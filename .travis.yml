@@ -25,5 +25,6 @@ deploy:
     secure: p+Daf9d5JQELhFwp9Bu1fICKlEA8EEnSGf8oHr6XE/ZS3aThYKUHjUhGIkUw05gxd8nYNLh/Ws762pcHyVUdAqJ6TSt9srvJ+EZmOQWKxKJvzTyn1nv/49kL0y7FdqJl9bsOcLTYOJ/cuWyotb1MkOyuSROAvxjUuY/L6JjXg5iPciIbIPbjabt7CuGQXS5MB9Yrjntz14NL3Ls/6cr5NbMKstAhDpWLcxyRdBsOTatt3ny5G4qsbPEkoyY00pVM6x5MRTZ3qLQwTa2/jxnA7S+gbxeL12r67NfpgJQ+HSwPeUkrWa04hBqAFtjUwtIVVUHbpSsisavsM7eCSxmUd5xk70epFdCX665xTs1cyDczncL2PvesXfVo4YnodaX94NAnXlQRLkAl92iGhn/pOuMPXZeP6g5ZDWH4cJOL+yOEjOesihn1jx4xlyAp6o+Y4h/0xJAGtY2fTRtPTxnFitYq+obEa7qPJ4qgxxlIwtTWjEdN96XVdsEQEC9kyh0U2WsXsxr8kiOJGzQPDYSkxKXd9yLyDHIiHx9FDqmmVeD5ZzUk2LqP7pvr2r9EGtEQUlugZxIDeHEMhBXLZYlEgQl0s3+zFv9wfa2Zcz1v94ivY138XfVm9uL+AbJ9mjjAnMydCWFTBsMBWze9GkDC8uQTL/dlj8LKAT4bi0BjQiI=
   file: 'app/build/outputs/apk/app-release-unsigned.apk'
   on:
+    tags: true
     branch: master
     repo: dreamteamsupreme/301p
