@@ -6,4 +6,24 @@ public class MockInventoryTest extends ActivityInstrumentationTestCase2{
     public MockInventoryTest(Class activityClass) {
         super(activityClass);
     }
+
+    public void testAddItem() {
+
+    }
+
+    public void testEditAnItem() {
+
+    }
+
+    public void testRemoveAnItem() {
+
+    }
+
+    public void testViewInventory() {
+
+    }
+
+    public void testViewItem() {
+
+    }
 }
