@@ -20,8 +20,10 @@ public class MockBrowseSearchTest extends ActivityInstrumentationTestCase2{
         root = getActivity();
         BrowseSearch browseSearch = new BrowseSearch();
 
-        Friend friend1 = new Friend("Sally");
-        Friend friend2 = new Friend("Sammy");
+        User friend1 = new User("Sally");
+        User friend2 = new User("Sammy");
+
+        friend1.addFriend(friend2);
 
         Inventory<Items> mockFriendInventory1 = new Inventory<Items>();
         mockFriendInventory1.add(new Items("item1", "BigCategory"));
