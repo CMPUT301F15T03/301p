@@ -26,11 +26,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.08"
-     inkscape:cx="4429.8399"
-     inkscape:cy="-1779.3796"
+     inkscape:zoom="0.22627417"
+     inkscape:cx="2041.7915"
+     inkscape:cy="-3619.7553"
      inkscape:document-units="px"
-     inkscape:current-layer="layer2"
+     inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="1440"
      inkscape:window-height="851"
@@ -6364,11 +6364,33 @@
        width="202.50542"
        id="rect8254"
        style="fill:#ececec;fill-opacity:1" />
-    <path
-       inkscape:connector-curvature="0"
-       id="path8264"
-       d="m 1835.9331,4845.1896 c -15.5647,0 -28.0957,12.5309 -28.0957,28.0957 l 0,171.9355 -8.5566,-27.0859 c -2.5083,-7.9402 -11.0235,-12.6819 -19.0938,-10.6309 l -13.3144,3.3848 c -8.0703,2.051 -12.5493,10.0931 -10.041,18.0332 l 45.2754,143.3242 c 0.6869,2.1747 1.8351,4.098 3.291,5.7187 -0.2716,1.4137 -0.418,2.872 -0.418,4.3672 0,12.6629 10.1946,22.8575 22.8574,22.8575 l 105.7149,0 c 12.6628,0 22.8554,-10.1946 22.8554,-22.8575 0,-2.1943 -0.3127,-4.3105 -0.8847,-6.3164 l 9.2832,-90.1289 25.8535,-66.791 c 3.6767,-9.4987 -0.2111,-20.1683 -8.7168,-23.9219 -2.5107,-1.108 -5.1313,-1.469 -7.6777,-1.207 0.9476,-10.086 -6.3639,-18.9043 -16.4766,-19.8125 l -8.6719,-0.7793 c -2.1385,-0.1921 -4.2193,0.01 -6.1933,0.5 -2.9167,-4.5618 -7.8343,-7.7655 -13.7071,-8.293 l -8.6718,-0.7793 c -5.2235,-0.4691 -10.1357,1.278 -13.8301,4.4532 -3.3532,-4.2185 -8.5217,-6.9239 -14.3535,-6.9239 l -23.334,0 c -0.4019,0 -0.7942,0.035 -1.1895,0.061 l 0,-89.1074 c 0,-15.5648 -12.5309,-28.0957 -28.0957,-28.0957 l -3.8086,0 z"
-       style="fill:#ffd42a;fill-opacity:1" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="1197.6621"
+       y="5082.8711"
+       id="text8241"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan8243"
+         x="1197.6621"
+         y="5082.8711">User's inventory.</tspan><tspan
+         sodipodi:role="line"
+         x="1197.6621"
+         y="5132.8711"
+         id="tspan8245" /><tspan
+         sodipodi:role="line"
+         x="1197.6621"
+         y="5182.8711"
+         id="tspan8247">Inventory items are listed, and </tspan><tspan
+         sodipodi:role="line"
+         x="1197.6621"
+         y="5232.8711"
+         id="tspan8249">new items can be added with</tspan><tspan
+         sodipodi:role="line"
+         x="1197.6621"
+         y="5282.8711"
+         id="tspan8251">the + button.</tspan></text>
   </g>
   <g
      inkscape:groupmode="layer"
@@ -13265,5 +13287,101 @@
            style="fill:#ffffff;fill-opacity:1" />
       </g>
     </g>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="985.53009"
+       y="3478.6223"
+       id="text8166"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan8168"
+         x="985.53009"
+         y="3478.6223">Trade History.</tspan><tspan
+         sodipodi:role="line"
+         x="985.53009"
+         y="3528.6223"
+         id="tspan8172" /><tspan
+         sodipodi:role="line"
+         x="985.53009"
+         y="3578.6223"
+         id="tspan8176">All previous and pending trades</tspan><tspan
+         sodipodi:role="line"
+         x="985.53009"
+         y="3628.6223"
+         id="tspan8178">inolving the User are listed.</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="1926.866"
+       y="3452.1057"
+       id="text8180"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan8182"
+         x="1926.866"
+         y="3452.1057">Initiate Trade Offer.</tspan><tspan
+         sodipodi:role="line"
+         x="1926.866"
+         y="3502.1057"
+         id="tspan8186" /><tspan
+         sodipodi:role="line"
+         x="1926.866"
+         y="3552.1057"
+         id="tspan8190">A user can offer one or more items </tspan><tspan
+         sodipodi:role="line"
+         x="1926.866"
+         y="3602.1057"
+         id="tspan8192">in exchange for one  item</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="2872.6213"
+       y="3447.6865"
+       id="text8198"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         x="2872.6213"
+         y="3447.6865"
+         id="tspan8204">Recieve Trade Offer.</tspan><tspan
+         sodipodi:role="line"
+         x="2872.6213"
+         y="3497.6865"
+         id="tspan8210" /><tspan
+         sodipodi:role="line"
+         x="2872.6213"
+         y="3547.6865"
+         id="tspan8212">Upon reciept of a trade, a User can</tspan><tspan
+         sodipodi:role="line"
+         x="2872.6213"
+         y="3597.6865"
+         id="tspan8214">Accept, Decline, or Counter-offer</tspan><tspan
+         sodipodi:role="line"
+         x="2872.6213"
+         y="3647.6865"
+         id="tspan8216">the trade.s</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="3725.5688"
+       y="3465.364"
+       id="text8218"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         x="3725.5688"
+         y="3465.364"
+         id="tspan8224">Counter trade offer.</tspan><tspan
+         sodipodi:role="line"
+         x="3725.5688"
+         y="3515.364"
+         id="tspan8231" /><tspan
+         sodipodi:role="line"
+         x="3725.5688"
+         y="3565.364"
+         id="tspan8235">When countering a trade, a User</tspan><tspan
+         sodipodi:role="line"
+         x="3725.5688"
+         y="3615.364"
+         id="tspan8239">can </tspan></text>
   </g>
 </svg>
