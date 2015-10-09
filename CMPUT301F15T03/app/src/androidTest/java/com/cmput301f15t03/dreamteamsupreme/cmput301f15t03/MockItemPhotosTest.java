@@ -10,6 +10,7 @@ public class MockItemPhotosTest extends ActivityInstrumentationTestCase2 {
         super(MainActivity.class);
     }
 
+    // for UC06.01.01 AttachPhotographsToItems
     public void testAttachPhotographsToItems() {
         Item item = new Item("Test Item");
         Photo photo1 = new Photo("img/1");
@@ -79,6 +80,7 @@ public class MockItemPhotosTest extends ActivityInstrumentationTestCase2 {
         assertTrue(photo1.isInFocus());
     }
 
+    // for UC06.03.01 DeleteAttachedPhotographs
     public void testDeleteAttachedPhotographs() {
         Item item = new Item("Test Item");
         Photo photo1 = new Photo("img/1");
@@ -103,7 +105,8 @@ public class MockItemPhotosTest extends ActivityInstrumentationTestCase2 {
         assertEquals(0, item.getPhotos().size());
     }
 
-    public void testPushOfflineItems() {
+    // for UC09.01.01 CreateItemsOffline
+    public void testCreateItemsOffline() {
         // make connectivity offline
         // future reference: http://stackoverflow.com/questions/12535101/how-can-i-turn-off-3g-data-programmatically-on-android/12535246#12535246
         Item item = new Item();
