@@ -121,10 +121,10 @@ public class MockBrowseSearchTest extends ActivityInstrumentationTestCase2{
 
         List<Items> getItems = browser.getFriendPublicInventory("item2");
 
-        int i= 0;
+        int j= 0;
         For(Items i: getItems){
-            assertTrue(i.equals(expectedItems.get(i)));
-            i++;
+            assertTrue(i.equals(expectedItems.get(j)));
+            j++;
         }
     }
 
