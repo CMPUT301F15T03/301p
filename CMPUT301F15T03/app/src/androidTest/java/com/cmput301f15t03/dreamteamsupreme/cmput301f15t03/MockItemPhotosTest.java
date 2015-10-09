@@ -6,6 +6,8 @@ package com.cmput301f15t03.dreamteamsupreme.cmput301f15t03;
 
 public class MockItemPhotosTest extends ActivityInstrumentationTestCase2 {
 
+    private static final String EXISTING_TEST_USER_NAME = "Test User";
+
     public MockItemPhotosTest() {
         super(MainActivity.class);
     }
@@ -117,5 +119,37 @@ public class MockItemPhotosTest extends ActivityInstrumentationTestCase2 {
         while (NetworkManager.deviceIsOffline()) ;
         // wait until device is online, item should have been in inventory
         assertTrue(inventory.exists(item));
+    }
+
+    /**
+    * UC06.05.01
+    */
+    public void testManualDownloadItemPhotoWhenAutoDownloadDisabled() {
+        AppSettings settings = AppSettings.getInstance();
+        Boolean originalValue = settings.getAutoDownloadModeValue();
+        settings.setAutoDownloadModeValue(Boolean.FALSE);
+
+        User user = User.getExistingUser(EXISTING_TEST_USER_NAME);
+        user.clearCache();
+        List<Item> items = user.getInventory().getItems();
+        for (Item item : items)
+        {
+            if (item.getPhotos().size() > 0)
+            {
+                Photo photo = item.getPhotos().getElementAt(0);
+                assertFalse(photo.isDownloaded());
+
+                photo.downloadPhoto();
+                assertTrue(photo.isDownloaded());
+
+                settings.setAutoDownloadModeValue(originalValue);
+                return;
+            }
+        }
+
+        settings.setAutoDownloadModeValue(originalValue);
+        // Dev note: test user should've items with photos. Fix it and
+        // re-run the test if this fails
+        assertTrue(false);
     }
 }
