@@ -9,6 +9,8 @@ public class MockFriendsTest extends ActivityInstrumentationTestCase2{
         super(activityClass);
     }
 
+    private static final String EXISTING_TEST_USER_NAME = "Test User";
+
     /**
      * UC02.04.01
      */
@@ -33,7 +35,7 @@ public class MockFriendsTest extends ActivityInstrumentationTestCase2{
     /**
      * UC02.04.01
      */
-    public void testCreateDuplicateProile() {
+    public void testCreateDuplicateProfile() {
         String username = "bobsmith";
         User user = new User(username);
         assertTrue(user.getName().equals(name));
@@ -41,6 +43,7 @@ public class MockFriendsTest extends ActivityInstrumentationTestCase2{
         //grrr, junit3 does not have assertRaises...
         try {
             User user2 = new User(username);
+            assertTrue("Exception should've been thrown", false);
         } catch(DuplicateUsernameException e){
             assertTrue("Duplicate username exception", true);
         }
@@ -126,4 +129,109 @@ public class MockFriendsTest extends ActivityInstrumentationTestCase2{
     public void viewFriendProfile(){
 
     }
+
+    /**
+    * UC10.02.01
+    */
+    public void testEditName() {
+        User user = UserFactory.getExistingUser(EXISTING_TEST_USER_NAME);
+        String currentName = user.getName();
+        // To ensure a different name
+        String newName = new StringBuilder(currentName).append(" foo");
+        user.setName(newName);
+
+        assertTrue(user.getName().equals(newName));
+
+        // Reset back to original value
+        user.setName(currentName);
+    }
+
+    /**
+    * UC10.02.01
+    */
+    public void testEditAddress() {
+        User user = UserFactory.getExistingUser(EXISTING_TEST_USER_NAME);
+        String currentAddress = user.getAddress();
+        String newAddress = new StringBuilder(currentName).append(" foo");
+        user.setAddress(newAddress);
+
+        assertTrue(user.getAddress().equals(newAddress));
+
+        user.setAddress(currentAddress);
+    }
+
+    /**
+    * UC10.02.01
+    */
+    public void testEditPhoneNumberWithValidNumber() {
+        User user = UserFactory.getExistingUser(EXISTING_TEST_USER_NAME);
+        String currentPhoneNumber = user.getPhoneNumber();
+        String newNumber = "403 113 1232";
+        if (newNumber.equals(currentPhoneNumber))
+        {
+            newNumber = "404 113 1232";
+        }
+        user.setPhoneNumber(newNumber);
+
+        assertTrue(user.getPhoneNumber().equals(newNumber));
+
+        user.setPhoneNumber(currentPhoneNumber);
+    }
+
+    /**
+    * UC10.02.01
+    */
+    public void testEditPhoneNumberWithInValidNumber() {
+        User user = UserFactory.getExistingUser(EXISTING_TEST_USER_NAME);
+        String currentPhoneNumber = user.getPhoneNumber();
+        String newNumber = "hello";
+        try {
+            user.setPhoneNumber(newNumber);
+            assertTrue(false);
+        }
+        catch (IllegalArgumentException e) {
+            assertTrue(true);
+        }
+
+        assertTrue(user.getPhoneNumber().equals(currentPhoneNumber));
+    }
+
+    /**
+    * UC10.02.01
+    */
+    public void testEditEmailWithValidEmail() {
+        User user = UserFactory.getExistingUser(EXISTING_TEST_USER_NAME);
+        String currentEmail = user.getEmail();
+        String newEmail = "foo@bar.com";
+        if (newEmail.equals(currentEmail))
+        {
+            newEmail = "bar@foo.com";
+        }
+        user.setEmail(newEmail);
+
+        assertTrue(user.getEmail().equals(newEmail));
+
+        user.setEmail(currentEmail);
+    }
+
+    /**
+    * UC10.02.01
+    */
+    public void testEditEmailWithInvalidEmail() {
+        User user = UserFactory.getExistingUser(EXISTING_TEST_USER_NAME);
+        String currentEmail = user.getEmail();
+        String newEmail = "foo@barcom";
+
+        try {
+            user.setEmail(newEmail);
+            assertTrue(false);
+        }
+        catch (IllegalArgumentException e) {
+            assertTrue(true);
+        }
+
+        assertTrue(user.getEmail().equals(currentEmail));
+    }
+
+    // TODO: Add more tests as more mutable fields are added
 }
