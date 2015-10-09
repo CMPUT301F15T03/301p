@@ -80,7 +80,29 @@ public class MockInventoryTest extends ActivityInstrumentationTestCase2{
     }
 
     public void testRemoveAnItem() {
+        ElasticSearchServer server = new ElasticSearchServer();
+        User owner = new User("UserName");
+        User friend = new User("friend");
+        owner.addFriend(friend);
+        sever.addUser(owner);
+        Inventory inv = new Inventory();
+        owner.setInventory(inv);
 
+        tempItem.setName("50mm Cannon Lens");
+        tempItem.setQualilty("Bad Condition"); // changed this
+        tempItem.setCategory("lenses");
+        tempItem.setPublic();
+        tempItem.addComment("This is my cherished cannon lens!!");
+        inv.addItem(tempItem);
+
+        friend.initiateTrade(User, tempItem);
+
+        assert.true(inv.contains(tempItem));
+        inv.remove(tempItem);
+        assert.false(inv.contains(tempItem));
+        assert.equals(server.getUser("UserName").getItem("50mm Cannon Lens").getStatus(), "inactive");// server lists item as inactive
+        assert.null(friend.getFriend("UserName").getInventory().getItem("50mm Cannon Lens")); // friend cant see removed item
+        assert.true(friend.getTrade(0).getStatus().equals("canceled"));
     }
 
     public void testViewInventory() {
