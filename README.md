@@ -11,5 +11,6 @@
   * A storyboard showcasing the adding of an item (UC1.01.01) has also been checked in to [insert SVG location here].
 3. Release Planning
   * All user stories (represented as issues here on GitHub) have been partioned into either the Project Part 4 Milestone or the Project Part 5 milestone.
-4. Glossary
+4. Glossary and Information Sources:
   * Terminology for all major nouns/verbs used in our Use Cases has been tabled in the glossary of our wiki, you can find that here [insert glossary link here].
+  * A license has also been chosen and can be round at the root of this repository [insert link to license here].
