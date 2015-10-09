@@ -13,4 +13,4 @@
   * All user stories (represented as issues here on GitHub) have been partioned into either the [Project Part 4 Milestone](https://github.com/CMPUT301F15T03/301p/milestones/Project%20Part%204) or the [Project Part 5 milestone](https://github.com/CMPUT301F15T03/301p/milestones/Project%20Part%205).
 4. Glossary and Information Sources:
   * Terminology for all major nouns/verbs used in our Use Cases has been tabled in the glossary of our wiki, you can find that [here](https://github.com/CMPUT301F15T03/301p/wiki/Glossary-References#glossary).
-  * A license has also been chosen and can be round at the root of this repository [here](https://github.com/CMPUT301F15T03/301p/blob/master/LICENSE).
+  * A license has also been chosen and can be found at the root of this repository [here](https://github.com/CMPUT301F15T03/301p/blob/master/LICENSE).
