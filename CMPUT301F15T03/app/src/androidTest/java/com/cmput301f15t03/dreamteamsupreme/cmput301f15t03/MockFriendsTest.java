@@ -13,6 +13,27 @@ public class MockFriendsTest extends ActivityInstrumentationTestCase2{
     private static final String EXISTING_TEST_USER_NAME = "Test User";
 
     /**
+     * UC02.01.01
+     */
+    public void testUserCanSeeFriends(){
+        User user = new User("jane");
+        User user2 = new User("steve");
+        FriendsList friendsList = FriendsListManager.getFriendsList();
+
+        friendsList.newFriendRequest(user, user2);
+
+        FriendRequestList requests = friendsList.getRequests(user2);
+        FriendRequest request = requests.get(0);
+        request.accept();
+
+        assertTrue(friendsList.areFriends(user, user2));
+
+        List<User> friendsOfUser = friendsList.getFriendsOf(user);
+        assertTrue(friendsOfUser.contains(user2));
+
+    }
+
+    /**
      * UC02.04.01
      */
     public void testCreateProfile() {
