@@ -29,16 +29,16 @@ public class MockInventoryTest extends ActivityInstrumentationTestCase2{
         tempItem.setCategory("lenses");
         tempItem.setPrivate();
         tempItem.addComment("This is my cherished cannon lens!!");
-        assert.false(inv.contains(tempItem)); // inventory should not have the item yet
+        assertFalse(inv.contains(tempItem)); // inventory should not have the item yet
 
-        assert.null(friend.getFriend("UserName").getInventory().getItem("50mm Cannon Lens"));
+        assertNull(friend.getFriend("UserName").getInventory().getItem("50mm Cannon Lens"));
         tempItem.setPublic();
-        assert.equals(friend.getFriend("UserName").getInventory().getItem("50mm Cannon Lens"), tempItem);
+        assertEquals(friend.getFriend("UserName").getInventory().getItem("50mm Cannon Lens"), tempItem);
 
         inv.addItem(tempItem);
 
-        assert.true(inv.contains(tempItem));
-        assert.equals(server.getUser("UserName").getItem("50mm Cannon Lens"), tempItem); // server has the item
+        assertTrue(inv.contains(tempItem));
+        assertEquals(server.getUser("UserName").getItem("50mm Cannon Lens"), tempItem); // server has the item
 
         tempItem = new Item();
         tempItem.setName("100mm Cannon Lens");
@@ -50,7 +50,7 @@ public class MockInventoryTest extends ActivityInstrumentationTestCase2{
         inv.addItem(tempItem);
 
         // the item had invalid attirbutes set and is therefore not in the inventory
-        assert.false(inv.contains(tempItem)); 
+        assertFalse(inv.contains(tempItem)); 
     }
 
     public void testEditAnItem() {
@@ -71,12 +71,12 @@ public class MockInventoryTest extends ActivityInstrumentationTestCase2{
 
         tempItem.setQualilty("Bad");
         // friend sees the updated quality
-        assert.equals(friend.getFriend("UserName").getInventory().getItem("50mm Cannon Lens").getQuality(), "Bad");
+        assertEquals(friend.getFriend("UserName").getInventory().getItem("50mm Cannon Lens").getQuality(), "Bad");
          // server has the updated item
-        assert.equals(server.getUser("UserName").getItem("50mm Cannon Lens").getQuality(), tempItem);
+        assertEquals(server.getUser("UserName").getItem("50mm Cannon Lens").getQuality(), tempItem);
 
         tempItem.setCategory("Invalid category");
-        assert.equals(tempItem.getCategory(), "lenses"); // invalid entry is not saved
+        assertEquals(tempItem.getCategory(), "lenses"); // invalid entry is not saved
     }
 
     public void testRemoveAnItem() {
@@ -97,12 +97,12 @@ public class MockInventoryTest extends ActivityInstrumentationTestCase2{
 
         friend.initiateTrade(User, tempItem);
 
-        assert.true(inv.contains(tempItem));
+        assertTrue(inv.contains(tempItem));
         inv.remove(tempItem);
-        assert.false(inv.contains(tempItem));
-        assert.equals(server.getUser("UserName").getItem("50mm Cannon Lens").getStatus(), "inactive");// server lists item as inactive
-        assert.null(friend.getFriend("UserName").getInventory().getItem("50mm Cannon Lens")); // friend cant see removed item
-        assert.true(friend.getTrade(0).getStatus().equals("canceled"));
+        assertFalse(inv.contains(tempItem));
+        assertEquals(server.getUser("UserName").getItem("50mm Cannon Lens").getStatus(), "inactive");// server lists item as inactive
+        assertNull(friend.getFriend("UserName").getInventory().getItem("50mm Cannon Lens")); // friend cant see removed item
+        assertTrue(friend.getTrade(0).getStatus().equals("canceled"));
     }
 
     public void testViewInventory() {
@@ -121,7 +121,7 @@ public class MockInventoryTest extends ActivityInstrumentationTestCase2{
         tempItem.addComment("This is my cherished cannon lens!!");
         inv.addItem(tempItem);
 
-        assert.equals(InventoryView.getView().getItems(), inventory.getItems());
+        assertEquals(InventoryView.getView().getItems(), inventory.getItems());
     }
 
     public void testViewItem() {
@@ -141,6 +141,6 @@ public class MockInventoryTest extends ActivityInstrumentationTestCase2{
         tempItem.addComment("This is my cherished cannon lens!!");
         inv.addItem(tempItem);
 
-        assert.equals(InventoryView.getView().getItems().getItem("50mm Cannon Lens"), inventory.getItem("50mm Cannon Lens"));
+        assertEquals(InventoryView.getView().getItems().getItem("50mm Cannon Lens"), inventory.getItem("50mm Cannon Lens"));
     }
 }
