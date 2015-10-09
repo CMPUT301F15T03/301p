@@ -39,7 +39,7 @@ public class MockBrowseSearchTest extends ActivityInstrumentationTestCase2{
     }
 
     public void testBrowseAllFriendsGeneralSearch(){
-        //UC1.3.1.1 BrowseAllFriendsGeneralSearch
+        //UC3.1.1 BrowseAllFriendsGeneralSearch
         List<Items> expectedItems = new ArrayList<Items>();
         expectedItems.add(new Items("item1", "BigCategory"));
         expectedItems.add(new Items("item2", "SmallCategory"));
@@ -56,7 +56,7 @@ public class MockBrowseSearchTest extends ActivityInstrumentationTestCase2{
     }
 
     public void testBrowseFriendGeneralSearch(){
-        //UC1.3.1.2 BrowseFriendGeneralSearch
+        //UC3.1.2 BrowseFriendGeneralSearch
         List<Items> expectedItems = new ArrayList<Items>();
         expectedItems.add(new Items("item1", "BigCategory"));
         expectedItems.add(new Items("item2", "SmallCategory"));
@@ -71,7 +71,7 @@ public class MockBrowseSearchTest extends ActivityInstrumentationTestCase2{
     }
 
     public void testBrowseAllFriendsCategorySearch(){
-        //UC1.3.1.3 BrowseAllFriendsCategorySearch
+        //UC3.1.3 BrowseAllFriendsCategorySearch
         List<Items> expectedItems = new ArrayList<Items>();
         expectedItems.add(new Items("item2", "SmallCategory"));
         expectedItems.add(new Items("item2", "SmallCategory"));
@@ -86,7 +86,7 @@ public class MockBrowseSearchTest extends ActivityInstrumentationTestCase2{
     }
 
     public void testBrowseFriendCategorySearch(){
-        //UC1.3.1.4 BrowseFriendCategorySearch
+        //UC3.1.4 BrowseFriendCategorySearch
         List<Items> expectedItems = new ArrayList<Items>();
         expectedItems.add(new Items("item2", "SmallCategory"));
 
@@ -100,7 +100,7 @@ public class MockBrowseSearchTest extends ActivityInstrumentationTestCase2{
     }
 
     public void testBrowseAllFriendsTextualQuerySearch(){
-        //UC1.3.1.5 BrowseAllFriendsTextualQuerySearch
+        //UC3.1.5 BrowseAllFriendsTextualQuerySearch
         List<Items> expectedItems = new ArrayList<Items>();
         expectedItems.add(new Items("item2", "SmallCategory");
         expectedItems.add(new Items("item2", "SmallCategory");
@@ -115,7 +115,7 @@ public class MockBrowseSearchTest extends ActivityInstrumentationTestCase2{
     }
 
     public void testBrowseFriendTextualQuerySearch(){
-        //UC1.3.1.6 BrowseFriendTextualQuerySearch
+        //UC3.1.6 BrowseFriendTextualQuerySearch
         List<Items> expectedItems = new ArrayList<Items>();
         expectedItems.add(new Items("item2", "SmallCategory");
 
@@ -129,7 +129,7 @@ public class MockBrowseSearchTest extends ActivityInstrumentationTestCase2{
     }
 
     public void testOfflineBrowsing(){
-        //UC1.3.3.1 OfflineBrowsing
+        //UC3.3.1 OfflineBrowsing
         List<Items> expectedItems = new ArrayList<Items>();
         expectedItems.add(new Items("item1", "BigCategory"));
         expectedItems.add(new Items("item2", "SmallCategory"));
