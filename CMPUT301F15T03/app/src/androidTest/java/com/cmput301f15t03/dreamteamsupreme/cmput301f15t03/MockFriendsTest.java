@@ -119,4 +119,11 @@ public class MockFriendsTest extends ActivityInstrumentationTestCase2{
         assertFalse(favouritesList.contains(user));
     }
 
+
+    /**
+     * UC02.05.01
+     */
+    public void viewFriendProfile(){
+
+    }
 }
