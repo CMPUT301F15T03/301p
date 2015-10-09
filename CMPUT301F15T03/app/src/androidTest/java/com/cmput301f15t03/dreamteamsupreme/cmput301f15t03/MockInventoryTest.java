@@ -106,10 +106,41 @@ public class MockInventoryTest extends ActivityInstrumentationTestCase2{
     }
 
     public void testViewInventory() {
+        ElasticSearchServer server = new ElasticSearchServer();
+        User owner = new User("UserName");
+        User friend = new User("friend");
+        owner.addFriend(friend);
+        sever.addUser(owner);
+        Inventory inv = new Inventory();
+        owner.setInventory(inv);
 
+        tempItem.setName("50mm Cannon Lens");
+        tempItem.setQualilty("Bad Condition"); // changed this
+        tempItem.setCategory("lenses");
+        tempItem.setPublic();
+        tempItem.addComment("This is my cherished cannon lens!!");
+        inv.addItem(tempItem);
+
+        assert.equals(InventoryView.getView().getItems(), inventory.getItems());
     }
 
     public void testViewItem() {
+        // i dont know how to test UI
+        ElasticSearchServer server = new ElasticSearchServer();
+        User owner = new User("UserName");
+        User friend = new User("friend");
+        owner.addFriend(friend);
+        sever.addUser(owner);
+        Inventory inv = new Inventory();
+        owner.setInventory(inv);
 
+        tempItem.setName("50mm Cannon Lens");
+        tempItem.setQualilty("Bad Condition"); // changed this
+        tempItem.setCategory("lenses");
+        tempItem.setPublic();
+        tempItem.addComment("This is my cherished cannon lens!!");
+        inv.addItem(tempItem);
+
+        assert.equals(InventoryView.getView().getItems().getItem("50mm Cannon Lens"), inventory.getItem("50mm Cannon Lens"));
     }
 }
