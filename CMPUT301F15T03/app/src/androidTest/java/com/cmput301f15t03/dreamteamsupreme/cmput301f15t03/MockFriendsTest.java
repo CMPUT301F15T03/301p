@@ -3,6 +3,7 @@ package com.cmput301f15t03.dreamteamsupreme.cmput301f15t03;
 import android.test.ActivityInstrumentationTestCase2;
 
 import java.net.UnknownServiceException;
+import java.util.List;
 
 public class MockFriendsTest extends ActivityInstrumentationTestCase2{
     public MockFriendsTest(Class activityClass) {
@@ -56,7 +57,7 @@ public class MockFriendsTest extends ActivityInstrumentationTestCase2{
     public void testAddFriend(){
         User user = new User("jane");
         User user2 = new User("steve");
-        FriendsList friendsList = getFriendsList();
+        FriendsList friendsList = FriendsListManager.getFriendsList();
 
         friendsList.newFriendRequest(user, user2);
 
@@ -73,7 +74,7 @@ public class MockFriendsTest extends ActivityInstrumentationTestCase2{
     public void testRemoveFriend(){
         User user = new User("jane");
         User user2 = new User("steve");
-        FriendsList friendsList = getFriendsList();
+        FriendsList friendsList = FriendsListManager.getFriendsList();
 
         friendsList.newFriendRequest(user, user2);
 
@@ -126,7 +127,30 @@ public class MockFriendsTest extends ActivityInstrumentationTestCase2{
     /**
      * UC02.05.01
      */
-    public void viewFriendProfile(){
+    public void testViewFriendProfile(){
+        User user = new User("jane");
+        User user2 = new User("steve");
+        user2.setCity("Edmonton");
+        user2.setEmail("abc@example.com");
+
+        FriendsList friendsList = FriendsListManager.getFriendsList();
+
+        friendsList.newFriendRequest(user, user2);
+
+        FriendRequestList requests = friendsList.getRequests(user2);
+        FriendRequest request = requests.get(0);
+        request.accept();
+
+        assertTrue(friendsList.areFriends(user, user2));
+        
+
+        List<User> friendsOf = friendsList.getFriendsOf(user);
+
+        User otherUser = friendsOf.get(0);
+
+        assertTrue(otherUser.getUsername().equals(user2.getUsername()));
+        assertTrue(otherUser.getEmail().equals(user2.getEmail()));
+        assertTrue(otherUser.getPhoneNumber().equals(user2.getPhoneNumber()));
 
     }
 
@@ -147,7 +171,7 @@ public class MockFriendsTest extends ActivityInstrumentationTestCase2{
     }
 
     /**
-    * UC10.02.01
+     * UC10.02.01
     */
     public void testEditAddress() {
         User user = UserFactory.getExistingUser(EXISTING_TEST_USER_NAME);
@@ -162,7 +186,7 @@ public class MockFriendsTest extends ActivityInstrumentationTestCase2{
 
     /**
     * UC10.02.01
-    */
+     */
     public void testEditPhoneNumberWithValidNumber() {
         User user = UserFactory.getExistingUser(EXISTING_TEST_USER_NAME);
         String currentPhoneNumber = user.getPhoneNumber();
