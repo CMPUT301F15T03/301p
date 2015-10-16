@@ -135,12 +135,43 @@ public class MockInventoryTest extends ActivityInstrumentationTestCase2{
         owner.setInventory(inv);
 
         tempItem.setName("50mm Cannon Lens");
-        tempItem.setQualilty("Bad Condition"); // changed this
+        tempItem.setQualilty("Bad Condition");
         tempItem.setCategory("lenses");
         tempItem.setPublic();
         tempItem.addComment("This is my cherished cannon lens!!");
         inv.addItem(tempItem);
 
         assertEquals(InventoryView.getView().getItems().getItem("50mm Cannon Lens"), inventory.getItem("50mm Cannon Lens"));
+    }
+
+    public void testChooseCategory() {
+    	ElasticSearchServer server = new ElasticSearchServer();
+        User owner = new User("UserName");
+        User friend = new User("friend");
+        owner.addFriend(friend);
+        sever.addUser(owner);
+        Inventory inv = new Inventory();
+        owner.setInventory(inv);
+
+        tempItem.setName("50mm Cannon Lens");
+        String category = Items.Categories[0];
+        tempItem.setQualilty("Bad Condition");
+        tempItem.setCategory(category); // valid selection for category
+        tempItem.setPublic();
+        tempItem.addComment("This is my cherished cannon lens!!");
+        inv.addItem(tempItem);
+
+        assertEquals(inventory.getItem("50mm Cannon Lens").getCategory(), category); // add item and check category
+        category = Items.Categories[4];
+        inventory.getItem("50mm Cannon Lens").setCategory(category);
+        assertEquals(inventory.getItem("50mm Cannon Lens").getCategory(), category); // edit item and check category
+    }
+
+    public void testNavigateToEntryItem() {
+
+    }
+
+    public void testChangePublicStatus() {
+
     }
 }
