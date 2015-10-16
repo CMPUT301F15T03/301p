@@ -111,14 +111,34 @@ public class MockItemPhotosTest extends ActivityInstrumentationTestCase2 {
     public void testCreateItemsOffline() {
         // make connectivity offline
         // future reference: http://stackoverflow.com/questions/12535101/how-can-i-turn-off-3g-data-programmatically-on-android/12535246#12535246
-        Item item = new Item();
+        ElasticSearchServer server = new ElasticSearchServer();
+        User owner = new User("UserName");
+        sever.addUser(owner);
+        Inventory inv = new Inventory();
 
-        assertTrue(NetworkManager.deviceIsOffline());
-        inventory.add(item);
+        NetworkManager.setDeviceOffline(); // set device offline
+        assertTrue(NetworkManager.deviceIsOffline()); // make sure the device is offline
 
-        while (NetworkManager.deviceIsOffline()) ;
-        // wait until device is online, item should have been in inventory
-        assertTrue(inventory.exists(item));
+        owner.setInventory(inv);
+
+        Item tempItem = new Item();
+        tempItem.setName("50mm Cannon Lens");
+        tempItem.setQualilty("Good Condition");
+        tempItem.setCategory("lenses");
+        tempItem.setPrivate();
+        tempItem.addComment("This is my cherished cannon lens!!");
+        assertFalse(inv.contains(tempItem)); // inventory should not have the item yet
+
+        inv.addItem(tempItem);
+
+        assertTrue(inv.contains(tempItem));
+        assertNull(server.getUser("UserName").getItem("50mm Cannon Lens"), tempItem); // server does not have the item
+
+		NetworkManager.setDeviceOnline();
+		asssertTrue(NetworkManager.deviceIsOnline());
+
+        assertEquals(server.getUser("UserName").getItem("50mm Cannon Lens"), tempItem); // server has the item
+
     }
 
     /**

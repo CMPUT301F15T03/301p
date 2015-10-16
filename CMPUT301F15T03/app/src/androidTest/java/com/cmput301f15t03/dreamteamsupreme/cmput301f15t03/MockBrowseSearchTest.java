@@ -38,7 +38,7 @@ public class MockBrowseSearchTest extends ActivityInstrumentationTestCase2{
 
     }
 
-    public void testBrowseAllFriendsGeneralSearch(){
+    public void testBrowseAllFriendsGeneralSearch() {
         //UC3.1.1 BrowseAllFriendsGeneralSearch
         List<Items> expectedItems = new ArrayList<Items>();
         expectedItems.add(new Items("item1", "BigCategory"));
@@ -55,7 +55,7 @@ public class MockBrowseSearchTest extends ActivityInstrumentationTestCase2{
         }
     }
 
-    public void testBrowseFriendGeneralSearch(){
+    public void testBrowseFriendGeneralSearch() {
         //UC3.1.2 BrowseFriendGeneralSearch
         List<Items> expectedItems = new ArrayList<Items>();
         expectedItems.add(new Items("item1", "BigCategory"));
@@ -70,7 +70,7 @@ public class MockBrowseSearchTest extends ActivityInstrumentationTestCase2{
         }
     }
 
-    public void testBrowseAllFriendsCategorySearch(){
+    public void testBrowseAllFriendsCategorySearch() {
         //UC3.1.3 BrowseAllFriendsCategorySearch
         List<Items> expectedItems = new ArrayList<Items>();
         expectedItems.add(new Items("item2", "SmallCategory"));
@@ -85,7 +85,7 @@ public class MockBrowseSearchTest extends ActivityInstrumentationTestCase2{
         }
     }
 
-    public void testBrowseFriendCategorySearch(){
+    public void testBrowseFriendCategorySearch() {
         //UC3.1.4 BrowseFriendCategorySearch
         List<Items> expectedItems = new ArrayList<Items>();
         expectedItems.add(new Items("item2", "SmallCategory"));
@@ -99,7 +99,7 @@ public class MockBrowseSearchTest extends ActivityInstrumentationTestCase2{
         }
     }
 
-    public void testBrowseAllFriendsTextualQuerySearch(){
+    public void testBrowseAllFriendsTextualQuerySearch() {
         //UC3.1.5 BrowseAllFriendsTextualQuerySearch
         List<Items> expectedItems = new ArrayList<Items>();
         expectedItems.add(new Items("item2", "SmallCategory");
@@ -128,8 +128,11 @@ public class MockBrowseSearchTest extends ActivityInstrumentationTestCase2{
         }
     }
 
-    public void testOfflineBrowsing(){
+    public void testOfflineBrowsing() {
         //UC3.3.1 OfflineBrowsing
+        NetworkManager.setDeviceOnline();
+        asssertTrue(NetworkManager.deviceIsOnline());
+
         List<Items> expectedItems = new ArrayList<Items>();
         expectedItems.add(new Items("item1", "BigCategory"));
         expectedItems.add(new Items("item2", "SmallCategory"));
@@ -144,7 +147,9 @@ public class MockBrowseSearchTest extends ActivityInstrumentationTestCase2{
             n++;
         }
 
-        //GO OFFLINE
+        NetworkManager.setDeviceOffline(); // set device offline
+        assertTrue(NetworkManager.deviceIsOffline()); // make sure the device is offline
+        
         List<Items> getItems = browser.getAllFriendsPublicInventories();
 
         int n= 0;
