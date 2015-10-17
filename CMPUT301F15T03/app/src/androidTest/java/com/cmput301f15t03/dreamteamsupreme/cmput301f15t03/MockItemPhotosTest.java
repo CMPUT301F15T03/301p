@@ -14,39 +14,58 @@ public class MockItemPhotosTest extends ActivityInstrumentationTestCase2 {
 
     // for UC06.01.01 AttachPhotographsToItems
     public void testAttachPhotographsToItems() {
-        Item item = new Item("Test Item");
+        // set up preconditions: owner is editing an item
+        ElasticSearchServer server = new ElasticSearchServer();
+        User owner = new User("UserName");
+        User friend = new User("friend");
+        owner.addFriend(friend);
+        sever.addUser(owner);
+        Inventory inv = new Inventory();
+        owner.setInventory(inv);
+
+        Item tempItem = new Item();
+        tempItem.setName("50mm Cannon Lens");
+        tempItem.setQualilty("Good Condition");
+        tempItem.setCategory("lenses");
+        tempItem.setPrivate();
+        tempItem.addComment("This is my cherished cannon lens!!");
+
+        inv.addItem(tempItem);
+
+        // create some photos
         Photo photo1 = new Photo("img/1");
         Photo photo2 = new Photo("img/2");
         Photo photo3 = new Photo("img/3");
         Photo photo4 = new Photo("img/4");
         Photo photo5 = new Photo("img/5");
         Photo photo6 = new Photo("img/6");
-        item.addPhoto(photo1);
+        tempItem.addPhoto(photo1);
 
         // photo should have be added to item's photos
         assertTrue(item.getPhotos().contains(photo1));
 
         // adding more photos to the item
-        item.addPhoto(photo2);
-        item.addPhoto(photo3);
+        tempItem.addPhoto(photo2);
+        tempItem.addPhoto(photo3);
 
-        assertEquals(item.getPhotos().size, 3);
+        assertEquals(tempItem.getPhotos().size, 3);
 
         // photo size > file size requirement should not get added
         try {
             Photo largePhoto = new Photo("img/7");
-            item.addPhoto(largePhoto);
+            tempItem.addPhoto(largePhoto);
         } catch (OversizedPhotoException e) {
             assertTrue(true);
         }
 
         // cannot go over maximum number of photos to an item
-        item.addPhoto(photo4);
-        item.addPhoto(photo5);
+        // right now, assuming max number is 5 for each item
+        tempItem.addPhoto(photo4);
+        tempItem.addPhoto(photo5);
 
         // so adding a 6th picture should cause an error
         try {
-            item.addPhoto(photo6);
+            tempItem.addPhoto(photo6);
         } catch (MaxPhotosLimitException e) {
             assertTrue(true);
         }
@@ -54,45 +73,80 @@ public class MockItemPhotosTest extends ActivityInstrumentationTestCase2 {
 
     // for UC06.02.01 ViewItemPhotographs
     public void testViewItemPhotographs() {
+        // set up preconditions: item exists with photographs attached
+        ElasticSearchServer server = new ElasticSearchServer();
+        User owner = new User("UserName");
+        User friend = new User("friend");
+        owner.addFriend(friend);
+        sever.addUser(owner);
+        Inventory inv = new Inventory();
+        owner.setInventory(inv);
+
+        Item tempItem = new Item();
+        tempItem.setName("50mm Cannon Lens");
+        tempItem.setQualilty("Good Condition");
+        tempItem.setCategory("lenses");
+        tempItem.setPrivate();
+        tempItem.addComment("This is my cherished cannon lens!!");
+
+        inv.addItem(tempItem);
+
         // add photograph
-        Item item = new Item("Test Item");
         Photo photo1 = new Photo("img/1");
         Photo photo2 = new Photo("img/2");
         Photo photo3 = new Photo("img/3");
-        item.add(photo1);
+        tempItem.add(photo1);
 
         // someone wants to view the photos of the item, they clicked photo1
-        // (the only existing photo of the item right now), so not really in gallery view yet
-        item.viewPhotos(photo1);
+        // (the only existing photo of the item right now)
+        tempItem.viewPhotos(photo1);
+        assertTrue(photo1.isMainPhoto());   // only photo should be main photo
 
         // isInFocus assumes that the first photo in the list is in focus / full screen
         assertTrue(photo1.isInFocus());
 
         // now add more photos
-        item.addPhoto(photo2);
-        item.addPhoto(photo3);
+        tempItem.addPhoto(photo2);
+        tempItem.addPhoto(photo3);
 
         // nextPhoto and previousPhoto methods are equivalent to "swiping" through the gallery
-        item.viewPhotos(photo1);
-        item.nextPhoto();
+        tempItem.viewPhotos(photo1);
+        tempItem.nextPhoto();
         assertTrue(photo2.isInFocus());
-        item.nextPhoto();
+        tempItem.nextPhoto();
         assertTrue(photo3.isInFocus());
-        item.nextPhoto();
+        tempItem.nextPhoto();
         assertTrue(photo1.isInFocus());
     }
 
     // for UC06.03.01 DeleteAttachedPhotographs
     public void testDeleteAttachedPhotographs() {
-        Item item = new Item("Test Item");
+        // set up preconditions: item exists with photographs attached
+        ElasticSearchServer server = new ElasticSearchServer();
+        User owner = new User("UserName");
+        User friend = new User("friend");
+        owner.addFriend(friend);
+        sever.addUser(owner);
+        Inventory inv = new Inventory();
+        owner.setInventory(inv);
+
+        Item tempItem = new Item();
+        tempItem.setName("50mm Cannon Lens");
+        tempItem.setQualilty("Good Condition");
+        tempItem.setCategory("lenses");
+        tempItem.setPrivate();
+        tempItem.addComment("This is my cherished cannon lens!!");
+
+        inv.addItem(tempItem);
+
         Photo photo1 = new Photo("img/1");
         Photo photo2 = new Photo("img/2");
         Photo photo3 = new Photo("img/3");
 
         // add photographs
-        item.addPhoto(photo1);
-        item.addPhoto(photo2);
-        item.addPhoto(photo3);
+        tempItem.addPhoto(photo1);
+        tempItem.addPhoto(photo2);
+        tempItem.addPhoto(photo3);
 
         // delete the photographs
         item.removePhoto(photo1);
@@ -100,8 +154,8 @@ public class MockItemPhotosTest extends ActivityInstrumentationTestCase2 {
         // check to make sure photo is not in the item's photographs anymore
         assertFalse(item.getPhotos().contains(photo1));
 
-        item.removePhoto(photo2);
-        item.removePhoto(photo3);
+        tempItem.removePhoto(photo2);
+        tempItem.removePhoto(photo3);
 
         // all photos should have been removed
         assertEquals(0, item.getPhotos().size());
