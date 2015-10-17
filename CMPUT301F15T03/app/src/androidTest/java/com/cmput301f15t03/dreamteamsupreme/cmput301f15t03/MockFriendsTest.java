@@ -1,6 +1,8 @@
 package com.cmput301f15t03.dreamteamsupreme.cmput301f15t03;
 
+import android.app.Instrumentation;
 import android.test.ActivityInstrumentationTestCase2;
+import android.view.View;
 
 import java.net.UnknownServiceException;
 import java.util.List;
@@ -16,21 +18,62 @@ public class MockFriendsTest extends ActivityInstrumentationTestCase2{
      * UC02.01.01
      */
     public void testUserCanSeeFriends(){
-        User user = new User("jane");
-        User user2 = new User("steve");
-        FriendsList friendsList = FriendsListManager.getFriendsList();
+        MainActivity activity = (MainActivity) getActivity();
 
-        friendsList.newFriendRequest(user, user2);
+        //Precondition: user joesmith exists
 
-        FriendRequestList requests = friendsList.getRequests(user2);
-        FriendRequest request = requests.get(0);
-        request.accept();
+        // code from https://developer.android.com/training/activity-testing/activity-functional-testing.html
+        // Date: 2015-10-16
+        // Set up an ActivityMonitor
+        Instrumentation.ActivityMonitor receiverActivityMonitor =
+                getInstrumentation().addMonitor(FriendsListActivity.class.getName(),
+                        null, false);
 
-        assertTrue(friendsList.areFriends(user, user2));
 
-        List<User> friendsOfUser = friendsList.getFriendsOf(user);
-        assertTrue(friendsOfUser.contains(user2));
 
+        activity.runOnUiThread(new Runnable() {
+            public void run() {
+                View v = oldTweetList.getChildAt(0);
+                oldTweetList.performItemClick(v, 0, v.getId());
+            }
+        });
+        getInstrumentation().waitForIdleSync();
+
+        // Validate that ReceiverActivity is started
+        FriendsListActivity receiverActivity = (FriendsListActivity)
+                receiverActivityMonitor.waitForActivityWithTimeout(TIMEOUT_IN_MS);
+        assertNotNull("ReceiverActivity is null", receiverActivity);
+        assertEquals("Monitor for ReceiverActivity has not been called",
+                1, receiverActivityMonitor.getHits());
+        assertEquals("Activity is of wrong type",
+                FriendsListActivity.class, receiverActivity.getClass());
+
+        FriendsList friendsList = receiverActivity.getFriendsList();
+        String friendName = "joesmith";
+
+
+        //Precondition for adding a friend
+        for (Friend f: friendsList){
+            assertFalse(f.getUsername.equals(friendName));
+        }
+
+        //Add the new friend through the UI
+        FloatingActionButton fab = receiverActivity.getAddButton();
+        fab.performClick();
+
+        EditText inputBox = receiverActivity.getInputBox();
+        inputBox.setText(friendName);
+        Button okButton = receiverActivity.getOKButton();
+        okButton.performClick();
+
+        //Ensure the new friend is visible in the list.
+        Boolean containsFriend = Boolean.FALSE;
+        for (Friend f: friendsList){
+            if (f.getUsername().equals(friendName)) {
+                containsFriend = Boolean.TRUE;
+            }
+        }
+        assertTrue(containsFriend);
     }
 
     /**
@@ -78,15 +121,11 @@ public class MockFriendsTest extends ActivityInstrumentationTestCase2{
     public void testAddFriend(){
         User user = new User("jane");
         User user2 = new User("steve");
-        FriendsList friendsList = FriendsListManager.getFriendsList();
+        FriendsList friendsList = user.getFriendsList();
 
-        friendsList.newFriendRequest(user, user2);
+        friendsList.addFriend(user2);
+        assertTrue(friendsList.contains(user2));
 
-        FriendRequestList requests = friendsList.getRequests(user2);
-        FriendRequest request = requests.get(0);
-        request.accept();
-
-        assertTrue(friendsList.areFriends(user, user2));
     }
 
     /**
@@ -95,53 +134,13 @@ public class MockFriendsTest extends ActivityInstrumentationTestCase2{
     public void testRemoveFriend(){
         User user = new User("jane");
         User user2 = new User("steve");
-        FriendsList friendsList = FriendsListManager.getFriendsList();
+        FriendsList friendsList = user.getFriendsList();
 
-        friendsList.newFriendRequest(user, user2);
+        friendsList.addFriend(user2);
+        assertTrue(friendsList.contains(user2));
 
-        FriendRequestList requests = friendsList.getRequests(user2);
-        FriendRequest request = requests.get(0);
-        request.accept();
-
-        assertTrue(friendsList.areFriends(user, user2));
-
-        friendsList.removeFriendship(user, user2);
-
-        assertFalse(friendsList.areFriends(user, user2));
-    }
-
-    /**
-     * UC02.01.01
-     */
-    public void testAddFavourite(){
-        User user = new User("jane");
-        User user2 = new User("steve");
-
-        user.addFavourite(user2);
-
-        List<Favourites> favouritesList = user.getFavourites();
-
-        assertTrue(favouritesList.contains(user2));
-    }
-
-    /**
-     * UC02.01.01
-     */
-    public void testRemoveFavourite(){
-        User user = new User("jane");
-        User user2 = new User("steve");
-
-        user.addFavourite(user2);
-
-        List<Favourites> favouritesList = user.getFavourites();
-
-        assertTrue(favouritesList.contains(user2));
-
-        user.removeFavourite(user2);
-
-        favouritesList = user.getFavourites();
-
-        assertFalse(favouritesList.contains(user));
+        friendsList.removeFriend(user2);
+        assertFalse(friendsList.contains(user2));
     }
 
 
