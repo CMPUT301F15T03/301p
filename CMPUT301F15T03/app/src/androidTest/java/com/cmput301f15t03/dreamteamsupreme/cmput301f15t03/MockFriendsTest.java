@@ -12,8 +12,7 @@ public class MockFriendsTest extends ActivityInstrumentationTestCase2{
         super(activityClass);
     }
 
-    private static final String EXISTING_TEST_USER_NAME = "Test User";
-
+    public static void TIMEOUT_IN_MS = 1000;
     /**
      * UC02.01.01
      */
@@ -33,8 +32,8 @@ public class MockFriendsTest extends ActivityInstrumentationTestCase2{
 
         activity.runOnUiThread(new Runnable() {
             public void run() {
-                View v = oldTweetList.getChildAt(0);
-                oldTweetList.performItemClick(v, 0, v.getId());
+                View v = sidebar.getChildAt(0); // Click on "friends" item to navigate to friends list
+                sidebar.performItemClick(v, 0, v.getId());
             }
         });
         getInstrumentation().waitForIdleSync();
@@ -178,11 +177,21 @@ public class MockFriendsTest extends ActivityInstrumentationTestCase2{
     * UC10.02.01
     */
     public void testEditName() {
-        User user = UserFactory.getExistingUser(EXISTING_TEST_USER_NAME);
+
+        User user = new User("jane");
+        user.setName("Jane Smith");
+        user.setEmail("jane@example.com");
+        user.setCity("Edmonton");
+        user.setPhone("780 123 4567");
+
+
+
         String currentName = user.getName();
         // To ensure a different name
-        String newName = new StringBuilder(currentName).append(" foo");
-        user.setName(newName);
+
+
+        StringBuilder newName = new StringBuilder(currentName).append(" foo");
+        user.setName(newName.toString());
 
         assertTrue(user.getName().equals(newName));
 
@@ -193,22 +202,32 @@ public class MockFriendsTest extends ActivityInstrumentationTestCase2{
     /**
      * UC10.02.01
     */
-    public void testEditAddress() {
-        User user = UserFactory.getExistingUser(EXISTING_TEST_USER_NAME);
-        String currentAddress = user.getAddress();
-        String newAddress = new StringBuilder(currentName).append(" foo");
-        user.setAddress(newAddress);
+    public void testEditCity() {
+        User user = new User("jane");
+        user.setName("Jane Smith");
+        user.setEmail("jane@example.com");
+        user.setCity("Edmonton");
+        user.setPhone("780 123 4567");
 
-        assertTrue(user.getAddress().equals(newAddress));
+        String currentCity = user.getCity();
+        String newCity = "Calgary";
+        user.setCity(newCity);
 
-        user.setAddress(currentAddress);
+        assertTrue(user.getCity().equals(newCity));
+
     }
 
     /**
     * UC10.02.01
      */
     public void testEditPhoneNumberWithValidNumber() {
-        User user = UserFactory.getExistingUser(EXISTING_TEST_USER_NAME);
+        User user = new User("jane");
+        user.setName("Jane Smith");
+        user.setEmail("jane@example.com");
+        user.setCity("Edmonton");
+        user.setPhone("780 123 4567");
+
+
         String currentPhoneNumber = user.getPhoneNumber();
         String newNumber = "403 113 1232";
         if (newNumber.equals(currentPhoneNumber))
@@ -226,7 +245,12 @@ public class MockFriendsTest extends ActivityInstrumentationTestCase2{
     * UC10.02.01
     */
     public void testEditPhoneNumberWithInValidNumber() {
-        User user = UserFactory.getExistingUser(EXISTING_TEST_USER_NAME);
+        User user = new User("jane");
+        user.setName("Jane Smith");
+        user.setEmail("jane@example.com");
+        user.setCity("Edmonton");
+        user.setPhone("780 123 4567");
+
         String currentPhoneNumber = user.getPhoneNumber();
         String newNumber = "hello";
         try {
@@ -244,7 +268,12 @@ public class MockFriendsTest extends ActivityInstrumentationTestCase2{
     * UC10.02.01
     */
     public void testEditEmailWithValidEmail() {
-        User user = UserFactory.getExistingUser(EXISTING_TEST_USER_NAME);
+        User user = new User("jane");
+        user.setName("Jane Smith");
+        user.setEmail("jane@example.com");
+        user.setCity("Edmonton");
+        user.setPhone("780 123 4567");
+
         String currentEmail = user.getEmail();
         String newEmail = "foo@bar.com";
         if (newEmail.equals(currentEmail))
@@ -262,7 +291,12 @@ public class MockFriendsTest extends ActivityInstrumentationTestCase2{
     * UC10.02.01
     */
     public void testEditEmailWithInvalidEmail() {
-        User user = UserFactory.getExistingUser(EXISTING_TEST_USER_NAME);
+        User user = new User("jane");
+        user.setName("Jane Smith");
+        user.setEmail("jane@example.com");
+        user.setCity("Edmonton");
+        user.setPhone("780 123 4567");
+
         String currentEmail = user.getEmail();
         String newEmail = "foo@barcom";
 
@@ -276,6 +310,4 @@ public class MockFriendsTest extends ActivityInstrumentationTestCase2{
 
         assertTrue(user.getEmail().equals(currentEmail));
     }
-
-    // TODO: Add more tests as more mutable fields are added
 }
