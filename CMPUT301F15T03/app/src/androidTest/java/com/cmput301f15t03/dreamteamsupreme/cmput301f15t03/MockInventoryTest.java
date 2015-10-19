@@ -168,7 +168,53 @@ public class MockInventoryTest extends ActivityInstrumentationTestCase2{
     }
 
     public void testNavigateToEntryItem() {
-    	//another UI test, unsure of this at the moment
+    	ElasticSearchServer server = new ElasticSearchServer();
+        User owner = new User("UserName");
+        User friend = new User("friend");
+        owner.addFriend(friend);
+        sever.addUser(owner);
+        Inventory inv = new Inventory();
+        owner.setInventory(inv);
+
+        tempItem.setName("50mm Cannon Lens");
+        String category = Items.Categories[0];
+        tempItem.setQualilty("Bad Condition");
+        tempItem.setCategory(category);
+        tempItem.setPublic();
+        tempItem.addComment("This is my cherished cannon lens!!");
+        inv.addItem(tempItem);
+
+
+        MainActivity activity = (MainActivity) getActivity();
+
+        // code from https://developer.android.com/training/activity-testing/activity-functional-testing.html
+        // Date: 2015-10-16
+        // Set up an ActivityMonitor
+        Instrumentation.ActivityMonitor receiverActivityMonitor =
+                getInstrumentation().addMonitor(InventoryActivity.class.getName(),
+                        null, false);
+
+
+
+        activity.runOnUiThread(new Runnable() {
+            public void run() {
+                activity.inventorybutton.performItemClick(v, 0, v.getId());
+            }
+        });
+        getInstrumentation().waitForIdleSync();
+
+        // Validate that ReceiverActivity is started
+        InventoryActivity receiverActivity = (InventoryActivity)
+                receiverActivityMonitor.waitForActivityWithTimeout(TIMEOUT_IN_MS);
+        assertNotNull("ReceiverActivity is null", receiverActivity);
+        assertEquals("Monitor for ReceiverActivity has not been called",
+                1, receiverActivityMonitor.getHits());
+        assertEquals("Activity is of wrong type",
+                InventoryActivity.class, receiverActivity.getClass());
+
+        ItemList itemList = receiverActivity.getItemList();
+
+        assertTrue(itemList.contains(tempItem));
     }
 
     public void testChangePublicStatus() {
