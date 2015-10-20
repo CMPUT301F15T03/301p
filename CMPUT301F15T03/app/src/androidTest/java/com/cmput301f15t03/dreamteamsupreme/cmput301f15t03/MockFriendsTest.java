@@ -14,12 +14,16 @@ public class MockFriendsTest extends ActivityInstrumentationTestCase2{
 
     public static void TIMEOUT_IN_MS = 1000;
     /**
-     * UC02.01.01
+     * UC02.01.01, UC02.02.01
      */
     public void testUserCanSeeFriends(){
         MainActivity activity = (MainActivity) getActivity();
 
         //Precondition: user joesmith exists
+        User user = new User("joesmith");
+
+        UserController userController = UserController.getInstance();
+        userController.addUser(user);
 
         // code from https://developer.android.com/training/activity-testing/activity-functional-testing.html
         // Date: 2015-10-16
@@ -126,6 +130,7 @@ public class MockFriendsTest extends ActivityInstrumentationTestCase2{
         assertTrue(friendsList.contains(user2));
 
     }
+
 
     /**
      * UC02.03.01
