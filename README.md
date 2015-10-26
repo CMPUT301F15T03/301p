@@ -16,4 +16,4 @@
   * A license has also been chosen and can be found at the root of this repository [here](https://github.com/CMPUT301F15T03/301p/blob/master/LICENSE).
   
 ###Part 3
-UML diagrams can be found [here](https://github.com/CMPUT301F15T03/301p/tree/master/docs/uml)
+UML diagrams can be found [here](https://github.com/CMPUT301F15T03/301p/tree/master/docs/uml). The master UML is [here](https://github.com/CMPUT301F15T03/301p/blob/master/docs/uml/master_uml.pdf).
