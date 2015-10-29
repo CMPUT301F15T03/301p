@@ -6,5 +6,9 @@ package ca.ualberta.cmput301.t03;
 public class EditItemController {
     private Item itemModel;
 
+    public EditItemController(Item itemModel) {
+        this.itemModel = itemModel;
+    }
+
     public void saveItemToInvetory() { throw new UnsupportedOperationException(); }
 }
