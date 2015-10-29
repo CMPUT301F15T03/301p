@@ -1,11 +1,11 @@
 package ca.ualberta.cmput301.t03;
 
-import java.util.Collection;
+import java.util.*;
 
 /**
  * Created by ross on 15-10-29.
  */
-public class Trade {
+public class Trade implements Observable, Observer {
     private TradeState state;
     private User borrower;
     private User owner;
@@ -13,7 +13,7 @@ public class Trade {
     private ArrayList<Item> ownersItems;
     private DataManager dataManager;
     private Guid id;
-    private ArrayList<Observer> observers;
+    private Set<Observer> observers;
     private String comments;
 
     public void load() {
@@ -74,4 +74,25 @@ public class Trade {
     }
 
 
+    @Override
+    public void notifyObservers() {
+        for (Observer o: observers) {
+            o.update(this);
+        }
+    }
+
+    @Override
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void update(Observable observable) {
+        throw new UnsupportedOperationException();
+    }
 }
