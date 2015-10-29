@@ -11,7 +11,7 @@ public class Configuration implements Observable{
     private DataManager dataManager;
     private Set<Observer> observers;
     private Boolean offlineModeEnabled;
-    private Boolean downloadImagesEnabled;
+    private Boolean downloadImagesEnabled; 
 
     public Configuration() {
         dataManager = new DataManager();
