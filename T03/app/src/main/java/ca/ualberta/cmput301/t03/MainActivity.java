@@ -12,9 +12,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    public FragmentAdapter mFragmentAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +26,8 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        mFragmentAdapter = new FragmentAdapter(getSupportFragmentManager());
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -78,17 +84,42 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
+        Fragment fragment = null;
 
-        if (id == R.id.nav_inventory) {
-            // Handle the camera action
-        } else if (id == R.id.nav_browse) {
+        Class fragmentClass;
 
-        } else if (id == R.id.nav_trades) {
-
-        } else if (id == R.id.nav_friends) {
-
+        switch(item.getItemId()){
+            case R.id.nav_inventory:
+                fragmentClass = BlankFragment.class;
+//                fragmentClass = InventoryFragment.class;
+                break;
+            case R.id.nav_browse:
+                fragmentClass = BlankFragment.class;
+//                fragmentClass = BrowseFragment.class;
+                break;
+            case R.id.nav_trades:
+                fragmentClass = BlankFragment.class;
+//                fragmentClass = TradesFragment.class;
+                break;
+            case R.id.nav_friends:
+                fragmentClass = BlankFragment.class;
+//                fragmentClass = FriendsFragment.class;
+                break;
+            default:
+                fragmentClass = BlankFragment.class;
+//                fragmentClass = FriendsFragment.class;
         }
+
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.fragmentContent, fragment).commit();
+
+        setTitle("GET A STRING");
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

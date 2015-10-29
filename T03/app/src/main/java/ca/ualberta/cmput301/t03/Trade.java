@@ -2,6 +2,8 @@ package ca.ualberta.cmput301.t03;
 
 import java.util.*;
 
+import ca.ualberta.cmput301.t03.datamanager.DataManager;
+
 /**
  * Created by ross on 15-10-29.
  */
@@ -12,7 +14,7 @@ public class Trade implements Observable, Observer {
     private ArrayList<Item> borrowersItems;
     private ArrayList<Item> ownersItems;
     private DataManager dataManager;
-    private Guid id;
+//    private Guid id;
     private Set<Observer> observers;
     private String comments;
 
@@ -48,9 +50,9 @@ public class Trade implements Observable, Observer {
     public ArrayList<Item> getOwnersItems() {
         throw new UnsupportedOperationException();
     }
-    public Guid getId() {
-        return this.id;
-    }
+//    public Guid getId() {
+//        return this.id;
+//    }
     public String getComments() {
         return this.comments;
     }
