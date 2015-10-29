@@ -76,7 +76,7 @@ public class Trade implements Observable, Observer {
 
     @Override
     public void notifyObservers() {
-        for (Observer<Trade> o: observers) {
+        for (Observer o: observers) {
             o.update(this);
         }
     }
@@ -92,12 +92,7 @@ public class Trade implements Observable, Observer {
     }
 
     @Override
-    public void update(User observable) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void update(Item observable) {
+    public void update(Observable observable) {
         throw new UnsupportedOperationException();
     }
 }
