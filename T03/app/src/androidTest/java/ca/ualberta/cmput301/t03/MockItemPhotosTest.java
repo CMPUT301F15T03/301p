@@ -1,5 +1,7 @@
 package ca.ualberta.cmput301.t03;
 
+import android.test.ActivityInstrumentationTestCase2;
+
 /**
  * Created by mabuyo on 2015-10-08.
  */
