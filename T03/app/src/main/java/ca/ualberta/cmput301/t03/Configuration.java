@@ -11,7 +11,7 @@ public class Configuration implements Observable{
     private DataManager dataManager;
     private Set<Observer> observers;
     private Boolean offlineModeEnabled;
-    private Boolean downloadImagesEnabled; 
+    private Boolean downloadImagesEnabled;
 
     public Configuration() {
         dataManager = new DataManager();
@@ -35,6 +35,7 @@ public class Configuration implements Observable{
     public void setOfflineModeEnabled(Boolean offlineModeEnabled) {
         this.offlineModeEnabled = offlineModeEnabled;
         notifyObservers();
+        save();
     }
 
     public Boolean getDownloadImagesEnabled() {
@@ -44,6 +45,7 @@ public class Configuration implements Observable{
     public void setDownloadImagesEnabled(Boolean downloadImagesEnabled) {
         this.downloadImagesEnabled = downloadImagesEnabled;
         notifyObservers();
+        save();
     }
 
     @Override
