@@ -1,5 +1,7 @@
 package ca.ualberta.cmput301.t03;
 
+import java.util.Collection;
+
 /**
  * Created by mmabuyo on 2015-10-29.
  */

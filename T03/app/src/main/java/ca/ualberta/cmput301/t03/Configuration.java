@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import ca.ualberta.cmput301.t03.datamanager.DataManager;
+
 /**
  * Created by kyleoshaughnessy on 2015-10-29.
  */
@@ -14,7 +16,7 @@ public class Configuration implements Observable{
     private Boolean downloadImagesEnabled;
 
     public Configuration() {
-        dataManager = new DataManager();
+//        dataManager = new DataManager();
         observers = new HashSet<>();
         load();
     }

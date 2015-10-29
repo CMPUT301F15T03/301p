@@ -2,6 +2,8 @@ package ca.ualberta.cmput301.t03;
 
 import java.util.HashSet;
 
+import ca.ualberta.cmput301.t03.datamanager.DataManager;
+
 /**
  * Created by ross on 15-10-29.
  */
@@ -9,10 +11,10 @@ public class User implements Observable, Observer {
     private FriendsList friends;
     private UserProfile profile;
     private String username;
-    private Inventory inventory;
+//    private Inventory inventory;
     private DataManager dataManager;
     private HashSet<Observer> observers;
-    private BrowsableInventories browsableInventories;
+//    private BrowsableInventories browsableInventories;
 
     @Override
     public void notifyObservers() {
