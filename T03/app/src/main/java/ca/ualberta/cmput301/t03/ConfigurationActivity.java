@@ -6,8 +6,14 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Switch;
 
-public class ConfigurationActivity extends AppCompatActivity {
+public class ConfigurationActivity extends AppCompatActivity implements Observer {
+
+    private Configuration model;
+    private ConfigurationController controller;
+    private Switch offlineModeSwitch;
+    private Switch downloadImagesSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +31,15 @@ public class ConfigurationActivity extends AppCompatActivity {
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        model = new Configuration();
+        model.addObserver(this);
+        controller = new ConfigurationController(model);
+        // TODO : get the view elements for switches and assign them the the Switch members
     }
 
+    @Override
+    public void update(Observable observable) {
+        // TODO : update view elements
+    }
 }
