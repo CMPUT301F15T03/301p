@@ -59,4 +59,17 @@ public class ConfigurationActivity extends AppCompatActivity implements Observer
         offlineModeSwitch.setChecked(model.getOfflineModeEnabled());
         downloadImagesSwitch.setChecked(model.getDownloadImagesEnabled());
     }
+    
+    public Configuration getModel() {
+        return model;
+    }
+
+    public Switch getOfflineModeSwitch() {
+        return offlineModeSwitch;
+    }
+
+
+    public Switch getDownloadImagesSwitch() {
+        return downloadImagesSwitch;
+    }
 }
