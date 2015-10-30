@@ -2,6 +2,10 @@ package ca.ualberta.cmput301.t03;
 
 import android.test.ActivityInstrumentationTestCase2;
 
+import ca.ualberta.cmput301.t03.inventory.Inventory;
+import ca.ualberta.cmput301.t03.inventory.Item;
+import ca.ualberta.cmput301.t03.user.User;
+
 public class MockInventoryTest extends ActivityInstrumentationTestCase2{
     public MockInventoryTest(Class activityClass) {
         super(activityClass);
