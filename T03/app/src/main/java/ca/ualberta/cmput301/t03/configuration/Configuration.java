@@ -26,7 +26,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import java.lang.annotation.Documented;
 import java.util.HashSet;
 import java.util.Set;
 
