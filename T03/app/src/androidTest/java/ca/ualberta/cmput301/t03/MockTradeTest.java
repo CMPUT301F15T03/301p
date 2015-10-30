@@ -1,5 +1,9 @@
 package ca.ualberta.cmput301.t03;
 
+import ca.ualberta.cmput301.t03.inventory.Item;
+import ca.ualberta.cmput301.t03.trading.Trade;
+import ca.ualberta.cmput301.t03.user.User;
+
 /**
  * Created by rhanders on 2015-10-08.
  */
