@@ -38,14 +38,6 @@ public class ConfigurationController {
     }
 
     /**
-     * Set the state of offline mode in the configuration
-     * @param state The state desired for offlineMode in the configuration
-     */
-    public void onOfflineModeToggled(Boolean state) {
-        model.setOfflineMode(state);
-    }
-
-    /**
      * Set the state of download images in the configuration
      * @param state The state desired for downloadImages in the configuration
      */
