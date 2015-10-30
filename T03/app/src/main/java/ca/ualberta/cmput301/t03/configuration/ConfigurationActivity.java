@@ -1,6 +1,6 @@
 /*
     Copyright (C) 2015 Kyle O'Shaughnessy
-    Photography equipment trading application for CMPUT 301 at the University of Alberta
+    Photography equipment trading application for CMPUT 301 at the University of Alberta.
 
 
     This file is part of {Application Name}.
