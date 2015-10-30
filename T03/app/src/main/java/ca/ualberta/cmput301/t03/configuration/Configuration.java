@@ -34,9 +34,9 @@ import ca.ualberta.cmput301.t03.Observer;
 
 public class Configuration implements Observable {
 
-    private static final String offlineModeEnabledKey = "OFFLINE_MODE_ENABLED";
-    private static final String downloadImagesEnabledKey = "DOWNLOAD_IMAGES_ENABLED";
-    
+    private static final String offlineModeKey = "OFFLINE_MODE_ENABLED";
+    private static final String downloadImagesKey = "DOWNLOAD_IMAGES_ENABLED";
+
     private Set<Observer> observers;
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
@@ -49,28 +49,28 @@ public class Configuration implements Observable {
         preferences.registerOnSharedPreferenceChangeListener(new SharedPreferences.OnSharedPreferenceChangeListener() {
             @Override
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-                if (key.equals(offlineModeEnabledKey) || key.equals(downloadImagesEnabledKey)) {
+                if (key.equals(offlineModeKey) || key.equals(downloadImagesKey)) {
                     notifyObservers();
                 }
             }
         });
     }
 
-    public Boolean getOfflineModeEnabled() {
-        return preferences.getBoolean(offlineModeEnabledKey, false);
+    public Boolean isOfflineModeEnabled() {
+        return preferences.getBoolean(offlineModeKey, false);
     }
 
-    public void setOfflineModeEnabled(Boolean offlineModeEnabled) {
-        editor.putBoolean(offlineModeEnabledKey, offlineModeEnabled);
+    public void setOfflineMode(Boolean offlineMode) {
+        editor.putBoolean(offlineModeKey, offlineMode);
         editor.commit();
     }
 
-    public Boolean getDownloadImagesEnabled() {
-        return preferences.getBoolean(downloadImagesEnabledKey, false);
+    public Boolean isDownloadImagesEnabled() {
+        return preferences.getBoolean(downloadImagesKey, false);
     }
 
-    public void setDownloadImagesEnabled(Boolean downloadImagesEnabled) {
-        editor.putBoolean(downloadImagesEnabledKey, downloadImagesEnabled);
+    public void setDownloadImages(Boolean downloadImages) {
+        editor.putBoolean(downloadImagesKey, downloadImages);
         editor.commit();
     }
 
