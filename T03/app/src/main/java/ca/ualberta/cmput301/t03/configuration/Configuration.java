@@ -1,15 +1,17 @@
-package ca.ualberta.cmput301.t03;
+package ca.ualberta.cmput301.t03.configuration;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import ca.ualberta.cmput301.t03.Observable;
+import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.datamanager.DataManager;
 
 /**
  * Created by kyleoshaughnessy on 2015-10-29.
  */
-public class Configuration implements Observable{
+public class Configuration implements Observable {
     private DataManager dataManager;
     private Set<Observer> observers;
     private Boolean offlineModeEnabled;

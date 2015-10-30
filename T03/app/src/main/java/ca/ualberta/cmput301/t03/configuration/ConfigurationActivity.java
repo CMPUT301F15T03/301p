@@ -1,4 +1,4 @@
-package ca.ualberta.cmput301.t03;
+package ca.ualberta.cmput301.t03.configuration;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -7,6 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Switch;
+
+import ca.ualberta.cmput301.t03.Observable;
+import ca.ualberta.cmput301.t03.Observer;
+import ca.ualberta.cmput301.t03.R;
 
 public class ConfigurationActivity extends AppCompatActivity implements Observer {
 
