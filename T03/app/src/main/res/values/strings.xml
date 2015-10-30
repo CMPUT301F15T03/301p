@@ -9,14 +9,12 @@
     <string name="title_activity_trade_offer_history">TradeOfferHistoryActivity</string>
     
     <string name="action_settings">Settings</string>
-<!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="username">myUsername</string>
-<<<<<<< Updated upstream
     <string name="title_activity_configuration">ConfigurationActivity</string>
-=======
 
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
->>>>>>> Stashed changes
+    <string name="inventoryTitle">Inventory</string>
+    <string name="browseTitle">Browse</string>
+    <string name="tradeTitle">Trade</string>
+    <string name="friendsTitle">Friends</string>
 </resources>
