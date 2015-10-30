@@ -38,7 +38,6 @@ public class Configuration implements Observable{
     void load() {
         offlineModeEnabled = false;
         downloadImagesEnabled = false;
-        // TODO : get values for offlineModeEnabled and downloadImagesEnabled
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         String stateJson = preferences.getString(key, "");
         if (!stateJson.equals("")) {
@@ -51,7 +50,6 @@ public class Configuration implements Observable{
     }
 
     void save() {
-        // TODO : save values of offlineModeEnabled and downloadImagesEnabled
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor preferencesEditor = preferences.edit();
         Gson gson = new Gson();
