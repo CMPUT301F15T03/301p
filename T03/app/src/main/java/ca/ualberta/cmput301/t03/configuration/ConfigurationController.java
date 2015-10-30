@@ -1,4 +1,6 @@
-package ca.ualberta.cmput301.t03;
+package ca.ualberta.cmput301.t03.configuration;
+
+import ca.ualberta.cmput301.t03.configuration.Configuration;
 
 /**
  * Created by kyleoshaughnessy on 2015-10-29.
