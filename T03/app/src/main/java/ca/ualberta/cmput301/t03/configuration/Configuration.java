@@ -25,14 +25,6 @@ package ca.ualberta.cmput301.t03.configuration;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.JsonReader;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
-import org.json.JSONObject;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -42,58 +34,44 @@ import ca.ualberta.cmput301.t03.Observer;
 
 public class Configuration implements Observable {
 
-    private transient static final String key = "CONFIGURATION";
-    private transient Context context;
-    private transient Set<Observer> observers;
-    private Boolean offlineModeEnabled;
-    private Boolean downloadImagesEnabled;
+    private static final String offlineModeEnabledKey = "OFFLINE_MODE_ENABLED";
+    private static final String downloadImagesEnabledKey = "DOWNLOAD_IMAGES_ENABLED";
+    
+    private Set<Observer> observers;
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
+
 
     public Configuration(Context context) {
         this.observers = new HashSet<>();
-        this.context = context;
-        load();
-    }
-
-    private void load() {
-        offlineModeEnabled = false;
-        downloadImagesEnabled = false;
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String stateJson = preferences.getString(key, "");
-        if (!stateJson.equals("")) {
-            JsonParser jp = new JsonParser();
-            JsonObject jo = jp.parse(stateJson).getAsJsonObject();
-            offlineModeEnabled = jo.get("offlineModeEnabled").getAsBoolean();
-            downloadImagesEnabled = jo.get("downloadImagesEnabled").getAsBoolean();
-        }
-        notifyObservers();
-    }
-
-    private void save() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor preferencesEditor = preferences.edit();
-        Gson gson = new Gson();
-        preferencesEditor.putString(key, gson.toJson(this));
-        preferencesEditor.commit();
+        this.preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        this.editor = preferences.edit();
+        preferences.registerOnSharedPreferenceChangeListener(new SharedPreferences.OnSharedPreferenceChangeListener() {
+            @Override
+            public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+                if (key.equals(offlineModeEnabledKey) || key.equals(downloadImagesEnabledKey)) {
+                    notifyObservers();
+                }
+            }
+        });
     }
 
     public Boolean getOfflineModeEnabled() {
-        return offlineModeEnabled;
+        return preferences.getBoolean(offlineModeEnabledKey, false);
     }
 
     public void setOfflineModeEnabled(Boolean offlineModeEnabled) {
-        this.offlineModeEnabled = offlineModeEnabled;
-        notifyObservers();
-        save();
+        editor.putBoolean(offlineModeEnabledKey, offlineModeEnabled);
+        editor.commit();
     }
 
     public Boolean getDownloadImagesEnabled() {
-        return downloadImagesEnabled;
+        return preferences.getBoolean(downloadImagesEnabledKey, false);
     }
 
     public void setDownloadImagesEnabled(Boolean downloadImagesEnabled) {
-        this.downloadImagesEnabled = downloadImagesEnabled;
-        notifyObservers();
-        save();
+        editor.putBoolean(downloadImagesEnabledKey, downloadImagesEnabled);
+        editor.commit();
     }
 
     @Override
