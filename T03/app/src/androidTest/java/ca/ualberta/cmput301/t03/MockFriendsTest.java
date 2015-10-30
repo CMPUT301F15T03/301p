@@ -4,8 +4,11 @@ import android.app.Instrumentation;
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
 
-import java.net.UnknownServiceException;
 import java.util.List;
+
+import ca.ualberta.cmput301.t03.user.FriendsList;
+import ca.ualberta.cmput301.t03.user.User;
+import ca.ualberta.cmput301.t03.user.UserController;
 
 public class MockFriendsTest extends ActivityInstrumentationTestCase2{
     public MockFriendsTest(Class activityClass) {
