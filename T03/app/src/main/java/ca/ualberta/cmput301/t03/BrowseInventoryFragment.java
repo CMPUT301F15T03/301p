@@ -8,18 +8,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link EditProfileFragment.OnFragmentInteractionListener} interface
+ * {@link BrowseInventoryFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link EditProfileFragment#newInstance} factory method to
+ * Use the {@link BrowseInventoryFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class EditProfileFragment extends Fragment implements Observer {
-    private UserProfile model;
-    private UserProfileController controller;
+public class BrowseInventoryFragment extends Fragment implements Observer {
+    private BrowsableInventories model;
+    private BrowseInventoryController controller;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -38,11 +37,11 @@ public class EditProfileFragment extends Fragment implements Observer {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment EditProfileFragment.
+     * @return A new instance of fragment BrowseInventoryFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static EditProfileFragment newInstance(String param1, String param2) {
-        EditProfileFragment fragment = new EditProfileFragment();
+    public static BrowseInventoryFragment newInstance(String param1, String param2) {
+        BrowseInventoryFragment fragment = new BrowseInventoryFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -50,7 +49,7 @@ public class EditProfileFragment extends Fragment implements Observer {
         return fragment;
     }
 
-    public EditProfileFragment() {
+    public BrowseInventoryFragment() {
         // Required empty public constructor
     }
 
@@ -67,7 +66,7 @@ public class EditProfileFragment extends Fragment implements Observer {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_edit_profile, container, false);
+        return inflater.inflate(R.layout.fragment_browse_inventory, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -94,11 +93,6 @@ public class EditProfileFragment extends Fragment implements Observer {
         mListener = null;
     }
 
-    @Override
-    public void update(Observable observable) {
-        throw new UnsupportedOperationException();
-    }
-
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -112,6 +106,11 @@ public class EditProfileFragment extends Fragment implements Observer {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public void update(Observable observable) {
+        throw new UnsupportedOperationException();
     }
 
 }
