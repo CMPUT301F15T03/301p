@@ -16,7 +16,9 @@ import android.view.ViewGroup;
  * Use the {@link ItemTileFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ItemTileFragment extends Fragment {
+public class ItemTileFragment extends Fragment implements Observer {
+    private Item model;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -88,6 +90,11 @@ public class ItemTileFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void update(Observable observable) {
+        throw new UnsupportedOperationException();
     }
 
     /**

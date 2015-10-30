@@ -17,6 +17,9 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class BrowseInventoryFragment extends Fragment implements Observer {
+    private BrowsableInventories model;
+    private BrowseInventoryController controller;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -90,11 +93,6 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
         mListener = null;
     }
 
-    @Override
-    public void update(Observable observable) {
-        throw new UnsupportedOperationException();
-    }
-
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -108,6 +106,11 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public void update(Observable observable) {
+        throw new UnsupportedOperationException();
     }
 
 }
