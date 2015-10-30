@@ -13,7 +13,7 @@ public class ConfigurationController {
     }
 
     public void onOfflineModeToggled(Boolean switchState) {
-        model.setDownloadImagesEnabled(switchState);
+        model.setOfflineModeEnabled(switchState);
     }
 
     public void onDownloadImagesToggled(Boolean switchState) {
