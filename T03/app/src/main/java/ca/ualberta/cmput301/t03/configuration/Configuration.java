@@ -74,10 +74,10 @@ public class Configuration implements Observable {
 
     /**
      * Set the value of offline mode
-     * @param offlineMode true == enabled, false == disable
+     * @param state true == enabled, false == disable
      */
-    public void setOfflineMode(Boolean offlineMode) {
-        editor.putBoolean(offlineModeKey, offlineMode);
+    public void setOfflineMode(Boolean state) {
+        editor.putBoolean(offlineModeKey, state);
         editor.commit();
     }
 
@@ -91,10 +91,10 @@ public class Configuration implements Observable {
 
     /**
      * Set the value of download images setting
-     * @param downloadImages true == enabled, false == disable
+     * @param state true == enabled, false == disable
      */
-    public void setDownloadImages(Boolean downloadImages) {
-        editor.putBoolean(downloadImagesKey, downloadImages);
+    public void setDownloadImages(Boolean state) {
+        editor.putBoolean(downloadImagesKey, state);
         editor.commit();
     }
 
