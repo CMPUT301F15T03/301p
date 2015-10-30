@@ -13,7 +13,7 @@ public class Trade implements Observable, Observer {
     private User owner;
     private ArrayList<Item> borrowersItems;
     private ArrayList<Item> ownersItems;
-    private Guid id;
+//    private Guid id;
     private String comments;
 
     private DataManager dataManager;
