@@ -2,7 +2,9 @@ package ca.ualberta.cmput301.t03;
 
 import android.test.ActivityInstrumentationTestCase2;
 
-import java.net.UnknownServiceException;
+import ca.ualberta.cmput301.t03.inventory.Item;
+import ca.ualberta.cmput301.t03.photo.Photo;
+import ca.ualberta.cmput301.t03.user.User;
 
 public class AppSettingsTest extends ActivityInstrumentationTestCase2{
     public AppSettingsTest(Class activityClass) {

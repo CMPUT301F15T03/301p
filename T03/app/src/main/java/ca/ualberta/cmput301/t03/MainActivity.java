@@ -15,6 +15,9 @@ import android.view.MenuItem;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
+import ca.ualberta.cmput301.t03.trading.TradeOfferHistoryFragment;
+import ca.ualberta.cmput301.t03.user.FriendsListFragment;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
