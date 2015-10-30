@@ -55,11 +55,17 @@ public class ConfigurationActivity extends AppCompatActivity implements Observer
     }
 
     @Override
+    protected void onDestroy() {
+        model.removeObserver(this);
+        super.onDestroy();
+    }
+
+    @Override
     public void update(Observable observable) {
         offlineModeSwitch.setChecked(model.getOfflineModeEnabled());
         downloadImagesSwitch.setChecked(model.getDownloadImagesEnabled());
     }
-    
+
     public Configuration getModel() {
         return model;
     }
