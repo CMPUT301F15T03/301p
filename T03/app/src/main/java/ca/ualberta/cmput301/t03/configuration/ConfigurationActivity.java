@@ -6,11 +6,14 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.Switch;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.R;
+import ca.ualberta.cmput301.t03.configuration.Configuration;
+import ca.ualberta.cmput301.t03.configuration.ConfigurationController;
 
 public class ConfigurationActivity extends AppCompatActivity implements Observer {
 
@@ -25,25 +28,35 @@ public class ConfigurationActivity extends AppCompatActivity implements Observer
         setContentView(R.layout.activity_configuration);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        model = new Configuration();
+        model = new Configuration(getApplicationContext());
         model.addObserver(this);
         controller = new ConfigurationController(model);
-        // TODO : get the view elements for switches and assign them the the Switch members
+
+        offlineModeSwitch = (Switch) findViewById(R.id.offlineModeSwitch);
+        downloadImagesSwitch = (Switch) findViewById(R.id.downloadImagesSwitch);
+
+        offlineModeSwitch.setChecked(model.getOfflineModeEnabled());
+        downloadImagesSwitch.setChecked(model.getDownloadImagesEnabled());
+
+        offlineModeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                controller.onOfflineModeToggled(isChecked);
+            }
+        });
+        downloadImagesSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                controller.onDownloadImagesToggled(isChecked);
+            }
+        });
     }
 
     @Override
     public void update(Observable observable) {
-        throw new UnsupportedOperationException();
+        offlineModeSwitch.setChecked(model.getOfflineModeEnabled());
+        downloadImagesSwitch.setChecked(model.getDownloadImagesEnabled());
     }
 }
