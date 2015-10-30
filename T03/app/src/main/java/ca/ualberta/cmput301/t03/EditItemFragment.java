@@ -17,7 +17,10 @@ import android.view.ViewGroup;
  * Use the {@link EditItemFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class EditItemFragment extends Fragment {
+public class EditItemFragment extends Fragment implements Observer {
+    private Item model;
+    private EditItemController controller;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -104,6 +107,11 @@ public class EditItemFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public void update(Observable observable) {
+        throw new UnsupportedOperationException();
     }
 
 }

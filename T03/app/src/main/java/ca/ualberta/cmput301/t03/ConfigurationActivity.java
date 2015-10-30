@@ -40,6 +40,6 @@ public class ConfigurationActivity extends AppCompatActivity implements Observer
 
     @Override
     public void update(Observable observable) {
-        // TODO : update view elements
+        throw new UnsupportedOperationException();
     }
 }
