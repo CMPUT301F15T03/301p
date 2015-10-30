@@ -40,7 +40,6 @@ public class ConfigurationActivity extends AppCompatActivity implements Observer
 
     private Configuration model;
     private ConfigurationController controller;
-    private Switch offlineModeSwitch;
     private Switch downloadImagesSwitch;
 
     /**
@@ -60,18 +59,8 @@ public class ConfigurationActivity extends AppCompatActivity implements Observer
         model.addObserver(this);
         controller = new ConfigurationController(model);
 
-        offlineModeSwitch = (Switch) findViewById(R.id.offlineModeSwitch);
         downloadImagesSwitch = (Switch) findViewById(R.id.downloadImagesSwitch);
-
-        offlineModeSwitch.setChecked(model.isOfflineModeEnabled());
         downloadImagesSwitch.setChecked(model.isDownloadImagesEnabled());
-
-        offlineModeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                controller.onOfflineModeToggled(isChecked);
-            }
-        });
         downloadImagesSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -97,7 +86,6 @@ public class ConfigurationActivity extends AppCompatActivity implements Observer
      */
     @Override
     public void update(Observable observable) {
-        offlineModeSwitch.setChecked(model.isOfflineModeEnabled());
         downloadImagesSwitch.setChecked(model.isDownloadImagesEnabled());
     }
 
@@ -107,14 +95,6 @@ public class ConfigurationActivity extends AppCompatActivity implements Observer
      */
     public Configuration getModel() {
         return model;
-    }
-
-    /**
-     * Get the offlineModeSwitch view used by the ConfigurationActivity
-     * @return Activities offlineModeSwitch
-     */
-    public Switch getOfflineModeSwitch() {
-        return offlineModeSwitch;
     }
 
     /**

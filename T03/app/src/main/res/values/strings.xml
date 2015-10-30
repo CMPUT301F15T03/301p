@@ -19,5 +19,5 @@
     <string name="friendsTitle">Friends</string>
 
     <string name="configurationOfflineMode">Offline Mode</string>
-    <string name="configurationDownloadImages">Download Images</string>
+    <string name="configurationDownloadImages">Automatically download images</string>
 </resources>

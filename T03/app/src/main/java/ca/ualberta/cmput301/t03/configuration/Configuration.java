@@ -39,7 +39,6 @@ import ca.ualberta.cmput301.t03.Observer;
  */
 public class Configuration implements Observable {
 
-    private static final String offlineModeKey = "OFFLINE_MODE_ENABLED";
     private static final String downloadImagesKey = "DOWNLOAD_IMAGES_ENABLED";
 
     private Set<Observer> observers;
@@ -57,28 +56,11 @@ public class Configuration implements Observable {
         preferences.registerOnSharedPreferenceChangeListener(new SharedPreferences.OnSharedPreferenceChangeListener() {
             @Override
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-                if (key.equals(offlineModeKey) || key.equals(downloadImagesKey)) {
+                if (key.equals(downloadImagesKey)) {
                     notifyObservers();
                 }
             }
         });
-    }
-
-    /**
-     * Check if offline mode is enabled for the application
-     * @return Boolean representing if offline mode is enabled or not (true == enabled)
-     */
-    public Boolean isOfflineModeEnabled() {
-        return preferences.getBoolean(offlineModeKey, false);
-    }
-
-    /**
-     * Set the value of offline mode
-     * @param state true == enabled, false == disable
-     */
-    public void setOfflineMode(Boolean state) {
-        editor.putBoolean(offlineModeKey, state);
-        editor.commit();
     }
 
     /**
