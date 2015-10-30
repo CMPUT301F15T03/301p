@@ -8,18 +8,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link EditProfileFragment.OnFragmentInteractionListener} interface
+ * {@link ItemTileFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link EditProfileFragment#newInstance} factory method to
+ * Use the {@link ItemTileFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class EditProfileFragment extends Fragment implements Observer {
-    private UserProfile model;
-    private UserProfileController controller;
+public class ItemTileFragment extends Fragment implements Observer {
+    private Item model;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -38,11 +36,11 @@ public class EditProfileFragment extends Fragment implements Observer {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment EditProfileFragment.
+     * @return A new instance of fragment ItemTileFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static EditProfileFragment newInstance(String param1, String param2) {
-        EditProfileFragment fragment = new EditProfileFragment();
+    public static ItemTileFragment newInstance(String param1, String param2) {
+        ItemTileFragment fragment = new ItemTileFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -50,7 +48,7 @@ public class EditProfileFragment extends Fragment implements Observer {
         return fragment;
     }
 
-    public EditProfileFragment() {
+    public ItemTileFragment() {
         // Required empty public constructor
     }
 
@@ -67,7 +65,7 @@ public class EditProfileFragment extends Fragment implements Observer {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_edit_profile, container, false);
+        return inflater.inflate(R.layout.fragment_item_tile, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

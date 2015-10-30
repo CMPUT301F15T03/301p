@@ -13,10 +13,11 @@ public class Trade implements Observable, Observer {
     private User owner;
     private ArrayList<Item> borrowersItems;
     private ArrayList<Item> ownersItems;
-    private DataManager dataManager;
-//    private Guid id;
-    private Set<Observer> observers;
+    private Guid id;
     private String comments;
+
+    private DataManager dataManager;
+    private Set<Observer> observers;
 
     public void load() {
         throw new UnsupportedOperationException();

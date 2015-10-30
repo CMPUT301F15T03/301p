@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.Collection;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -17,7 +19,9 @@ import android.view.ViewGroup;
  * Use the {@link TradeOfferHistoryFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TradeOfferHistoryFragment extends Fragment {
+public class TradeOfferHistoryFragment extends Fragment implements Observer {
+    private Collection<Trade> model;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -88,6 +92,11 @@ public class TradeOfferHistoryFragment extends Fragment {
 //        super.onDetach();
 //        mListener = null;
 //    }
+
+    @Override
+    public void update(Observable observable) {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * This interface must be implemented by activities that contain this

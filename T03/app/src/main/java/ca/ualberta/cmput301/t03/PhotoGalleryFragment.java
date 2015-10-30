@@ -12,12 +12,15 @@ import android.view.ViewGroup;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link PhotosGalleryFragment.OnFragmentInteractionListener} interface
+ * {@link PhotoGalleryFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link PhotosGalleryFragment#newInstance} factory method to
+ * Use the {@link PhotoGalleryFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PhotosGalleryFragment extends Fragment {
+public class PhotoGalleryFragment extends Fragment implements Observer {
+    private PhotoGallery model;
+    private PhotoGalleryController controller;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -35,11 +38,11 @@ public class PhotosGalleryFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment PhotosGalleryFragment.
+     * @return A new instance of fragment PhotoGalleryFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static PhotosGalleryFragment newInstance(String param1, String param2) {
-        PhotosGalleryFragment fragment = new PhotosGalleryFragment();
+    public static PhotoGalleryFragment newInstance(String param1, String param2) {
+        PhotoGalleryFragment fragment = new PhotoGalleryFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -47,7 +50,7 @@ public class PhotosGalleryFragment extends Fragment {
         return fragment;
     }
 
-    public PhotosGalleryFragment() {
+    public PhotoGalleryFragment() {
         // Required empty public constructor
     }
 
@@ -64,7 +67,7 @@ public class PhotosGalleryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_photos_gallery, container, false);
+        return inflater.inflate(R.layout.fragment_photo_gallery, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -89,6 +92,11 @@ public class PhotosGalleryFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void update(Observable observable) {
+        throw new UnsupportedOperationException();
     }
 
     /**
