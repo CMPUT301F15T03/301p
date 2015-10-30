@@ -18,7 +18,7 @@ import android.support.v4.app.FragmentManager;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    public FragmentAdapter mFragmentAdapter;
+    public FragmentManager mfragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mFragmentAdapter = new FragmentAdapter(getSupportFragmentManager());
+        addInitialFragment();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -85,44 +85,60 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         Fragment fragment = null;
-
+        String title;
         Class fragmentClass;
 
         switch(item.getItemId()){
             case R.id.nav_inventory:
-                fragmentClass = BlankFragment.class;
+                fragmentClass = FriendsListFragment.class;
 //                fragmentClass = InventoryFragment.class;
+                title = getString(R.string.inventoryTitle);
                 break;
             case R.id.nav_browse:
                 fragmentClass = BlankFragment.class;
 //                fragmentClass = BrowseFragment.class;
+                title = getString(R.string.browseTitle);
                 break;
             case R.id.nav_trades:
-                fragmentClass = BlankFragment.class;
+                fragmentClass = TradeOfferHistoryFragment.class;
 //                fragmentClass = TradesFragment.class;
+                title = getString(R.string.tradeTitle);
                 break;
             case R.id.nav_friends:
-                fragmentClass = BlankFragment.class;
-//                fragmentClass = FriendsFragment.class;
+                fragmentClass = FriendsListFragment.class;
+                title = getString(R.string.friendsTitle);
                 break;
             default:
                 fragmentClass = BlankFragment.class;
-//                fragmentClass = FriendsFragment.class;
+                title = getString(R.string.browseTitle);
         }
 
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+            mfragmentManager.beginTransaction().replace(R.id.fragmentContent, fragment).commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        setTitle(title);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    private void addInitialFragment(){
+        Fragment fragment = null;
+        Class fragmentClass;
+
+        fragmentClass = BlankFragment.class;
         try {
             fragment = (Fragment) fragmentClass.newInstance();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.fragmentContent, fragment).commit();
-
-        setTitle("GET A STRING");
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
+        mfragmentManager = getSupportFragmentManager();
+        mfragmentManager.beginTransaction().add(R.id.fragmentContent, fragment).commit();
     }
 }
