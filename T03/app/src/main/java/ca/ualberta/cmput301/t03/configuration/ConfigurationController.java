@@ -22,18 +22,34 @@
 
 package ca.ualberta.cmput301.t03.configuration;
 
+/**
+ * ConfigurationController is a controller for the Configuration model.
+ * This class is responsible for providing an abstraction for event handlers setup by the view.
+ */
 public class ConfigurationController {
     private Configuration model;
 
+    /**
+     *
+     * @param model The model which this controller will be modifying
+     */
     public ConfigurationController(Configuration model) {
         this.model = model;
     }
 
-    public void onOfflineModeToggled(Boolean switchState) {
-        model.setOfflineMode(switchState);
+    /**
+     * Set the state of offline mode in the configuration
+     * @param state The state desired for offlineMode in the configuration
+     */
+    public void onOfflineModeToggled(Boolean state) {
+        model.setOfflineMode(state);
     }
 
-    public void onDownloadImagesToggled(Boolean switchState) {
-        model.setDownloadImages(switchState);
+    /**
+     * Set the state of download images in the configuration
+     * @param state The state desired for downloadImages in the configuration
+     */
+    public void onDownloadImagesToggled(Boolean state) {
+        model.setDownloadImages(state);
     }
 }

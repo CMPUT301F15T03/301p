@@ -32,6 +32,10 @@ import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.R;
 
+/**
+ * ConfigurationActivity is the view component of the configuration MVC triplet.
+ * This is the view that users will interact with in order to change application wide preferences.
+ */
 public class ConfigurationActivity extends AppCompatActivity implements Observer {
 
     private Configuration model;
@@ -39,6 +43,11 @@ public class ConfigurationActivity extends AppCompatActivity implements Observer
     private Switch offlineModeSwitch;
     private Switch downloadImagesSwitch;
 
+    /**
+     * onCreate will setup the callbacks for switch toggles to the controller which will modify
+     * the model that it is listening too.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,27 +80,47 @@ public class ConfigurationActivity extends AppCompatActivity implements Observer
         });
     }
 
+    /**
+     * onDestroy will ensure that the current ConfigurationActivity view is removed from the models
+     * observers list.
+     */
     @Override
     protected void onDestroy() {
         model.removeObserver(this);
         super.onDestroy();
     }
 
+    /**
+     * update triggers a refresh of the view elements when called by a model that
+     * ConfigurationActivity has registered with.
+     * @param observable The observable which triggered the update
+     */
     @Override
     public void update(Observable observable) {
         offlineModeSwitch.setChecked(model.isOfflineModeEnabled());
         downloadImagesSwitch.setChecked(model.isDownloadImagesEnabled());
     }
 
+    /**
+     * Get the model currently in use by the ConfigurationActivity
+     * @return Activity's model
+     */
     public Configuration getModel() {
         return model;
     }
 
+    /**
+     * Get the offlineModeSwitch view used by the ConfigurationActivity
+     * @return Activities offlineModeSwitch
+     */
     public Switch getOfflineModeSwitch() {
         return offlineModeSwitch;
     }
 
-
+    /**
+     * Get the downloadImagesSwitch view used by the ConfigurationActivity
+     * @return Activities downloadImagesSwitch
+     */
     public Switch getDownloadImagesSwitch() {
         return downloadImagesSwitch;
     }
