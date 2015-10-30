@@ -30,10 +30,10 @@ public class ConfigurationController {
     }
 
     public void onOfflineModeToggled(Boolean switchState) {
-        model.setOfflineModeEnabled(switchState);
+        model.setOfflineMode(switchState);
     }
 
     public void onDownloadImagesToggled(Boolean switchState) {
-        model.setDownloadImagesEnabled(switchState);
+        model.setDownloadImages(switchState);
     }
 }
