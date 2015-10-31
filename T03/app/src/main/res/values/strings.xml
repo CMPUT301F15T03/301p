@@ -20,4 +20,8 @@
 
     <string name="configurationOfflineMode">Offline Mode</string>
     <string name="configurationDownloadImages">Automatically download images</string>
+
+
+    <!--Business logic constants-->
+    <string name="httpDataManagerRootUri">http://cmput301.softwareprocess.es:8080/cmput301f15t03/</string>
 </resources>
