@@ -4,9 +4,9 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="title_activity_trade_offer_compose">TradeOfferComposeActivity</string>
-    <string name="title_activity_trade_offer_review">TradeOfferReviewActivity</string>
-    <string name="title_activity_trade_offer_history">TradeOfferHistoryActivity</string>
+    <string name="title_activity_trade_offer_compose">Compose a Trade</string>
+    <string name="title_activity_trade_offer_review">Review Trade</string>
+    <string name="title_activity_trade_offer_history">Trade History</string>
     <string name="title_activity_configuration">Configuration</string>
 
     <string name="action_settings">Settings</string>
@@ -15,7 +15,7 @@
 
     <string name="inventoryTitle">Inventory</string>
     <string name="browseTitle">Browse</string>
-    <string name="tradeTitle">Trade</string>
+    <string name="tradeTitle">Trades</string>
     <string name="friendsTitle">Friends</string>
 
     <string name="configurationOfflineMode">Offline Mode</string>

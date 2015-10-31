@@ -17,6 +17,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
 import ca.ualberta.cmput301.t03.configuration.ConfigurationActivity;
+import ca.ualberta.cmput301.t03.inventory.BrowseInventoryFragment;
 import ca.ualberta.cmput301.t03.trading.TradeOfferHistoryFragment;
 import ca.ualberta.cmput301.t03.user.FriendsListFragment;
 
@@ -97,18 +98,16 @@ public class MainActivity extends AppCompatActivity
 
         switch(item.getItemId()){
             case R.id.nav_inventory:
-                fragmentClass = FriendsListFragment.class;
-//                fragmentClass = InventoryFragment.class;
+                // TODO : swap this out for the inventory fragment
+                fragmentClass = BrowseInventoryFragment.class;
                 title = getString(R.string.inventoryTitle);
                 break;
             case R.id.nav_browse:
-                fragmentClass = BlankFragment.class;
-//                fragmentClass = BrowseFragment.class;
+                fragmentClass = BrowseInventoryFragment.class;
                 title = getString(R.string.browseTitle);
                 break;
             case R.id.nav_trades:
                 fragmentClass = TradeOfferHistoryFragment.class;
-//                fragmentClass = TradesFragment.class;
                 title = getString(R.string.tradeTitle);
                 break;
             case R.id.nav_friends:
