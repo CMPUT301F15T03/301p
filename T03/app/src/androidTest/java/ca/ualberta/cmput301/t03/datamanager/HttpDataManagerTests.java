@@ -1,5 +1,11 @@
 package ca.ualberta.cmput301.t03.datamanager;
 
+import java.net.MalformedURLException;
+
+import ca.ualberta.cmput301.t03.R;
+import ca.ualberta.cmput301.t03.common.exceptions.NotImplementedException;
+import ca.ualberta.cmput301.t03.datamanager.httpdatamanager.HttpDataManager;
+
 /**
  * Created by rishi on 15-10-30.
  */
@@ -7,7 +13,11 @@ public class HttpDataManagerTests extends BaseDataManagerTests<HttpDataManager> 
 
     @Override
     protected HttpDataManager createNewDataManager() {
-        return new HttpDataManager(getContext());
+        try {
+            return new HttpDataManager(getContext().getString(R.string.httpDataManagerRootUrl));
+        } catch (MalformedURLException e) {
+            throw new NotImplementedException("Invalid httpDataManagerRootUrl resource.", e);
+        }
     }
 
     @Override
