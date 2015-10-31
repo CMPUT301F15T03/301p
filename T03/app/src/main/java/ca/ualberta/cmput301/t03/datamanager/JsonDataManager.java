@@ -41,23 +41,10 @@ public abstract class JsonDataManager implements DataManager {
             gsonBuilder.setPrettyPrinting();
         }
 
-        if (format.useExplicitExposeAnnotation) {
+        if (format.useExplicitExposeAnnotation()) {
             gsonBuilder.excludeFieldsWithoutExposeAnnotation();
         }
 
         return gsonBuilder.create();
-    }
-
-    public static class JsonFormatter {
-
-        private boolean useExplicitExposeAnnotation;
-
-        public JsonFormatter(boolean useExplicitExposeAnnotation) {
-            setUseExplicitExposeAnnotation(useExplicitExposeAnnotation);
-        }
-
-        public void setUseExplicitExposeAnnotation(boolean useExplicitExposeAnnotation) {
-            this.useExplicitExposeAnnotation = useExplicitExposeAnnotation;
-        }
     }
 }
