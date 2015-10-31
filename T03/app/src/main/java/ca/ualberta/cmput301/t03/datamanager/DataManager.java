@@ -9,6 +9,6 @@ public interface DataManager {
     boolean keyExists(DataKey key);
     <T> T getData(DataKey key, Type typeOfT);
     <T> void writeData(DataKey key, T obj, Type typeOfT);
-    void delete(DataKey key);
+    boolean deleteIfExists(DataKey key);
     boolean isOperational();
 }

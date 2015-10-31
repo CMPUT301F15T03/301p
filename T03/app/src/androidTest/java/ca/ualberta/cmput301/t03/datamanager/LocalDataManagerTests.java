@@ -27,6 +27,7 @@ public class LocalDataManagerTests extends AndroidTestCase {
         localDataManager.writeData(dataKey, testDto, new TypeToken<TestDto>() {}.getType());
         assertTrue(localDataManager.keyExists(dataKey));
         assertFalse(localDataManager.keyExists(new DataKey("not", "exists")));
+        assertTrue(localDataManager.deleteIfExists(dataKey));
     }
 
     public void testGetDataWhenKeyDoesNotExistThrowsException() {
@@ -44,12 +45,15 @@ public class LocalDataManagerTests extends AndroidTestCase {
         assertTrue(localDataManager.keyExists(dataKey));
         TestDto receivedData = localDataManager.getData(dataKey, new TypeToken<TestDto>() {}.getType());
         assertEquals(testDto, receivedData);
+        assertTrue(localDataManager.deleteIfExists(dataKey));
     }
 
     public void testDelete() {
+        assertFalse(localDataManager.keyExists(dataKey));
+        assertFalse(localDataManager.deleteIfExists(dataKey));
         localDataManager.writeData(dataKey, testDto, new TypeToken<TestDto>() {}.getType());
         assertTrue(localDataManager.keyExists(dataKey));
-        localDataManager.delete(dataKey);
+        assertTrue(localDataManager.deleteIfExists(dataKey));
         assertFalse(localDataManager.keyExists(dataKey));
     }
 

@@ -35,7 +35,7 @@ public class JsonDataManagerTests extends TestCase {
             }
 
             @Override
-            public void delete(DataKey key) {
+            public boolean deleteIfExists(DataKey key) {
                 throw new NotImplementedException("Not applicable for abstract classes.");
             }
 
