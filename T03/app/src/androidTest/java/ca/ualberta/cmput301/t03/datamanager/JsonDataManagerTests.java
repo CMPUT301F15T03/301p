@@ -76,7 +76,7 @@ public class JsonDataManagerTests extends TestCase {
         Type testDtoType = new TypeToken<TestDto>(){}.getType();
 
         String json = testDataManager.serialize(obj, testDtoType,
-                new JsonFormatter(true));
+                new JsonFormatter(true, true));
         Gson gson = new Gson();
         TestDto deserialized = gson.fromJson(json, testDtoType);
         assertEquals(1, deserialized.getaNumber());
@@ -90,7 +90,7 @@ public class JsonDataManagerTests extends TestCase {
         Type testDtoType = new TypeToken<TestDto>(){}.getType();
 
         String json = testDataManager.serialize(obj, testDtoType,
-                new JsonFormatter(false));
+                new JsonFormatter(false, true));
         Gson gson = new Gson();
         TestDto deserialized = gson.fromJson(json, testDtoType);
         assertEquals(1, deserialized.getaNumber());
@@ -102,7 +102,7 @@ public class JsonDataManagerTests extends TestCase {
     public void testExplitExposeDeserializationTrue() {
         String json = "{\"aNumber\" : 1, \"aString\" : \"One\", \"aBoolean\" : True, \"aHiddenString\" : \"hidden\"}";
         Type testDtoType = new TypeToken<TestDto>(){}.getType();
-        TestDto deserialized = testDataManager.deserialize(json, testDtoType, new JsonFormatter(true));
+        TestDto deserialized = testDataManager.deserialize(json, testDtoType, new JsonFormatter(true, true));
         assertEquals(1, deserialized.getaNumber());
         assertEquals("One", deserialized.getaString());
         assertEquals(true, deserialized.getaBoolean());
@@ -112,7 +112,7 @@ public class JsonDataManagerTests extends TestCase {
     public void testExplitExposeDeserializationFalse() {
         String json = "{\"aNumber\" : 1, \"aString\" : \"One\", \"aBoolean\" : True, \"aHiddenString\" : \"hidden\"}";
         Type testDtoType = new TypeToken<TestDto>(){}.getType();
-        TestDto deserialized = testDataManager.deserialize(json, testDtoType, new JsonFormatter(false));
+        TestDto deserialized = testDataManager.deserialize(json, testDtoType, new JsonFormatter(false, true));
         assertEquals(1, deserialized.getaNumber());
         assertEquals("One", deserialized.getaString());
         assertEquals(true, deserialized.getaBoolean());
