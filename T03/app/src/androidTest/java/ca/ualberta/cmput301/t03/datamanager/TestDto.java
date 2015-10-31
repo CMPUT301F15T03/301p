@@ -53,4 +53,30 @@ public class TestDto {
     public void setaHiddenString(String aHiddenString) {
         this.aHiddenString = aHiddenString;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+
+        if (!(obj instanceof TestDto)) {
+            return false;
+        }
+
+        TestDto rhs = (TestDto)obj;
+
+        return this.getaBoolean() == rhs.getaBoolean() &&
+                this.getaHiddenString().equals(rhs.getaHiddenString()) &&
+                this.getaNumber() == rhs.getaNumber() &&
+                this.getaString().equals(rhs.getaString());
+    }
+
+    @Override
+    public int hashCode() {
+        return new Boolean(this.getaBoolean()).hashCode() ^
+                new Integer(this.getaNumber()).hashCode() ^
+                this.getaString().hashCode() ^
+                this.getaHiddenString().hashCode();
+    }
 }
