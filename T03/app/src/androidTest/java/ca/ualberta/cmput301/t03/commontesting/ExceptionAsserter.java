@@ -25,7 +25,7 @@ public class ExceptionAsserter {
                     expectedExceptionType.getName(), exception.getClass().getName(), ExceptionUtils.getStackTrace(exception)));
         }
 
-        throw new AssertionFailedError(String.format("Expected exception of type '%s, but none thrown.",
+        throw new AssertionFailedError(String.format("Expected exception of type '%s', but none thrown.",
                 expectedExceptionType.getName()));
     }
 }

@@ -5,7 +5,6 @@ import android.widget.CompoundButton;
 
 import ca.ualberta.cmput301.t03.configuration.ConfigurationActivity;
 
-//
 public class AppSettingsTest extends ActivityInstrumentationTestCase2 {
 
     private Boolean switchToggledState = false;
