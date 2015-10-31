@@ -26,9 +26,18 @@ public class HttpResponse {
 
     public void readFromHttpURLConnection(HttpURLConnection httpConnection) throws IOException {
         responseCode = httpConnection.getResponseCode();
-        InputStream in = new BufferedInputStream(httpConnection.getInputStream());
+
+        InputStream in;
+        if (responseCode >= HttpStatusCode.BAD_REQUEST.getStatusCode()) {
+            in = new BufferedInputStream(httpConnection.getErrorStream());
+        }
+        else {
+            in = new BufferedInputStream(httpConnection.getInputStream());
+        }
+
         data = IOUtils.toByteArray(in);
         in.close();
+
     }
 
     public byte[] getData() {
