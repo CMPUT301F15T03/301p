@@ -1,7 +1,6 @@
 package ca.ualberta.cmput301.t03.datamanager;
 
 import com.google.gson.Gson;
-import com.google.gson.annotations.Expose;
 import com.google.gson.reflect.TypeToken;
 
 import junit.framework.TestCase;
