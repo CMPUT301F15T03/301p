@@ -1,5 +1,7 @@
 package ca.ualberta.cmput301.t03.user;
 
+import com.google.gson.annotations.Expose;
+
 import java.util.HashSet;
 
 import ca.ualberta.cmput301.t03.Observable;
@@ -9,9 +11,14 @@ import ca.ualberta.cmput301.t03.Observer;
  * Created by ross on 15-10-29.
  */
 public class UserProfile implements Observable {
+    public final static String type = "UserProfile";
+    @Expose
     private String city;
+    @Expose
     private String email;
+    @Expose
     private String phone;
+
     private HashSet<Observer> observers;
 
     public UserProfile() {
@@ -24,7 +31,6 @@ public class UserProfile implements Observable {
 
     public void setCity(String city) {
         this.city = city;
-        notifyObservers();
     }
 
     public String getEmail() {
@@ -33,7 +39,6 @@ public class UserProfile implements Observable {
 
     public void setEmail(String email) {
         this.email = email;
-        notifyObservers();
     }
 
     public String getPhone() {
@@ -42,13 +47,16 @@ public class UserProfile implements Observable {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public void commitChanges() {
         notifyObservers();
     }
 
     @Override
     public void notifyObservers() {
-        for (Observer o: observers) {
-            o.update(this);
+        for (Observer observer: observers) {
+            observer.update(this);
         }
     }
 
