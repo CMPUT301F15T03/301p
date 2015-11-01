@@ -96,7 +96,7 @@ public class LocalDataManager extends JsonDataManager {
         File appContextRootDirectory = context.getFilesDir();
         File typeDirectory = new File(appContextRootDirectory, key.getType());
         if (createTypeDirectoryIfNotExists && !typeDirectory.exists()) {
-            typeDirectory.mkdir();
+            typeDirectory.mkdirs();
         }
         return new File(typeDirectory, key.getId() + ".json");
     }

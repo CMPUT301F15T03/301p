@@ -15,6 +15,7 @@ import java.util.Objects;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.common.Preconditions;
 import ca.ualberta.cmput301.t03.common.exceptions.NotImplementedException;
+import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.common.http.HttpClient;
 import ca.ualberta.cmput301.t03.common.http.HttpResponse;
 import ca.ualberta.cmput301.t03.common.http.HttpStatusCode;
@@ -43,6 +44,10 @@ public class HttpDataManager extends JsonDataManager {
 
     @Override
     public boolean keyExists(DataKey key) throws IOException {
+        if (!isOperational()) {
+            throw new ServiceNotAvailableException("HttpDataManager is not operational. Cannot perform this operation.");
+        }
+
         HttpResponse response = client.makeGetRequest(key.toString());
 
         if (response.getResponseCode() == HttpStatusCode.OK.getStatusCode()) {
@@ -58,13 +63,17 @@ public class HttpDataManager extends JsonDataManager {
 
     @Override
     public <T> T getData(DataKey key, Type typeOfT) throws IOException {
+        if (!isOperational()) {
+            throw new ServiceNotAvailableException("HttpDataManager is not operational. Cannot perform this operation.");
+        }
+
         HttpResponse response = client.makeGetRequest(key.toString());
 
         if (response.getResponseCode() == HttpStatusCode.NOT_FOUND.getStatusCode()) {
             throw new DataKeyNotFoundException(key.toString());
         }
         if (response.getResponseCode() == HttpStatusCode.OK.getStatusCode()) {
-            String sourceJson = extractSourceFromElasticSearchResponse(response);
+            String sourceJson = extractSourceFromElasticSearchHttpResponse(response);
             return deserialize(sourceJson, typeOfT);
         }
 
@@ -74,6 +83,10 @@ public class HttpDataManager extends JsonDataManager {
 
     @Override
     public <T> void writeData(DataKey key, T obj, Type typeOfT) throws IOException {
+        if (!isOperational()) {
+            throw new ServiceNotAvailableException("HttpDataManager is not operational. Cannot perform this operation.");
+        }
+
         byte[] requestContents = serialize(obj, typeOfT).getBytes();
         HttpResponse response = client.makePutRequest(key.toString(), requestContents);
 
@@ -86,6 +99,10 @@ public class HttpDataManager extends JsonDataManager {
 
     @Override
     public boolean deleteIfExists(DataKey key) throws IOException {
+        if (!isOperational()) {
+            throw new ServiceNotAvailableException("HttpDataManager is not operational. Cannot perform this operation.");
+        }
+
         HttpResponse response = client.makeDeleteRequest(key.toString());
 
         if (response.getResponseCode() == HttpStatusCode.OK.getStatusCode()) {
@@ -108,7 +125,7 @@ public class HttpDataManager extends JsonDataManager {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
-    private String extractSourceFromElasticSearchResponse(HttpResponse response) {
+    private String extractSourceFromElasticSearchHttpResponse(HttpResponse response) {
         String responseContents = new String(response.getContents());
         Type mapType = new TypeToken<ElasticSearchResponse<Object>>(){}.getType();
         ElasticSearchResponse<Object> elasticSearchResponse = deserialize(responseContents, mapType);
