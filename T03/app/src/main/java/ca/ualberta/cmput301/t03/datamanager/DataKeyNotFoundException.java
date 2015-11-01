@@ -7,6 +7,7 @@ import android.content.res.Resources;
  */
 public class DataKeyNotFoundException extends Resources.NotFoundException {
     public DataKeyNotFoundException() {
+        super();
     }
 
     public DataKeyNotFoundException(String name) {
