@@ -9,7 +9,7 @@ import java.lang.reflect.Type;
  */
 public abstract class JsonDataManager implements DataManager {
 
-    private final JsonFormatter jsonFormatter;
+    protected final JsonFormatter jsonFormatter;
 
     public JsonDataManager(boolean useExplicitExposeAnnotation) {
         this.jsonFormatter = new JsonFormatter(useExplicitExposeAnnotation, true);
