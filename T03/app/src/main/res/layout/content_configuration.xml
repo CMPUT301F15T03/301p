@@ -8,6 +8,14 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_configuration"
-    tools:context="ca.ualberta.cmput301.t03.ConfigurationActivity">
+    tools:context="ca.ualberta.cmput301.t03.configuration.ConfigurationActivity">
 
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/configurationDownloadImages"
+        android:id="@+id/downloadImagesSwitch"
+        android:layout_alignParentEnd="true"
+        android:checked="false"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>

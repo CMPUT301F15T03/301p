@@ -1,5 +1,6 @@
 package ca.ualberta.cmput301.t03;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,9 +13,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+
+import ca.ualberta.cmput301.t03.inventory.BrowseInventoryFragment;
+import ca.ualberta.cmput301.t03.configuration.ConfigurationActivity;
+import ca.ualberta.cmput301.t03.inventory.BrowseInventoryFragment;
+import ca.ualberta.cmput301.t03.trading.TradeOfferHistoryFragment;
+import ca.ualberta.cmput301.t03.user.FriendsListFragment;
+import ca.ualberta.cmput301.t03.user.UserInventoryFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    public FragmentManager mfragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +34,8 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        addInitialFragment();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -68,6 +82,8 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(this, ConfigurationActivity.class);
+            this.startActivity(intent);
             return true;
         }
 
@@ -77,21 +93,59 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
 
-        if (id == R.id.nav_inventory) {
-            // Handle the camera action
-        } else if (id == R.id.nav_browse) {
+        Fragment fragment = null;
+        String title;
+        Class fragmentClass;
 
-        } else if (id == R.id.nav_trades) {
-
-        } else if (id == R.id.nav_friends) {
-
+        switch(item.getItemId()){
+            case R.id.nav_inventory:
+                fragmentClass = UserInventoryFragment.class;
+                title = getString(R.string.inventoryTitle);
+                break;
+            case R.id.nav_browse:
+                fragmentClass = BrowseInventoryFragment.class;
+                title = getString(R.string.browseTitle);
+                break;
+            case R.id.nav_trades:
+                fragmentClass = TradeOfferHistoryFragment.class;
+                title = getString(R.string.tradeTitle);
+                break;
+            case R.id.nav_friends:
+                fragmentClass = FriendsListFragment.class;
+                title = getString(R.string.friendsTitle);
+                break;
+            default:
+                fragmentClass = BrowseInventoryFragment.class;
+                title = getString(R.string.browseTitle);
         }
+
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+            mfragmentManager.beginTransaction().replace(R.id.fragmentContent, fragment).commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        setTitle(title);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void addInitialFragment(){
+        Fragment fragment = null;
+        Class fragmentClass;
+
+        fragmentClass = BrowseInventoryFragment.class;
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        mfragmentManager = getSupportFragmentManager();
+        mfragmentManager.beginTransaction().add(R.id.fragmentContent, fragment).commit();
     }
 }
