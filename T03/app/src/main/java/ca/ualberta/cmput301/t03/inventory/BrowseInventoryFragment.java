@@ -26,6 +26,8 @@ import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.inventory.BrowsableInventories;
 import ca.ualberta.cmput301.t03.inventory.BrowseInventoryController;
+import ca.ualberta.cmput301.t03.user.AddFriendButtonOnClickListener;
+import ca.ualberta.cmput301.t03.user.User;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -47,7 +49,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
     private String mParam1;
     private String mParam2;
 
-    FloatingActionButton fab;
+    private FloatingActionButton fab;
 
 //    private OnFragmentInteractionListener mListener;
 
@@ -78,26 +80,8 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_browse_inventory, container, false);
 
-        final ListView listview = (ListView) v.findViewById(R.id.BrowseListView);
-
-        List<HashMap<String,String>> tiles = buildTiles();
-        String[] from = {"tileViewItemName", "tileViewItemCategory"};
-        int[] to = {R.id.tileViewItemName, R.id.tileViewItemCategory};
-        SimpleAdapter adapter = new SimpleAdapter(getActivity().getBaseContext(), tiles, R.layout.fragment_item_tile, from, to);
-        listview.setAdapter(adapter);
-
-        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
-        fab.setImageDrawable(ContextCompat.getDrawable(getActivity().getBaseContext(), R.drawable.ic_filter));
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                controller.addFilter();
-                Toast.makeText(getActivity().getBaseContext(), "ADD FILTER", Toast.LENGTH_SHORT).show();
-            }
-        });
-        fab.show();
-
-
+        createListView(v);
+        setupFab();
 
         return v;
     }
@@ -113,6 +97,38 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
             tiles.add(hm);
         }
         return tiles;
+    }
+    public void createListView(View v){
+        final ListView listview = (ListView) v.findViewById(R.id.BrowseListView);
+        List<HashMap<String,String>> tiles = buildTiles();
+        String[] from = {"tileViewItemName", "tileViewItemCategory"};
+        int[] to = {R.id.tileViewItemName, R.id.tileViewItemCategory};
+        SimpleAdapter adapter = new SimpleAdapter(getActivity().getBaseContext(), tiles, R.layout.fragment_item_tile, from, to);
+        listview.setAdapter(adapter);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        teardownFab();
+    }
+
+    private void setupFab(){
+        fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+        fab.setImageDrawable(ContextCompat.getDrawable(getActivity().getBaseContext(), R.drawable.ic_filter));
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                controller.addFilter();
+                Toast.makeText(getActivity().getBaseContext(), "ADD FILTER", Toast.LENGTH_SHORT).show();
+            }
+        });
+        fab.show();
+    }
+
+    private void teardownFab(){
+        fab.setOnClickListener(null);
+        fab.hide();
     }
 
     @Override
