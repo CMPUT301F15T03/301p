@@ -25,7 +25,11 @@ import ca.ualberta.cmput301.t03.inventory.Inventory;
 /**
  * Created by ross on 15-10-29.
  */
-public class User implements Observable, Observer {
+public class User implements Observable, Observer, Comparable<User> {
+
+    public String getUsername() {
+        return username;
+    }
 
     @Expose
     private String username;
@@ -129,5 +133,10 @@ public class User implements Observable, Observer {
                 throw new RuntimeException("Unable to write profile changes.");
             }
         }
+    }
+
+    @Override
+    public int compareTo(User another) {
+        return getUsername().compareTo(another.getUsername());
     }
 }
