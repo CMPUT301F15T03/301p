@@ -31,6 +31,7 @@ public class UserInventoryFragment extends Fragment implements Observer {
     private Inventory model;
     private UserInventoryController controller;
 
+    private FloatingActionButton fab;
 
     // TODO: Rename and change types and number of parameters
     public static UserInventoryFragment newInstance() {
@@ -52,29 +53,17 @@ public class UserInventoryFragment extends Fragment implements Observer {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_user_inventory, container, false);
 
-        final ListView listview = (ListView) v.findViewById(R.id.InventoryListView);
-
-        List<HashMap<String,String>> tiles = buildTiles();
-        String[] from = {"tileViewItemName", "tileViewItemCategory"};
-        int[] to = {R.id.tileViewItemName, R.id.tileViewItemCategory};
-        SimpleAdapter adapter = new SimpleAdapter(getActivity().getBaseContext(), tiles, R.layout.fragment_item_tile, from, to);
-        listview.setAdapter(adapter);
-
-        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
-        fab.setImageDrawable(ContextCompat.getDrawable(getActivity().getBaseContext() ,R.drawable.ic_add));
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                controller.addItemButtonClicked();
-                Toast.makeText(getActivity().getBaseContext(), "GET ITEM", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        fab.show();
-
-
+        createListView(v);
+        setupFab();
 
         return v;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        createListView(view);
+        setupFab();
     }
 
     private ArrayList<HashMap<String, String>> buildTiles() {
@@ -90,6 +79,38 @@ public class UserInventoryFragment extends Fragment implements Observer {
         return tiles;
     }
 
+    public void createListView(View v){
+        final ListView listview = (ListView) v.findViewById(R.id.InventoryListView);
+        List<HashMap<String,String>> tiles = buildTiles();
+        String[] from = {"tileViewItemName", "tileViewItemCategory"};
+        int[] to = {R.id.tileViewItemName, R.id.tileViewItemCategory};
+        SimpleAdapter adapter = new SimpleAdapter(getActivity().getBaseContext(), tiles, R.layout.fragment_item_tile, from, to);
+        listview.setAdapter(adapter);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        teardownFab();
+    }
+
+    private void setupFab(){
+        fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+        fab.setImageDrawable(ContextCompat.getDrawable(getActivity().getBaseContext(), R.drawable.ic_add));
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                controller.addItemButtonClicked();
+                Toast.makeText(getActivity().getBaseContext(), "GET ITEM", Toast.LENGTH_SHORT).show();
+            }
+        });
+        fab.show();
+    }
+
+    private void teardownFab(){
+        fab.setOnClickListener(null);
+        fab.hide();
+    }
 
     @Override
     public void update(Observable observable) {
