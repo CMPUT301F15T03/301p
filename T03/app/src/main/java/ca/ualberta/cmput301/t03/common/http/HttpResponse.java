@@ -13,11 +13,11 @@ import java.net.HttpURLConnection;
 public class HttpResponse {
 
     private int responseCode;
-    private byte[] data;
+    private byte[] contents;
 
-    public HttpResponse(int responseCode, byte[] data) {
+    public HttpResponse(int responseCode, byte[] contents) {
         this.responseCode = responseCode;
-        this.data = data;
+        this.contents = contents;
     }
 
     public HttpResponse() {
@@ -35,13 +35,13 @@ public class HttpResponse {
             in = new BufferedInputStream(httpConnection.getInputStream());
         }
 
-        data = IOUtils.toByteArray(in);
+        contents = IOUtils.toByteArray(in);
         in.close();
 
     }
 
-    public byte[] getData() {
-        return data;
+    public byte[] getContents() {
+        return contents;
     }
 
     public int getResponseCode() {

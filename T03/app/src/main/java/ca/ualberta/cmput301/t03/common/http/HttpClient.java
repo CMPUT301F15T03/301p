@@ -15,7 +15,7 @@ public class HttpClient {
     private URL root;
 
     public HttpClient(String root) throws MalformedURLException {
-        this.root = new URL(root);
+        this(new URL(root));
     }
 
     public HttpClient(URL root) {
