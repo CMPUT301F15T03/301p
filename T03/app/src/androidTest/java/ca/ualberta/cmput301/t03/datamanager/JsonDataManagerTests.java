@@ -18,7 +18,7 @@ public class JsonDataManagerTests extends TestCase {
     private JsonDataManager testDataManager;
 
     public void setUp() {
-        testDataManager = new JsonDataManager() {
+        testDataManager = new JsonDataManager(false) {
             @Override
             public boolean keyExists(DataKey key) {
                 throw new NotImplementedException("Not applicable for abstract classes.");
