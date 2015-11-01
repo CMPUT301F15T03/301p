@@ -16,10 +16,12 @@ import android.view.MenuItem;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
+import ca.ualberta.cmput301.t03.inventory.BrowseInventoryFragment;
 import ca.ualberta.cmput301.t03.configuration.ConfigurationActivity;
 import ca.ualberta.cmput301.t03.inventory.BrowseInventoryFragment;
 import ca.ualberta.cmput301.t03.trading.TradeOfferHistoryFragment;
 import ca.ualberta.cmput301.t03.user.FriendsListFragment;
+import ca.ualberta.cmput301.t03.user.UserInventoryFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -91,15 +93,14 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+
         Fragment fragment = null;
         String title;
         Class fragmentClass;
 
         switch(item.getItemId()){
             case R.id.nav_inventory:
-                // TODO : swap this out for the inventory fragment
-                fragmentClass = BrowseInventoryFragment.class;
+                fragmentClass = UserInventoryFragment.class;
                 title = getString(R.string.inventoryTitle);
                 break;
             case R.id.nav_browse:
@@ -115,7 +116,7 @@ public class MainActivity extends AppCompatActivity
                 title = getString(R.string.friendsTitle);
                 break;
             default:
-                fragmentClass = BlankFragment.class;
+                fragmentClass = BrowseInventoryFragment.class;
                 title = getString(R.string.browseTitle);
         }
 
@@ -137,7 +138,7 @@ public class MainActivity extends AppCompatActivity
         Fragment fragment = null;
         Class fragmentClass;
 
-        fragmentClass = BlankFragment.class;
+        fragmentClass = BrowseInventoryFragment.class;
         try {
             fragment = (Fragment) fragmentClass.newInstance();
         } catch (Exception e) {
