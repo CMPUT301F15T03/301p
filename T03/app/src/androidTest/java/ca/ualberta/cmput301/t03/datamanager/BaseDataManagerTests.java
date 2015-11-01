@@ -4,6 +4,12 @@ import android.test.AndroidTestCase;
 
 import com.google.gson.reflect.TypeToken;
 
+import junit.framework.AssertionFailedError;
+
+import java.io.IOException;
+
+import ca.ualberta.cmput301.t03.common.exceptions.ExceptionUtils;
+
 import static ca.ualberta.cmput301.t03.commontesting.ExceptionAsserter.assertThrowsException;
 
 /**
@@ -20,45 +26,71 @@ public abstract class BaseDataManagerTests<T extends DataManager> extends Androi
     public void setUp() {
         dataManager = createNewDataManager();
         testDto = new TestDto(100, "Hundred", false, "a hidden string");
-        dataKey = new DataKey("TestDto", "123");
+        dataKey = new DataKey("testdto", "123");
     }
 
     protected void keyExistsTest() {
-        assertFalse(dataManager.keyExists(dataKey));
-        dataManager.writeData(dataKey, testDto, new TypeToken<TestDto>() {
-        }.getType());
-        assertTrue(dataManager.keyExists(dataKey));
-        assertFalse(dataManager.keyExists(new DataKey("not", "exists")));
-        assertTrue(dataManager.deleteIfExists(dataKey));
+        try {
+            assertFalse(dataManager.keyExists(dataKey));
+            dataManager.writeData(dataKey, testDto, new TypeToken<TestDto>() {
+            }.getType());
+            assertTrue(dataManager.keyExists(dataKey));
+            assertFalse(dataManager.keyExists(new DataKey("not", "exists")));
+            assertTrue(dataManager.deleteIfExists(dataKey));
+        }
+        catch (IOException e) {
+            throw new AssertionFailedError(e.getMessage() + "\n" + ExceptionUtils.getStackTrace(e));
+        }
     }
 
     protected void getDataWhenKeyDoesNotExistThrowsExceptionTest() {
-        assertFalse(dataManager.keyExists(dataKey));
-        assertThrowsException(new Runnable() {
-            @Override
-            public void run() {
-                dataManager.getData(dataKey, new TypeToken<TestDto>() {
-                }.getType());
-            }
-        }, DataKeyNotFoundException.class);
+        try {
+            assertFalse(dataManager.keyExists(dataKey));
+            assertThrowsException(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        dataManager.getData(dataKey, new TypeToken<TestDto>() {
+                        }.getType());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }, DataKeyNotFoundException.class);
+        }
+        catch (IOException e) {
+            throw new AssertionFailedError(e.getMessage() + "\n" + ExceptionUtils.getStackTrace(e));
+        }
     }
 
     protected void writeDataTest() {
-        dataManager.writeData(dataKey, testDto, new TypeToken<TestDto>() {}.getType());
-        assertTrue(dataManager.keyExists(dataKey));
-        TestDto receivedData = dataManager.getData(dataKey, new TypeToken<TestDto>() {}.getType());
-        assertEquals(testDto, receivedData);
-        assertTrue(dataManager.deleteIfExists(dataKey));
+        try {
+            dataManager.writeData(dataKey, testDto, new TypeToken<TestDto>() {
+            }.getType());
+            assertTrue(dataManager.keyExists(dataKey));
+            TestDto receivedData = dataManager.getData(dataKey, new TypeToken<TestDto>() {
+            }.getType());
+            assertEquals(testDto, receivedData);
+            assertTrue(dataManager.deleteIfExists(dataKey));
+        }
+        catch (IOException e) {
+            throw new AssertionFailedError(e.getMessage() + "\n" + ExceptionUtils.getStackTrace(e));
+        }
     }
 
     protected void deleteTest() {
-        assertFalse(dataManager.keyExists(dataKey));
-        assertFalse(dataManager.deleteIfExists(dataKey));
-        dataManager.writeData(dataKey, testDto, new TypeToken<TestDto>() {
-        }.getType());
-        assertTrue(dataManager.keyExists(dataKey));
-        assertTrue(dataManager.deleteIfExists(dataKey));
-        assertFalse(dataManager.keyExists(dataKey));
+        try {
+            assertFalse(dataManager.keyExists(dataKey));
+            assertFalse(dataManager.deleteIfExists(dataKey));
+            dataManager.writeData(dataKey, testDto, new TypeToken<TestDto>() {
+            }.getType());
+            assertTrue(dataManager.keyExists(dataKey));
+            assertTrue(dataManager.deleteIfExists(dataKey));
+            assertFalse(dataManager.keyExists(dataKey));
+        }
+        catch (IOException e) {
+            throw new AssertionFailedError(e.getMessage() + "\n" + ExceptionUtils.getStackTrace(e));
+        }
     }
 
     protected void isOperationalTest() {
