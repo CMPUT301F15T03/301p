@@ -9,8 +9,18 @@ import java.lang.reflect.Type;
  */
 public abstract class JsonDataManager implements DataManager {
 
+    private final JsonFormatter jsonFormatter;
+
+    public JsonDataManager(boolean useExplicitExposeAnnotation) {
+        this.jsonFormatter = new JsonFormatter(useExplicitExposeAnnotation, true);
+    }
+
+    public JsonDataManager() {
+        this(false);
+    }
+
     protected String serialize(Object obj, Type type) {
-        return serialize(obj, type, new JsonFormatter(false, true));
+        return serialize(obj, type, jsonFormatter);
     }
 
     protected String serialize(Object obj, Type type, JsonFormatter format) {
@@ -19,7 +29,7 @@ public abstract class JsonDataManager implements DataManager {
     }
 
     protected <T> T deserialize(String obj, Type typeOfT) {
-        return deserialize(obj, typeOfT, new JsonFormatter(false, true));
+        return deserialize(obj, typeOfT, jsonFormatter);
     }
 
     protected <T> T deserialize(String obj, Type typeOfT, JsonFormatter format) {
