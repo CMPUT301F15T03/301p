@@ -14,10 +14,10 @@ before_script:
     - adb shell input keyevent 82 &
 script:
     - cd T03
-    - gradle connectedAndroidTest --console plain
-    - gradle lint --console plain
-    - gradle assemble --console plain
-install:
+    - gradle connectedAndroidTest --quiet
+    - gradle lint --quiet
+    - gradle assemble --quiet
+-install:
     true
 notifications:
   slack:
