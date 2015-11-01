@@ -3,8 +3,11 @@ package ca.ualberta.cmput301.t03.user;
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -34,6 +37,9 @@ public class FriendsListFragment extends Fragment implements Observer {
     private String mParam1;
     private String mParam2;
 
+
+    private FloatingActionButton fab;
+
 //    private OnFragmentInteractionListener mListener;
 
     /**
@@ -56,6 +62,13 @@ public class FriendsListFragment extends Fragment implements Observer {
         // Required empty public constructor
     }
 
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_friends_list, menu);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +76,25 @@ public class FriendsListFragment extends Fragment implements Observer {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        setHasOptionsMenu(true);
+
+        setupFab();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        teardownFab();
+    }
+
+    private void setupFab(){
+        fab = (FloatingActionButton)getActivity().findViewById(R.id.fab);
+//        fab.setOnClickListener();
+        fab.show();
+    }
+
+    private void teardownFab(){
+        fab.hide();
     }
 
     @Override
