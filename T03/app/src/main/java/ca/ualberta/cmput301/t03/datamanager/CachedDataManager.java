@@ -11,21 +11,21 @@ import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 /**
  * Created by rishi on 15-10-31.
  */
-public class CachedDataManager implements DataManager {
+public class CachedDataManager extends JsonDataManager {
 
     private final static String CACHE_DIRECTORY = "cache";
-    private final DataManager innerManager;
+    private final JsonDataManager innerManager;
     private final Context context;
     private final LocalDataManager cachingDataManager;
 
-    public CachedDataManager(DataManager innerManager, Context context, boolean useExplicitExposeAnnotation) {
+    public CachedDataManager(JsonDataManager innerManager, Context context, boolean useExplicitExposeAnnotation) {
         this.innerManager = Preconditions.checkNotNull(innerManager, "innerManager");
         this.context = Preconditions.checkNotNull(context, "context");
         this.cachingDataManager = new LocalDataManager(context, useExplicitExposeAnnotation);
     }
 
-    public CachedDataManager(DataManager innerManager, Context context) {
-        this(innerManager, context, false);
+    public CachedDataManager(JsonDataManager innerManager, Context context) {
+        this(innerManager, context, innerManager.jsonFormatter.getUseExplicitExposeAnnotation());
     }
 
     @Override
