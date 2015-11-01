@@ -30,10 +30,15 @@ public class HttpDataManager extends JsonDataManager {
     private final HttpClient client;
     private final Context context;
 
-    public HttpDataManager(Context context) throws MalformedURLException {
+    public HttpDataManager(Context context, boolean useExplicitExposeAnnotation) throws MalformedURLException {
+        super(useExplicitExposeAnnotation);
         this.context = Preconditions.checkNotNull(context, "context");
         String rootUrl = context.getString(R.string.httpDataManagerRootUrl);
         client = new HttpClient(Preconditions.checkNotNullOrWhitespace(rootUrl, "rootUrl"));
+    }
+
+    public HttpDataManager(Context context) throws MalformedURLException {
+        this(context, false);
     }
 
     @Override

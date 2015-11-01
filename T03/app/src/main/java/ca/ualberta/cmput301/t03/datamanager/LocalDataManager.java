@@ -19,8 +19,13 @@ public class LocalDataManager extends JsonDataManager {
 
     private final Context context;
 
-    public LocalDataManager(Context context) {
+    public LocalDataManager(Context context, boolean useExplicitExposeAnnotation) {
+        super(useExplicitExposeAnnotation);
         this.context = Preconditions.checkNotNull(context, "context");
+    }
+
+    public LocalDataManager(Context context) {
+        this(context, false);
     }
 
     @Override
