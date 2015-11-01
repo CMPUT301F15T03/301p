@@ -94,7 +94,7 @@ public class CachedDataManagerTests extends BaseDataManagerTests<CachedDataManag
         assertFalse(cachedDataManager.keyExists(dataKey));
     }
 
-    private class InMemoryDataManager implements DataManager {
+    private class InMemoryDataManager extends JsonDataManager {
         private boolean isOperational = true;
         private HashMap<String, Object> inMemoryDataRepository = new HashMap<>();
 
