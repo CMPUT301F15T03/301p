@@ -31,6 +31,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ca.ualberta.cmput301.t03.MainActivity" />
         </activity>
+        <activity
+            android:name=".user.InitializeUserActivity"
+            android:label="@string/title_activity_initialize_user"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
     </application>
 
 </manifest>
