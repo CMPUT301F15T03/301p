@@ -3,8 +3,11 @@
     android:layout_height="match_parent"
     tools:context="ca.ualberta.cmput301.t03.user.UserInventoryFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView android:layout_width="match_parent" android:layout_height="match_parent"
-        android:text="I AM INVENTORY" />
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/InventoryListView"
+        android:layout_gravity="center_horizontal|top"
+        tools:listitem="@layout/fragment_item_tile" />
 
 </FrameLayout>
