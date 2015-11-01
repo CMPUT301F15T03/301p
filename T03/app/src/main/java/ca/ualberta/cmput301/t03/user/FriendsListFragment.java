@@ -78,7 +78,6 @@ public class FriendsListFragment extends Fragment implements Observer {
         }
         setHasOptionsMenu(true);
 
-        setupFab();
     }
 
     @Override
@@ -89,11 +88,12 @@ public class FriendsListFragment extends Fragment implements Observer {
 
     private void setupFab(){
         fab = (FloatingActionButton)getActivity().findViewById(R.id.fab);
-//        fab.setOnClickListener();
+        fab.setOnClickListener(new AddFriendButtonOnClickListener());
         fab.show();
     }
 
     private void teardownFab(){
+        fab.setOnClickListener(null);
         fab.hide();
     }
 
@@ -102,6 +102,12 @@ public class FriendsListFragment extends Fragment implements Observer {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_friends_list, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setupFab();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
