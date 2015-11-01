@@ -22,6 +22,11 @@ public class Item {
     private boolean itemIsPrivate;
     private String itemDescription;
 
+    public Item(String name, String category){
+        setItemName(name);
+        setItemCategory(category);
+    }
+
     public String getItemName() {
         return itemName;
     }

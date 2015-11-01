@@ -18,7 +18,6 @@ import android.support.v4.app.FragmentManager;
 
 import ca.ualberta.cmput301.t03.inventory.BrowseInventoryFragment;
 import ca.ualberta.cmput301.t03.configuration.ConfigurationActivity;
-import ca.ualberta.cmput301.t03.inventory.BrowseInventoryFragment;
 import ca.ualberta.cmput301.t03.trading.TradeOfferHistoryFragment;
 import ca.ualberta.cmput301.t03.user.FriendsListFragment;
 import ca.ualberta.cmput301.t03.user.UserInventoryFragment;
@@ -26,7 +25,7 @@ import ca.ualberta.cmput301.t03.user.UserInventoryFragment;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    public FragmentManager mfragmentManager;
+    public FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,7 +121,7 @@ public class MainActivity extends AppCompatActivity
 
         try {
             fragment = (Fragment) fragmentClass.newInstance();
-            mfragmentManager.beginTransaction().replace(R.id.fragmentContent, fragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.fragmentContent, fragment).commit();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -145,7 +144,7 @@ public class MainActivity extends AppCompatActivity
             e.printStackTrace();
         }
 
-        mfragmentManager = getSupportFragmentManager();
-        mfragmentManager.beginTransaction().add(R.id.fragmentContent, fragment).commit();
+        fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().add(R.id.fragmentContent, fragment).commit();
     }
 }
