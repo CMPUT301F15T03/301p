@@ -24,6 +24,8 @@ import java.util.List;
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.R;
+import ca.ualberta.cmput301.t03.common.exceptions.ExceptionUtils;
+import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.inventory.BrowsableInventories;
 import ca.ualberta.cmput301.t03.inventory.BrowseInventoryController;
 import ca.ualberta.cmput301.t03.user.AddFriendButtonOnClickListener;
@@ -50,7 +52,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
     private String mParam2;
 
     private FloatingActionButton fab;
-
+    private User user;
 //    private OnFragmentInteractionListener mListener;
 
     /**
@@ -80,7 +82,17 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_browse_inventory, container, false);
 
+
+        Configuration c = new Configuration(getActivity().getApplicationContext());
+        try{
+            user = new User(c.getApplicationUserName(), getActivity().getApplicationContext());
+        } catch (Exception e){
+
+        }
+
+
         createListView(v);
+
         setupFab();
 
         return v;

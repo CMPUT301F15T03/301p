@@ -18,7 +18,7 @@ import ca.ualberta.cmput301.t03.datamanager.DataManager;
 public class Inventory implements Filterable<Item>, Observable, Observer {
     public final static String type = "Inventory";
     @Expose
-    private Collection<Item> items;
+    private ArrayList<Item> items;
 
     private String ownerName; // is this needed?
     private String ownerId; // is this needed?
@@ -27,13 +27,20 @@ public class Inventory implements Filterable<Item>, Observable, Observer {
     public Inventory() {
         observers = new HashSet<>();
         items = new ArrayList<>();
+        items.add(new Item("testItem", "testItem"));
+        items.add(new Item("testItem2", "testItem2"));
+        items.add(new Item("testItem3", "testItem3"));
+        items.add(new Item("testItem4", "testItem4"));
+        items.add(new Item("testItem5", "testItem5"));
+        items.add(new Item("testItem6", "testItem6"));
+        items.add(new Item("testItem7", "testItem7"));
     }
 
-    public Collection<Item> getItems() {
+    public ArrayList<Item> getItems() {
         return items;
     }
 
-    public void setItems(Collection<Item> items) {
+    public void setItems(ArrayList<Item> items) {
         this.items = items;
     }
 
