@@ -8,7 +8,7 @@
 //
 //import ca.ualberta.cmput301.t03.user.FriendsList;
 //import ca.ualberta.cmput301.t03.user.User;
-//import ca.ualberta.cmput301.t03.user.UserController;
+//import ca.ualberta.cmput301.t03.user.InitializeUserController;
 //
 //public class MockFriendsTest extends ActivityInstrumentationTestCase2{
 //    public MockFriendsTest(Class activityClass) {
@@ -25,7 +25,7 @@
 //        //Precondition: user joesmith exists
 //        User user = new User("joesmith");
 //
-//        UserController userController = UserController.getInstance();
+//        InitializeUserController userController = InitializeUserController.getInstance();
 //        userController.addUser(user);
 //
 //        // code from https://developer.android.com/training/activity-testing/activity-functional-testing.html

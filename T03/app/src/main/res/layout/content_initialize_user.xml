@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:showIn="@layout/activity_initialize_user"
+    tools:context="ca.ualberta.cmput301.t03.user.InitializeUserActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/createProfileMessage"
+        android:id="@+id/createAUserTextView"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/doneButton"
+        android:layout_alignParentEnd="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:id="@+id/userNameEditText"
+        android:layout_below="@+id/createAUserTextView"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/doneButton"
+        android:autoText="false"
+        android:clickable="false"
+        android:hint="@string/userNameHint"
+        android:inputType="textVisiblePassword|text|textNoSuggestions"
+        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/cityEditText"
+        android:layout_below="@+id/userNameEditText"
+        android:layout_alignParentStart="true"
+        android:hint="@string/cityHint"
+        android:layout_alignEnd="@+id/userNameEditText" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textWebEmailAddress|textEmailAddress"
+        android:ems="10"
+        android:id="@+id/emailEditText"
+        android:layout_below="@+id/cityEditText"
+        android:layout_alignParentStart="true"
+        android:hint="@string/emailHint"
+        android:layout_toStartOf="@+id/doneButton" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="phone"
+        android:ems="10"
+        android:id="@+id/phoneNumberEditText"
+        android:layout_below="@+id/emailEditText"
+        android:layout_alignParentStart="true"
+        android:phoneNumber="true"
+        android:hint="@string/phoneNumberHint"
+        android:layout_alignEnd="@+id/emailEditText" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/doneButtonText"
+        android:id="@+id/doneButton"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true" />
+
+</RelativeLayout>

@@ -19,6 +19,7 @@ import android.support.v4.app.FragmentManager;
 import ca.ualberta.cmput301.t03.inventory.BrowseInventoryFragment;
 import ca.ualberta.cmput301.t03.configuration.ConfigurationActivity;
 import ca.ualberta.cmput301.t03.trading.TradeOfferHistoryFragment;
+import ca.ualberta.cmput301.t03.user.EditProfileFragment;
 import ca.ualberta.cmput301.t03.user.FriendsListFragment;
 import ca.ualberta.cmput301.t03.user.UserInventoryFragment;
 
@@ -53,6 +54,14 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        // todo : uncomment the below when ready :D
+//        Configuration config = new Configuration(getApplicationContext());
+//        config.clearApplicaitonUserID();
+//        if (!config.isApplicationUserIDCreated()) {
+//            Intent intent = new Intent(this, InitializeUserActivity.class);
+//            this.startActivity(intent);
+//        }
     }
 
     @Override
@@ -113,6 +122,10 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_friends:
                 fragmentClass = FriendsListFragment.class;
                 title = getString(R.string.friendsTitle);
+                break;
+            case R.id.nav_edit_profile:
+                fragmentClass = EditProfileFragment.class;
+                title = getString(R.string.editProfileTitle);
                 break;
             default:
                 fragmentClass = BrowseInventoryFragment.class;

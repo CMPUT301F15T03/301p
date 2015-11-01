@@ -14,6 +14,37 @@ public class UserProfile implements Observable {
     private String phone;
     private HashSet<Observer> observers;
 
+    public UserProfile() {
+        observers = new HashSet<>();
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+        notifyObservers();
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+        notifyObservers();
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+        notifyObservers();
+    }
+
     @Override
     public void notifyObservers() {
         for (Observer o: observers) {
