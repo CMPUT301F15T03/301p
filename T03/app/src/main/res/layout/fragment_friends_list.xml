@@ -3,10 +3,21 @@
     android:layout_height="match_parent"
     tools:context="ca.ualberta.cmput301.t03.user.FriendsListFragment">
 
-    <!--<RecyclerView-->
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/friendsListListView"
+        android:layout_gravity="center"
+        android:choiceMode="singleChoice"
+        tools:listitem="@android:layout/simple_list_item_1" />
+
+
+    <!--cool experiment -->
+    <!--<android.support.v7.widget.RecyclerView-->
         <!--android:layout_width="wrap_content"-->
         <!--android:layout_height="wrap_content"-->
-        <!--android:id="@+id/friendsListListView"-->
+        <!--android:id="@+id/friendsListRecyclerView"-->
         <!--android:layout_gravity="center"-->
         <!--android:choiceMode="singleChoice"-->
         <!--tools:listitem="@android:layout/simple_list_item_1" />-->
