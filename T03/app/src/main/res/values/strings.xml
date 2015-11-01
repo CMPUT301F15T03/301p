@@ -4,6 +4,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <string name="title_activity_initialize_user">Welcome to TradingPost!</string>
     <string name="title_activity_trade_offer_compose">Compose a Trade</string>
     <string name="title_activity_trade_offer_review">Review Trade</string>
     <string name="title_activity_trade_offer_history">Trade History</string>
@@ -13,15 +14,25 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="username">myUsername</string>
 
+    <!--Navbar titles for drawer fragments-->
     <string name="inventoryTitle">Inventory</string>
     <string name="browseTitle">Browse</string>
     <string name="tradeTitle">Trades</string>
     <string name="friendsTitle">Friends</string>
 
+    <!--Configuration strings-->
     <string name="configurationOfflineMode">Offline Mode</string>
     <string name="configurationDownloadImages">Automatically download images</string>
 
+    <!--Initialize user strings-->
+    <string name="userNameHint">Username</string>
+    <string name="createProfileMessage">Please create your profile:</string>
+    <string name="cityHint">City</string>
+    <string name="emailHint">Email</string>
+    <string name="phoneNumberHint">Phone number</string>
+    <string name="doneButtonText">Done</string>
 
     <!--Business logic constants-->
     <string name="httpDataManagerRootUrl">http://cmput301.softwareprocess.es:8080/cmput301f15t03/</string>
+
 </resources>
