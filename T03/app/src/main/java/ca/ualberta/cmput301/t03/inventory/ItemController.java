@@ -6,6 +6,10 @@ package ca.ualberta.cmput301.t03.inventory;
 public class ItemController {
     private Item itemModel;
 
+    public ItemController(Item itemModel) {
+        this.itemModel = itemModel;
+    }
+
     public void saveToInventory() { throw new UnsupportedOperationException(); }
     public void addToInventory() { throw new UnsupportedOperationException(); }
 }

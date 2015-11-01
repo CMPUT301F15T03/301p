@@ -6,6 +6,10 @@ package ca.ualberta.cmput301.t03.photo;
 public class AttachPhotosController {
     private PhotoGallery photoGalleryModel;
 
+    public AttachPhotosController(PhotoGallery photoGalleryModel) {
+        this.photoGalleryModel = photoGalleryModel;
+    }
+
     public void selectPhoto() { throw new UnsupportedOperationException(); }
     public void unselectPhoto() { throw new UnsupportedOperationException(); }
     public void finishSelection() { throw new UnsupportedOperationException(); }

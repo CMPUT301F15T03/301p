@@ -7,6 +7,9 @@ import java.util.Collection;
 import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.datamanager.DataManager;
 
+import android.net.Uri;
+import java.util.Collection;
+
 /**
  * Created by mmabuyo on 2015-10-29.
  */
