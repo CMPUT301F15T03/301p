@@ -3,13 +3,15 @@
 
     <group android:checkableBehavior="single">
         <item android:id="@+id/nav_inventory" android:icon="@android:drawable/ic_menu_camera"
-            android:title="Inventory" />
+            android:title="@string/inventoryTitle" />
         <item android:id="@+id/nav_browse" android:icon="@android:drawable/ic_menu_gallery"
-            android:title="Browse" />
+            android:title="@string/browseTitle" />
         <item android:id="@+id/nav_trades" android:icon="@android:drawable/ic_menu_slideshow"
-            android:title="Trades" />
-        <item android:id="@+id/nav_friends" android:icon="@android:drawable/ic_menu_manage"
-            android:title="Friends" />
+            android:title="@string/tradeTitle" />
+        <item android:id="@+id/nav_friends" android:icon="@drawable/ic_menu_friendslist"
+            android:title="@string/friendsTitle" />
+        <item android:id="@+id/nav_edit_profile" android:icon="@android:drawable/ic_menu_edit"
+            android:title="@string/editProfileTitle" />
     </group>
 
     <!--<item android:title="Communicate">-->
