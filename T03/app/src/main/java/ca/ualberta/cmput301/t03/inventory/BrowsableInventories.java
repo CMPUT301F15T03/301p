@@ -1,6 +1,8 @@
 package ca.ualberta.cmput301.t03.inventory;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import ca.ualberta.cmput301.t03.Filter;
 import ca.ualberta.cmput301.t03.Filterable;
@@ -14,8 +16,13 @@ import ca.ualberta.cmput301.t03.Observer;
 public class BrowsableInventories implements Filterable<Item>, Observer {
     private FriendsList friends;
 
-    public Collection<Item> getBrowsables() {
-        throw new UnsupportedOperationException();
+    public ArrayList<Item> getBrowsables() {
+        ArrayList<Item> list = new ArrayList<Item>();
+        for(int i=0; i < 5; i++){
+            list.add(new Item("test", "test"));
+        }
+
+        return list;
     }
 
     @Override
