@@ -22,7 +22,6 @@
 
 package ca.ualberta.cmput301.t03.configuration;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -32,6 +31,7 @@ import java.util.Set;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
+import ca.ualberta.cmput301.t03.user.User;
 
 /**
  * Model component of the Configuration MVC triplet.
@@ -40,7 +40,7 @@ import ca.ualberta.cmput301.t03.Observer;
 public class Configuration implements Observable {
 
     private static final String downloadImagesKey = "DOWNLOAD_IMAGES_ENABLED";
-    private static final String applicationUserKey = "APPLICATION_USER_ID";
+    private static final String applicationUserName = "APPLICATION_USER_NAME";
 
     private Set<Observer> observers;
     private SharedPreferences preferences;
@@ -57,7 +57,7 @@ public class Configuration implements Observable {
         preferences.registerOnSharedPreferenceChangeListener(new SharedPreferences.OnSharedPreferenceChangeListener() {
             @Override
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-                if (key.equals(downloadImagesKey) || key.equals(applicationUserKey)) {
+                if (key.equals(downloadImagesKey) || key.equals(applicationUserName)) {
                     notifyObservers();
                 }
             }
@@ -85,17 +85,17 @@ public class Configuration implements Observable {
      * Check to see if a user's id has been assigned to this application
      * @return true == user id has been assigned, false == otherwise
      */
-    public Boolean isApplicationUserIDCreated() {
-        return preferences.contains(applicationUserKey);
+    public Boolean isApplicationUserNameSet() {
+        return preferences.contains(applicationUserName);
     }
 
     /**
      * Get the current user id associated with this application
      * @return the application's associated user id
      */
-    public String getApplicationUserID() {
-        if (isApplicationUserIDCreated()) {
-            return preferences.getString(applicationUserKey, "");
+    public String getApplicationUserName() {
+        if (isApplicationUserNameSet()) {
+            return preferences.getString(applicationUserName, "");
         }
         else {
             return null;
@@ -106,16 +106,16 @@ public class Configuration implements Observable {
      * set the application's associated user id
      * @param userID the user id you want to associate with the application
      */
-    public void setApplicationUserID(String userID) {
-        editor.putString(applicationUserKey, userID);
+    public void setApplicationUserName(String userID) {
+        editor.putString(applicationUserName, userID);
         editor.commit();
     }
 
     /**
      * Remove the user id from this particular instance of the application
      */
-    public void clearApplicaitonUserID() {
-        editor.remove(applicationUserKey);
+    public void clearApplicaitonUserName() {
+        editor.remove(applicationUserName);
         editor.commit();
     }
 
