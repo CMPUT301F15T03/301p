@@ -18,11 +18,13 @@ import android.view.MenuItem;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
+import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.inventory.BrowseInventoryFragment;
 import ca.ualberta.cmput301.t03.configuration.ConfigurationActivity;
 import ca.ualberta.cmput301.t03.trading.TradeOfferHistoryFragment;
 import ca.ualberta.cmput301.t03.user.EditProfileFragment;
 import ca.ualberta.cmput301.t03.user.FriendsListFragment;
+import ca.ualberta.cmput301.t03.user.InitializeUserActivity;
 import ca.ualberta.cmput301.t03.user.UserInventoryFragment;
 
 public class MainActivity extends AppCompatActivity
@@ -58,12 +60,12 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         // todo : uncomment the below when ready :D
-//        Configuration config = new Configuration(getApplicationContext());
-//        config.clearApplicaitonUserID();
-//        if (!config.isApplicationUserIDCreated()) {
-//            Intent intent = new Intent(this, InitializeUserActivity.class);
-//            this.startActivity(intent);
-//        }
+        Configuration config = new Configuration(getApplicationContext());
+        if (!config.isApplicationUserNameSet()) {
+            Intent intent = new Intent(this, InitializeUserActivity.class);
+            this.startActivity(intent);
+        }
+
     }
 
     @Override
