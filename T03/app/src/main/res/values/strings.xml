@@ -19,6 +19,7 @@
     <string name="browseTitle">Browse</string>
     <string name="tradeTitle">Trades</string>
     <string name="friendsTitle">Friends</string>
+    <string name="editProfileTitle">Edit Profile</string>
 
     <!--Configuration strings-->
     <string name="configurationOfflineMode">Offline Mode</string>
@@ -34,5 +35,6 @@
 
     <!--Business logic constants-->
     <string name="httpDataManagerRootUrl">http://cmput301.softwareprocess.es:8080/cmput301f15t03/</string>
+    <string name="friendSearch">search</string>
 
 </resources>

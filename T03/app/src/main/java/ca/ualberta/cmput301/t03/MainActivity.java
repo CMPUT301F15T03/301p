@@ -19,11 +19,10 @@ import android.support.v4.app.FragmentManager;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.inventory.BrowseInventoryFragment;
 import ca.ualberta.cmput301.t03.configuration.ConfigurationActivity;
-import ca.ualberta.cmput301.t03.inventory.BrowseInventoryFragment;
 import ca.ualberta.cmput301.t03.trading.TradeOfferHistoryFragment;
+import ca.ualberta.cmput301.t03.user.EditProfileFragment;
 import ca.ualberta.cmput301.t03.user.FriendsListFragment;
 import ca.ualberta.cmput301.t03.user.InitializeUserActivity;
-import ca.ualberta.cmput301.t03.user.User;
 import ca.ualberta.cmput301.t03.user.UserInventoryFragment;
 
 public class MainActivity extends AppCompatActivity
@@ -125,6 +124,10 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_friends:
                 fragmentClass = FriendsListFragment.class;
                 title = getString(R.string.friendsTitle);
+                break;
+            case R.id.nav_edit_profile:
+                fragmentClass = EditProfileFragment.class;
+                title = getString(R.string.editProfileTitle);
                 break;
             default:
                 fragmentClass = BrowseInventoryFragment.class;
