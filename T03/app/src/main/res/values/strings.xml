@@ -35,5 +35,6 @@
 
     <!--Business logic constants-->
     <string name="httpDataManagerRootUrl">http://cmput301.softwareprocess.es:8080/cmput301f15t03/</string>
+    <string name="friendSearch">search</string>
 
 </resources>
