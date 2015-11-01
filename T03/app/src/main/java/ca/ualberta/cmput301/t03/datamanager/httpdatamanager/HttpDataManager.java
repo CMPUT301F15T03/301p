@@ -1,5 +1,9 @@
 package ca.ualberta.cmput301.t03.datamanager.httpdatamanager;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
 import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.reflect.TypeToken;
 
@@ -8,6 +12,7 @@ import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.util.Objects;
 
+import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.common.Preconditions;
 import ca.ualberta.cmput301.t03.common.exceptions.NotImplementedException;
 import ca.ualberta.cmput301.t03.common.http.HttpClient;
@@ -23,8 +28,11 @@ import ca.ualberta.cmput301.t03.datamanager.JsonDataManager;
 public class HttpDataManager extends JsonDataManager {
 
     private final HttpClient client;
+    private final Context context;
 
-    public HttpDataManager(String rootUrl) throws MalformedURLException {
+    public HttpDataManager(Context context) throws MalformedURLException {
+        this.context = Preconditions.checkNotNull(context, "context");
+        String rootUrl = context.getString(R.string.httpDataManagerRootUrl);
         client = new HttpClient(Preconditions.checkNotNullOrWhitespace(rootUrl, "rootUrl"));
     }
 
@@ -89,7 +97,10 @@ public class HttpDataManager extends JsonDataManager {
 
     @Override
     public boolean isOperational() {
-        throw new NotImplementedException();
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     private String extractSourceFromElasticSearchResponse(HttpResponse response) {
