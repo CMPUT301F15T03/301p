@@ -56,7 +56,7 @@ public class HttpDataManager extends JsonDataManager {
         HttpResponse response = client.makeGetRequest(key.toString());
 
         if (response.getResponseCode() == HttpStatusCode.NOT_FOUND.getStatusCode()) {
-            throw new DataKeyNotFoundException(String.format("DataKey '%s' not found", key.toString()));
+            throw new DataKeyNotFoundException(key.toString());
         }
         if (response.getResponseCode() == HttpStatusCode.OK.getStatusCode()) {
             String sourceJson = extractSourceFromElasticSearchResponse(response);

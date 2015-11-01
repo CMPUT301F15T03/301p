@@ -34,7 +34,7 @@ public class LocalDataManager extends JsonDataManager {
         Preconditions.checkNotNull(key, "key");
 
         if (!keyExists(key)) {
-            throw new DataKeyNotFoundException(String.format("DataKey '%s' not found", key.toString()));
+            throw new DataKeyNotFoundException(key.toString());
         }
 
         File targetFile = getTargetFile(key, false);
