@@ -1,7 +1,6 @@
 package ca.ualberta.cmput301.t03.datamanager;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import java.lang.reflect.Type;
 
@@ -10,18 +9,21 @@ import java.lang.reflect.Type;
  */
 public abstract class JsonDataManager implements DataManager {
 
-    private final Gson gson;
-
-    public JsonDataManager() {
-        // Source: http://www.mkyong.com/java/how-to-enable-pretty-print-json-output-gson/
-        gson = new GsonBuilder().setPrettyPrinting().create();
+    protected String serialize(Object obj, Type type) {
+        return serialize(obj, type, new JsonFormatter(false, true));
     }
 
-    protected String serialize(Object obj, Type type) {
+    protected String serialize(Object obj, Type type, JsonFormatter format) {
+        Gson gson = format.getGson();
         return gson.toJson(obj, type);
     }
 
     protected <T> T deserialize(String obj, Type typeOfT) {
+        return deserialize(obj, typeOfT, new JsonFormatter(false, true));
+    }
+
+    protected <T> T deserialize(String obj, Type typeOfT, JsonFormatter format) {
+        Gson gson = format.getGson();
         return gson.fromJson(obj, typeOfT);
     }
 }
