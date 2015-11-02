@@ -138,3 +138,4 @@ public class HttpDataManager extends JsonDataManager {
 //        return serialize(map, new TypeToken<LinkedTreeMap>(){}.getType());
     }
 }
+
