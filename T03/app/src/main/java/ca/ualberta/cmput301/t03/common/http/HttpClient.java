@@ -1,97 +1,76 @@
 package ca.ualberta.cmput301.t03.common.http;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
- * Copyright 2015 John Slevinsky
- * <p/>
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p/>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p/>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Created by rishi on 15-10-31.
  */
-public class HttpClient extends HttpClientAsync {
+// Source: http://www.mkyong.com/java/how-to-send-http-request-getpost-in-java/
+public class HttpClient {
+
+    private URL root;
+
     public HttpClient(String root) throws MalformedURLException {
-        super(root);
+        this(new URL(root));
     }
 
     public HttpClient(URL root) {
-        super(root);
+        this.root = root;
     }
 
-    private String mSuffix;
-    private byte[] mDataToBeSent;
-    private HttpMethods mSendMethod;
-    private HttpResponse mResponse;
-
-
-
-    protected HttpResponse makeAsyncSendDataRequest(String suffix, byte[] dataToBeSent, HttpMethods sendMethod) throws IOException {
-        return super.makeSendDataRequest(suffix, dataToBeSent, sendMethod);
+    public HttpResponse makeGetRequest(String suffix) throws IOException {
+        return makeDataLessRequest(suffix, HttpMethods.GET);
     }
 
-    protected HttpResponse makeAsyncDataLessRequest(String suffix, HttpMethods method) throws IOException {
-        return super.makeDataLessRequest(suffix, method);
+    public HttpResponse makeDeleteRequest(String suffix) throws IOException {
+        return makeDataLessRequest(suffix, HttpMethods.DELETE);
     }
 
-    @Override
-    protected HttpResponse makeSendDataRequest(String suffix, byte[] dataToBeSent, HttpMethods sendMethod){
-        mDataToBeSent = dataToBeSent;
-        mSuffix = suffix;
-        mSendMethod = sendMethod;
-
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    mResponse = makeAsyncSendDataRequest(mSuffix, mDataToBeSent, mSendMethod);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        });
-        t.start();
-        try {
-            t.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return mResponse;
-
+    public HttpResponse makePostRequest(String suffix, byte[] postData) throws IOException {
+        return makeSendDataRequest(suffix, postData, HttpMethods.POST);
     }
 
-    @Override
-    protected HttpResponse makeDataLessRequest(String suffix, HttpMethods method){
-        mSuffix = suffix;
-        mSendMethod = method;
-
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    mResponse =  makeAsyncDataLessRequest(mSuffix, mSendMethod);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        t.start();
-        try {
-            t.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return mResponse;
+    public HttpResponse makePutRequest(String suffix, byte[] putData) throws IOException {
+        return makeSendDataRequest(suffix, putData, HttpMethods.PUT);
     }
 
+    private HttpResponse makeDataLessRequest(String suffix, HttpMethods method) throws IOException {
+        HttpURLConnection httpConnection = openHttpURLConnection(suffix);
+        method.setMethod(httpConnection);
+        httpConnection.setDoInput(true);
+
+        HttpResponse response = new HttpResponse();
+        response.readFromHttpURLConnection(httpConnection);
+        httpConnection.disconnect();
+
+        return response;
+    }
+
+    private HttpResponse makeSendDataRequest(String suffix, byte[] dataToBeSent, HttpMethods sendMethod) throws IOException {
+
+        HttpURLConnection httpConnection = openHttpURLConnection(suffix);
+        sendMethod.setMethod(httpConnection);
+        httpConnection.setDoOutput(true);
+        httpConnection.setDoInput(true);
+
+        DataOutputStream out = new DataOutputStream(httpConnection.getOutputStream());
+        out.write(dataToBeSent);
+        out.flush();
+        out.close();
+
+        HttpResponse response = new HttpResponse();
+        response.readFromHttpURLConnection(httpConnection);
+        httpConnection.disconnect();
+
+        return response;
+    }
+
+    private HttpURLConnection openHttpURLConnection(String suffix) throws IOException {
+        URL queryUrl = new URL(root, suffix);
+        return (HttpURLConnection) queryUrl.openConnection();
+    }
 }
