@@ -3,6 +3,7 @@ package ca.ualberta.cmput301.t03.datamanager.httpdatamanager;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.provider.ContactsContract;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -32,6 +33,9 @@ public class HttpDataManager extends JsonDataManager {
 
     private final HttpClient client;
     private final Context context;
+
+    private HttpResponse mResponse;
+    private DataKey mKey;
 
     public HttpDataManager(Context context, boolean useExplicitExposeAnnotation) throws MalformedURLException {
         super(useExplicitExposeAnnotation);
@@ -69,11 +73,15 @@ public class HttpDataManager extends JsonDataManager {
             throw new ServiceNotAvailableException("HttpDataManager is not operational. Cannot perform this operation.");
         }
 
-
+        mKey = key;
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
-                HttpResponse response = client.makeGetRequest(key.toString());
+                try {
+                    mResponse = client.makeGetRequest(mKey.toString());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
             }
         });
@@ -85,16 +93,16 @@ public class HttpDataManager extends JsonDataManager {
             e.printStackTrace();
         }
 
-        if (response.getResponseCode() == HttpStatusCode.NOT_FOUND.getStatusCode()) {
+        if (mResponse.getResponseCode() == HttpStatusCode.NOT_FOUND.getStatusCode()) {
             throw new DataKeyNotFoundException(key.toString());
         }
-        if (response.getResponseCode() == HttpStatusCode.OK.getStatusCode()) {
-            String sourceJson = extractSourceFromElasticSearchHttpResponse(response);
+        if (mResponse.getResponseCode() == HttpStatusCode.OK.getStatusCode()) {
+            String sourceJson = extractSourceFromElasticSearchHttpResponse(mResponse);
             return deserialize(sourceJson, typeOfT);
         }
 
         throw new NotImplementedException(String.format("Dev note: Unexpected response '%d' from the GET Elastic Search endpoint.",
-                response.getResponseCode()));
+                mResponse.getResponseCode()));
     }
 
     @Override
