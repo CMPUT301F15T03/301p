@@ -24,5 +24,6 @@ public class AddFriendButtonOnClickListener implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         Snackbar.make(v, "Adding a friend", Snackbar.LENGTH_SHORT).show();
+
     }
 }

@@ -134,6 +134,7 @@ public class FriendsListFragment extends Fragment implements Observer {
     private void setupFab(){
         fab = (FloatingActionButton)getActivity().findViewById(R.id.fab);
         fab.setOnClickListener(new AddFriendButtonOnClickListener());
+        fab.setImageResource(R.drawable.ic_add_white_24dp);
         fab.show();
     }
 

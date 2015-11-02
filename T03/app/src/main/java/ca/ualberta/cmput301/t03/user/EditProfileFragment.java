@@ -2,9 +2,13 @@ package ca.ualberta.cmput301.t03.user;
 
 import android.app.Activity;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -107,15 +111,41 @@ public class EditProfileFragment extends Fragment implements Observer {
         mEmailField.setText(model.getEmail());
         mPhoneField.setText(model.getPhone());
 
+
+        mCityField.setOnEditorActionListener(controller.getCityInteractionListener());
+        mPhoneField.setOnEditorActionListener(controller.getPhoneInteractionListener());
+
+        TextWatcher t = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                Snackbar.make(getView(), s, Snackbar.LENGTH_SHORT).show();
+            }
+        };
+
+        mEmailField.addTextChangedListener(t);
+
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
 
-        controller.setCity(mCityField.getText().toString());
-        controller.setEmail(mEmailField.getText().toString());
-        controller.setPhone(mPhoneField.getText().toString());
+        new AsyncTask<Object, Object, Object>(){
+
+            @Override
+            protected Object doInBackground(Object... params) {
+                controller.commitChanges();
+                return null;
+            }
+        }.execute();
 
     }
 
