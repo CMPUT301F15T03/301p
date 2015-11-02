@@ -7,6 +7,8 @@ import android.os.Bundle;
 
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.Loader;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -73,6 +75,17 @@ public class EditProfileFragment extends Fragment implements Observer {
             public void run() {
                 try {
                     model = user.getProfile();
+                    controller = new UserProfileController(model);
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            populateFields();
+                        }
+                    });
+
+
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -80,13 +93,6 @@ public class EditProfileFragment extends Fragment implements Observer {
             }
         });
         worker.start();
-        try {
-            worker.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        controller = new UserProfileController(model);
     }
 
     @Override
@@ -95,6 +101,18 @@ public class EditProfileFragment extends Fragment implements Observer {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_edit_profile, container, false);
 
+    }
+
+    public void populateFields(){
+        mNameField.setText(user.getUsername());
+        mCityField.setText(model.getCity());
+        mEmailField.setText(model.getEmail());
+        mPhoneField.setText(model.getPhone());
+
+
+        mCityField.addTextChangedListener(controller.getCityWatcher());
+        mPhoneField.addTextChangedListener(controller.getPhoneWatcher());
+        mEmailField.addTextChangedListener(controller.getEmailWatcher());
     }
 
 
@@ -106,15 +124,6 @@ public class EditProfileFragment extends Fragment implements Observer {
         mEmailField = (EditText) getActivity().findViewById(R.id.profileEmailEditText);
         mPhoneField = (EditText) getActivity().findViewById(R.id.profilePhoneEditText);
 
-        mNameField.setText(user.getUsername());
-        mCityField.setText(model.getCity());
-        mEmailField.setText(model.getEmail());
-        mPhoneField.setText(model.getPhone());
-
-
-        mCityField.addTextChangedListener(controller.getCityWatcher());
-        mPhoneField.addTextChangedListener(controller.getPhoneWatcher());
-        mEmailField.addTextChangedListener(controller.getEmailWatcher());
 
     }
 
