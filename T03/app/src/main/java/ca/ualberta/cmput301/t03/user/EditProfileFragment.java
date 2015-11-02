@@ -113,9 +113,9 @@ public class EditProfileFragment extends Fragment implements Observer {
     public void onDestroyView() {
         super.onDestroyView();
 
-        controller.setCity(mCityField.toString());
-        controller.setEmail(mEmailField.toString());
-        controller.setPhone(mPhoneField.toString());
+        controller.setCity(mCityField.getText().toString());
+        controller.setEmail(mEmailField.getText().toString());
+        controller.setPhone(mPhoneField.getText().toString());
 
     }
 
