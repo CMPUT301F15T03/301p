@@ -3,8 +3,8 @@ package ca.ualberta.cmput301.t03.user;
 import com.google.gson.annotations.Expose;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 import ca.ualberta.cmput301.t03.Filter;
 import ca.ualberta.cmput301.t03.Filterable;
@@ -19,20 +19,20 @@ public class FriendsList implements Observable, Filterable {
     public final static String type = "FriendsList";
 
     @Expose
-    private Collection<User> friends; // should this be a list or a set?
+    private List<User> friends; // should this be a list or a set?
     private HashSet<Observer> observers;
 
     public FriendsList() {
-        friends = new HashSet<>();
+        friends = new ArrayList<>();
         observers = new HashSet<>();
     }
 
-    public Collection<User> getFriends() {
+    public List<User> getFriends() {
         return friends;
     }
 
 
-    public void setFriends(Collection<User> friends) {
+    public void setFriends(List<User> friends) {
         this.friends = friends;
     }
 
@@ -84,5 +84,9 @@ public class FriendsList implements Observable, Filterable {
     @Override
     public Object getFilteredItems() {
         throw new UnsupportedOperationException();
+    }
+
+    public int size(){
+        return friends.size();
     }
 }
