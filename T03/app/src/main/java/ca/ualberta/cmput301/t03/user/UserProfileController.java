@@ -1,7 +1,11 @@
 package ca.ualberta.cmput301.t03.user;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.UnknownFormatConversionException;
 
@@ -35,42 +39,67 @@ public class UserProfileController {
         mUserProfile.commitChanges();
     }
 
-    public CityInteractionListener getCityInteractionListener(){
-        return new CityInteractionListener();
+    public TextWatcher getCityWatcher() {
+        return cityWatcher;
     }
 
-    public EmailInteractionListener getEmailInteractionListener(){
-        return new EmailInteractionListener();
+    public TextWatcher getPhoneWatcher() {
+        return phoneWatcher;
     }
 
-    public PhoneInteractionListener getPhoneInteractionListener(){
-        return new PhoneInteractionListener();
+    public TextWatcher getEmailWatcher() {
+        return emailWatcher;
     }
 
-    public class CityInteractionListener implements TextView.OnEditorActionListener {
+    TextWatcher cityWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
 
         @Override
-        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-            setCity(v.getText().toString());
-            return true;
-        }
-    }
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-    public class EmailInteractionListener implements TextView.OnEditorActionListener {
+        }
+
         @Override
-        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-            setEmail(v.getText().toString());
-            return true;
+        public void afterTextChanged(Editable s) {
+            setCity(s.toString());
         }
-    }
+    };
 
-
-    public class PhoneInteractionListener implements TextView.OnEditorActionListener {
+    TextWatcher phoneWatcher = new TextWatcher() {
         @Override
-        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-            setPhone(v.getText().toString());
-            return true;
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
         }
-    }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            setPhone(s.toString());
+        }
+    };
+
+    TextWatcher emailWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            setEmail(s.toString());
+        }
+    };
 
 }

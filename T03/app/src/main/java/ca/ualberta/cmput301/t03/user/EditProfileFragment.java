@@ -67,7 +67,7 @@ public class EditProfileFragment extends Fragment implements Observer {
             e.printStackTrace();
         }
 
-
+        //FIXME this is bad and will result in ANR...
         Thread worker = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -112,25 +112,9 @@ public class EditProfileFragment extends Fragment implements Observer {
         mPhoneField.setText(model.getPhone());
 
 
-        mCityField.setOnEditorActionListener(controller.getCityInteractionListener());
-        mPhoneField.setOnEditorActionListener(controller.getPhoneInteractionListener());
-
-        TextWatcher t = new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                Snackbar.make(getView(), s, Snackbar.LENGTH_SHORT).show();
-            }
-        };
-
-        mEmailField.addTextChangedListener(t);
+        mCityField.addTextChangedListener(controller.getCityWatcher());
+        mPhoneField.addTextChangedListener(controller.getPhoneWatcher());
+        mEmailField.addTextChangedListener(controller.getEmailWatcher());
 
     }
 
