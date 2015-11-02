@@ -35,10 +35,15 @@ public class Inventory implements Filterable<Item>, Observable, Observer {
 
     public void setItems(Collection<Item> items) {
         this.items = items;
+        for (Item item : items) {
+            item.addObserver(this);
+        }
     }
 
     public void addItem(Item item) {
         items.add(item);
+        item.addObserver(this);
+        notifyObservers();
     }
 
     public void removeItem(Item item) {
