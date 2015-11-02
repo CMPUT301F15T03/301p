@@ -12,6 +12,7 @@ import ca.ualberta.cmput301.t03.datamanager.DataManager;
 import ca.ualberta.cmput301.t03.datamanager.LocalDataManager;
 import ca.ualberta.cmput301.t03.datamanager.httpdatamanager.HttpDataManager;
 import ca.ualberta.cmput301.t03.inventory.Inventory;
+import ca.ualberta.cmput301.t03.inventory.Item;
 
 /**
  * Created by ross on 15-10-29.
@@ -54,6 +55,7 @@ public class InitializeUserController {
             throw new RuntimeException("Issue getting user's profile.");
 
         }
+
         localUserProfile.setCity(city);
         localUserProfile.setEmail(email);
         localUserProfile.setPhone(phoneNumber);
@@ -67,12 +69,41 @@ public class InitializeUserController {
             throw new RuntimeException("Issue getting user's inventory.");
         }
 
-        FriendsList localUserFriends = null;
+//        Item testItem = new Item();
+//        testItem.setItemCategory("lenses");
+//        testItem.setItemDescription("Cool lense");
+//        testItem.setItemIsPrivate(false);
+//        testItem.setItemName("Cannon 50mm lense");
+//        testItem.setItemQuality("Good");
+//        testItem.setItemQuantity(5);
+//        localUserInventory.addItem(testItem);
+//        localUserInventory.commitChanges();
 
+        FriendsList localUserFriends = null;
         try {
             localUserFriends = localUser.getFriends();
         } catch (IOException e) {
             throw new RuntimeException("Issue getting user's friendsList.");
         }
+//
+//        try {
+//            localUserFriends.addFriend(new User("TestUserKyle22", context));
+//        } catch (MalformedURLException e) {
+//        }
+//        localUserFriends.commitChanges();
+//
+//        User tempUser = null;
+//        try {
+//            tempUser = new User("TestUserKyle25", context);
+//            tempUser.getProfile();
+//            tempUser.getFriends();
+//            tempUser.getInventory();
+//        } catch (MalformedURLException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        assert tempUser != null;
     }
 }

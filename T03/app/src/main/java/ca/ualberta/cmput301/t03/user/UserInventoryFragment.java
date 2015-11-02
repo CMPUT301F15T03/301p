@@ -22,6 +22,7 @@ import java.util.List;
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.R;
+import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.inventory.Item;
 import ca.ualberta.cmput301.t03.user.UserInventoryController;
 import ca.ualberta.cmput301.t03.inventory.Inventory;
@@ -32,6 +33,7 @@ public class UserInventoryFragment extends Fragment implements Observer {
     private UserInventoryController controller;
 
     private FloatingActionButton fab;
+    private User user;
 
     // TODO: Rename and change types and number of parameters
     public static UserInventoryFragment newInstance() {
@@ -53,23 +55,27 @@ public class UserInventoryFragment extends Fragment implements Observer {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_user_inventory, container, false);
 
+
+
+        Configuration c = new Configuration(getActivity().getApplicationContext());
+        try{
+            user = new User(c.getApplicationUserName(), getActivity().getApplicationContext());
+            model = user.getInventory();
+        } catch (Exception e){
+            throw new RuntimeException();
+        }
+
         createListView(v);
         setupFab();
 
         return v;
     }
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        createListView(view);
-        setupFab();
-    }
-
     private ArrayList<HashMap<String, String>> buildTiles() {
         ArrayList<HashMap<String, String>> tiles = new ArrayList<>();
-        Item[] itemList = {new Item("test", "test"), new Item("test", "test"), new Item("test", "test"), new Item("test", "test"), new Item("test", "test") };
-        //SHOULD BE REPLACED WITH ONCE LINKED ArrayList<Item> itemList = model.getBrowsables();
+//        Item[] itemList = {new Item("test", "test"), new Item("test", "test"), new Item("test", "test"), new Item("test", "test"), new Item("test", "test") };
+        //SHOULD BE REPLACED WITH ONCE LINKED
+        ArrayList<Item> itemList = model.getItems();
         for (Item item: itemList){
             HashMap<String, String> hm = new HashMap<String, String>();
             hm.put("tileViewItemName", item.getItemName());
