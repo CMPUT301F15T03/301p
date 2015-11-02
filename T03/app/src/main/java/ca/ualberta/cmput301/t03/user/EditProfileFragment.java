@@ -5,13 +5,20 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import android.support.v4.app.Fragment;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.R;
+import ca.ualberta.cmput301.t03.configuration.Configuration;
 
 
 /**
@@ -25,33 +32,16 @@ import ca.ualberta.cmput301.t03.R;
 public class EditProfileFragment extends Fragment implements Observer {
     private UserProfile model;
     private UserProfileController controller;
+    private User user;
+    private EditText mNameField;
+    private EditText mEmailField;
+    private EditText mPhoneField;
+    private EditText mCityField;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
-    private OnFragmentInteractionListener mListener;
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment EditProfileFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static EditProfileFragment newInstance(String param1, String param2) {
+    public static EditProfileFragment newInstance() {
         EditProfileFragment fragment = new EditProfileFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -62,10 +52,37 @@ public class EditProfileFragment extends Fragment implements Observer {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+
+        Configuration c = new Configuration(getContext());
+        c.getApplicationUserName();
+
+        user = null;
+        try {
+            user = new User(c.getApplicationUserName(), getContext());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
         }
+
+
+        Thread worker = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    model = user.getProfile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+        worker.start();
+        try {
+            worker.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        controller = new UserProfileController(model);
     }
 
     @Override
@@ -73,50 +90,37 @@ public class EditProfileFragment extends Fragment implements Observer {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_edit_profile, container, false);
+
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mNameField = (EditText) getActivity().findViewById(R.id.profileNameEditText);
+        mCityField = (EditText) getActivity().findViewById(R.id.profileCityEditText);
+        mEmailField = (EditText) getActivity().findViewById(R.id.profileEmailEditText);
+        mPhoneField = (EditText) getActivity().findViewById(R.id.profilePhoneEditText);
+
+        mNameField.setText(user.getUsername());
+        mCityField.setText(model.getCity());
+        mEmailField.setText(model.getEmail());
+        mPhoneField.setText(model.getPhone());
+
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-//            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
+    public void onDestroyView() {
+        super.onDestroyView();
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
+        controller.setCity(mCityField.toString());
+        controller.setEmail(mEmailField.toString());
+        controller.setPhone(mPhoneField.toString());
+
     }
 
     @Override
     public void update(Observable observable) {
-        throw new UnsupportedOperationException();
-    }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
     }
-
 }
