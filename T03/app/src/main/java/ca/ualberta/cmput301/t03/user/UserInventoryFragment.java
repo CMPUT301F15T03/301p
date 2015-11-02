@@ -61,6 +61,7 @@ public class UserInventoryFragment extends Fragment implements Observer {
         try{
             user = new User(c.getApplicationUserName(), getActivity().getApplicationContext());
             model = user.getInventory();
+//            model.addMockData();
         } catch (Exception e){
             throw new RuntimeException();
         }
