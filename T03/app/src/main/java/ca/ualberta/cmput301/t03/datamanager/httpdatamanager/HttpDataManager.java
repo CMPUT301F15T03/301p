@@ -4,8 +4,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.reflect.TypeToken;
 
@@ -69,21 +67,7 @@ public class HttpDataManager extends JsonDataManager {
             throw new ServiceNotAvailableException("HttpDataManager is not operational. Cannot perform this operation.");
         }
 
-
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                HttpResponse response = client.makeGetRequest(key.toString());
-
-            }
-        });
-
-        t.start();
-        try {
-            t.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        HttpResponse response = client.makeGetRequest(key.toString());
 
         if (response.getResponseCode() == HttpStatusCode.NOT_FOUND.getStatusCode()) {
             throw new DataKeyNotFoundException(key.toString());
@@ -143,12 +127,9 @@ public class HttpDataManager extends JsonDataManager {
 
     private String extractSourceFromElasticSearchHttpResponse(HttpResponse response) {
         String responseContents = new String(response.getContents());
-        JsonParser jp = new JsonParser();
-        JsonElement responseContentsJSON = jp.parse(responseContents);
-        return responseContentsJSON.getAsJsonObject().getAsJsonObject("_source").toString();
-//        Type mapType = new TypeToken<ElasticSearchResponse<Object>>(){}.getType();
-//        ElasticSearchResponse<Object> elasticSearchResponse = deserialize(responseContents, mapType);
-//        LinkedTreeMap map = (LinkedTreeMap)elasticSearchResponse.getSource();
-//        return serialize(map, new TypeToken<LinkedTreeMap>(){}.getType());
+        Type mapType = new TypeToken<ElasticSearchResponse<Object>>(){}.getType();
+        ElasticSearchResponse<Object> elasticSearchResponse = deserialize(responseContents, mapType);
+        LinkedTreeMap map = (LinkedTreeMap)elasticSearchResponse.getSource();
+        return serialize(map, new TypeToken<LinkedTreeMap>(){}.getType());
     }
 }

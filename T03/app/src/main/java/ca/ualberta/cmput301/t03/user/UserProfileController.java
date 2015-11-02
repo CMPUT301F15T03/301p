@@ -1,33 +1,24 @@
 package ca.ualberta.cmput301.t03.user;
 
-import java.util.UnknownFormatConversionException;
-
 /**
  * Created by ross on 15-10-29.
  */
 public class UserProfileController {
-    private UserProfile mUserProfile;
-
-    UserProfileController(UserProfile userProfile){
-        mUserProfile = userProfile;
-    }
+    private UserProfile userProfile;
 
     public void setName(String name) {
-        throw new UnknownFormatConversionException("you can't do that!");
+        throw new UnsupportedOperationException();
     }
 
     public void setPhone(String phone) {
-        mUserProfile.setPhone(phone);
-        mUserProfile.commitChanges();
+        throw new UnsupportedOperationException();
     }
 
     public void setCity(String city) {
-        mUserProfile.setCity(city);
-        mUserProfile.commitChanges();
+        throw new UnsupportedOperationException();
     }
 
     public void setEmail(String email) {
-        mUserProfile.setEmail(email);
-        mUserProfile.commitChanges();
+        throw new UnsupportedOperationException();
     }
 }
