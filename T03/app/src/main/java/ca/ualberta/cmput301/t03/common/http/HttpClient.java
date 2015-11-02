@@ -51,6 +51,7 @@ public class HttpClient {
     }
 
     private HttpResponse makeSendDataRequest(String suffix, byte[] dataToBeSent, HttpMethods sendMethod) throws IOException {
+
         HttpURLConnection httpConnection = openHttpURLConnection(suffix);
         sendMethod.setMethod(httpConnection);
         httpConnection.setDoOutput(true);

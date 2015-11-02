@@ -26,9 +26,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
-                android:text="Name"
                 android:ems="10"
-                android:id="@+id/editText" />
+                android:id="@+id/profileNameEditText" />
 
         </LinearLayout>
 
@@ -49,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
                 android:ems="10"
-                android:id="@+id/editText3" />
+                android:id="@+id/profileEmailEditText" />
 
         </LinearLayout>
 
@@ -70,7 +69,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="phone"
                 android:ems="10"
-                android:id="@+id/editText4" />
+                android:id="@+id/profilePhoneEditText" />
         </LinearLayout>
 
         <LinearLayout
@@ -90,7 +89,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="textPostalAddress"
                 android:ems="10"
-                android:id="@+id/editText5" />
+                android:id="@+id/profileCityEditText" />
         </LinearLayout>
 
     </LinearLayout>
