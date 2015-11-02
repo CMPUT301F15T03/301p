@@ -4,17 +4,31 @@ import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.R;
+import ca.ualberta.cmput301.t03.configuration.Configuration;
 
+
+//https://guides.codepath.com/android/using-the-recyclerview
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,8 +39,10 @@ import ca.ualberta.cmput301.t03.R;
  * create an instance of this fragment.
  */
 public class FriendsListFragment extends Fragment implements Observer {
-    private FriendsList model;
-    private FriendsListController controller;
+    private FriendsList mModel;
+    private FriendsListController mController;
+    private RecyclerView mRecyclerView;
+    private User mUser;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -39,6 +55,7 @@ public class FriendsListFragment extends Fragment implements Observer {
 
 
     private FloatingActionButton fab;
+    private ListView mListView;
 
 //    private OnFragmentInteractionListener mListener;
 
@@ -78,6 +95,34 @@ public class FriendsListFragment extends Fragment implements Observer {
         }
         setHasOptionsMenu(true);
 
+
+
+
+//        Configuration c = new Configuration(getContext());
+
+
+//        try {
+//           mUser = new User(c.getApplicationUserName(), getContext());
+//        } catch (MalformedURLException e) {
+//            e.printStackTrace();
+//        }
+//
+//        Collection<User> users = null;
+//        try {
+//            users = mUser.getFriends().getFriends();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
+//        ArrayAdapter
+
+        ArrayList myFriends = new ArrayList();
+        myFriends.add("kyle");
+//        ArrayAdapter adapter = new ArrayAdapter(getContext(), R.id.friendsListRecyclerView);
+//
+//        new ArrayAdapter<String>();
+//
+//        mRecyclerView.setAdapter();
     }
 
     @Override
@@ -108,7 +153,62 @@ public class FriendsListFragment extends Fragment implements Observer {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupFab();
+
+
+//        setupRecyclerView();
+
+        setupListView();
+
     }
+
+    private void setupListView(){
+        mListView = (ListView) getActivity().findViewById(R.id.friendsListListView);
+
+        FriendsList friendsList = new FriendsList();
+        try {
+            friendsList.addFriend(new User("steve", getContext()));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+//        FriendsListListAdapter adapter = new FriendsListListAdapter(getContext(), friendsList);
+
+
+        ArrayAdapter<User> adapter = new ArrayAdapter<User>(getContext(), R.layout.friends_list_item, friendsList.getFriends());
+        mListView.setAdapter(adapter);
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                User user = (User) mListView.getItemAtPosition(position);
+
+                Snackbar.make(getView(), user.getUsername(), Snackbar.LENGTH_SHORT).show();
+
+            }
+        });
+
+    }
+
+
+//    private void setupRecyclerView() {
+//        mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.friendsListRecyclerView);
+//
+//        FriendsList friendsList = new FriendsList();
+//
+//        try {
+//            friendsList.addFriend(new User("steve", getContext()));
+//        } catch (MalformedURLException e) {
+//            e.printStackTrace();
+//        }
+//
+//        FriendsListAdapter adapter = new FriendsListAdapter(friendsList);
+//
+//        mRecyclerView.setAdapter(adapter);
+//
+//        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+//
+//
+//    }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
