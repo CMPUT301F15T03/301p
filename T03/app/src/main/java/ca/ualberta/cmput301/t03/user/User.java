@@ -21,6 +21,7 @@ import ca.ualberta.cmput301.t03.datamanager.LocalDataManager;
 import ca.ualberta.cmput301.t03.datamanager.httpdatamanager.HttpDataManager;
 import ca.ualberta.cmput301.t03.inventory.BrowsableInventories;
 import ca.ualberta.cmput301.t03.inventory.Inventory;
+import ca.ualberta.cmput301.t03.inventory.Item;
 
 /**
  * Created by ross on 15-10-29.
@@ -89,6 +90,9 @@ public class User implements Observable, Observer, Comparable<User> {
                 inventory = dataManager.getData(key, Inventory.class);
             }
             inventory.addObserver(this);
+        }
+        for (Item item : inventory.getItems()) {
+            item.addObserver(inventory);
         }
         return inventory;
     }
