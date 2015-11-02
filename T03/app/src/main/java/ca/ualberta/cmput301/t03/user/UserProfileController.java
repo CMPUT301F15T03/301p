@@ -1,5 +1,8 @@
 package ca.ualberta.cmput301.t03.user;
 
+import android.view.KeyEvent;
+import android.widget.TextView;
+
 import java.util.UnknownFormatConversionException;
 
 /**
@@ -18,16 +21,56 @@ public class UserProfileController {
 
     public void setPhone(String phone) {
         mUserProfile.setPhone(phone);
-        mUserProfile.commitChanges();
     }
 
     public void setCity(String city) {
         mUserProfile.setCity(city);
-        mUserProfile.commitChanges();
     }
 
     public void setEmail(String email) {
         mUserProfile.setEmail(email);
+    }
+
+    public void commitChanges(){
         mUserProfile.commitChanges();
     }
+
+    public CityInteractionListener getCityInteractionListener(){
+        return new CityInteractionListener();
+    }
+
+    public EmailInteractionListener getEmailInteractionListener(){
+        return new EmailInteractionListener();
+    }
+
+    public PhoneInteractionListener getPhoneInteractionListener(){
+        return new PhoneInteractionListener();
+    }
+
+    public class CityInteractionListener implements TextView.OnEditorActionListener {
+
+        @Override
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            setCity(v.getText().toString());
+            return true;
+        }
+    }
+
+    public class EmailInteractionListener implements TextView.OnEditorActionListener {
+        @Override
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            setEmail(v.getText().toString());
+            return true;
+        }
+    }
+
+
+    public class PhoneInteractionListener implements TextView.OnEditorActionListener {
+        @Override
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            setPhone(v.getText().toString());
+            return true;
+        }
+    }
+
 }

@@ -1,5 +1,7 @@
 package ca.ualberta.cmput301.t03.user;
 
+import android.os.AsyncTask;
+
 import com.google.gson.annotations.Expose;
 
 import java.util.HashSet;
