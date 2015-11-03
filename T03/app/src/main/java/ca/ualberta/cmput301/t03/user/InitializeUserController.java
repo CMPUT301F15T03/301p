@@ -85,37 +85,37 @@ public class InitializeUserController {
         }
 
 
-        // test data - add a friend
-        try {
-            localUserFriends.addFriend(new User("TestUserKyle22", context));
-        } catch (MalformedURLException e) {
-        }
-        localUserFriends.commitChanges();
-
-        // test data - add an item
-        Item testItem = new Item();
-        testItem.setItemCategory("lenses");
-        testItem.setItemDescription("Cool lense");
-        testItem.setItemIsPrivate(false);
-        testItem.setItemName("Cannon 50mm lense");
-        testItem.setItemQuality("Good");
-        testItem.setItemQuantity(5);
-        localUserInventory.addItem(testItem);
-        localUserInventory.commitChanges();
-
-        // test data get a user
-        User tempUser = null;
-        try {
-            tempUser = new User("TestUserKyle25", context);
-            tempUser.getProfile();
-            tempUser.getFriends();
-            tempUser.getInventory();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        assert tempUser != null;
+//        // test data - add a friend
+//        try {
+//            localUserFriends.addFriend(new User("TestUserKyle22", context));
+//        } catch (MalformedURLException e) {
+//        }
+//        localUserFriends.commitChanges();
+//
+//        // test data - add an item
+//        Item testItem = new Item();
+//        testItem.setItemCategory("lenses");
+//        testItem.setItemDescription("Cool lense");
+//        testItem.setItemIsPrivate(false);
+//        testItem.setItemName("Cannon 50mm lense");
+//        testItem.setItemQuality("Good");
+//        testItem.setItemQuantity(5);
+//        localUserInventory.addItem(testItem);
+//        localUserInventory.commitChanges();
+//
+//        // test data get a user
+//        User tempUser = null;
+//        try {
+//            tempUser = new User("TestUserKyle25", context);
+//            tempUser.getProfile();
+//            tempUser.getFriends();
+//            tempUser.getInventory();
+//        } catch (MalformedURLException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        assert tempUser != null;
     }
 }
