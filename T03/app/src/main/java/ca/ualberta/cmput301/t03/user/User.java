@@ -3,6 +3,7 @@ package ca.ualberta.cmput301.t03.user;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.provider.CalendarContract;
+import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 
@@ -41,11 +42,13 @@ public class User implements Observable, Observer, Comparable<User> {
     private BrowsableInventories browsableInventories; // not sure we need this
 
     private DataManager dataManager;
+    private Context context;
     private HashSet<Observer> observers;
 
     public User(String username, Context context) throws MalformedURLException {
-        observers = new HashSet<>();
-        dataManager = new CachedDataManager(new HttpDataManager(context, true), context, true);
+        this.observers = new HashSet<>();
+        this.context = context;
+        this.dataManager = new CachedDataManager(new HttpDataManager(context, true), context, true);
         this.username = username;
     }
 
@@ -59,6 +62,12 @@ public class User implements Observable, Observer, Comparable<User> {
             else {
                 friends = dataManager.getData(key, FriendsList.class);
             }
+            ArrayList<User> temp = new ArrayList<>();
+            for (User user : friends.getFriends()) {
+                temp.add(new User(user.getUsername(), context));
+            }
+            friends.getFriends().clear();
+            friends.getFriends().addAll(temp);
             friends.addObserver(this);
         }
         return friends;
@@ -140,7 +149,28 @@ public class User implements Observable, Observer, Comparable<User> {
     }
 
     @Override
+    public String toString() {
+        return String.format("%s", getUsername());
+    }
+
+    @Override
     public int compareTo(User another) {
         return getUsername().compareTo(another.getUsername());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (super.equals(o)){
+            return true;
+        }
+
+        User other = (User) o;
+
+        return compareTo(other) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 }

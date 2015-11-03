@@ -26,6 +26,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -42,6 +44,7 @@ public class Configuration implements Observable {
     private static final String downloadImagesKey = "DOWNLOAD_IMAGES_ENABLED";
     private static final String applicationUserName = "APPLICATION_USER_NAME";
 
+    private  Context context;
     private Set<Observer> observers;
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
@@ -54,6 +57,7 @@ public class Configuration implements Observable {
         this.observers = new HashSet<>();
         this.preferences = PreferenceManager.getDefaultSharedPreferences(context);
         this.editor = preferences.edit();
+        this.context = context;
         preferences.registerOnSharedPreferenceChangeListener(new SharedPreferences.OnSharedPreferenceChangeListener() {
             @Override
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
@@ -100,6 +104,44 @@ public class Configuration implements Observable {
         else {
             return null;
         }
+    }
+
+    /**
+     * Returns the current user of the application. User's getter have not been called yet, and
+     * need to be called in order for members to be initialized
+     * @return The empty User upon success, null if failure
+     */
+    public User getApplicationUser() {
+        if (!isApplicationUserNameSet()) {
+            return null;
+        }
+        try {
+            return new User(getApplicationUserName(), context);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * Works similarly to getApplicationUser, but will return a user with all members initialized
+     * ahead of time
+     * @return a fully initialized user upon success, null if failure
+     */
+    public User getFullApplicationUser() {
+        User fullUser = getApplicationUser();
+        if (fullUser == null) {
+            return fullUser;
+        }
+        try {
+            fullUser.getFriends();
+            fullUser.getInventory();
+            fullUser.getProfile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return fullUser;
+
     }
 
     /**
