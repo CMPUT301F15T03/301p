@@ -14,7 +14,7 @@ before_script:
     - adb shell input keyevent 82 &
 script:
     - cd T03
-    - gradle connectedAndroidTest --quiet
+    - gradle connectedAndroidTest -i
     - gradle lint --quiet
     - gradle assemble --quiet
 -install:
