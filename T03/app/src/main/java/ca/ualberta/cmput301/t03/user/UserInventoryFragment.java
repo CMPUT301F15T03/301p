@@ -17,7 +17,6 @@ import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -62,12 +61,7 @@ public class UserInventoryFragment extends Fragment implements Observer {
         Configuration c = new Configuration(getContext());
         c.getApplicationUserName();
 
-        user = null;
-        try {
-            user = new User(c.getApplicationUserName(), getContext());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+        this.user = new User(c.getApplicationUserName(), getContext());
 
         Thread worker = new Thread(new Runnable() {
             @Override
