@@ -33,7 +33,7 @@ public class InitializeUserController {
     }
 
     public boolean isUserNameTaken(String username) throws IOException {
-        return dataManager.keyExists(new DataKey("UserProfile", username));
+        return dataManager.keyExists(new DataKey(UserProfile.type, username));
     }
 
     public boolean isEmailInValid(String email) {
@@ -42,12 +42,16 @@ public class InitializeUserController {
 
     public void initializeUser(String username, String city, String email, String phoneNumber) {
         configuration.setApplicationUserName(username);
+
+        // create user
         User localUser = null;
         try {
             localUser = new User(username, context);
         } catch (MalformedURLException e) {
             throw new RuntimeException("Issue creating new user.");
         }
+
+        // get userProfile -> sets up ES
         UserProfile localUserProfile = null;
         try {
             localUserProfile = localUser.getProfile();
@@ -56,12 +60,15 @@ public class InitializeUserController {
 
         }
 
+        // set profile info from the view
         localUserProfile.setCity(city);
         localUserProfile.setEmail(email);
         localUserProfile.setPhone(phoneNumber);
 
+        // push changes to the user model, this propagates changes to ES
         localUserProfile.commitChanges();
 
+        // get userInventory -> this sets up ES
         Inventory localUserInventory = null;
         try {
             localUserInventory = localUser.getInventory();
@@ -69,41 +76,46 @@ public class InitializeUserController {
             throw new RuntimeException("Issue getting user's inventory.");
         }
 
-//        Item testItem = new Item();
-//        testItem.setItemCategory("lenses");
-//        testItem.setItemDescription("Cool lense");
-//        testItem.setItemIsPrivate(false);
-//        testItem.setItemName("Cannon 50mm lense");
-//        testItem.setItemQuality("Good");
-//        testItem.setItemQuantity(5);
-//        localUserInventory.addItem(testItem);
-//        localUserInventory.commitChanges();
-
+        // get userFriendsList -> this sets up ES
         FriendsList localUserFriends = null;
         try {
             localUserFriends = localUser.getFriends();
         } catch (IOException e) {
             throw new RuntimeException("Issue getting user's friendsList.");
         }
-//
-//        try {
-//            localUserFriends.addFriend(new User("TestUserKyle22", context));
-//        } catch (MalformedURLException e) {
-//        }
-//        localUserFriends.commitChanges();
-//
-//        User tempUser = null;
-//        try {
-//            tempUser = new User("TestUserKyle25", context);
-//            tempUser.getProfile();
-//            tempUser.getFriends();
-//            tempUser.getInventory();
-//        } catch (MalformedURLException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        assert tempUser != null;
+
+
+        // test data - add a friend
+        try {
+            localUserFriends.addFriend(new User("TestUserKyle22", context));
+        } catch (MalformedURLException e) {
+        }
+        localUserFriends.commitChanges();
+
+        // test data - add an item
+        Item testItem = new Item();
+        testItem.setItemCategory("lenses");
+        testItem.setItemDescription("Cool lense");
+        testItem.setItemIsPrivate(false);
+        testItem.setItemName("Cannon 50mm lense");
+        testItem.setItemQuality("Good");
+        testItem.setItemQuantity(5);
+        localUserInventory.addItem(testItem);
+        localUserInventory.commitChanges();
+
+        // test data get a user
+        User tempUser = null;
+        try {
+            tempUser = new User("TestUserKyle25", context);
+            tempUser.getProfile();
+            tempUser.getFriends();
+            tempUser.getInventory();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        assert tempUser != null;
     }
 }
