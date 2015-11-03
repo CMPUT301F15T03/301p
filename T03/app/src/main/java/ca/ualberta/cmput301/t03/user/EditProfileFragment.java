@@ -69,7 +69,6 @@ public class EditProfileFragment extends Fragment implements Observer {
             e.printStackTrace();
         }
 
-        //FIXME this is bad and will result in ANR...
         Thread worker = new Thread(new Runnable() {
             @Override
             public void run() {
