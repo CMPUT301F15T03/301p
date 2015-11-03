@@ -2,7 +2,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
              android:layout_height="match_parent"
-    tools:context="ca.ualberta.cmput301.t03.inventory.EditItemFragment">
+    tools:context="ca.ualberta.cmput301.t03.inventory.AddItemView"
+    android:id="@+id/add_item_view">
 
     <!-- TODO: Update blank fragment layout -->
     <!-- Source: suud, accessed Oct 31, 2015

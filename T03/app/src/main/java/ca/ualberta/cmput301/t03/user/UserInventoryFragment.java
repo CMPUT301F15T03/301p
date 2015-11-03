@@ -51,8 +51,6 @@ public class UserInventoryFragment extends Fragment implements Observer {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-
     }
 
     @Override
@@ -128,7 +126,6 @@ public class UserInventoryFragment extends Fragment implements Observer {
                 Toast.makeText(getActivity().getBaseContext(), "Inspect Item", Toast.LENGTH_SHORT).show();
             }
         });
-
 
     }
 

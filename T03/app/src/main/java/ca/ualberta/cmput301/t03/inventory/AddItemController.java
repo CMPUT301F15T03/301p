@@ -1,12 +1,16 @@
 package ca.ualberta.cmput301.t03.inventory;
 
+import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.IOException;
 
 import ca.ualberta.cmput301.t03.R;
 
@@ -16,12 +20,15 @@ import ca.ualberta.cmput301.t03.R;
 public class AddItemController {
     private Item itemModel;
     private View v;
-    private Context context;
+    private Activity activity;
+    private Inventory inventory;
 
-    public AddItemController(Context context, View v) {
+    public AddItemController(View v, Activity activity, Inventory inventory) {
         this.v = v;
-        this.context = context;
+        this.activity = activity;
+        this.inventory = inventory;
         itemModel = new Item();
+
     }
 
     public void addItemToInventory() {
@@ -62,6 +69,16 @@ public class AddItemController {
         Log.d("ITEM", itemModel.getItemDescription());
 
         // add to inventory
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                inventory.addItem(itemModel);
+                // close view, should go back to inventory view, which should have been updated with the new item!
+                activity.finish();
+            }
+        });
+        thread.start();
+
     }
 
     public void checkFieldsValid() {

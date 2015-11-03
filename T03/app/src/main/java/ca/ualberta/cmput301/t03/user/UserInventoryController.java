@@ -10,6 +10,7 @@ import ca.ualberta.cmput301.t03.datamanager.DataManager;
 import ca.ualberta.cmput301.t03.datamanager.httpdatamanager.HttpDataManager;
 import ca.ualberta.cmput301.t03.inventory.AddItemView;
 import ca.ualberta.cmput301.t03.inventory.Inventory;
+import ca.ualberta.cmput301.t03.inventory.Item;
 
 /**
  * Created by ross on 15-10-29.
@@ -35,8 +36,13 @@ public class UserInventoryController {
     public void addItemButtonClicked() {
 //        throw new UnsupportedOperationException();
         Intent intent = new Intent(context, AddItemView.class);
-//        intent.putExtra(EXTRA_MESSAGE, message);
         context.startActivity(intent);
 
     }
+
+    public void addingItemToInventory(Item item) {
+        inventory.addItem(item);
+    }
+
+
 }
