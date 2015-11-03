@@ -1,8 +1,6 @@
 package ca.ualberta.cmput301.t03.user;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -22,7 +20,6 @@ public class InitializeUserActivity extends AppCompatActivity {
     private EditText phoneNumberEditText;
     private Button doneButton;
     private InitializeUserController controller;
-    private String toastError;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,39 +35,11 @@ public class InitializeUserActivity extends AppCompatActivity {
         cityEditText = (EditText) findViewById(R.id.cityEditText);
         phoneNumberEditText = (EditText) findViewById(R.id.phoneNumberEditText);
         doneButton = (Button) findViewById(R.id.doneButton);
-        toastError = null;
 
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                AsyncTask task = new AsyncTask() {
-                    @Override
-                    protected Object doInBackground(Object[] params) {
-                        try {
-                            onDoneButtonClick();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        return null;
-                    }
-
-                    @Override
-                    protected void onPostExecute(Object o) {
-                        super.onPostExecute(o);
-                        InitializeUserActivity.this.runOnUiThread(new Runnable() {
-                            public void run() {
-                                if (toastError != null) {
-                                    Toast.makeText(InitializeUserActivity.this, toastError, Toast.LENGTH_SHORT).show();
-                                    toastError = null;
-                                }
-                                else {
-                                    finish();
-                                }
-                            }
-                        });
-                    }
-                };
-                task.execute();
+            public void onClick(View v) {
+                onDoneButtonClick();
             }
         });
     }
@@ -100,31 +69,55 @@ public class InitializeUserActivity extends AppCompatActivity {
         return doneButton;
     }
 
-    public void onDoneButtonClick() throws IOException {
-        if (userNameEditText.getText().toString().isEmpty()) {
-            toastError = "Please provide a username";
-            return;
-        }
+    public void onDoneButtonClick() {
+        // todo : some of this code should be in the controller
 
-        if (controller.isUserNameTaken(userNameEditText.getText().toString())) {
-            toastError = "That username is taken, try again";
-            return;
-        }
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String toastError = null;
+                if (userNameEditText.getText().toString().isEmpty()) {
+                    toastMessage("Please provide a username");
+                    return;
+                }
 
-        if (cityEditText.getText().toString().isEmpty()) {
-            toastError = "Please provide a city";
-            return;
-        }
+                try {
+                    if (controller.isUserNameTaken(userNameEditText.getText().toString())) {
+                        toastMessage("That username is taken, try again");
+                        return;
+                    }
+                } catch (IOException e) {
+                    toastMessage("Error with network, try again later.");
+                    return;
+                }
 
-        if (controller.isEmailInValid(emailEditText.getText().toString())) {
-            toastError = "Please provide a valid email address";
-            return;
-        }
+                if (cityEditText.getText().toString().isEmpty()) {
+                    toastMessage("Please provide a city");
+                    return;
+                }
 
-        controller.initializeUser(userNameEditText.getText().toString(),
-                cityEditText.getText().toString(),
-                emailEditText.getText().toString(),
-                phoneNumberEditText.getText().toString());
+                if (controller.isEmailInValid(emailEditText.getText().toString())) {
+                    toastMessage("Please provide a valid email address");
+                    return;
+                }
 
+                controller.initializeUser(userNameEditText.getText().toString(),
+                        cityEditText.getText().toString(),
+                        emailEditText.getText().toString(),
+                        phoneNumberEditText.getText().toString());
+
+                finish();
+            }
+        });
+        thread.start();
+    }
+
+    public void toastMessage(final String toastError) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(InitializeUserActivity.this, toastError, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
