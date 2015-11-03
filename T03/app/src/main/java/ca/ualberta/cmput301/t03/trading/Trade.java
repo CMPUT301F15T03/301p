@@ -53,6 +53,7 @@ public class Trade implements Observable, Observer {
     public void load() {
         throw new UnsupportedOperationException();
     }
+
     public void save() {
         throw new UnsupportedOperationException();
     }
@@ -60,12 +61,15 @@ public class Trade implements Observable, Observer {
     public Boolean isClosed() {
         return state.isClosed();
     }
+
     public Boolean isOpen() {
         return state.isOpen();
     }
+
     public TradeState getState() {
         return state;
     }
+
     public void setState(TradeState state) {
         this.state = state;
     }
@@ -73,40 +77,50 @@ public class Trade implements Observable, Observer {
     public User getBorrower() {
         return this.borrower;
     }
+
     public User getOwner() {
         return this.owner;
     }
+
     public ArrayList<Item> getBorrowersItems() {
         return this.borrowersItems;
     }
+
     public ArrayList<Item> getOwnersItems() {
         return this.ownersItems;
     }
+
     public UUID getTradeUUID() {
         return this.tradeUUID;
     }
+
     public String getComments() {
         return this.comments;
     }
+
     public void setComments(String comments) {
         this.comments = comments;
     }
+
     public void offer() throws IllegalTradeStateTransition {
         this.state.offer(this);
     }
+
     public void cancel() throws IllegalTradeStateTransition {
         this.state.cancel(this);
     }
+
     public void accept() throws IllegalTradeStateTransition {
         this.state.accept(this);
     }
+
     public void decline() throws IllegalTradeStateTransition {
         this.state.decline(this);
     }
 
     @Override
     public void notifyObservers() {
-        for (Observer o: observers) {
+        for (Observer o : observers) {
             o.update(this);
         }
     }
