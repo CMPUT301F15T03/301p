@@ -37,5 +37,6 @@ public class UserInventoryController {
         Intent intent = new Intent(context, AddItemView.class);
 //        intent.putExtra(EXTRA_MESSAGE, message);
         context.startActivity(intent);
+
     }
 }
