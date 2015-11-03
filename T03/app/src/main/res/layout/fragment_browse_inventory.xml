@@ -12,6 +12,7 @@
         android:layout_height="match_parent"
         android:id="@+id/BrowseListView"
         android:layout_gravity="center_horizontal|top"
-        tools:listitem="@layout/fragment_item_tile" />
+        tools:listitem="@layout/fragment_item_tile"
+        android:clickable="true"/>
 
 </FrameLayout>

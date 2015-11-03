@@ -2,12 +2,15 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" tools:context="ca.ualberta.cmput301.t03.inventory.ItemTileFragment">
 
+
+
     <!-- TODO: Update blank fragment layout -->
 
     <RelativeLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="121dp">
+        android:layout_height="121dp"
+        android:descendantFocusability="blocksDescendants">
 
         <ImageButton
             android:layout_width="142dp"
@@ -25,8 +28,7 @@
             android:layout_alignParentStart="true"
             android:layout_gravity="left|top"
             android:contentDescription=""
-            android:src="@drawable/photo_unavailable" />
-
+            android:src="@drawable/photo_unavailable"/>
         <TextView
             android:layout_width="217dp"
             android:layout_height="75dp"
@@ -44,8 +46,7 @@
             android:layout_alignParentStart="true"
             android:textStyle="bold"
             android:textSize="35dp"
-            android:textAlignment="center" />
-
+            android:textAlignment="center"/>
         <TextView
             android:layout_width="225dp"
             android:layout_height="55dp"
@@ -61,7 +62,6 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentStart="true"
             android:layout_centerInParent="true"
-            android:textAlignment="center" />
-
+            android:textAlignment="center"/>
     </RelativeLayout>
 </FrameLayout>
