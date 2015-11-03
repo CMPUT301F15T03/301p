@@ -41,6 +41,10 @@
             android:label="@string/title_activity_add_item_view"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
+        <activity
+            android:name=".inventory.EditItemView"
+            android:label="@string/title_activity_edit_item_view" >
+        </activity>
     </application>
 
 </manifest>

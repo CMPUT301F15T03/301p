@@ -9,6 +9,7 @@ import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.datamanager.DataManager;
 import ca.ualberta.cmput301.t03.datamanager.httpdatamanager.HttpDataManager;
 import ca.ualberta.cmput301.t03.inventory.AddItemView;
+import ca.ualberta.cmput301.t03.inventory.EditItemView;
 import ca.ualberta.cmput301.t03.inventory.Inventory;
 import ca.ualberta.cmput301.t03.inventory.Item;
 
@@ -47,9 +48,9 @@ public class UserInventoryController {
     }
 
     public void inspectItem(Item item){
-//        Intent intent = new Intent(context, EditItemView.class);
-//        intent.putExtra(ITEM_NAME, item.getItemName());
-//        context.startActivity(intent);
+        Intent intent = new Intent(context, EditItemView.class);
+        intent.putExtra("ITEM_NAME", item.getItemName());
+        context.startActivity(intent);
     }
 
 }

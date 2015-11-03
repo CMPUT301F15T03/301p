@@ -1,6 +1,8 @@
 package ca.ualberta.cmput301.t03.user;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Bundle;
@@ -125,6 +127,8 @@ public class UserInventoryFragment extends Fragment implements Observer {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 controller.inspectItem(model.getItems().get(position));
                 Toast.makeText(getActivity().getBaseContext(), "Inspect Item", Toast.LENGTH_SHORT).show();
+
+
             }
         });
 
