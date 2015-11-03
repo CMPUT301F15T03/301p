@@ -28,7 +28,6 @@ public class AddItemController {
         this.activity = activity;
         this.inventory = inventory;
         itemModel = new Item();
-
     }
 
     public void addItemToInventory() {

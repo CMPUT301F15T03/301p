@@ -26,7 +26,6 @@ public class AddItemView extends AppCompatActivity {
     private Button addToInventoryButton;
     private Inventory inventoryModel;
 
-    private FloatingActionButton fab;
     private User user;
     private Activity activity = this;
 
