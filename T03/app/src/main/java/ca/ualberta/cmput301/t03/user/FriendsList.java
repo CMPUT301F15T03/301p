@@ -52,6 +52,7 @@ public class FriendsList implements Observable, Filterable {
     @Override
     public void notifyObservers() {
         for (Observer o: observers) {
+
             o.update(this);
         }
     }

@@ -148,6 +148,11 @@ public class User implements Observable, Observer, Comparable<User> {
     }
 
     @Override
+    public String toString() {
+        return String.format("%s", getUsername());
+    }
+
+    @Override
     public int compareTo(User another) {
         return getUsername().compareTo(another.getUsername());
     }
