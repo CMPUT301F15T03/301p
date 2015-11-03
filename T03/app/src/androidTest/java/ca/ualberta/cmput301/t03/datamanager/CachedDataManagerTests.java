@@ -18,11 +18,7 @@ import static ca.ualberta.cmput301.t03.commontesting.ExceptionAsserter.assertThr
 public class CachedDataManagerTests extends BaseDataManagerTests<CachedDataManager> implements DataManagerApiTests {
     @Override
     protected CachedDataManager createNewDataManager() {
-        try {
-            return new CachedDataManager(new HttpDataManager(getContext()), getContext());
-        } catch (MalformedURLException e) {
-            throw new NotImplementedException("Invalid httpDataManagerRootUrl resource.", e);
-        }
+        return new CachedDataManager(new HttpDataManager(getContext()), getContext());
     }
 
     @Override

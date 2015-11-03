@@ -115,12 +115,7 @@ public class Configuration implements Observable {
         if (!isApplicationUserNameSet()) {
             return null;
         }
-        try {
-            return new User(getApplicationUserName(), context);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return new User(getApplicationUserName(), context);
     }
 
     /**

@@ -82,12 +82,7 @@ public class FriendsListFragment extends Fragment implements Observer {
         Configuration c = new Configuration(getContext());
         c.getApplicationUserName();
 
-        mUser = null;
-        try {
-            mUser = new User(c.getApplicationUserName(), getContext());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+        mUser = new User(c.getApplicationUserName(), getContext());
 
         Thread worker = new Thread(new Runnable() {
             @Override
