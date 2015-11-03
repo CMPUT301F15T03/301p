@@ -32,6 +32,7 @@ import ca.ualberta.cmput301.t03.user.FriendsListFragment;
 import ca.ualberta.cmput301.t03.user.InitializeUserActivity;
 import ca.ualberta.cmput301.t03.user.User;
 import ca.ualberta.cmput301.t03.user.UserInventoryFragment;
+import ca.ualberta.cmput301.t03.user.ViewProfileFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -132,7 +133,7 @@ public class MainActivity extends AppCompatActivity
                 title = getString(R.string.friendsTitle);
                 break;
             case R.id.nav_edit_profile:
-                fragmentClass = EditProfileFragment.class;
+                fragmentClass = ViewProfileFragment.class;
                 title = getString(R.string.editProfileTitle);
                 break;
             default:
