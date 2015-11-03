@@ -166,12 +166,7 @@ public class User implements Observable, Observer, Comparable<User> {
 
         User other = (User) o;
 
-        boolean result = true;
-
-        result = result && other.hashCode() == hashCode();
-        result = result && compareTo(other) == 0;
-
-        return result;
+        return compareTo(other) == 0;
     }
 
     @Override

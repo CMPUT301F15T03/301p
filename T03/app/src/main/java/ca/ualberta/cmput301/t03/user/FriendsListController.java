@@ -38,24 +38,28 @@ public class FriendsListController {
     }
 
 
-    public void addFriend(User friend) {
-        throw new UnsupportedOperationException();
-    }
+    public void addFriend(User friend) throws UserNotFoundException, IOException, UserAlreadyAddedException {
+        // Check if friend is already added...
 
-    public void addFriend(String friend) throws IOException, UserNotFoundException {
+        if (mFriendsList.containsFriend(friend)){
+            throw new UserAlreadyAddedException("User %s is already in your friends list!");
+        }
+
         // Check if friend exists
-
-        boolean doesUserExist = isUserNameTaken(friend);
+        boolean doesUserExist = isUserNameTaken(friend.getUsername());
 
         if (doesUserExist){
             //IF exists add it.
-            User friendToAdd = new User(friend, mContext);
+            User friendToAdd = friend;
             mFriendsList.addFriend(friendToAdd);
             mFriendsList.commitChanges();
         } else {
             throw new UserNotFoundException("Friend not found");
         }
+    }
 
+    public void addFriend(String friend) throws IOException, UserNotFoundException, UserAlreadyAddedException {
+        addFriend(new User(friend, mContext));
     }
 
     public void removeFriend(User friend) throws MalformedURLException {
