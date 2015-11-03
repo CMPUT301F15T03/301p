@@ -36,6 +36,9 @@ public class FriendsList implements Observable, Filterable {
         this.friends = friends;
     }
 
+    public boolean containsFriend(User user){
+        return friends.contains(user);
+    }
 
     public void addFriend(User user) {
         friends.add(user);
