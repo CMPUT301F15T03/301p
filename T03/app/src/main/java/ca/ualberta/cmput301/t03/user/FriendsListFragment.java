@@ -1,6 +1,8 @@
 package ca.ualberta.cmput301.t03.user;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -15,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import java.io.IOException;
@@ -38,39 +41,19 @@ import ca.ualberta.cmput301.t03.configuration.Configuration;
  * Use the {@link FriendsListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FriendsListFragment extends Fragment implements Observer {
+public class FriendsListFragment extends Fragment implements Observer, Observable {
     private FriendsList mModel;
     private FriendsListController mController;
     private RecyclerView mRecyclerView;
     private User mUser;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
 
     private FloatingActionButton fab;
     private ListView mListView;
 
-//    private OnFragmentInteractionListener mListener;
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment BlankFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static FriendsListFragment newInstance() {
         FriendsListFragment fragment = new FriendsListFragment();
         Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -90,39 +73,55 @@ public class FriendsListFragment extends Fragment implements Observer {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+
         }
         setHasOptionsMenu(true);
 
+        Configuration c = new Configuration(getContext());
+        c.getApplicationUserName();
+
+        mUser = null;
+        try {
+            mUser = new User(c.getApplicationUserName(), getContext());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        Thread worker = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mModel = mUser.getFriends();
+                    mController = new FriendsListController(getContext(), mModel);
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            populateFields();
+                        }
+                    });
 
 
 
-//        Configuration c = new Configuration(getContext());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-
-//        try {
-//           mUser = new User(c.getApplicationUserName(), getContext());
-//        } catch (MalformedURLException e) {
-//            e.printStackTrace();
-//        }
+            }
+        });
+        worker.start();
 //
-//        Collection<User> users = null;
-//        try {
-//            users = mUser.getFriends().getFriends();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
-//        ArrayAdapter
-
-        ArrayList myFriends = new ArrayList();
-        myFriends.add("kyle");
 //        ArrayAdapter adapter = new ArrayAdapter(getContext(), R.id.friendsListRecyclerView);
 //
 //        new ArrayAdapter<String>();
 //
 //        mRecyclerView.setAdapter();
+    }
+
+    public void populateFields(){
+        //do the listview here.
+        setupFab();
+        setupListView();
     }
 
     @Override
@@ -133,10 +132,58 @@ public class FriendsListFragment extends Fragment implements Observer {
 
     private void setupFab(){
         fab = (FloatingActionButton)getActivity().findViewById(R.id.fab);
-        fab.setOnClickListener(new AddFriendButtonOnClickListener());
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createAlertDialog().show();
+            }
+        });
         fab.setImageResource(R.drawable.ic_add_white_24dp);
         fab.show();
     }
+
+
+
+    private AlertDialog createAlertDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+        final EditText e = new EditText(getContext());
+        builder.setView(e); //todo replace with layout
+        builder.setCancelable(false);
+        builder.setNegativeButton("Cancel", null);
+        builder.setPositiveButton("Add", null);
+        builder.setTitle("Add a Friend");
+        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+
+                Thread t = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            mController.addFriend(e.getText().toString());
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
+
+//                            getActivity().runOnUiThread(new Runnable() {
+//                                @Override
+//                                public void run() {
+//
+//                                }
+//                            });
+
+                        }
+                    });
+                t.start();
+
+            }
+        });
+        AlertDialog d = builder.create();
+        return d;
+    }
+
+
 
     private void teardownFab(){
         fab.setOnClickListener(null);
@@ -153,29 +200,30 @@ public class FriendsListFragment extends Fragment implements Observer {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setupFab();
+//        setupFab();
 
 
 //        setupRecyclerView();
 
-        setupListView();
+//        setupListView();
 
     }
 
     private void setupListView(){
         mListView = (ListView) getActivity().findViewById(R.id.friendsListListView);
 
-        FriendsList friendsList = new FriendsList();
-        try {
-            friendsList.addFriend(new User("steve", getContext()));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+//        FriendsList friendsList = new FriendsList();
+//        try {
+//            friendsList.addFriend(new User("steve", getContext()));
+//        } catch (MalformedURLException e) {
+//            e.printStackTrace();
+//        }
 
 //        FriendsListListAdapter adapter = new FriendsListListAdapter(getContext(), friendsList);
 
 
-        ArrayAdapter<User> adapter = new ArrayAdapter<User>(getContext(), R.layout.friends_list_item, friendsList.getFriends());
+
+        ArrayAdapter<User> adapter = new ArrayAdapter<User>(getContext(), R.layout.friends_list_item, mModel.getFriends());
         mListView.setAdapter(adapter);
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -238,6 +286,21 @@ public class FriendsListFragment extends Fragment implements Observer {
     @Override
     public void update(Observable observable) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void notifyObservers() {
+
+    }
+
+    @Override
+    public void addObserver(Observer observer) {
+
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+
     }
 
     /**
