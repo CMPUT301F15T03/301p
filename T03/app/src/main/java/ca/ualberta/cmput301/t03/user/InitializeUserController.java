@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.Patterns;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 
 import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.datamanager.DataKey;
@@ -77,10 +76,7 @@ public class InitializeUserController {
 
 
 //        // test data - add a friend
-//        try {
-//            localUserFriends.addFriend(new User("TestUserKyle22", context));
-//        } catch (MalformedURLException e) {
-//        }
+//        localUserFriends.addFriend(new User("TestUserKyle22", context));
 //        localUserFriends.commitChanges();
 //
 //        // test data - add an item
@@ -101,8 +97,6 @@ public class InitializeUserController {
 //            tempUser.getProfile();
 //            tempUser.getFriends();
 //            tempUser.getInventory();
-//        } catch (MalformedURLException e) {
-//            e.printStackTrace();
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }

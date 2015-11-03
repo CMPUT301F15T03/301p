@@ -22,7 +22,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -211,11 +210,7 @@ public class FriendsListFragment extends Fragment implements Observer {
         mListView = (ListView) getActivity().findViewById(R.id.friendsListListView);
 
 //        FriendsList friendsList = new FriendsList();
-//        try {
-//            friendsList.addFriend(new User("steve", getContext()));
-//        } catch (MalformedURLException e) {
-//            e.printStackTrace();
-//        }
+//        friendsList.addFriend(new User("steve", getContext()));
 
 //        FriendsListListAdapter adapter = new FriendsListListAdapter(getContext(), friendsList);
 
@@ -242,12 +237,7 @@ public class FriendsListFragment extends Fragment implements Observer {
                 Thread t = new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        try {
-                            mController.removeFriend(user);
-                        } catch (MalformedURLException e) {
-                            e.printStackTrace();
-                        }
-
+                        mController.removeFriend(user);
                     }
                 });
                 t.start();
@@ -266,11 +256,7 @@ public class FriendsListFragment extends Fragment implements Observer {
 //
 //        FriendsList friendsList = new FriendsList();
 //
-//        try {
-//            friendsList.addFriend(new User("steve", getContext()));
-//        } catch (MalformedURLException e) {
-//            e.printStackTrace();
-//        }
+//        friendsList.addFriend(new User("steve", getContext()));
 //
 //        FriendsListAdapter adapter = new FriendsListAdapter(friendsList);
 //
