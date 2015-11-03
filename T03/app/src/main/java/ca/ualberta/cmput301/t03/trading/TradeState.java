@@ -1,5 +1,7 @@
 package ca.ualberta.cmput301.t03.trading;
 
+import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeStateTransition;
+
 /**
  * Created by ross on 15-10-29.
  */
