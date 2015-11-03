@@ -14,10 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.io.IOException;
-import java.net.MalformedURLException;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
@@ -83,11 +80,7 @@ public class ViewProfileFragment extends Fragment implements Observer {
 
         if (getArguments() != null) {
             String username = getArguments().getString(ARG_PARAM1);
-            try {
-                mUserToView = new User(username, getActivity().getApplicationContext());
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
+            mUserToView = new User(username, getActivity().getApplicationContext());
         } else {
             mUserToView = c.getApplicationUser();
         }
