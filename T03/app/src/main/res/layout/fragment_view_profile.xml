@@ -4,7 +4,46 @@
     tools:context="ca.ualberta.cmput301.t03.user.ViewProfileFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView android:layout_width="match_parent" android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Username"
+            android:id="@+id/viewProfileUsernameLabel"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="56dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="user_name_here"
+            android:id="@+id/viewProfileUsername"
+            android:layout_alignTop="@+id/viewProfileUsernameLabel"
+            android:layout_alignStart="@+id/viewProfileEmail" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Email"
+            android:id="@+id/viewProfileEmailLabel"
+            android:layout_below="@+id/viewProfileUsernameLabel"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="email_here"
+            android:id="@+id/viewProfileEmail"
+            android:layout_below="@+id/viewProfileUsername"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
 </FrameLayout>
