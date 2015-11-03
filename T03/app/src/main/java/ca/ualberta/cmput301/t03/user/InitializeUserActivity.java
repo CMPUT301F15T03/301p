@@ -75,7 +75,6 @@ public class InitializeUserActivity extends AppCompatActivity {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                String toastError = null;
                 if (userNameEditText.getText().toString().isEmpty()) {
                     toastMessage("Please provide a username");
                     return;
@@ -87,7 +86,7 @@ public class InitializeUserActivity extends AppCompatActivity {
                         return;
                     }
                 } catch (IOException e) {
-                    toastMessage("Error with network, try again later.");
+                    toastMessage("Error with network, try again later");
                     return;
                 }
 
