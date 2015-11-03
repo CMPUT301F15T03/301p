@@ -5,10 +5,14 @@ package ca.ualberta.cmput301.t03.trading;
  */
 public interface TradeState {
     Boolean isClosed();
+
     Boolean isOpen();
 
     void offer(Trade trade) throws IllegalTradeStateTransition;
+
     void cancel(Trade trade) throws IllegalTradeStateTransition;
+
     void accept(Trade trade) throws IllegalTradeStateTransition;
+
     void decline(Trade trade) throws IllegalTradeStateTransition;
 }

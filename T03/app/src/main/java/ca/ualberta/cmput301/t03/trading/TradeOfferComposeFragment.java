@@ -1,9 +1,9 @@
 package ca.ualberta.cmput301.t03.trading;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,19 +22,21 @@ import ca.ualberta.cmput301.t03.R;
  * create an instance of this fragment.
  */
 public class TradeOfferComposeFragment extends Fragment implements Observer {
-    private Trade model;
-    private TradeOfferComposeController controller;
-
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    private Trade model;
+    private TradeOfferComposeController controller;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    public TradeOfferComposeFragment() {
+        // Required empty public constructor
+    }
 
     /**
      * Use this factory method to create a new instance of
@@ -52,10 +54,6 @@ public class TradeOfferComposeFragment extends Fragment implements Observer {
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    public TradeOfferComposeFragment() {
-        // Required empty public constructor
     }
 
     @Override
