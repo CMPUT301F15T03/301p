@@ -58,7 +58,12 @@ public class FriendsListController {
 
     }
 
-    public void removeFriend(User friend) {
-        throw new UnsupportedOperationException();
+    public void removeFriend(User friend) throws MalformedURLException {
+        mFriendsList.removeFriend(friend);
+        mFriendsList.commitChanges();
+    }
+
+    public void removeFriend(String friend) throws MalformedURLException {
+        removeFriend(new User(friend, mContext));
     }
 }

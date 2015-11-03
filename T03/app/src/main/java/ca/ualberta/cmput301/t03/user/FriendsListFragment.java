@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -236,6 +237,30 @@ public class FriendsListFragment extends Fragment implements Observer {
                 User user = (User) mListView.getItemAtPosition(position);
 
                 Snackbar.make(getView(), user.getUsername(), Snackbar.LENGTH_SHORT).show();
+
+            }
+        });
+
+        mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                final User user = (User) mListView.getItemAtPosition(position);
+
+                Thread t = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            mController.removeFriend(user);
+                        } catch (MalformedURLException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                });
+                t.start();
+
+                return true;
+
 
             }
         });
