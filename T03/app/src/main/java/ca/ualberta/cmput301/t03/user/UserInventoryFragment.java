@@ -16,6 +16,8 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -54,21 +56,44 @@ public class UserInventoryFragment extends Fragment implements Observer {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_user_inventory, container, false);
+        final View v = inflater.inflate(R.layout.fragment_user_inventory, container, false);
 
 
+        Configuration c = new Configuration(getContext());
+        c.getApplicationUserName();
 
-        Configuration c = new Configuration(getActivity().getApplicationContext());
-        try{
-            user = new User(c.getApplicationUserName(), getActivity().getApplicationContext());
-            model = user.getInventory();
-//            model.addMockData();
-        } catch (Exception e){
-            throw new RuntimeException();
+        user = null;
+        try {
+            user = new User(c.getApplicationUserName(), getContext());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
         }
 
-        createListView(v);
-        setupFab();
+        Thread worker = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    model = user.getInventory();
+                    controller = new UserInventoryController(getContext(), model);
+
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            createListView(v);
+                            setupFab();
+                        }
+                    });
+
+
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+        worker.start();
 
         return v;
     }
@@ -98,10 +123,10 @@ public class UserInventoryFragment extends Fragment implements Observer {
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                controller.inspectItem(model.getItems().get(position));
                 Toast.makeText(getActivity().getBaseContext(), "Inspect Item", Toast.LENGTH_SHORT).show();
             }
         });
-
 
     }
 
@@ -117,8 +142,8 @@ public class UserInventoryFragment extends Fragment implements Observer {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                controller.addItemButtonClicked();
-                Toast.makeText(getActivity().getBaseContext(), "GET ITEM", Toast.LENGTH_SHORT).show();
+                controller.addItemButtonClicked();
+                Toast.makeText(getActivity().getBaseContext(), "ADD ITEM", Toast.LENGTH_SHORT).show();
             }
         });
         fab.show();

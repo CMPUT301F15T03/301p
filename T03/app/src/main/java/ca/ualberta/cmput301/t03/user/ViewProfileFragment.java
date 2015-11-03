@@ -3,14 +3,26 @@ package ca.ualberta.cmput301.t03.user;
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
+
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.R;
+import ca.ualberta.cmput301.t03.configuration.Configuration;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -22,15 +34,17 @@ import ca.ualberta.cmput301.t03.R;
  */
 public class ViewProfileFragment extends Fragment implements Observer {
     private UserProfile model;
+    private TextView cityView;
+    private TextView phoneView;
+    private TextView usernameView;
+    private TextView emailView;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_PARAM1 = "user";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private User mUserToView;
 
     private OnFragmentInteractionListener mListener;
 
@@ -38,16 +52,15 @@ public class ViewProfileFragment extends Fragment implements Observer {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param username Parameter 1.
      * @return A new instance of fragment ViewProfileFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ViewProfileFragment newInstance(String param1, String param2) {
+    public static ViewProfileFragment newInstance(String username) {
         ViewProfileFragment fragment = new ViewProfileFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_PARAM1, username);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -57,12 +70,30 @@ public class ViewProfileFragment extends Fragment implements Observer {
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_view_profile, menu);
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        final Configuration c = new Configuration(getContext());
+
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            String username = getArguments().getString(ARG_PARAM1);
+            try {
+                mUserToView = new User(username, getActivity().getApplicationContext());
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+        } else {
+            mUserToView = c.getApplicationUser();
         }
+        setHasOptionsMenu(true);
+
+
     }
 
     @Override
@@ -70,6 +101,62 @@ public class ViewProfileFragment extends Fragment implements Observer {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_view_profile, container, false);
+    }
+
+
+    void populateFields(){
+        String city = model.getCity();
+        String email = model.getEmail();
+        String phone = model.getPhone();
+        String username = mUserToView.getUsername();
+
+//        cityView.setText(city);
+        emailView.setText(email);
+//        phoneView.setText(phone);
+        usernameView.setText(username);
+
+
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        usernameView = (TextView) getActivity().findViewById(R.id.viewProfileUsername);
+        emailView = (TextView) getActivity().findViewById(R.id.viewProfileEmail);
+
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    model = mUserToView.getProfile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        populateFields();
+                    }
+                });
+            }
+        });
+        t.start();
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+//        return super.onOptionsItemSelected(item);
+
+        Snackbar.make(getView(), item.getTitle(), Snackbar.LENGTH_SHORT).show();
+
+        switch (item.getItemId()) {
+            case R.id.edit_profile_button:
+                Snackbar.make(getView(), "TODO open edit profile activity",Snackbar.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -82,12 +169,12 @@ public class ViewProfileFragment extends Fragment implements Observer {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+//        try {
+//            mListener = (OnFragmentInteractionListener) activity;
+//        } catch (ClassCastException e) {
+//            throw new ClassCastException(activity.toString()
+//                    + " must implement OnFragmentInteractionListener");
+//        }
     }
 
     @Override
