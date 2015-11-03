@@ -125,6 +125,7 @@ public class UserInventoryFragment extends Fragment implements Observer {
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                controller.inspectItem(model.getItems().get(position));
                 Toast.makeText(getActivity().getBaseContext(), "Inspect Item", Toast.LENGTH_SHORT).show();
             }
         });
