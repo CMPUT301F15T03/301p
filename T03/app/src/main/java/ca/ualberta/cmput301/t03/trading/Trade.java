@@ -2,7 +2,6 @@ package ca.ualberta.cmput301.t03.trading;
 
 import android.content.Context;
 
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
@@ -33,7 +32,7 @@ public class Trade implements Observable, Observer {
 
     public Trade(User borrower, User owner,
                  Collection<Item> borrowersItems, Collection<Item> ownersItems,
-                 Context context) throws MalformedURLException {
+                 Context context) {
         this.borrower = borrower;
         this.owner = owner;
         this.borrowersItems = new ArrayList<>();

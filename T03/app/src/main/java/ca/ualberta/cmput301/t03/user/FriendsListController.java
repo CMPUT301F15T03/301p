@@ -3,7 +3,6 @@ package ca.ualberta.cmput301.t03.user;
 import android.content.Context;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 
 import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.datamanager.DataKey;
@@ -58,12 +57,12 @@ public class FriendsListController {
         addFriend(new User(friend, mContext));
     }
 
-    public void removeFriend(User friend) throws MalformedURLException {
+    public void removeFriend(User friend) {
         mFriendsList.removeFriend(friend);
         mFriendsList.commitChanges();
     }
 
-    public void removeFriend(String friend) throws MalformedURLException {
+    public void removeFriend(String friend) {
         removeFriend(new User(friend, mContext));
     }
 }

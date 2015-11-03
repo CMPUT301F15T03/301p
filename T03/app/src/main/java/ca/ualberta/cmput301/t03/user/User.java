@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import com.google.gson.annotations.Expose;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashSet;
 

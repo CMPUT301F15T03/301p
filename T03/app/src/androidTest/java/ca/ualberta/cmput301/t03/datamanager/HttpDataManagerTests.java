@@ -15,7 +15,7 @@ public class HttpDataManagerTests extends BaseDataManagerTests<HttpDataManager> 
     protected HttpDataManager createNewDataManager() {
         return new HttpDataManager(getContext());
     }
-    
+
     @Override
     public void testKeyExists() {
         super.keyExistsTest();
