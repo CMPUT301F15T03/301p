@@ -40,12 +40,7 @@ public class InitializeUserController {
         configuration.setApplicationUserName(username);
 
         // create user
-        User localUser = null;
-        try {
-            localUser = new User(username, context);
-        } catch (MalformedURLException e) {
-            throw new RuntimeException("Issue creating new user.");
-        }
+        User localUser = new User(username, context);
 
         // get userProfile -> sets up ES
         UserProfile localUserProfile = null;
