@@ -3,6 +3,7 @@ package ca.ualberta.cmput301.t03.user;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.provider.CalendarContract;
+import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 
@@ -155,5 +156,26 @@ public class User implements Observable, Observer, Comparable<User> {
     @Override
     public int compareTo(User another) {
         return getUsername().compareTo(another.getUsername());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (super.equals(o)){
+            return true;
+        }
+
+        User other = (User) o;
+
+        boolean result = true;
+
+        result = result && other.hashCode() == hashCode();
+        result = result && compareTo(other) == 0;
+
+        return result;
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 }
