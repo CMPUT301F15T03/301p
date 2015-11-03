@@ -36,9 +36,11 @@ public class AddItemController {
         EditText itemNameText = (EditText) v.findViewById(R.id.itemName);
         String itemName = itemNameText.getText().toString();
 
+        int itemQuantity = 1;
         EditText itemQuantityText = (EditText) v.findViewById(R.id.itemQuantity);
-        int itemQuantity = Integer.parseInt(itemQuantityText.getText().toString());
-
+        if (itemQuantityText.getText().toString().length() > 0) {
+            itemQuantity = Integer.parseInt(itemQuantityText.getText().toString());
+        }
         EditText itemQualityText = (EditText) v.findViewById(R.id.itemQuality);
         String itemQuality = itemQualityText.getText().toString();
 
@@ -51,8 +53,10 @@ public class AddItemController {
         EditText itemDescriptionText = (EditText) v.findViewById(R.id.itemDescription);
         String itemDescription = itemDescriptionText.getText().toString();
 
-        // check if fields are filled out
-        // checkFieldsValid()
+        if (!checkFieldsValid()) {
+            Toast.makeText(activity, "Please fill in the required fields.", Toast.LENGTH_LONG).show();
+            return;
+        }
 
         // setters for itemModel
         itemModel.setItemName(itemName);
@@ -81,10 +85,20 @@ public class AddItemController {
 
     }
 
-    public void checkFieldsValid() {
-        // get fields from view
+    public boolean checkFieldsValid() {
+        EditText itemNameText = (EditText) v.findViewById(R.id.itemName);
+        String itemName = itemNameText.getText().toString();
+        EditText itemCategoryText = (EditText) v.findViewById(R.id.itemCategory);
+        String itemCategory = itemCategoryText.getText().toString();
 
-        // check for validity
+        // the only things required are item name and category
+        if (itemName.length() == 0) {
+            return false;
+        } if (itemCategory.length() == 0) {
+            // TODO: Implement categories (i.e. drop down choices)
+            return false;
+        }
+        return true;
     }
 
     public void addItemToInventoryButtonClicked() {
