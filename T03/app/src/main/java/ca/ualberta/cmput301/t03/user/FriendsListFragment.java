@@ -41,7 +41,7 @@ import ca.ualberta.cmput301.t03.configuration.Configuration;
  * Use the {@link FriendsListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FriendsListFragment extends Fragment implements Observer, Observable {
+public class FriendsListFragment extends Fragment implements Observer {
     private FriendsList mModel;
     private FriendsListController mController;
     private RecyclerView mRecyclerView;
@@ -50,6 +50,7 @@ public class FriendsListFragment extends Fragment implements Observer, Observabl
 
     private FloatingActionButton fab;
     private ListView mListView;
+    private ArrayAdapter<User> mAdapter;
 
     public static FriendsListFragment newInstance() {
         FriendsListFragment fragment = new FriendsListFragment();
@@ -94,6 +95,7 @@ public class FriendsListFragment extends Fragment implements Observer, Observabl
                     mModel = mUser.getFriends();
                     mController = new FriendsListController(getContext(), mModel);
 
+
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -122,6 +124,8 @@ public class FriendsListFragment extends Fragment implements Observer, Observabl
         //do the listview here.
         setupFab();
         setupListView();
+        mModel.addObserver(this);
+
     }
 
     @Override
@@ -222,9 +226,9 @@ public class FriendsListFragment extends Fragment implements Observer, Observabl
 //        FriendsListListAdapter adapter = new FriendsListListAdapter(getContext(), friendsList);
 
 
+        mAdapter = new ArrayAdapter<>(getContext(), R.layout.friends_list_item, mModel.getFriends());
+        mListView.setAdapter(mAdapter);
 
-        ArrayAdapter<User> adapter = new ArrayAdapter<User>(getContext(), R.layout.friends_list_item, mModel.getFriends());
-        mListView.setAdapter(adapter);
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -285,23 +289,16 @@ public class FriendsListFragment extends Fragment implements Observer, Observabl
 
     @Override
     public void update(Observable observable) {
-        throw new UnsupportedOperationException();
+
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mAdapter.notifyDataSetChanged();
+
+            }
+        });
     }
 
-    @Override
-    public void notifyObservers() {
-
-    }
-
-    @Override
-    public void addObserver(Observer observer) {
-
-    }
-
-    @Override
-    public void removeObserver(Observer observer) {
-
-    }
 
     /**
      * This interface must be implemented by activities that contain this
