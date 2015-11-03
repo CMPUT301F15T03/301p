@@ -6,4 +6,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="padding_trade_tile_text_left">5dp</dimen>
+    <dimen name="trade_tile_image_width">100dp</dimen>
+    <dimen name="trade_offer_padding_between_user_and_other_word">10dp</dimen>
 </resources>

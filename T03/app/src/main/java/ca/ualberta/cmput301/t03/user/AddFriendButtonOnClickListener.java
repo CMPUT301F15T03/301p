@@ -1,8 +1,10 @@
 package ca.ualberta.cmput301.t03.user;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.support.design.widget.Snackbar;
 import android.view.View;
+import android.widget.EditText;
 
 /**
  * Copyright 2015 John Slevinsky
@@ -25,5 +27,13 @@ public class AddFriendButtonOnClickListener implements View.OnClickListener {
     public void onClick(View v) {
         Snackbar.make(v, "Adding a friend", Snackbar.LENGTH_SHORT).show();
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+        builder.setView(new EditText(v.getContext())); //todo replace with layout
+        builder.setCancelable(false);
+        builder.setNegativeButton("Cancel", null);
+        builder.setPositiveButton("Add", null);
+        builder.setTitle("Add a Friend");
+        AlertDialog d = builder.create();
+        d.show();
     }
 }
