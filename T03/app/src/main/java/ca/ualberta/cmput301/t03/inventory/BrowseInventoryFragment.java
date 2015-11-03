@@ -8,11 +8,13 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
@@ -111,12 +113,19 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
         return tiles;
     }
     public void createListView(View v){
-        final ListView listview = (ListView) v.findViewById(R.id.BrowseListView);
+        ListView listview = (ListView) v.findViewById(R.id.BrowseListView);
         List<HashMap<String,String>> tiles = buildTiles();
         String[] from = {"tileViewItemName", "tileViewItemCategory"};
         int[] to = {R.id.tileViewItemName, R.id.tileViewItemCategory};
         SimpleAdapter adapter = new SimpleAdapter(getActivity().getBaseContext(), tiles, R.layout.fragment_item_tile, from, to);
         listview.setAdapter(adapter);
+
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getActivity().getBaseContext(), "Inspect Item", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
