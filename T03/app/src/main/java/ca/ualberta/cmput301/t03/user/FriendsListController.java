@@ -42,7 +42,7 @@ public class FriendsListController {
         throw new UnsupportedOperationException();
     }
 
-    public void addFriend(String friend) throws IOException {
+    public void addFriend(String friend) throws IOException, UserNotFoundException {
         // Check if friend exists
 
         boolean doesUserExist = isUserNameTaken(friend);
@@ -53,7 +53,7 @@ public class FriendsListController {
             mFriendsList.addFriend(friendToAdd);
             mFriendsList.commitChanges();
         } else {
-            throw new UnsupportedOperationException("Friend not found");
+            throw new UserNotFoundException("Friend not found");
         }
 
     }
