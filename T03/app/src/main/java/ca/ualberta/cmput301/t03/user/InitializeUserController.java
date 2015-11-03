@@ -25,11 +25,7 @@ public class InitializeUserController {
     public InitializeUserController(Context context) {
         this.context = context;
         this.configuration = new Configuration(context);
-        try {
-            this.dataManager = new HttpDataManager(context);
-        } catch (MalformedURLException e) {
-            throw new RuntimeException("There has been a issue contacting the application server.");
-        }
+        this.dataManager = new HttpDataManager(context);
     }
 
     public boolean isUserNameTaken(String username) throws IOException {
