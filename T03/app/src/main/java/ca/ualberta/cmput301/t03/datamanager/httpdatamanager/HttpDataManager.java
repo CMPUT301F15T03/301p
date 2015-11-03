@@ -3,19 +3,18 @@ package ca.ualberta.cmput301.t03.datamanager.httpdatamanager;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import com.google.gson.internal.LinkedTreeMap;
-import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.MalformedURLException;
-import java.util.Objects;
 
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.common.Preconditions;
+import ca.ualberta.cmput301.t03.common.exceptions.HttpDataManagerInitializationException;
 import ca.ualberta.cmput301.t03.common.exceptions.NotImplementedException;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.common.http.HttpClient;
@@ -29,18 +28,24 @@ import ca.ualberta.cmput301.t03.datamanager.JsonDataManager;
  * Created by rishi on 15-10-30.
  */
 public class HttpDataManager extends JsonDataManager {
+    private final String logTAG = "HTTPDataManager";
 
     private final HttpClient client;
     private final Context context;
 
-    public HttpDataManager(Context context, boolean useExplicitExposeAnnotation) throws MalformedURLException {
+    public HttpDataManager(Context context, boolean useExplicitExposeAnnotation) {
         super(useExplicitExposeAnnotation);
         this.context = Preconditions.checkNotNull(context, "context");
         String rootUrl = context.getString(R.string.httpDataManagerRootUrl);
-        client = new HttpClient(Preconditions.checkNotNullOrWhitespace(rootUrl, "rootUrl"));
+        try {
+            client = new HttpClient(Preconditions.checkNotNullOrWhitespace(rootUrl, "rootUrl"));
+        } catch (MalformedURLException e) {
+            Log.e(logTAG, e.getMessage());
+            throw new HttpDataManagerInitializationException(e.getMessage());
+        }
     }
 
-    public HttpDataManager(Context context) throws MalformedURLException {
+    public HttpDataManager(Context context) {
         this(context, false);
     }
 

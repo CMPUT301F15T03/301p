@@ -26,11 +26,7 @@ public class FriendsListController {
         mContext = context;
 
         mConfiguration = new Configuration(context);
-        try {
-            mDataManager = new HttpDataManager(context);
-        } catch (MalformedURLException e) {
-            throw new RuntimeException("There has been a issue contacting the application server.");
-        }
+        mDataManager = new HttpDataManager(context);
     }
 
     public boolean isUserNameTaken(String username) throws IOException {
