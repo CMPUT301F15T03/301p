@@ -29,9 +29,9 @@
         android:textStyle="bold"
         android:textSize="35dp"
         android:textAlignment="textStart"
+        android:paddingLeft="@dimen/padding_trade_tile_text_left"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/tradeTileMainItemImage"
-        android:paddingLeft="@dimen/padding_trade_tile_text_left" />
+        android:layout_toEndOf="@+id/tradeTileMainItemImage" />
 
     <TextView
         android:layout_width="fill_parent"
@@ -51,7 +51,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Received from"
-        android:id="@+id/tradeTileTradeDirection"
+        android:id="@+id/tradeTileTradeState"
         android:layout_alignParentBottom="true"
         android:layout_toEndOf="@+id/tradeTileMainItemImage"
         android:layout_marginLeft="@dimen/padding_trade_tile_text_left" />
@@ -63,7 +63,7 @@
         android:text="UserABC"
         android:id="@+id/tradeTileOtherUser"
         android:layout_alignParentBottom="true"
-        android:layout_toEndOf="@+id/tradeTileTradeDirection"
+        android:layout_toEndOf="@+id/tradeTileTradeState"
         android:layout_marginLeft="@dimen/padding_trade_tile_text_left"
         android:textStyle="bold" />
 
