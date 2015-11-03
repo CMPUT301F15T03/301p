@@ -1,9 +1,9 @@
 package ca.ualberta.cmput301.t03.trading;
 
 /**
- * Created by ross on 15-10-29.
+ * Created by ross on 15-11-02.
  */
-public class TradeStateAccepted implements TradeState {
+public class TradeStateCancelled implements TradeState {
     @Override
     public Boolean isClosed() {
         return Boolean.TRUE;
@@ -16,22 +16,22 @@ public class TradeStateAccepted implements TradeState {
 
     @Override
     public void offer(Trade trade) throws IllegalTradeStateTransition {
-        throw new IllegalTradeStateTransition("Accepted trade cannot be offered");
+        throw new IllegalTradeStateTransition("Cancelled trade cannot be offered");
     }
 
     @Override
     public void cancel(Trade trade) throws IllegalTradeStateTransition {
-        throw new IllegalTradeStateTransition("Accepted trade cannot be cancelled");
+        throw new IllegalTradeStateTransition("Cancelled trade cannot be cancelled");
     }
 
     @Override
     public void accept(Trade trade) throws IllegalTradeStateTransition {
-        throw new IllegalTradeStateTransition("Accepted trade cannot be accepted");
+        throw new IllegalTradeStateTransition("Cancelled trade cannot be accepted");
     }
 
     @Override
     public void decline(Trade trade) throws IllegalTradeStateTransition {
-        throw new IllegalTradeStateTransition("Accepted trade cannot be declined");
+        throw new IllegalTradeStateTransition("Cancelled trade cannot be declined");
     }
 
 }
