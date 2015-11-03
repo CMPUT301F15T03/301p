@@ -19,7 +19,7 @@ public class FriendsList implements Observable, Filterable {
     public final static String type = "FriendsList";
 
     @Expose
-    private List<User> friends; // should this be a list or a set?
+    private ArrayList<User> friends; // should this be a list or a set?
     private HashSet<Observer> observers;
 
     public FriendsList() {
@@ -27,12 +27,12 @@ public class FriendsList implements Observable, Filterable {
         observers = new HashSet<>();
     }
 
-    public List<User> getFriends() {
+    public ArrayList<User> getFriends() {
         return friends;
     }
 
 
-    public void setFriends(List<User> friends) {
+    public void setFriends(ArrayList<User> friends) {
         this.friends = friends;
     }
 
