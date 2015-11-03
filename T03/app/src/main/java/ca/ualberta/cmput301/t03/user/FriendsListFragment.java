@@ -162,25 +162,21 @@ public class FriendsListFragment extends Fragment implements Observer {
             @Override
             public void onDismiss(DialogInterface dialog) {
 
-                Thread t = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            mController.addFriend(e.getText().toString());
-                        } catch (IOException e1) {
-                            e1.printStackTrace();
-                        }
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String usr = e.getText().toString();
+                try {
+                    mController.addFriend(usr);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                } catch (UserNotFoundException e2) {
+                    Snackbar.make(getView(), String.format("User %s does not exist", usr), Snackbar.LENGTH_SHORT).show();
+                }
 
-//                            getActivity().runOnUiThread(new Runnable() {
-//                                @Override
-//                                public void run() {
-//
-//                                }
-//                            });
-
-                        }
-                    });
-                t.start();
+            }
+        });
+        t.start();
 
             }
         });
