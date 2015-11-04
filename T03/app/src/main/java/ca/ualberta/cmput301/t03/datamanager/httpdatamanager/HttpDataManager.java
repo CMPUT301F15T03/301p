@@ -26,6 +26,7 @@ import ca.ualberta.cmput301.t03.datamanager.DataKeyNotFoundException;
 import ca.ualberta.cmput301.t03.datamanager.JsonDataManager;
 
 /**
+ * A {@link JsonDataManager} that uses the ElasticSearch server as the storage media.
  * Created by rishi on 15-10-30.
  */
 public class HttpDataManager extends JsonDataManager {
@@ -33,6 +34,13 @@ public class HttpDataManager extends JsonDataManager {
     private final HttpClient client;
     private final Context context;
 
+    /**
+     * Creates an instance of {@link HttpDataManager}.
+     * @param context The context to be used for checking the network status of the phone.
+     * @param useExplicitExposeAnnotation True, if the @expose annotations are to be explicitly used,
+     *                                    else false. If this is set to true, only the fields with
+     *                                    the annotation @expose will be serialized/de-serialized.
+     */
     public HttpDataManager(Context context, boolean useExplicitExposeAnnotation) throws MalformedURLException {
         super(useExplicitExposeAnnotation);
         this.context = Preconditions.checkNotNull(context, "context");
@@ -40,10 +48,18 @@ public class HttpDataManager extends JsonDataManager {
         client = new HttpClient(Preconditions.checkNotNullOrWhitespace(rootUrl, "rootUrl"));
     }
 
+    /**
+     * Creates an instance of the {@link HttpDataManager}. The "useExplicitExposeAnnotation"
+     * value is set to false.
+     * @param context The context to be used for checking the network status of the phone.
+     */
     public HttpDataManager(Context context) throws MalformedURLException {
         this(context, false);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean keyExists(DataKey key) throws IOException {
         if (!isOperational()) {
@@ -63,6 +79,9 @@ public class HttpDataManager extends JsonDataManager {
                 response.getResponseCode()));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public <T> T getData(DataKey key, Type typeOfT) throws IOException {
         if (!isOperational()) {
@@ -83,6 +102,9 @@ public class HttpDataManager extends JsonDataManager {
                 response.getResponseCode()));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public <T> void writeData(DataKey key, T obj, Type typeOfT) throws IOException {
         if (!isOperational()) {
@@ -99,6 +121,9 @@ public class HttpDataManager extends JsonDataManager {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean deleteIfExists(DataKey key) throws IOException {
         if (!isOperational()) {
@@ -119,6 +144,10 @@ public class HttpDataManager extends JsonDataManager {
         }
     }
 
+    /**
+     * True, if the phone is online, else false.
+     * @return True, if the phone is online, else false.
+     */
     @Override
     public boolean isOperational() {
         ConnectivityManager connectivityManager
@@ -132,10 +161,6 @@ public class HttpDataManager extends JsonDataManager {
         JsonParser jp = new JsonParser();
         JsonElement responseContentsJSON = jp.parse(responseContents);
         return responseContentsJSON.getAsJsonObject().getAsJsonObject("_source").toString();
-//        Type mapType = new TypeToken<ElasticSearchResponse<Object>>(){}.getType();
-//        ElasticSearchResponse<Object> elasticSearchResponse = deserialize(responseContents, mapType);
-//        LinkedTreeMap map = (LinkedTreeMap)elasticSearchResponse.getSource();
-//        return serialize(map, new TypeToken<LinkedTreeMap>(){}.getType());
     }
 }
 

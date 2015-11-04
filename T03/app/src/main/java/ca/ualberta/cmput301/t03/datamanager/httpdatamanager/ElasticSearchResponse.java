@@ -3,6 +3,8 @@ package ca.ualberta.cmput301.t03.datamanager.httpdatamanager;
 import com.google.gson.annotations.SerializedName;
 
 /**
+ * A model for serializing the responses from ElasticSearch server. All fields, and getter/setter
+ * methods correspond to the fields in response JSON.
  * Created by rishi on 15-10-31.
  */
 public class ElasticSearchResponse<T> {
