@@ -2,20 +2,19 @@ package ca.ualberta.cmput301.t03.inventory;
 
 import com.google.gson.annotations.Expose;
 
-import java.util.Collection;
-
-import ca.ualberta.cmput301.t03.Observable;
-import ca.ualberta.cmput301.t03.Observer;
-import ca.ualberta.cmput301.t03.common.exceptions.NotImplementedException;
-import ca.ualberta.cmput301.t03.photo.PhotoGallery;
-import ca.ualberta.cmput301.t03.datamanager.DataManager;
+import org.parceler.Parcel;
 
 import java.util.Collection;
 import java.util.HashSet;
 
+import ca.ualberta.cmput301.t03.Observable;
+import ca.ualberta.cmput301.t03.Observer;
+import ca.ualberta.cmput301.t03.photo.PhotoGallery;
+
 /**
  * Created by mmabuyo on 2015-10-29.
  */
+@Parcel
 public class Item  implements Observer, Observable{
     private PhotoGallery photoList; // we will expose this later
     private Collection<Observer> observers;

@@ -4,6 +4,8 @@ import android.content.Context;
 
 import com.google.gson.annotations.Expose;
 
+import org.parceler.Parcel;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -21,29 +23,27 @@ import ca.ualberta.cmput301.t03.inventory.Item;
 /**
  * Created by ross on 15-10-29.
  */
+@Parcel
 public class User implements Observable, Observer, Comparable<User> {
-
-    public String getUsername() {
-        return username;
-    }
 
     @Expose
     private String username;
-
     private FriendsList friends;
     private UserProfile profile;
     private Inventory inventory;
     private BrowsableInventories browsableInventories; // not sure we need this
-
     private DataManager dataManager;
     private Context context;
     private HashSet<Observer> observers;
-
     public User(String username, Context context) {
         this.observers = new HashSet<>();
         this.context = context;
         this.dataManager = new CachedDataManager(new HttpDataManager(context, true), context, true);
         this.username = username;
+    }
+
+    public String getUsername() {
+        return username;
     }
 
     public FriendsList getFriends() throws IOException {
@@ -52,8 +52,7 @@ public class User implements Observable, Observer, Comparable<User> {
             if (!dataManager.keyExists(key)) {
                 friends = new FriendsList();
                 dataManager.writeData(key, friends, FriendsList.class);
-            }
-            else {
+            } else {
                 friends = dataManager.getData(key, FriendsList.class);
             }
             ArrayList<User> temp = new ArrayList<>();
