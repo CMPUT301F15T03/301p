@@ -1,3 +1,23 @@
+/*
+ * Copyright (C) 2015 Kyle O'Shaughnessy, Ross Anderson, Michelle Mabuyo, John Slevinsky, Udey Rishi
+ * Photography equipment trading application for CMPUT 301 at the University of Alberta.
+ *
+ * This file is part of {ApplicationName}
+ *
+ * {ApplicationName} is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package ca.ualberta.cmput301.t03.inventory;
 
 import android.app.Activity;
@@ -42,14 +62,12 @@ import ca.ualberta.cmput301.t03.user.User;
  * create an instance of this fragment.
  */
 public class BrowseInventoryFragment extends Fragment implements Observer {
-    private BrowsableInventories model;
-    private BrowseInventoryController controller;
-
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    private BrowsableInventories model;
+    private BrowseInventoryController controller;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -57,6 +75,10 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
     private FloatingActionButton fab;
     private User user;
 //    private OnFragmentInteractionListener mListener;
+
+    public BrowseInventoryFragment() {
+        // Required empty public constructor
+    }
 
     /**
      * Use this factory method to create a new instance of
@@ -68,10 +90,6 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
 
     public static BrowseInventoryFragment newInstance() {
         return new BrowseInventoryFragment();
-    }
-
-    public BrowseInventoryFragment() {
-        // Required empty public constructor
     }
 
     @Override
