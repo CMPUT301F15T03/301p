@@ -208,6 +208,7 @@ public class MainActivity extends AppCompatActivity
 
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().add(R.id.fragmentContent, fragment).commit();
+        setTitle(getString(R.string.browseTitle));
     }
 
 
