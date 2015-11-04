@@ -66,10 +66,39 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        // setup of user stuffs
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                PrimaryUser.setup(getApplicationContext());
+                User mainUser = PrimaryUser.getInstance();
+                mainUser.getUsername();
+            }
+        });
+
         final Configuration config = new Configuration(getApplicationContext());
         if (!config.isApplicationUserNameSet()) {
             Intent intent = new Intent(this, InitializeUserActivity.class);
-            this.startActivity(intent);
+            this.startActivityForResult(intent, 1);
+        }
+        else {
+            thread.start();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    PrimaryUser.setup(getApplicationContext());
+                    User mainUser = PrimaryUser.getInstance();
+                    mainUser.getUsername();
+                }
+            });
+            thread.start();
         }
     }
 
