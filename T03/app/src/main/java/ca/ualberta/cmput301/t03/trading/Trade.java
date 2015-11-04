@@ -15,6 +15,7 @@ import ca.ualberta.cmput301.t03.datamanager.CachedDataManager;
 import ca.ualberta.cmput301.t03.datamanager.DataManager;
 import ca.ualberta.cmput301.t03.datamanager.HttpDataManager;
 import ca.ualberta.cmput301.t03.inventory.Item;
+import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeModificationException;
 import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeStateTransition;
 import ca.ualberta.cmput301.t03.user.User;
 
@@ -93,6 +94,15 @@ public class Trade implements Observable, Observer {
 
     public ArrayList<Item> getBorrowersItems() {
         return this.borrowersItems;
+    }
+
+    public void setBorrowersItems(ArrayList<Item> newBorrowersItems) throws IllegalTradeModificationException {
+        if (!state.isEditable()) {
+            String msg = String.format("Trade %s in state %s is uneditable",
+                    getTradeUUID().toString(), getState().toString());
+            throw new IllegalTradeModificationException(msg);
+        }
+        this.borrowersItems = newBorrowersItems;
     }
 
     public ArrayList<Item> getOwnersItems() {

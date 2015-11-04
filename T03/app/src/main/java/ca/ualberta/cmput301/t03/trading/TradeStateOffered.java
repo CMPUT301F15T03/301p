@@ -18,6 +18,11 @@ public class TradeStateOffered implements TradeState {
     }
 
     @Override
+    public Boolean isEditable() {
+        return Boolean.FALSE;
+    }
+
+    @Override
     public void offer(Trade trade) throws IllegalTradeStateTransition {
         throw new IllegalTradeStateTransition("Offered trade cannot be offered");
     }
@@ -47,6 +52,11 @@ public class TradeStateOffered implements TradeState {
          * - notify observers
          */
         throw new NotImplementedException();
+    }
+
+    @Override
+    public String toString() {
+        return "TradeStateOffered";
     }
 
 }

@@ -17,6 +17,11 @@ public class TradeStateDeclined implements TradeState {
     }
 
     @Override
+    public Boolean isEditable() {
+        return Boolean.FALSE;
+    }
+
+    @Override
     public void offer(Trade trade) throws IllegalTradeStateTransition {
         throw new IllegalTradeStateTransition("Declined trade cannot be offered");
     }
@@ -34,6 +39,11 @@ public class TradeStateDeclined implements TradeState {
     @Override
     public void decline(Trade trade) throws IllegalTradeStateTransition {
         throw new IllegalTradeStateTransition("Declined trade cannot be declined");
+    }
+
+    @Override
+    public String toString() {
+        return "TradeStateDeclined";
     }
 
 }
