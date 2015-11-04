@@ -26,12 +26,8 @@ public interface DataManager {
      *           "typeOfT", else a {@link ClassCastException} might be thrown.
      * @return The retrieved object.
      * @throws IOException Thrown, if the communication to the storage media fails.
-     * @throws DataKeyNotFoundException Thrown, if the {@link DataKey} is not found. See
-     *                                  {@link DataManager#keyExists(DataKey)} for preventing this.
-     * @throws ClassCastException Thrown, if the generic type "T" does not correspond to the {@link Type}
-     *                            object passed as the argument "typeOfT"
      */
-    <T> T getData(DataKey key, Type typeOfT) throws IOException, DataKeyNotFoundException, ClassCastException;
+    <T> T getData(DataKey key, Type typeOfT) throws IOException;
 
     /**
      * Write the object to the storage, or overwrites the existing one if one existed.
