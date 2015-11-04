@@ -20,21 +20,11 @@
 
 package ca.ualberta.cmput301.t03;
 
-import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.CompoundButton;
 
 import ca.ualberta.cmput301.t03.commontesting.PrimaryUserHelper;
-import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.configuration.ConfigurationActivity;
-import ca.ualberta.cmput301.t03.datamanager.CachedDataManager;
-import ca.ualberta.cmput301.t03.datamanager.DataKey;
-import ca.ualberta.cmput301.t03.datamanager.DataManager;
-import ca.ualberta.cmput301.t03.datamanager.HttpDataManager;
-import ca.ualberta.cmput301.t03.inventory.Inventory;
-import ca.ualberta.cmput301.t03.user.FriendsList;
-import ca.ualberta.cmput301.t03.user.User;
-import ca.ualberta.cmput301.t03.user.UserProfile;
 
 public class AppSettingsTest extends ActivityInstrumentationTestCase2 {
 
