@@ -24,6 +24,8 @@ import android.os.AsyncTask;
 
 import com.google.gson.annotations.Expose;
 
+import org.parceler.Parcel;
+
 import java.util.HashSet;
 
 import ca.ualberta.cmput301.t03.Observable;

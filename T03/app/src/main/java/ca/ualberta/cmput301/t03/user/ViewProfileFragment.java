@@ -35,6 +35,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+
+import org.parceler.Parcels;
+import org.w3c.dom.Text;
+
 import java.io.IOException;
 
 import ca.ualberta.cmput301.t03.Observable;
@@ -77,10 +81,12 @@ public class ViewProfileFragment extends Fragment implements Observer {
      * @return A new instance of fragment ViewProfileFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ViewProfileFragment newInstance(String username) {
+    public static ViewProfileFragment newInstance(User user) {
         ViewProfileFragment fragment = new ViewProfileFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, username);
+//        args.putString(ARG_PARAM1, username);
+        args.putParcelable(ARG_PARAM1, Parcels.wrap(user));
+
 
         fragment.setArguments(args);
         return fragment;
@@ -89,7 +95,9 @@ public class ViewProfileFragment extends Fragment implements Observer {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.fragment_view_profile, menu);
+        if(PrimaryUser.getInstance().equals(mUserToView)) {
+            inflater.inflate(R.menu.fragment_view_profile, menu);
+        }
     }
 
     @Override
@@ -98,9 +106,12 @@ public class ViewProfileFragment extends Fragment implements Observer {
 
         final Configuration c = new Configuration(getContext());
 
+
+
         if (getArguments() != null) {
-            String username = getArguments().getString(ARG_PARAM1);
-            mUserToView = new User(username, getActivity().getApplicationContext());
+//            String username = getArguments().getString(ARG_PARAM1);
+            mUserToView = Parcels.unwrap(getArguments().getParcelable(ARG_PARAM1));
+//            mUserToView = new User(username, getActivity().getApplicationContext());
         } else {
             mUserToView = PrimaryUser.getInstance();
         }
@@ -123,9 +134,9 @@ public class ViewProfileFragment extends Fragment implements Observer {
         String phone = model.getPhone();
         String username = mUserToView.getUsername();
 
-//        cityView.setText(city);
+        cityView.setText(city);
         emailView.setText(email);
-//        phoneView.setText(phone);
+        phoneView.setText(phone);
         usernameView.setText(username);
 
 
@@ -133,12 +144,17 @@ public class ViewProfileFragment extends Fragment implements Observer {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        usernameView = (TextView) getActivity().findViewById(R.id.viewProfileUsername);
-        emailView = (TextView) getActivity().findViewById(R.id.viewProfileEmail);
+        usernameView = (TextView) getView().findViewById(R.id.viewProfileUsername);
+        emailView = (TextView) getView().findViewById(R.id.viewProfileEmail);
+        phoneView = (TextView) getView().findViewById(R.id.viewProfilePhone);
+        cityView = (TextView) getView().findViewById(R.id.viewProfileCity);
 
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
+                //TODO is there a better way to do this?
+                mUserToView = new User(mUserToView.getUsername(), getContext());
+
                 try {
                     model = mUserToView.getProfile();
                 } catch (IOException e) {

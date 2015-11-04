@@ -23,6 +23,7 @@ package ca.ualberta.cmput301.t03.user;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -40,6 +41,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+
+import org.parceler.Parcels;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -234,7 +237,7 @@ public class FriendsListFragment extends Fragment implements Observer {
 //        FriendsListListAdapter adapter = new FriendsListListAdapter(getContext(), friendsList);
 
 
-        mAdapter = new ArrayAdapter<>(getContext(), R.layout.friends_list_item, mModel.getFriends());
+        mAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, mModel.getFriends());
         mListView.setAdapter(mAdapter);
 
 
@@ -243,7 +246,11 @@ public class FriendsListFragment extends Fragment implements Observer {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 User user = (User) mListView.getItemAtPosition(position);
 
-                Snackbar.make(getView(), user.getUsername(), Snackbar.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), ViewProfileActivity.class);
+                intent.putExtra("user", Parcels.wrap(user));
+                startActivity(intent);
+
+//                Snackbar.make(getView(), user.getUsername(), Snackbar.LENGTH_SHORT).show();
 
             }
         });
