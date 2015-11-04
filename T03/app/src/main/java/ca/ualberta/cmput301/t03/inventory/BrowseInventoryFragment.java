@@ -72,7 +72,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
     private String mParam1;
     private String mParam2;
 
-    private FloatingActionButton fab;
+    private FloatingActionButton addFilterBrowseFab;
     private User user;
 //    private OnFragmentInteractionListener mListener;
 
@@ -117,7 +117,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
 
         createListView(v);
 
-        setupFab();
+        setupFab(v);
 
         return v;
     }
@@ -155,31 +155,23 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
 
                 controller.inspectItem(itemTest);
             }
-         });
+        });
     }
 
         @Override
     public void onDestroy() {
         super.onDestroy();
-        teardownFab();
     }
 
-    private void setupFab(){
-        fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
-        fab.setImageDrawable(ContextCompat.getDrawable(getActivity().getBaseContext(), R.drawable.ic_filter));
-        fab.setOnClickListener(new View.OnClickListener() {
+    private void setupFab(View v){
+        addFilterBrowseFab = (FloatingActionButton) v.findViewById(R.id.addFilterBrowseFab);
+        addFilterBrowseFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                controller.addFilter();
                 Toast.makeText(getActivity().getBaseContext(), "ADD FILTER", Toast.LENGTH_SHORT).show();
             }
         });
-        fab.show();
-    }
-
-    private void teardownFab(){
-        fab.setOnClickListener(null);
-        fab.hide();
     }
 
     @Override
