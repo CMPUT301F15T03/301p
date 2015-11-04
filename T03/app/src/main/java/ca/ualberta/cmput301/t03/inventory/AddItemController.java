@@ -32,7 +32,8 @@ public class AddItemController {
         this.inventory = inventory;
         itemModel = new Item();
 
-        // listeners
+        // Source, accessed Nov 3, 2015
+        // http://developer.android.com/guide/topics/ui/controls/spinner.html#Populate
         categorySelect = (Spinner) v.findViewById(R.id.itemCategory);
         categorySelect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -45,8 +46,7 @@ public class AddItemController {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-//                Toast.makeText(v, "Please fill in the required fields.", Toast.LENGTH_LONG).show();
-//                return;
+
             }
         });
     }
@@ -103,11 +103,12 @@ public class AddItemController {
         // the only things required are item name and category
         if (itemName.length() == 0) {
             return false;
+        } if (itemModel.getItemCategory().length() == 0) {
+            return false;
         }
 
         return true;
     }
-
 
     public void addItemToInventoryButtonClicked() {
         addItemToInventory();
