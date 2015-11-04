@@ -9,7 +9,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -25,6 +28,7 @@ public class AddItemView extends AppCompatActivity {
     private AddItemController controller;
     private Button addToInventoryButton;
     private Inventory inventoryModel;
+    Spinner categoriesSpinner;
 
     private User user;
     private Activity activity = this;
@@ -49,8 +53,18 @@ public class AddItemView extends AppCompatActivity {
         });
         worker.start();
 
-        addToInventoryButton = (Button) findViewById(R.id.addItem);
+        // Source, accessed Nov 3, 2015
+        // http://developer.android.com/guide/topics/ui/controls/spinner.html#Populate
+        categoriesSpinner = (Spinner) findViewById(R.id.itemCategory);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.categories_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        categoriesSpinner.setAdapter(adapter);
 
+        addToInventoryButton = (Button) findViewById(R.id.addItem);
         addToInventoryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -58,4 +72,5 @@ public class AddItemView extends AppCompatActivity {
             }
         });
     }
+
 }
