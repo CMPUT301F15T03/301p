@@ -45,6 +45,10 @@
             android:name=".inventory.EditItemView"
             android:label="@string/title_activity_edit_item_view" >
         </activity>
+        <activity
+            android:name=".inventory.InspectItemView"
+            android:label="@string/title_activity_inspect_item_view" >
+        </activity>
     </application>
 
 </manifest>
