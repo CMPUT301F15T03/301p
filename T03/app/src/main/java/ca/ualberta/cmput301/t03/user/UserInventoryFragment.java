@@ -27,6 +27,7 @@ import java.util.List;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
+import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.inventory.Item;
@@ -64,7 +65,7 @@ public class UserInventoryFragment extends Fragment implements Observer {
             @Override
             public void run() {
                 try {
-                    user = c.getFullApplicationUser();
+                    user = PrimaryUser.getInstance();
 
                     model = user.getInventory();
                     controller = new UserInventoryController(getContext(), model);

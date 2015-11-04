@@ -13,6 +13,7 @@ import android.widget.EditText;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.user.User;
@@ -39,7 +40,7 @@ public class EditItemView extends AppCompatActivity {
         Configuration c = new Configuration(this.getBaseContext());
         c.getApplicationUserName();
 
-        this.user = new User(c.getApplicationUserName(), this.getBaseContext());
+        user = PrimaryUser.getInstance();
 
         Thread worker = new Thread(new Runnable() {
             @Override

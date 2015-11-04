@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import java.io.IOException;
 
+import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.user.User;
@@ -33,14 +34,12 @@ public class AddItemView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_add_item_view);
 
-        final Configuration c = new Configuration(this.getBaseContext());
-        c.getApplicationUserName();
-        
+        user = PrimaryUser.getInstance();
+
         Thread worker = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    user = c.getFullApplicationUser();
                     inventoryModel = user.getInventory();
                     controller = new AddItemController(findViewById(R.id.add_item_view), activity, inventoryModel);
                 } catch (IOException e) {
