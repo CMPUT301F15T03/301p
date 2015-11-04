@@ -27,7 +27,6 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -116,12 +115,7 @@ public class Configuration implements Observable {
         if (!isApplicationUserNameSet()) {
             return null;
         }
-        try {
-            return new User(getApplicationUserName(), context);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return new User(getApplicationUserName(), context);
     }
 
     /**

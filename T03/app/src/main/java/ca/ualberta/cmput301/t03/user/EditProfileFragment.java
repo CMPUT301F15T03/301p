@@ -19,7 +19,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
@@ -62,12 +61,7 @@ public class EditProfileFragment extends Fragment implements Observer {
         Configuration c = new Configuration(getContext());
         c.getApplicationUserName();
 
-        user = null;
-        try {
-            user = new User(c.getApplicationUserName(), getContext());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+        user = new User(c.getApplicationUserName(), getContext());
 
         Thread worker = new Thread(new Runnable() {
             @Override

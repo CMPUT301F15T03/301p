@@ -4,12 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import java.net.MalformedURLException;
-
 import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.datamanager.DataManager;
 import ca.ualberta.cmput301.t03.datamanager.HttpDataManager;
 import ca.ualberta.cmput301.t03.inventory.AddItemView;
+import ca.ualberta.cmput301.t03.inventory.EditItemView;
 import ca.ualberta.cmput301.t03.inventory.Inventory;
 import ca.ualberta.cmput301.t03.inventory.Item;
 
@@ -28,12 +27,8 @@ public class UserInventoryController {
         this.inventory = inventory;
         this.context = context;
 
-        configuration = new Configuration(context);
-        try {
-            dataManager = new HttpDataManager(context);
-        } catch (MalformedURLException e) {
-            throw new RuntimeException("There has been a issue contacting the application server.");
-        }
+        this.configuration = new Configuration(context);
+        this.dataManager = new HttpDataManager(context);
     }
 
     public void addItemButtonClicked() {
@@ -57,9 +52,9 @@ public class UserInventoryController {
     }
 
     public void inspectItem(Item item){
-//        Intent intent = new Intent(context, EditItemView.class);
-//        intent.putExtra(ITEM_NAME, item.getItemName());
-//        context.startActivity(intent);
+        Intent intent = new Intent(context, EditItemView.class);
+        intent.putExtra("ITEM_NAME", item.getItemName());
+        context.startActivity(intent);
     }
 
 }

@@ -28,7 +28,6 @@ public class AddItemController {
         this.activity = activity;
         this.inventory = inventory;
         itemModel = new Item();
-
     }
 
     public void addItemToInventory() {
@@ -65,12 +64,6 @@ public class AddItemController {
         itemModel.setItemCategory(itemCategory);
         itemModel.setItemIsPrivate(itemIsPrivate);
         itemModel.setItemDescription(itemDescription);
-
-        // log to see if it worked
-        Log.d("ITEM", itemModel.getItemName());
-        Log.d("ITEM", itemModel.getItemQuality());
-        Log.d("ITEM", itemModel.getItemCategory());
-        Log.d("ITEM", itemModel.getItemDescription());
 
         // add to inventory
         Thread thread = new Thread(new Runnable() {

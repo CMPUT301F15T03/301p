@@ -2,7 +2,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ca.ualberta.cmput301.t03.inventory.InspectItemFragment">
+    tools:context="ca.ualberta.cmput301.t03.inventory.EditItemView"
+    android:id="@+id/edit_item_view">
 
     <!-- TODO: Update blank fragment layout -->
     <!-- Source: suud, accessed Oct 31, 2015
@@ -20,21 +21,11 @@
                 android:layout_height="wrap_content">
 
                 <ImageView
-                    android:layout_width="154dp"
-                    android:layout_height="118dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:id="@+id/itemMainPhoto"
                     android:layout_gravity="left|top"
-                    android:contentDescription=""
-                    android:src="@drawable/photo_unavailable" />
-
-                <Button
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.25"
-                    android:id="@+id/proposeTradeButton"
-                    android:text="Propose Trade"
-                    android:layout_gravity="right"/>
-
+                    android:contentDescription="" />
 
             </LinearLayout>
 
@@ -49,7 +40,7 @@
                     android:layout_weight="0.25"
                     android:text="Name: " />
 
-                <TextView
+                <EditText
                     android:id="@+id/itemName"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -68,12 +59,14 @@
                     android:layout_weight="0.25"
                     android:text="Quantity: " />
 
-                <TextView
+                <EditText
                     android:id="@+id/itemQuantity"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.75"
-                    android:ems="10" />
+                    android:ems="10"
+                    android:text="1"
+                    android:inputType="number"/>
             </LinearLayout>
 
             <LinearLayout
@@ -87,7 +80,7 @@
                     android:layout_weight="0.25"
                     android:text="Quality: " />
 
-                <TextView
+                <EditText
                     android:id="@+id/itemQuality"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -106,7 +99,7 @@
                     android:layout_weight="0.25"
                     android:text="Category: " />
 
-                <TextView
+                <EditText
                     android:id="@+id/itemCategory"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -148,7 +141,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal" >
 
-                <TextView
+                <EditText
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -167,6 +160,21 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Photos" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Upload Photos"
+                    android:id="@+id/uploadPhotos"
+                    android:visibility="gone"/>
 
             </LinearLayout>
 
@@ -196,11 +204,31 @@
                     android:layout_gravity="left|top"
                     android:contentDescription="" />
 
-
             </LinearLayout>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|bottom"
+                android:text="EDIT"
+                android:id="@+id/editItem"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|bottom"
+                android:text="SAVE"
+                android:id="@+id/saveItem"
+                android:visibility="gone"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|bottom"
+                android:text="DELETE"
+                android:id="@+id/deleteItem"/>
 
         </LinearLayout>
 
     </ScrollView>
-
 </FrameLayout>
