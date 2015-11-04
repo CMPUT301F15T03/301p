@@ -1,5 +1,6 @@
 package ca.ualberta.cmput301.t03;
 
+import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -12,10 +13,19 @@ import static android.support.test.espresso.matcher.ViewMatchers.withContentDesc
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static ca.ualberta.cmput301.t03.commontesting.PauseForAnimation.pause;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.anything;
+import static org.hamcrest.Matchers.hasToString;
 
+import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.test.ActivityInstrumentationTestCase2;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.UUID;
 
 import ca.ualberta.cmput301.t03.commontesting.PrimaryUserHelper;
 import ca.ualberta.cmput301.t03.inventory.Item;
@@ -28,7 +38,11 @@ import ca.ualberta.cmput301.t03.user.User;
 public class TradeUITest
         extends ActivityInstrumentationTestCase2<MainActivity> {
 
+    private static final String TEST_USER_FRIEND_1 = "TEST_USER_FRIEND_1";
+    private static final String TEST_ITEM_1_CATEGORY = "TEST_ITEM_1_CATEGORY";
+    private static final String TEST_ITEM_1_NAME = "TEST_ITEM_1_NAME";
     private MainActivity mActivity;
+    private Context mContext;
 
     public TradeUITest() {
         super(MainActivity.class);
@@ -39,44 +53,80 @@ public class TradeUITest
         super.setUp();
         injectInstrumentation(InstrumentationRegistry.getInstrumentation());
         mActivity = getActivity();
+        mContext = this.getInstrumentation().getTargetContext();
 
-        //PrimaryUserHelper.setup(this.getInstrumentation().getTargetContext());
+        PrimaryUserHelper.setup(mContext);
+
+        /**
+         * Setup users.
+         * user
+         *  - clear friends
+         *  - clear items
+         * userFriend1
+         *  - clear friends
+         *  - clear items
+         */
+        User user = PrimaryUser.getInstance();
+        user.getFriends().setFriends(new ArrayList<User>());
+        user.getInventory().setItems(new LinkedHashMap<UUID, Item>());
+        User userFriend1 = new User(TEST_USER_FRIEND_1, mContext);
+        userFriend1.getFriends().setFriends(new ArrayList<User>());
+        userFriend1.getInventory().setItems(new LinkedHashMap<UUID, Item>());
     }
 
     @Override
     public void tearDown() throws Exception {
-        //PrimaryUserHelper.tearDown(this.getInstrumentation().getTargetContext());
+        PrimaryUserHelper.tearDown(mContext);
 
         super.tearDown();
     }
 
+    /**
+     * UC1.4.1 OfferTradeWithFriend
+     */
     public void testOfferTradeWithFriend(){
-        //UC1.4.1 OfferTradeWithFriend
 
-        // TODO create item in owner's inventory to trade for
+        /**
+         * Create an owner with an item, and add them as a friend
+         * The user can then offer to trade for the item
+         */
+        User user = PrimaryUser.getInstance();
+        User owner = new User(TEST_USER_FRIEND_1, mContext);
+        Item ownerItem = new Item(TEST_ITEM_1_NAME, TEST_ITEM_1_CATEGORY);
+        try {
+            owner.getInventory().addItem(ownerItem);
+            user.getFriends().addFriend(owner);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        onView(withId(R.id.BrowseListView))
+        try {
+            assertEquals(1, user.getFriends().size());
+            assertTrue(user.getFriends().containsFriend(owner));
+            assertNotNull(owner.getInventory().getItem(ownerItem.getUuid()));
+        } catch (IOException e) {
+            assertTrue("IOException in testOfferTradeWithFriend", Boolean.FALSE);
+        }
+
+        onData(anything())
+                .inAdapterView(withId(R.id.BrowseListView))
+                .atPosition(0)
                 .perform(click());
+        pause();
         onView(withId(R.id.proposeTradeButton))
                 .perform(click());
+        pause();
         onView(withId(R.id.tradeComposeConfirm))
                 .perform(click());
+        pause();
 
-        // TODO assert trade was created
-        // TODO assert trade was offered
-
-//        User owner = new User("User A");
-//        User borrower = new User("User B");
-//
-//        Item itemBorrowerWants = new Item("Item Borrower Wants");
-//        owner.addItemToInventory(itemBorrowerWants);
-//
-//        List<Item> itemsInReturn = new List<Item>();
-//        Trade trade = new Trade(borrower, owner, itemBorrowerWants, itemsInReturn);
-//        tradeManager.offer(trade);
-//
-//        assertTrue(tradeManager.exists(trade));
-//        assertTrue(tradeManager.isOpen(trade));
+//        assertEquals(1, user.getTrades().size());
+//        assertNotNull(user.getTrades().get(0));
+//        assertEquals(user.getUsername(), user.getTrades().get(0).getBorrower().getUsername());
+//        assertEquals(owner.getUsername(), user.getTrades().get(0).getOwner().getUsername());
+//        assertEquals(1, user.getTrades().get(0).getOwnersItems().size());
+//        assertNotNull(user.getTrades().get(0).getOwnersItems().get(0));
+//        assertEquals(ownerItem.getItemName(), user.getTrades().get(0).getOwnersItems().get(0));
     }
 
     public void testOwnerIsNotifiedOfTradeOffer(){
