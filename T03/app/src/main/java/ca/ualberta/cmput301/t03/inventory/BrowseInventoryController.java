@@ -3,6 +3,8 @@ package ca.ualberta.cmput301.t03.inventory;
 import android.content.Context;
 import android.content.Intent;
 
+import org.parceler.Parcels;
+
 import ca.ualberta.cmput301.t03.Filter;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.datamanager.DataManager;
@@ -33,8 +35,7 @@ public class BrowseInventoryController {
 
     public void inspectItem(Item item){
         Intent intent = new Intent(context, InspectItemView.class);
-//        intent.putExtra(FRIEND_NAME, item.getItemName());
-//        intent.putExtra(ITEM_NAME, item.getItemName());
+        intent.putExtra("inventory/inspect/item", Parcels.wrap(item));
         context.startActivity(intent);
     }
 }

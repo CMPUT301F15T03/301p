@@ -4,6 +4,9 @@ import android.util.Log;
 
 import com.google.gson.annotations.Expose;
 
+import org.parceler.Parcel;
+import org.parceler.Transient;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -17,6 +20,7 @@ import ca.ualberta.cmput301.t03.datamanager.DataManager;
 /**
  * Created by ross on 15-10-29.
  */
+@Parcel
 public class Inventory implements Filterable<Item>, Observable, Observer {
     public final static String type = "Inventory";
     @Expose
@@ -24,6 +28,7 @@ public class Inventory implements Filterable<Item>, Observable, Observer {
 
     private String ownerName; // is this needed?
     private String ownerId; // is this needed?
+    @Transient
     private HashSet<Observer> observers;
 
     public Inventory() {

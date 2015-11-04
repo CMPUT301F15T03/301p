@@ -57,7 +57,7 @@ public class Trade implements Observable, Observer {
         this.observers = new HashSet<>();
 
         this.tradeUUID = UUID.randomUUID();
-        this.save();
+        // this.save();
     }
 
     public void load() {
