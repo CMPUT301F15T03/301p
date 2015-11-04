@@ -10,6 +10,8 @@ public interface TradeState {
 
     Boolean isOpen();
 
+    Boolean isEditable();
+
     void offer(Trade trade) throws IllegalTradeStateTransition;
 
     void cancel(Trade trade) throws IllegalTradeStateTransition;

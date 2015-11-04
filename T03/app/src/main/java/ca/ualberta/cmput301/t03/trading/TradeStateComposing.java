@@ -18,6 +18,11 @@ public class TradeStateComposing implements TradeState {
     }
 
     @Override
+    public Boolean isEditable() {
+        return Boolean.TRUE;
+    }
+
+    @Override
     public void offer(Trade trade) {
         trade.setState(new TradeStateOffered());
         /**
@@ -49,5 +54,10 @@ public class TradeStateComposing implements TradeState {
     @Override
     public void decline(Trade trade) throws IllegalTradeStateTransition {
         throw new IllegalTradeStateTransition("Trade being composed cannot be declined");
+    }
+
+    @Override
+    public String toString() {
+        return "TradeStateComposing";
     }
 }
