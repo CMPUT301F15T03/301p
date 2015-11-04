@@ -11,7 +11,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 
 import ca.ualberta.cmput301.t03.R;
@@ -38,12 +37,7 @@ public class InspectItemView extends AppCompatActivity {
         Configuration c = new Configuration(this.getBaseContext());
         c.getApplicationUserName();
 
-        user = null;
-        try {
-            user = new User(c.getApplicationUserName(), this.getBaseContext());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+        this.user = new User(c.getApplicationUserName(), this.getBaseContext());
 
         Thread worker = new Thread(new Runnable() {
             @Override
