@@ -38,9 +38,9 @@ public class BrowseInventoryController {
     }
 
     public void inspectItem(Item item){
-//        Intent intent = new Intent(context, InspectItemView.class);
+        Intent intent = new Intent(context, InspectItemView.class);
 //        intent.putExtra(FRIEND_NAME, item.getItemName());
 //        intent.putExtra(ITEM_NAME, item.getItemName());
-//        context.startActivity(intent);
+        context.startActivity(intent);
     }
 }

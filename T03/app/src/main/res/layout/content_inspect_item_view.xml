@@ -2,8 +2,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ca.ualberta.cmput301.t03.inventory.EditItemView"
-    android:id="@+id/edit_item_view">
+    tools:context="ca.ualberta.cmput301.t03.inventory.InspectItemView"
+    android:id="@+id/inspect_item_view">
 
     <!-- TODO: Update blank fragment layout -->
     <!-- Source: suud, accessed Oct 31, 2015
@@ -21,11 +21,20 @@
                 android:layout_height="wrap_content">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="171dp"
+                    android:layout_height="117dp"
                     android:id="@+id/itemMainPhoto"
                     android:layout_gravity="left|top"
-                    android:contentDescription="" />
+                    android:contentDescription=""
+                    android:src="@drawable/photo_unavailable"/>
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.25"
+                    android:id="@+id/proposeTradeButton"
+                    android:text="Propose Trade"
+                    android:layout_gravity="right"/>
 
             </LinearLayout>
 
@@ -206,27 +215,6 @@
 
             </LinearLayout>
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right|bottom"
-                android:text="EDIT"
-                android:id="@+id/editItem"/>
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right|bottom"
-                android:text="SAVE"
-                android:id="@+id/saveItem"
-                android:visibility="gone"/>
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right|bottom"
-                android:text="DELETE"
-                android:id="@+id/deleteItem"/>
 
         </LinearLayout>
 

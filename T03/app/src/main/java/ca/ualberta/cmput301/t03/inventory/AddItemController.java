@@ -65,12 +65,6 @@ public class AddItemController {
         itemModel.setItemIsPrivate(itemIsPrivate);
         itemModel.setItemDescription(itemDescription);
 
-        // log to see if it worked
-        Log.d("ITEM", itemModel.getItemName());
-        Log.d("ITEM", itemModel.getItemQuality());
-        Log.d("ITEM", itemModel.getItemCategory());
-        Log.d("ITEM", itemModel.getItemDescription());
-
         // add to inventory
         Thread thread = new Thread(new Runnable() {
             @Override

@@ -2,6 +2,11 @@ package ca.ualberta.cmput301.t03.inventory;
 
 import android.app.Activity;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+
+import ca.ualberta.cmput301.t03.R;
 
 /**
  * Created by mmabuyo on 2015-10-29.
@@ -20,13 +25,62 @@ public class EditItemController {
     }
 
     public void saveItemToInventory() {
+        // get views and resave
+        EditText itemNameText = (EditText) v.findViewById(R.id.itemName);
+        String itemName = itemNameText.getText().toString();
 
-        throw new UnsupportedOperationException();
+        int itemQuantity = 1;
+        EditText itemQuantityText = (EditText) v.findViewById(R.id.itemQuantity);
+        if (itemQuantityText.getText().toString().length() > 0) {
+            itemQuantity = Integer.parseInt(itemQuantityText.getText().toString());
+        }
+        EditText itemQualityText = (EditText) v.findViewById(R.id.itemQuality);
+        String itemQuality = itemQualityText.getText().toString();
 
+        EditText itemCategoryText = (EditText) v.findViewById(R.id.itemCategory);
+        String itemCategory = itemCategoryText.getText().toString();
+
+        CheckBox itemIsPrivateCheckBox = (CheckBox) v.findViewById(R.id.itemPrivateCheckBox);
+        boolean itemIsPrivate = itemIsPrivateCheckBox.isChecked();
+
+        EditText itemDescriptionText = (EditText) v.findViewById(R.id.itemDescription);
+        String itemDescription = itemDescriptionText.getText().toString();
+
+        itemModel.setItemName(itemName);
+        itemModel.setItemQuantity(itemQuantity);
+        itemModel.setItemQuality(itemQuality);
+        itemModel.setItemCategory(itemCategory);
+        itemModel.setItemIsPrivate(itemIsPrivate);
+        itemModel.setItemDescription(itemDescription);
+
+        // add to inventory
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                inventory.addItem(itemModel);
+                activity.finish();
+            }
+        });
+        thread.start();
     }
 
-    public void saveItemToInventoryButtonClicked() {
-        saveItemToInventory();
+    public void editItemButtonClicked() {
+        // show save button, upload photos button, and hide edit button
+        v.findViewById(R.id.saveItem).setVisibility(View.VISIBLE);
+        v.findViewById(R.id.uploadPhotos).setVisibility(View.VISIBLE);
+        v.findViewById(R.id.editItem).setVisibility(View.GONE);
+
+        // set EditText views to be editable
+        v.findViewById(R.id.itemName).setFocusableInTouchMode(true);
+        v.findViewById(R.id.itemQuality).setFocusableInTouchMode(true);
+        v.findViewById(R.id.itemQuantity).setFocusableInTouchMode(true);
+        v.findViewById(R.id.itemCategory).setFocusableInTouchMode(true);
+        v.findViewById(R.id.itemPrivateCheckBox).setFocusableInTouchMode(true);
+        v.findViewById(R.id.itemDescription).setFocusableInTouchMode(true);
+    }
+
+    public void deleteItemButtonClicked() {
+
     }
 
 }

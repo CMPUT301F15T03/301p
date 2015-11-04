@@ -18,12 +18,10 @@ import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.user.User;
 
-public class EditItemView extends AppCompatActivity {
+public class InspectItemView extends AppCompatActivity {
     private Item itemModel;
-    private EditItemController controller;
-    private Button editItemButton;
-    private Button saveToInventoryButton;
-    private Button deleteItemButton;
+    private InspectItemController controller;
+    private Button proposeTradeButton;
 
     private Inventory inventoryModel;
 
@@ -33,9 +31,9 @@ public class EditItemView extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.content_edit_item_view);
+        setContentView(R.layout.content_inspect_item_view);
 
-        String itemNameClicked = getIntent().getStringExtra("ITEM_NAME");
+        //String itemNameClicked = getIntent().getStringExtra("ITEM_NAME");
 
         Configuration c = new Configuration(this.getBaseContext());
         c.getApplicationUserName();
@@ -79,7 +77,7 @@ public class EditItemView extends AppCompatActivity {
                         }
                     });
                     //TODO: unique ids for items, or use ITEM_NAME from getExtra
-                    controller = new EditItemController(findViewById(R.id.edit_item_view), activity, inventoryModel, items.get(0));
+                    controller = new InspectItemController(findViewById(R.id.edit_item_view), activity, inventoryModel, items.get(0));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -98,32 +96,13 @@ public class EditItemView extends AppCompatActivity {
 
         /* BUTTON LISTENERS */
         // save to inventory listener
-        editItemButton = (Button) findViewById(R.id.editItem);
-        editItemButton.setOnClickListener(new View.OnClickListener() {
+        proposeTradeButton = (Button) findViewById(R.id.proposeTradeButton);
+        proposeTradeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                controller.editItemButtonClicked();
+                controller.proposeTradeButtonClicked();
             }
         });
 
-        // save to inventory listener
-        saveToInventoryButton = (Button) findViewById(R.id.saveItem);
-        saveToInventoryButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                controller.saveItemToInventory();
-            }
-        });
-
-        // delete from inventory listener
-        deleteItemButton = (Button) findViewById(R.id.deleteItem);
-        deleteItemButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //controller.saveItemToInventoryButtonClicked();
-            }
-        });
     }
-
-
 }
