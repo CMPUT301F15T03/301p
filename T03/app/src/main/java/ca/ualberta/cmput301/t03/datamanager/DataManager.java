@@ -34,7 +34,7 @@ public interface DataManager {
     <T> T getData(DataKey key, Type typeOfT) throws IOException, DataKeyNotFoundException, ClassCastException;
 
     /**
-     * Write the object to the storage, or overwrites the exisiting one if one existed.
+     * Write the object to the storage, or overwrites the existing one if one existed.
      * @param key The {@link DataKey} for the object.
      * @param obj The object to be stored.
      * @param typeOfT The {@link Type} of the object.
