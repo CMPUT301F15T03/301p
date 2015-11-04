@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.Patterns;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 
 import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.datamanager.DataKey;
@@ -23,11 +22,7 @@ public class InitializeUserController {
     public InitializeUserController(Context context) {
         this.context = context;
         this.configuration = new Configuration(context);
-        try {
-            this.dataManager = new HttpDataManager(context);
-        } catch (MalformedURLException e) {
-            throw new RuntimeException("There has been a issue contacting the application server.");
-        }
+        this.dataManager = new HttpDataManager(context);
     }
 
     public boolean isUserNameTaken(String username) throws IOException {
@@ -42,12 +37,7 @@ public class InitializeUserController {
         configuration.setApplicationUserName(username);
 
         // create user
-        User localUser = null;
-        try {
-            localUser = new User(username, context);
-        } catch (MalformedURLException e) {
-            throw new RuntimeException("Issue creating new user.");
-        }
+        User localUser = new User(username, context);
 
         // get userProfile -> sets up ES
         UserProfile localUserProfile = null;
@@ -84,10 +74,7 @@ public class InitializeUserController {
 
 
 //        // test data - add a friend
-//        try {
-//            localUserFriends.addFriend(new User("TestUserKyle22", context));
-//        } catch (MalformedURLException e) {
-//        }
+//        localUserFriends.addFriend(new User("TestUserKyle22", context));
 //        localUserFriends.commitChanges();
 //
 //        // test data - add an item
@@ -108,8 +95,6 @@ public class InitializeUserController {
 //            tempUser.getProfile();
 //            tempUser.getFriends();
 //            tempUser.getInventory();
-//        } catch (MalformedURLException e) {
-//            e.printStackTrace();
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }

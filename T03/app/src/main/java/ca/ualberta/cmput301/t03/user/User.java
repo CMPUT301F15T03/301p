@@ -5,7 +5,6 @@ import android.content.Context;
 import com.google.gson.annotations.Expose;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -40,7 +39,7 @@ public class User implements Observable, Observer, Comparable<User> {
     private Context context;
     private HashSet<Observer> observers;
 
-    public User(String username, Context context) throws MalformedURLException {
+    public User(String username, Context context) {
         this.observers = new HashSet<>();
         this.context = context;
         this.dataManager = new CachedDataManager(new HttpDataManager(context, true), context, true);

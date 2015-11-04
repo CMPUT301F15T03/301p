@@ -3,6 +3,7 @@ package ca.ualberta.cmput301.t03.datamanager;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -13,6 +14,7 @@ import java.net.MalformedURLException;
 
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.common.Preconditions;
+import ca.ualberta.cmput301.t03.common.exceptions.HttpDataManagerInitializationException;
 import ca.ualberta.cmput301.t03.common.exceptions.NotImplementedException;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.common.http.HttpClient;
@@ -24,6 +26,7 @@ import ca.ualberta.cmput301.t03.common.http.HttpStatusCode;
  * Created by rishi on 15-10-30.
  */
 public class HttpDataManager extends JsonDataManager {
+    private final String logTAG = "HTTPDataManager";
 
     private final HttpClient client;
     private final Context context;
@@ -35,11 +38,16 @@ public class HttpDataManager extends JsonDataManager {
      *                                    else false. If this is set to true, only the fields with
      *                                    the annotation @expose will be serialized/de-serialized.
      */
-    public HttpDataManager(Context context, boolean useExplicitExposeAnnotation) throws MalformedURLException {
+    public HttpDataManager(Context context, boolean useExplicitExposeAnnotation) {
         super(useExplicitExposeAnnotation);
         this.context = Preconditions.checkNotNull(context, "context");
         String rootUrl = context.getString(R.string.httpDataManagerRootUrl);
-        client = new HttpClient(Preconditions.checkNotNullOrWhitespace(rootUrl, "rootUrl"));
+        try {
+            client = new HttpClient(Preconditions.checkNotNullOrWhitespace(rootUrl, "rootUrl"));
+        } catch (MalformedURLException e) {
+            Log.e(logTAG, e.getMessage());
+            throw new HttpDataManagerInitializationException(e.getMessage());
+        }
     }
 
     /**
@@ -47,7 +55,7 @@ public class HttpDataManager extends JsonDataManager {
      * value is set to false.
      * @param context The context to be used for checking the network status of the phone.
      */
-    public HttpDataManager(Context context) throws MalformedURLException {
+    public HttpDataManager(Context context) {
         this(context, false);
     }
 
