@@ -21,7 +21,6 @@ import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -60,14 +59,12 @@ public class UserInventoryFragment extends Fragment implements Observer {
 
         final Configuration c = new Configuration(getContext());
         c.getApplicationUserName();
-
-
+        
         Thread worker = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     user = c.getFullApplicationUser();
-
 
                     model = user.getInventory();
                     controller = new UserInventoryController(getContext(), model);
@@ -151,8 +148,7 @@ public class UserInventoryFragment extends Fragment implements Observer {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 controller.inspectItem(model.getItems().get(position));
                 Toast.makeText(getActivity().getBaseContext(), "Inspect Item", Toast.LENGTH_SHORT).show();
-
-
+                
             }
         });
 

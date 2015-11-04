@@ -11,11 +11,7 @@ public class HttpDataManagerTests extends BaseDataManagerTests<HttpDataManager> 
 
     @Override
     protected HttpDataManager createNewDataManager() {
-        try {
-            return new HttpDataManager(getContext());
-        } catch (MalformedURLException e) {
-            throw new NotImplementedException("Invalid httpDataManagerRootUrl resource.", e);
-        }
+        return new HttpDataManager(getContext());
     }
 
     @Override
