@@ -19,7 +19,10 @@ import android.view.MenuItem;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import junit.framework.Test;
 
 import java.io.IOException;
 
@@ -38,6 +41,8 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public FragmentManager fragmentManager;
+    private TextView sidebarUsernameTextView;
+    private TextView sidebarEmailTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,15 +71,9 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        // setup of user stuffs
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                PrimaryUser.setup(getApplicationContext());
-                User mainUser = PrimaryUser.getInstance();
-                mainUser.getUsername();
-            }
-        });
+        View header = navigationView.inflateHeaderView(R.layout.nav_header_main);
+        sidebarUsernameTextView = (TextView) header.findViewById(R.id.SidebarUsernameTextView);
+        sidebarEmailTextView = (TextView) header.findViewById(R.id.sidebarEmailTextView);
 
         final Configuration config = new Configuration(getApplicationContext());
         if (!config.isApplicationUserNameSet()) {
@@ -82,7 +81,7 @@ public class MainActivity extends AppCompatActivity
             this.startActivityForResult(intent, 1);
         }
         else {
-            thread.start();
+            afterUserSetup();
         }
     }
 
@@ -90,15 +89,7 @@ public class MainActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
-            Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    PrimaryUser.setup(getApplicationContext());
-                    User mainUser = PrimaryUser.getInstance();
-                    mainUser.getUsername();
-                }
-            });
-            thread.start();
+            afterUserSetup();
         }
     }
 
@@ -197,5 +188,30 @@ public class MainActivity extends AppCompatActivity
 
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().add(R.id.fragmentContent, fragment).commit();
+    }
+
+
+    private void afterUserSetup() {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                PrimaryUser.setup(getApplicationContext());
+                User mainUser = PrimaryUser.getInstance();
+                final String username = mainUser.getUsername();
+                try {
+                    final String email = mainUser.getProfile().getEmail();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            sidebarUsernameTextView.setText(username);
+                            sidebarEmailTextView.setText(email);
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread.start();
     }
 }
