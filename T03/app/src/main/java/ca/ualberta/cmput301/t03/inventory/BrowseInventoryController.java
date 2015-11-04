@@ -1,6 +1,7 @@
 package ca.ualberta.cmput301.t03.inventory;
 
 import android.content.Context;
+import android.content.Intent;
 
 import ca.ualberta.cmput301.t03.Filter;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
@@ -31,9 +32,9 @@ public class BrowseInventoryController {
     }
 
     public void inspectItem(Item item){
-//        Intent intent = new Intent(context, InspectItemView.class);
+        Intent intent = new Intent(context, InspectItemView.class);
 //        intent.putExtra(FRIEND_NAME, item.getItemName());
 //        intent.putExtra(ITEM_NAME, item.getItemName());
-//        context.startActivity(intent);
+        context.startActivity(intent);
     }
 }

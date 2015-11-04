@@ -25,7 +25,6 @@ public class AddItemView extends AppCompatActivity {
     private Button addToInventoryButton;
     private Inventory inventoryModel;
 
-    private FloatingActionButton fab;
     private User user;
     private Activity activity = this;
 
@@ -34,15 +33,14 @@ public class AddItemView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_add_item_view);
 
-        Configuration c = new Configuration(this.getBaseContext());
+        final Configuration c = new Configuration(this.getBaseContext());
         c.getApplicationUserName();
-
-        user = new User(c.getApplicationUserName(), this.getBaseContext());
-
+        
         Thread worker = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
+                    user = c.getFullApplicationUser();
                     inventoryModel = user.getInventory();
                     controller = new AddItemController(findViewById(R.id.add_item_view), activity, inventoryModel);
                 } catch (IOException e) {
