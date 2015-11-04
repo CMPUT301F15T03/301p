@@ -9,8 +9,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.HashMap;
 
-import ca.ualberta.cmput301.t03.datamanager.httpdatamanager.ElasticSearchResponse;
-
 /**
  * Created by rishi on 15-10-31.
  */
