@@ -2,9 +2,7 @@ package ca.ualberta.cmput301.t03.datamanager;
 
 import java.net.MalformedURLException;
 
-import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.common.exceptions.NotImplementedException;
-import ca.ualberta.cmput301.t03.datamanager.httpdatamanager.HttpDataManager;
 
 /**
  * Created by rishi on 15-10-30.
