@@ -1,4 +1,4 @@
-package ca.ualberta.cmput301.t03.datamanager.httpdatamanager;
+package ca.ualberta.cmput301.t03.common.http;
 
 import com.google.gson.annotations.SerializedName;
 
