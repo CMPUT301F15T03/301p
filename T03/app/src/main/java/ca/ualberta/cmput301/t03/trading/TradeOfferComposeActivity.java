@@ -32,6 +32,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import org.parceler.Parcels;
 
@@ -54,13 +55,22 @@ public class TradeOfferComposeActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         model = new Trade(Parcels.<User>unwrap(getIntent().getParcelableExtra("trade/compose/borrower")),
-                Parcels.<User>unwrap(getIntent().getParcelableExtra("trade/compose/user")),
+                Parcels.<User>unwrap(getIntent().getParcelableExtra("trade/compose/owner")),
                 new ArrayList<Item>(),
                 new ArrayList<Item>() {{
                     add(Parcels.<Item>unwrap(getIntent().getParcelableExtra("trade/compose/item")));
                 }},
                 this.getBaseContext());
         controller = new TradeOfferComposeController(this.getBaseContext(), model);
+
+        final TextView ownerUsername = (TextView) findViewById(R.id.tradeComposeOtherUser);
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ownerUsername.setText(model.getOwner().getUsername());
+            }
+        });
     }
 
     @Override
