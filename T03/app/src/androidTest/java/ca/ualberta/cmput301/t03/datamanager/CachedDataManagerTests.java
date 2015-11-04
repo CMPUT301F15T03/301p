@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 import ca.ualberta.cmput301.t03.common.exceptions.NotImplementedException;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
-import ca.ualberta.cmput301.t03.datamanager.httpdatamanager.HttpDataManager;
+
 import static ca.ualberta.cmput301.t03.commontesting.ExceptionAsserter.assertThrowsException;
 
 /**

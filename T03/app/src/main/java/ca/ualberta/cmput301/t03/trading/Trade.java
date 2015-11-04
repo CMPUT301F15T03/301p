@@ -12,7 +12,7 @@ import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.datamanager.CachedDataManager;
 import ca.ualberta.cmput301.t03.datamanager.DataManager;
-import ca.ualberta.cmput301.t03.datamanager.httpdatamanager.HttpDataManager;
+import ca.ualberta.cmput301.t03.datamanager.HttpDataManager;
 import ca.ualberta.cmput301.t03.inventory.Item;
 import ca.ualberta.cmput301.t03.user.User;
 

@@ -1,4 +1,4 @@
-package ca.ualberta.cmput301.t03.datamanager.httpdatamanager;
+package ca.ualberta.cmput301.t03.datamanager;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -6,13 +6,10 @@ import android.net.NetworkInfo;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import com.google.gson.internal.LinkedTreeMap;
-import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.MalformedURLException;
-import java.util.Objects;
 
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.common.Preconditions;
@@ -21,9 +18,6 @@ import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.common.http.HttpClient;
 import ca.ualberta.cmput301.t03.common.http.HttpResponse;
 import ca.ualberta.cmput301.t03.common.http.HttpStatusCode;
-import ca.ualberta.cmput301.t03.datamanager.DataKey;
-import ca.ualberta.cmput301.t03.datamanager.DataKeyNotFoundException;
-import ca.ualberta.cmput301.t03.datamanager.JsonDataManager;
 
 /**
  * A {@link JsonDataManager} that uses the ElasticSearch server as the storage media.
