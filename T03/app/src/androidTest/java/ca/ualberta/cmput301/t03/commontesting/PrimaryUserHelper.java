@@ -16,8 +16,13 @@ import ca.ualberta.cmput301.t03.user.UserProfile;
  * Created by kyleoshaughnessy on 2015-11-04.
  */
 public class PrimaryUserHelper {
+    private static String previousUser;
+
     public static void setup(Context context) throws Exception {
         Configuration configuration = new Configuration(context);
+        if (configuration.isApplicationUserNameSet()) {
+            previousUser = configuration.getApplicationUserName();
+        }
         configuration.clearApplicaitonUserName();
         configuration.setApplicationUserName("JUNIT_TEST_USER_DO_NOT_USE_THIS_NAME");
         User temp = new User(configuration.getApplicationUserName(), context);
@@ -36,5 +41,11 @@ public class PrimaryUserHelper {
         dataManager.deleteIfExists(new DataKey(UserProfile.type, configuration.getApplicationUserName()));
         dataManager.deleteIfExists(new DataKey(Inventory.type, configuration.getApplicationUserName()));
         dataManager.deleteIfExists(new DataKey(FriendsList.type, configuration.getApplicationUserName()));
+        configuration.clearApplicaitonUserName();
+
+        if (previousUser != null) {
+            configuration.setApplicationUserName(previousUser);
+        }
+        previousUser = null;
     }
 }
