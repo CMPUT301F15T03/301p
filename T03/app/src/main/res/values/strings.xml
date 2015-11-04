@@ -45,5 +45,17 @@
     <string name="hello_world">Hello world!</string>
     <string name="editProfile">Edit Profile</string>
 
+    <string-array name="categories_array">
+        <item>Cameras</item>
+        <item>Flash Photography</item>
+        <item>Instant Photography</item>
+        <item>Lens mounts</item>
+        <item>Photographic Chemicals</item>
+        <item>Photographic Shutters</item>
+        <item>Optical Filters</item>
+        <item>Photobooth Props</item>
+        <item>Stands</item>
+        <item>Photographic Films</item>
+    </string-array>
 
 </resources>
