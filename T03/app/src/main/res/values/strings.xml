@@ -57,5 +57,8 @@
         <item>Stands</item>
         <item>Photographic Films</item>
     </string-array>
+    <string name="title_activity_edit_profile">EditProfileActivity</string>
+    <string name="myProfileLabel">My Profile</string>
+    <string name="title_activity_view_profile">ViewProfileActivity</string>
 
 </resources>

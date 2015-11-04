@@ -42,6 +42,7 @@ import java.io.IOException;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
+import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
 
@@ -80,31 +81,8 @@ public class EditProfileFragment extends Fragment implements Observer {
         Configuration c = new Configuration(getContext());
         c.getApplicationUserName();
 
-        user = new User(c.getApplicationUserName(), getContext());
+        user = PrimaryUser.getInstance();
 
-        Thread worker = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    model = user.getProfile();
-                    controller = new UserProfileController(model);
-
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            populateFields();
-                        }
-                    });
-
-
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        });
-        worker.start();
     }
 
     @Override
@@ -131,10 +109,35 @@ public class EditProfileFragment extends Fragment implements Observer {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mNameField = (EditText) getActivity().findViewById(R.id.profileNameEditText);
-        mCityField = (EditText) getActivity().findViewById(R.id.profileCityEditText);
-        mEmailField = (EditText) getActivity().findViewById(R.id.profileEmailEditText);
-        mPhoneField = (EditText) getActivity().findViewById(R.id.profilePhoneEditText);
+        mNameField = (EditText) getView().findViewById(R.id.profileNameEditText);
+        mCityField = (EditText) getView().findViewById(R.id.profileCityEditText);
+        mEmailField = (EditText) getView().findViewById(R.id.profileEmailEditText);
+        mPhoneField = (EditText) getView().findViewById(R.id.profilePhoneEditText);
+
+        Thread worker = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    model = user.getProfile();
+                    controller = new UserProfileController(model);
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            populateFields();
+                        }
+                    });
+
+
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+        worker.start();
+
 
 
     }

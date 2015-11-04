@@ -21,6 +21,7 @@
 package ca.ualberta.cmput301.t03.user;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -38,6 +39,7 @@ import java.io.IOException;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
+import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
 
@@ -100,7 +102,7 @@ public class ViewProfileFragment extends Fragment implements Observer {
             String username = getArguments().getString(ARG_PARAM1);
             mUserToView = new User(username, getActivity().getApplicationContext());
         } else {
-            mUserToView = c.getApplicationUser();
+            mUserToView = PrimaryUser.getInstance();
         }
         setHasOptionsMenu(true);
 
@@ -164,6 +166,10 @@ public class ViewProfileFragment extends Fragment implements Observer {
         switch (item.getItemId()) {
             case R.id.edit_profile_button:
                 Snackbar.make(getView(), "TODO open edit profile activity",Snackbar.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), EditProfileActivity.class);
+
+                startActivity(intent);
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
