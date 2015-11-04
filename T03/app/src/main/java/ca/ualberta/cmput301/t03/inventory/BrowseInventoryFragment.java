@@ -19,6 +19,7 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -88,6 +89,9 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
         Configuration c = new Configuration(getActivity().getApplicationContext());
         try{
             user = new User(c.getApplicationUserName(), getActivity().getApplicationContext());
+
+            // TODO: pass in a proper Browseable Inventories
+            controller = new BrowseInventoryController(getContext(), new BrowsableInventories());
         } catch (Exception e){
 
         }
@@ -123,13 +127,20 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                controller.inspectItem();
                 Toast.makeText(getActivity().getBaseContext(), "Inspect Item", Toast.LENGTH_SHORT).show();
+
+                // TODO: actually get item clicked. this is for testing purposes
+                Item itemTest = new Item("TestItem", "TestCategory");
+                itemTest.setItemQuantity(1);
+                itemTest.setItemQuality("Good");
+                itemTest.setItemDescription("Pretty good");
+
+                controller.inspectItem(itemTest);
             }
-        });
+         });
     }
 
-    @Override
+        @Override
     public void onDestroy() {
         super.onDestroy();
         teardownFab();
