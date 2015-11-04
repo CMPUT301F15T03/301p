@@ -40,12 +40,12 @@ public class TradeUITest
         injectInstrumentation(InstrumentationRegistry.getInstrumentation());
         mActivity = getActivity();
 
-        //PrimaryUserHelper.setup(this.getInstrumentation().getTargetContext());
+        PrimaryUserHelper.setup(this.getInstrumentation().getTargetContext());
     }
 
     @Override
     public void tearDown() throws Exception {
-        //PrimaryUserHelper.tearDown(this.getInstrumentation().getTargetContext());
+        PrimaryUserHelper.tearDown(this.getInstrumentation().getTargetContext());
 
         super.tearDown();
     }
