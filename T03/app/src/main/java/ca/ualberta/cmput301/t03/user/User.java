@@ -1,9 +1,6 @@
 package ca.ualberta.cmput301.t03.user;
 
 import android.content.Context;
-import android.os.AsyncTask;
-import android.provider.CalendarContract;
-import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 
@@ -14,12 +11,10 @@ import java.util.HashSet;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
-import ca.ualberta.cmput301.t03.common.Preconditions;
 import ca.ualberta.cmput301.t03.datamanager.CachedDataManager;
 import ca.ualberta.cmput301.t03.datamanager.DataKey;
 import ca.ualberta.cmput301.t03.datamanager.DataManager;
-import ca.ualberta.cmput301.t03.datamanager.LocalDataManager;
-import ca.ualberta.cmput301.t03.datamanager.httpdatamanager.HttpDataManager;
+import ca.ualberta.cmput301.t03.datamanager.HttpDataManager;
 import ca.ualberta.cmput301.t03.inventory.BrowsableInventories;
 import ca.ualberta.cmput301.t03.inventory.Inventory;
 import ca.ualberta.cmput301.t03.inventory.Item;
