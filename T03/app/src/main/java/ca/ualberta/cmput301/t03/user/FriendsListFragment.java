@@ -71,7 +71,7 @@ public class FriendsListFragment extends Fragment implements Observer {
     private User mUser;
 
 
-    private FloatingActionButton fab;
+    private FloatingActionButton addFriendFab;
     private ListView mListView;
     private ArrayAdapter<User> mAdapter;
 
@@ -148,19 +148,17 @@ public class FriendsListFragment extends Fragment implements Observer {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        teardownFab();
     }
 
     private void setupFab(){
-        fab = (FloatingActionButton)getActivity().findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        addFriendFab = (FloatingActionButton)getActivity().findViewById(R.id.addFriendFab);
+        addFriendFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 createAlertDialog().show();
             }
         });
-        fab.setImageResource(R.drawable.ic_add_white_24dp);
-        fab.show();
+        addFriendFab.setImageResource(R.drawable.ic_add_white_24dp);
     }
 
 
@@ -200,13 +198,6 @@ public class FriendsListFragment extends Fragment implements Observer {
         });
         AlertDialog d = builder.create();
         return d;
-    }
-
-
-
-    private void teardownFab(){
-        fab.setOnClickListener(null);
-        fab.hide();
     }
 
     @Override

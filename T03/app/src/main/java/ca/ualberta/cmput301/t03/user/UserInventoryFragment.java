@@ -61,7 +61,7 @@ public class UserInventoryFragment extends Fragment implements Observer {
     private UserInventoryController controller;
     private User user;
 
-    private FloatingActionButton fab;
+    private FloatingActionButton addItemFab;
     private ListView listview;
     private SimpleAdapter adapter;
 
@@ -120,7 +120,7 @@ public class UserInventoryFragment extends Fragment implements Observer {
 
     private void fragmentSetup(View v){
         createListView(v);
-        setupFab();
+        setupFab(v);
         model.addObserver(this);
 
 
@@ -178,25 +178,19 @@ public class UserInventoryFragment extends Fragment implements Observer {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        teardownFab();
     }
 
-    private void setupFab(){
-        fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
-        fab.setImageDrawable(ContextCompat.getDrawable(getActivity().getBaseContext(), R.drawable.ic_add));
-        fab.setOnClickListener(new View.OnClickListener() {
+    private void setupFab(View v){
+        addItemFab = (FloatingActionButton) v.findViewById(R.id.addItemInventoryFab);
+        addItemFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 controller.addItemButtonClicked();
                 Toast.makeText(getActivity().getBaseContext(), "ADD ITEM", Toast.LENGTH_SHORT).show();
             }
         });
-        fab.show();
-    }
 
-    private void teardownFab(){
-        fab.setOnClickListener(null);
-        fab.hide();
+
     }
 
     @Override
