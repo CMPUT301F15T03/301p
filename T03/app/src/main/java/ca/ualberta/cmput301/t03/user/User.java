@@ -5,6 +5,8 @@ import android.content.Context;
 import com.google.gson.annotations.Expose;
 
 import org.parceler.Parcel;
+import org.parceler.ParcelConstructor;
+import org.parceler.Transient;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,13 +30,33 @@ public class User implements Observable, Observer, Comparable<User> {
 
     @Expose
     private String username;
+    @Transient
     private FriendsList friends;
+    @Transient
     private UserProfile profile;
+    @Transient
     private Inventory inventory;
+    @Transient
     private BrowsableInventories browsableInventories; // not sure we need this
+    @Transient
     private DataManager dataManager;
+    @Transient
     private Context context;
+    @Transient
     private HashSet<Observer> observers;
+
+    @ParcelConstructor
+    private User(String username) {
+        /**
+         * Context is un-Parcelable, and on unmarshal/deserialize we only want
+         * read-only access anyway, so we just get the username.
+         */
+        this.observers = null;
+        this.context = null;
+        this.dataManager = null;
+        this.username = username;
+    }
+
     public User(String username, Context context) {
         this.observers = new HashSet<>();
         this.context = context;

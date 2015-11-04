@@ -3,6 +3,7 @@ package ca.ualberta.cmput301.t03.inventory;
 import com.google.gson.annotations.Expose;
 
 import org.parceler.Parcel;
+import org.parceler.Transient;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -16,7 +17,9 @@ import ca.ualberta.cmput301.t03.photo.PhotoGallery;
  */
 @Parcel
 public class Item  implements Observer, Observable{
+    @Transient
     private PhotoGallery photoList; // we will expose this later
+    @Transient
     private Collection<Observer> observers;
     @Expose
     private String itemName;

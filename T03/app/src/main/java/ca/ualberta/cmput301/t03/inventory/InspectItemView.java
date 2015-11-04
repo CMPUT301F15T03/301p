@@ -8,8 +8,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
-import java.io.IOException;
-import java.util.ArrayList;
+import org.parceler.Parcels;
 
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
@@ -31,49 +30,38 @@ public class InspectItemView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_inspect_item_view);
 
-        //String itemNameClicked = getIntent().getStringExtra("ITEM_NAME");
-
         Configuration c = new Configuration(this.getBaseContext());
         c.getApplicationUserName();
 
         user = PrimaryUser.getInstance();
+        itemModel = Parcels.unwrap(getIntent().getParcelableExtra("inventory/inspect/item"));
 
         Thread worker = new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    inventoryModel = user.getInventory();
-                    ArrayList<Item> items =  inventoryModel.getItems();
+                // populate with fields
+                final EditText itemNameText = (EditText) findViewById(R.id.itemName);
+                final EditText itemQuantityText = (EditText) findViewById(R.id.itemQuantity);
+                final EditText itemQualityText = (EditText) findViewById(R.id.itemQuality);
+                final EditText itemCategoryText = (EditText) findViewById(R.id.itemCategory);
+                final CheckBox itemIsPrivateCheckBox = (CheckBox) findViewById(R.id.itemPrivateCheckBox);
+                final EditText itemDescriptionText = (EditText) findViewById(R.id.itemDescription);
 
-                    // get the actual item model clicked
-                    itemModel = items.get(0);
+                // reference, accessed October 3, 2015
+                // http://stackoverflow.com/questions/5161951/android-only-the-original-thread-that-created-a-view-hierarchy-can-touch-its-vi
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        itemNameText.setText(itemModel.getItemName());
+                        itemQuantityText.setText(String.valueOf(itemModel.getItemQuantity()));
+                        itemQualityText.setText(itemModel.getItemQuality());
+                        itemCategoryText.setText(itemModel.getItemCategory());
+                        itemIsPrivateCheckBox.setChecked(itemModel.isItemIsPrivate());
+                        itemDescriptionText.setText(itemModel.getItemDescription());
+                    }
+                });
 
-                    // populate with fields
-                    final EditText itemNameText = (EditText) findViewById(R.id.itemName);
-                    final EditText itemQuantityText = (EditText) findViewById(R.id.itemQuantity);
-                    final EditText itemQualityText = (EditText) findViewById(R.id.itemQuality);
-                    final EditText itemCategoryText = (EditText) findViewById(R.id.itemCategory);
-                    final CheckBox itemIsPrivateCheckBox = (CheckBox) findViewById(R.id.itemPrivateCheckBox);
-                    final EditText itemDescriptionText = (EditText) findViewById(R.id.itemDescription);
-
-                    // reference, accessed October 3, 2015
-                    // http://stackoverflow.com/questions/5161951/android-only-the-original-thread-that-created-a-view-hierarchy-can-touch-its-vi
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            itemNameText.setText(itemModel.getItemName());
-                            itemQuantityText.setText(String.valueOf(itemModel.getItemQuantity()));
-                            itemQualityText.setText(itemModel.getItemQuality());
-                            itemCategoryText.setText(itemModel.getItemCategory());
-                            itemIsPrivateCheckBox.setChecked(itemModel.isItemIsPrivate());
-                            itemDescriptionText.setText(itemModel.getItemDescription());
-                        }
-                    });
-                    //TODO: unique ids for items, or use ITEM_NAME from getExtra
-                    controller = new InspectItemController(findViewById(R.id.edit_item_view), activity, user, inventoryModel, items.get(0));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                controller = new InspectItemController(findViewById(R.id.edit_item_view), activity, user, inventoryModel, itemModel);
             }
         });
         worker.start();
