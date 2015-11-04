@@ -1,6 +1,7 @@
 package ca.ualberta.cmput301.t03.inventory;
 
 import android.content.Context;
+import android.content.Intent;
 
 import java.net.MalformedURLException;
 
