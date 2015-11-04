@@ -13,27 +13,46 @@ import ca.ualberta.cmput301.t03.common.Preconditions;
 import ca.ualberta.cmput301.t03.common.exceptions.NotImplementedException;
 
 /**
+ * A {@link JsonDataManager} that stores the serialized JSONs locally in the phone's storage.
  * Created by rishi on 15-10-30.
  */
 public class LocalDataManager extends JsonDataManager {
 
     private final Context context;
 
+    /**
+     * Creates an instance of the {@link LocalDataManager}.
+     * @param context The {@link Context} to be used for accessing the filesystem.
+     * @param useExplicitExposeAnnotation True, if the @expose annotations are to be explicitly used,
+     *                                    else false. If this is set to true, only the fields with
+     *                                    the annotation @expose will be serialized/de-serialized.
+     */
     public LocalDataManager(Context context, boolean useExplicitExposeAnnotation) {
         super(useExplicitExposeAnnotation);
         this.context = Preconditions.checkNotNull(context, "context");
     }
 
+    /**
+     * Creates an instance of the {@link LocalDataManager}. The "useExplicitExposeAnnotation"
+     * value is set to false.
+     * @param context The {@link Context} to be used for accessing the filesystem.
+     */
     public LocalDataManager(Context context) {
         this(context, false);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean keyExists(DataKey key) {
         Preconditions.checkNotNull(key, "key");
         return getTargetFile(key, false).exists();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public <T> T getData(DataKey key, Type typeOfT) {
         Preconditions.checkNotNull(key, "key");
@@ -56,6 +75,9 @@ public class LocalDataManager extends JsonDataManager {
         return deserialize(fileContents, typeOfT);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public <T> void writeData(DataKey key, T obj, Type typeOfT) {
         Preconditions.checkNotNull(key, "key");
@@ -75,6 +97,9 @@ public class LocalDataManager extends JsonDataManager {
         out.close();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean deleteIfExists(DataKey key) {
         if (!keyExists(key)) {
@@ -86,6 +111,10 @@ public class LocalDataManager extends JsonDataManager {
         return true;
     }
 
+    /**
+     * Not applicable for LocalDataManager. Always returns true.
+     * @return Always true.
+     */
     @Override
     public boolean isOperational() {
         return true;

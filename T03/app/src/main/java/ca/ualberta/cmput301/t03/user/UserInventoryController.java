@@ -8,7 +8,7 @@ import java.net.MalformedURLException;
 
 import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.datamanager.DataManager;
-import ca.ualberta.cmput301.t03.datamanager.httpdatamanager.HttpDataManager;
+import ca.ualberta.cmput301.t03.datamanager.HttpDataManager;
 import ca.ualberta.cmput301.t03.inventory.AddItemView;
 import ca.ualberta.cmput301.t03.inventory.Inventory;
 import ca.ualberta.cmput301.t03.inventory.Item;
