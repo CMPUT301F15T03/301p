@@ -39,9 +39,6 @@ import ca.ualberta.cmput301.t03.user.UserProfile;
 public class AppSettingsTest extends ActivityInstrumentationTestCase2 {
 
     private Boolean switchToggledState = false;
-    private Configuration configuration;
-    private DataManager dataManager;
-    private Context context;
 
     public AppSettingsTest() {
         super(ca.ualberta.cmput301.t03.configuration.ConfigurationActivity.class);
