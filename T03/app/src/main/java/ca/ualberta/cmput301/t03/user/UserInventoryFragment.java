@@ -10,10 +10,12 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
@@ -29,6 +31,7 @@ import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.inventory.Item;
+import ca.ualberta.cmput301.t03.inventory.ItemTileFragment;
 import ca.ualberta.cmput301.t03.user.UserInventoryController;
 import ca.ualberta.cmput301.t03.inventory.Inventory;
 
@@ -36,9 +39,11 @@ import ca.ualberta.cmput301.t03.inventory.Inventory;
 public class UserInventoryFragment extends Fragment implements Observer {
     private Inventory model;
     private UserInventoryController controller;
+    private User user;
 
     private FloatingActionButton fab;
-    private User user;
+    private ListView listview;
+    private SimpleAdapter adapter;
 
     // TODO: Rename and change types and number of parameters
     public static UserInventoryFragment newInstance() {
@@ -53,28 +58,17 @@ public class UserInventoryFragment extends Fragment implements Observer {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        final View v = inflater.inflate(R.layout.fragment_user_inventory, container, false);
-
-
-        Configuration c = new Configuration(getContext());
+        final Configuration c = new Configuration(getContext());
         c.getApplicationUserName();
 
-        user = null;
-        try {
-            user = new User(c.getApplicationUserName(), getContext());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
 
         Thread worker = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
+                    user = c.getFullApplicationUser();
+
+
                     model = user.getInventory();
                     controller = new UserInventoryController(getContext(), model);
 
@@ -82,8 +76,7 @@ public class UserInventoryFragment extends Fragment implements Observer {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            createListView(v);
-                            setupFab();
+                            fragmentSetup(getView());
                         }
                     });
 
@@ -97,7 +90,38 @@ public class UserInventoryFragment extends Fragment implements Observer {
         });
         worker.start();
 
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        final View v = inflater.inflate(R.layout.fragment_user_inventory, container, false);
+
         return v;
+    }
+
+    private void fragmentSetup(View v){
+        createListView(v);
+        setupFab();
+        model.addObserver(this);
+
+
+//        final Item itemModel = new Item();
+//        itemModel.setItemName("lala");
+//        itemModel.setItemQuantity(1);
+//        itemModel.setItemQuality("good");
+//        itemModel.setItemCategory("good");
+//        itemModel.setItemIsPrivate(true);
+//        itemModel.setItemDescription("lala");
+//
+//        Thread thread = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                model.addItem(itemModel);
+//            }
+//        });
+//        thread.start();
+
     }
 
     private ArrayList<HashMap<String, String>> buildTiles() {
@@ -115,11 +139,11 @@ public class UserInventoryFragment extends Fragment implements Observer {
     }
 
     public void createListView(View v){
-        final ListView listview = (ListView) v.findViewById(R.id.InventoryListView);
+        listview = (ListView) v.findViewById(R.id.InventoryListView);
         List<HashMap<String,String>> tiles = buildTiles();
         String[] from = {"tileViewItemName", "tileViewItemCategory"};
         int[] to = {R.id.tileViewItemName, R.id.tileViewItemCategory};
-        SimpleAdapter adapter = new SimpleAdapter(getActivity().getBaseContext(), tiles, R.layout.fragment_item_tile, from, to);
+        adapter = new SimpleAdapter(getActivity().getBaseContext(), tiles, R.layout.fragment_item_tile, from, to);
         listview.setAdapter(adapter);
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -160,7 +184,15 @@ public class UserInventoryFragment extends Fragment implements Observer {
 
     @Override
     public void update(Observable observable) {
-        throw new UnsupportedOperationException();
+        Log.d("Q", "Updating Inven Frag");
+        onCreate(new Bundle());
+//        getActivity().runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                adapter.notifyDataSetChanged();
+//            }
+//        });
+//        throw new UnsupportedOperationException();
     }
 
 }

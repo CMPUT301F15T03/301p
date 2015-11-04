@@ -38,8 +38,11 @@
     <string name="friendSearch">search</string>
     <string name="trade_tile_blank">A Trade Tile</string>
     <string name="title_activity_add_item_view">AddItemView</string>
+
     <string name="title_activity_edit_item_view">EditItemView</string>
 
     <string name="hello_world">Hello world!</string>
+    <string name="editProfile">Edit Profile</string>
+
 
 </resources>
