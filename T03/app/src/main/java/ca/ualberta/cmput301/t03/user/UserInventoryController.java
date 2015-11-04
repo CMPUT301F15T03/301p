@@ -2,6 +2,7 @@ package ca.ualberta.cmput301.t03.user;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import java.net.MalformedURLException;
 
@@ -39,6 +40,15 @@ public class UserInventoryController {
 //        throw new UnsupportedOperationException();
         Intent intent = new Intent(context, AddItemView.class);
         context.startActivity(intent);
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                inventory.notifyObservers();
+            }
+        });
+        thread.start();
+
 
     }
 
