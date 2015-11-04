@@ -111,6 +111,7 @@ public class Configuration implements Observable {
      * need to be called in order for members to be initialized
      * @return The empty User upon success, null if failure
      */
+    @Deprecated
     public User getApplicationUser() {
         if (!isApplicationUserNameSet()) {
             return null;
@@ -128,6 +129,7 @@ public class Configuration implements Observable {
      * ahead of time
      * @return a fully initialized user upon success, null if failure
      */
+    @Deprecated
     public User getFullApplicationUser() {
         User fullUser = getApplicationUser();
         if (fullUser == null) {
