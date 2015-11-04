@@ -59,6 +59,24 @@
             android:label="@string/title_activity_trade_offer_review"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
+        <activity
+            android:name=".user.EditProfileActivity"
+            android:label="@string/title_activity_edit_profile"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ca.ualberta.cmput301.t03.MainActivity" />
+        </activity>
+        <activity
+            android:name=".user.ViewProfileActivity"
+            android:label="@string/title_activity_view_profile"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ca.ualberta.cmput301.t03.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

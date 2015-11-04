@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_edit_profile:
                 fragmentClass = ViewProfileFragment.class;
-                title = getString(R.string.editProfileTitle);
+                title = getString(R.string.myProfileLabel);
                 break;
             default:
                 fragmentClass = BrowseInventoryFragment.class;
