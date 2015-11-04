@@ -1,5 +1,7 @@
 package ca.ualberta.cmput301.t03.inventory;
 
+import android.util.Log;
+
 import com.google.gson.annotations.Expose;
 
 import java.util.ArrayList;
@@ -77,12 +79,14 @@ public class Inventory implements Filterable<Item>, Observable, Observer {
     @Override
     public void notifyObservers() {
         for (Observer o: observers) {
+            Log.d("Q", "inventory is notifying " + o.toString());
             o.update(this);
         }
     }
 
     @Override
     public void addObserver(Observer observer) {
+        Log.d("Q", "adding " + observer.toString() + " to Inventory");
         observers.add(observer);
     }
 
@@ -93,16 +97,8 @@ public class Inventory implements Filterable<Item>, Observable, Observer {
 
     @Override
     public void update(Observable observable) {
+
         notifyObservers();
     }
 
-    public void addMockData(){
-        addItem(new Item("testItem", "testItem"));
-        addItem(new Item("testItem2", "testItem2"));
-        addItem(new Item("testItem3", "testItem3"));
-        addItem(new Item("testItem4", "testItem4"));
-        addItem(new Item("testItem5", "testItem5"));
-        addItem(new Item("testItem6", "testItem6"));
-        addItem(new Item("testItem7", "testItem7"));
-    }
 }

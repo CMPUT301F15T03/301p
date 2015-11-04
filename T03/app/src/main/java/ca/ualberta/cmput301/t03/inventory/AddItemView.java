@@ -35,20 +35,15 @@ public class AddItemView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_add_item_view);
 
-        Configuration c = new Configuration(this.getBaseContext());
+        final Configuration c = new Configuration(this.getBaseContext());
         c.getApplicationUserName();
 
-        user = null;
-        try {
-            user = new User(c.getApplicationUserName(), this.getBaseContext());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
 
         Thread worker = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
+                    user = c.getFullApplicationUser();
                     inventoryModel = user.getInventory();
                     controller = new AddItemController(findViewById(R.id.add_item_view), activity, inventoryModel);
                 } catch (IOException e) {
