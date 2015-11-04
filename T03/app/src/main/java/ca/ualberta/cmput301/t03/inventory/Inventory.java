@@ -29,7 +29,10 @@ import org.parceler.Transient;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.UUID;
 
 import ca.ualberta.cmput301.t03.Filter;
 import ca.ualberta.cmput301.t03.Filterable;
@@ -44,31 +47,35 @@ import ca.ualberta.cmput301.t03.datamanager.DataManager;
 public class Inventory implements Filterable<Item>, Observable, Observer {
     public final static String type = "Inventory";
     @Expose
-    private ArrayList<Item> items;
+    private LinkedHashMap<UUID, Item> items;
 
     private String ownerName; // is this needed?
     private String ownerId; // is this needed?
+
+
     @Transient
     private HashSet<Observer> observers;
 
     public Inventory() {
         observers = new HashSet<>();
-        items = new ArrayList<>();
+        items = new LinkedHashMap<>();
     }
 
-    public ArrayList<Item> getItems() {
+    public HashMap<UUID, Item> getItems() {
         return items;
     }
 
-    public void setItems(ArrayList<Item> items) {
+
+    public void setItems(LinkedHashMap<UUID, Item> items) {
         this.items = items;
-        for (Item item : items) {
+        for (Item item : items.values()) {
             item.addObserver(this);
         }
     }
 
+
     public void addItem(Item item) {
-        items.add(item);
+        items.put(item.getUuid(), item);
         item.addObserver(this);
         notifyObservers();
     }
