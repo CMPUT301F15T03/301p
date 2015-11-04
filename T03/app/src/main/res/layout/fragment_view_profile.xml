@@ -45,5 +45,39 @@
             android:id="@+id/viewProfileEmail"
             android:layout_below="@+id/viewProfileUsername"
             android:layout_centerHorizontal="true" />
+        <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Phone"
+        android:id="@+id/viewProfilePhoneLabel"
+        android:layout_below="@+id/viewProfileEmailLabel"
+        android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="phone_here"
+            android:id="@+id/viewProfilePhone"
+            android:layout_below="@+id/viewProfileEmail"
+            android:layout_centerHorizontal="true" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="City"
+            android:id="@+id/viewProfileCityLabel"
+            android:layout_below="@+id/viewProfilePhoneLabel"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="city_here"
+            android:id="@+id/viewProfileCity"
+            android:layout_below="@+id/viewProfilePhone"
+            android:layout_centerHorizontal="true" />
     </RelativeLayout>
 </FrameLayout>
