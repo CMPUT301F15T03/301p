@@ -1,10 +1,8 @@
 package ca.ualberta.cmput301.t03.inventory;
 
 import android.app.Activity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -72,7 +70,7 @@ public class InspectItemView extends AppCompatActivity {
                         }
                     });
                     //TODO: unique ids for items, or use ITEM_NAME from getExtra
-                    controller = new InspectItemController(findViewById(R.id.edit_item_view), activity, inventoryModel, items.get(0));
+                    controller = new InspectItemController(findViewById(R.id.edit_item_view), activity, user, inventoryModel, items.get(0));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

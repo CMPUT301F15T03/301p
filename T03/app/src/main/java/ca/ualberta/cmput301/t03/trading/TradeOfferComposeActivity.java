@@ -13,7 +13,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import org.parceler.Parcels;
+
+import java.util.ArrayList;
+
 import ca.ualberta.cmput301.t03.R;
+import ca.ualberta.cmput301.t03.inventory.Item;
+import ca.ualberta.cmput301.t03.user.User;
 
 public class TradeOfferComposeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -45,6 +51,15 @@ public class TradeOfferComposeActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        model = new Trade(Parcels.<User>unwrap(getIntent().getParcelableExtra("trade/compose/borrower")),
+                Parcels.<User>unwrap(getIntent().getParcelableExtra("trade/compose/user")),
+                new ArrayList<Item>(),
+                new ArrayList<Item>() {{
+                    add(Parcels.<Item>unwrap(getIntent().getParcelableExtra("trade/compose/item")));
+                }},
+                this.getBaseContext());
+        controller = new TradeOfferComposeController(this.getBaseContext(), model);
     }
 
     @Override
