@@ -32,6 +32,7 @@ import android.widget.EditText;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.UUID;
 
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
@@ -55,7 +56,7 @@ public class EditItemView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_edit_item_view);
 
-        String itemNameClicked = getIntent().getStringExtra("ITEM_NAME");
+        final UUID itemUUID = UUID.fromString(getIntent().getStringExtra("ITEM_UUID"));
 
         Configuration c = new Configuration(this.getBaseContext());
         c.getApplicationUserName();
@@ -67,10 +68,9 @@ public class EditItemView extends AppCompatActivity {
             public void run() {
                 try {
                     inventoryModel = user.getInventory();
-                    ArrayList<Item> items =  inventoryModel.getItems();
 
                     // get the actual item model clicked
-                    itemModel = items.get(0);
+                    itemModel = inventoryModel.getItems().get(itemUUID);
 
                     // populate with fields
                     final EditText itemNameText = (EditText) findViewById(R.id.itemName);
@@ -94,7 +94,7 @@ public class EditItemView extends AppCompatActivity {
                         }
                     });
                     //TODO: unique ids for items, or use ITEM_NAME from getExtra
-                    controller = new EditItemController(findViewById(R.id.edit_item_view), activity, inventoryModel, items.get(0));
+                    controller = new EditItemController(findViewById(R.id.edit_item_view), activity, inventoryModel, itemModel);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

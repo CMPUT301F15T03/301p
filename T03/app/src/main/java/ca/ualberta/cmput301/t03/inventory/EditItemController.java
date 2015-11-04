@@ -58,7 +58,7 @@ public class EditItemController {
         String itemQuality = itemQualityText.getText().toString();
 
         EditText itemCategoryText = (EditText) v.findViewById(R.id.itemCategory);
-        String itemCategory = itemCategoryText.getText().toString();
+        final String itemCategory = itemCategoryText.getText().toString();
 
         CheckBox itemIsPrivateCheckBox = (CheckBox) v.findViewById(R.id.itemPrivateCheckBox);
         boolean itemIsPrivate = itemIsPrivateCheckBox.isChecked();
@@ -77,7 +77,8 @@ public class EditItemController {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                inventory.addItem(itemModel);
+//                inventory.addItem(itemModel);
+                itemModel.commitChanges();
                 activity.finish();
             }
         });
