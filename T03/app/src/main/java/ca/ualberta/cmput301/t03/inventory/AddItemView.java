@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
@@ -36,8 +35,7 @@ public class AddItemView extends AppCompatActivity {
 
         final Configuration c = new Configuration(this.getBaseContext());
         c.getApplicationUserName();
-
-
+        
         Thread worker = new Thread(new Runnable() {
             @Override
             public void run() {
