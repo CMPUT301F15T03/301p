@@ -49,6 +49,16 @@
             android:name=".inventory.InspectItemView"
             android:label="@string/title_activity_inspect_item_view" >
         </activity>
+        <activity
+            android:name=".trading.TradeOfferComposeActivity"
+            android:label="@string/title_activity_trade_offer_compose"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity
+            android:name=".trading.TradeOfferReviewActivity"
+            android:label="@string/title_activity_trade_offer_review"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
     </application>
 
 </manifest>

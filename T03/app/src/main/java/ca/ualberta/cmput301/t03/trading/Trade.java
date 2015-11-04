@@ -4,15 +4,18 @@ import android.content.Context;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
+import ca.ualberta.cmput301.t03.common.exceptions.NotImplementedException;
 import ca.ualberta.cmput301.t03.datamanager.CachedDataManager;
 import ca.ualberta.cmput301.t03.datamanager.DataManager;
 import ca.ualberta.cmput301.t03.datamanager.HttpDataManager;
 import ca.ualberta.cmput301.t03.inventory.Item;
+import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeStateTransition;
 import ca.ualberta.cmput301.t03.user.User;
 
 /**
@@ -30,6 +33,11 @@ public class Trade implements Observable, Observer {
     private DataManager dataManager;
     private Set<Observer> observers;
 
+    public Trade(UUID tradeUUID) {
+        this.tradeUUID = tradeUUID;
+        this.load();
+    }
+
     public Trade(User borrower, User owner,
                  Collection<Item> borrowersItems, Collection<Item> ownersItems,
                  Context context) {
@@ -44,17 +52,19 @@ public class Trade implements Observable, Observer {
             this.ownersItems.add(item);
         }
 
-        this.tradeUUID = UUID.randomUUID();
-
         this.dataManager = new CachedDataManager(new HttpDataManager(context, true), context, true);
+        this.observers = new HashSet<>();
+
+        this.tradeUUID = UUID.randomUUID();
+        this.save();
     }
 
     public void load() {
-        throw new UnsupportedOperationException();
+        throw new NotImplementedException();
     }
 
     public void save() {
-        throw new UnsupportedOperationException();
+        throw new NotImplementedException();
     }
 
     public Boolean isClosed() {

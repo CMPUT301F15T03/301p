@@ -3,7 +3,6 @@ package ca.ualberta.cmput301.t03;
 import android.content.Context;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 
 import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.user.User;
@@ -36,8 +35,6 @@ public class PrimaryUser {
                 ourInstance.getInventory();
                 ourInstance.getFriends();
                 ourInstance.getProfile();
-            } catch (MalformedURLException e) {
-                throw new RuntimeException("Issue creating PrimaryUser");
             } catch (IOException e) {
                 throw new RuntimeException("Issue grabbing User's fields");
             }
