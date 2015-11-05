@@ -62,10 +62,12 @@ public class FriendsList implements Observable, Filterable {
 
     public void addFriend(User user) {
         friends.add(user);
+        notifyObservers();
     }
 
     public void removeFriend(User user) {
         friends.remove(user);
+        notifyObservers();
     }
 
     public void commitChanges() {
