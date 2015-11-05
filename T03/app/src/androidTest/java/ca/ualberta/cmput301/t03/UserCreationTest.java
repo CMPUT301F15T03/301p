@@ -1,16 +1,12 @@
 package ca.ualberta.cmput301.t03;
 
-import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
-import android.view.KeyEvent;
-import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 
 import java.io.IOException;
-import java.nio.channels.SelectableChannel;
 
 import ca.ualberta.cmput301.t03.commontesting.PrimaryUserHelper;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
@@ -74,7 +70,7 @@ public class UserCreationTest extends ActivityInstrumentationTestCase2{
         } catch (IOException e) {
             e.printStackTrace();
         }
-        configuration.clearApplicaitonUserName();
+        configuration.clearApplicationUserName();
 
 
         Instrumentation.ActivityMonitor am = getInstrumentation().addMonitor(InitializeUserActivity.class.getName(), null, false);
