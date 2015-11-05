@@ -18,15 +18,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ca.ualberta.cmput301.t03.common.exceptions;
+package ca.ualberta.cmput301.t03.datamanager;
 
 /**
+ * An {@link RuntimeException} thrown when the {@link HttpDataManager} construction fails.
  * Created by ross on 15-11-03.
  */
 public class HttpDataManagerInitializationException extends RuntimeException {
+
+    /**
+     * Creates an instance of {@link HttpDataManagerInitializationException}.
+     */
     public HttpDataManagerInitializationException() {
         super();
     }
+
+    /**
+     * Create an instance of {@link HttpDataManagerInitializationException}.
+     * @param message The detailed message describing the exception.
+     */
     public HttpDataManagerInitializationException(String message) {
         super(message);
     }
