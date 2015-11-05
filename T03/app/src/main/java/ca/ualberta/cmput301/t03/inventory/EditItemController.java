@@ -21,10 +21,13 @@
 package ca.ualberta.cmput301.t03.inventory;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import ca.ualberta.cmput301.t03.R;
 
@@ -36,12 +39,27 @@ public class EditItemController {
     private View v;
     private Activity activity;
     private Inventory inventory;
+    private Spinner categorySelect;
 
     public EditItemController(View v, Activity activity, Inventory inventory, Item item) {
         this.v = v;
         this.activity = activity;
         this.inventory = inventory;
         itemModel = item;
+
+        categorySelect = (Spinner) v.findViewById(R.id.itemCategory);
+        categorySelect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String category = (String) parent.getItemAtPosition(position);
+                itemModel.setItemCategory(category);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     public void saveItemToInventory() {
@@ -57,9 +75,6 @@ public class EditItemController {
         EditText itemQualityText = (EditText) v.findViewById(R.id.itemQuality);
         String itemQuality = itemQualityText.getText().toString();
 
-        EditText itemCategoryText = (EditText) v.findViewById(R.id.itemCategory);
-        final String itemCategory = itemCategoryText.getText().toString();
-
         CheckBox itemIsPrivateCheckBox = (CheckBox) v.findViewById(R.id.itemPrivateCheckBox);
         boolean itemIsPrivate = itemIsPrivateCheckBox.isChecked();
 
@@ -69,7 +84,6 @@ public class EditItemController {
         itemModel.setItemName(itemName);
         itemModel.setItemQuantity(itemQuantity);
         itemModel.setItemQuality(itemQuality);
-        itemModel.setItemCategory(itemCategory);
         itemModel.setItemIsPrivate(itemIsPrivate);
         itemModel.setItemDescription(itemDescription);
 
@@ -96,6 +110,7 @@ public class EditItemController {
         v.findViewById(R.id.itemQuality).setFocusableInTouchMode(true);
         v.findViewById(R.id.itemQuantity).setFocusableInTouchMode(true);
         v.findViewById(R.id.itemCategory).setFocusableInTouchMode(true);
+        v.findViewById(R.id.itemCategory).setEnabled(true);
         v.findViewById(R.id.itemPrivateCheckBox).setFocusableInTouchMode(true);
         v.findViewById(R.id.itemDescription).setFocusableInTouchMode(true);
     }
