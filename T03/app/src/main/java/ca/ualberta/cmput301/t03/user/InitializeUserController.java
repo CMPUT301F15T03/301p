@@ -32,27 +32,54 @@ import ca.ualberta.cmput301.t03.datamanager.HttpDataManager;
 import ca.ualberta.cmput301.t03.inventory.Inventory;
 
 /**
- * Created by ross on 15-10-29.
+ * Controller for the InitializeUser Activity. Responsible for validating input of the view's form.
+ * Will be used to create a fresh user locally and on ElasticSearch.
  */
 public class InitializeUserController {
     private Configuration configuration;
     private DataManager dataManager;
     private Context context;
 
+    /**
+     * Constructor for InitializeUserController.
+     *
+     * @param context application context
+     */
     public InitializeUserController(Context context) {
         this.context = context;
         this.configuration = new Configuration(context);
         this.dataManager = new HttpDataManager(context);
     }
 
+    /**
+     * Check's both elasticSearch and the local cache to determine if username is taken.
+     *
+     * @param username username that we want to know if has been taken
+     * @return true == taken, false == not taken
+     * @throws IOException
+     */
     public boolean isUserNameTaken(String username) throws IOException {
         return dataManager.keyExists(new DataKey(UserProfile.type, username));
     }
 
+    /**
+     * Check to see if an email matches the valid syntax.
+     *
+     * @param email email that will be validated
+     * @return true == valid, false == invalid
+     */
     public boolean isEmailInValid(String email) {
         return email.trim().isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
+    /**
+     * Setup user, profile, inventory, and friendslist entities locally and on ElasticSearch.
+     *
+     * @param username    username of the new user
+     * @param city        city to be entered in user profile
+     * @param email       email to be entered in the user profile
+     * @param phoneNumber phone number to be entered in user profile (can be empty)
+     */
     public void initializeUser(String username, String city, String email, String phoneNumber) {
         configuration.setApplicationUserName(username);
 
@@ -91,34 +118,5 @@ public class InitializeUserController {
         } catch (IOException e) {
             throw new RuntimeException("Issue getting user's friendsList.");
         }
-
-
-//        // test data - add a friend
-//        localUserFriends.addFriend(new User("TestUserKyle22", context));
-//        localUserFriends.commitChanges();
-//
-//        // test data - add an item
-//        Item testItem = new Item();
-//        testItem.setItemCategory("lenses");
-//        testItem.setItemDescription("Cool lense");
-//        testItem.setItemIsPrivate(false);
-//        testItem.setItemName("Cannon 50mm lense");
-//        testItem.setItemQuality("Good");
-//        testItem.setItemQuantity(5);
-//        localUserInventory.addItem(testItem);
-//        localUserInventory.commitChanges();
-//
-//        // test data get a user
-//        User tempUser = null;
-//        try {
-//            tempUser = new User("TestUserKyle25", context);
-//            tempUser.getProfile();
-//            tempUser.getFriends();
-//            tempUser.getInventory();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        assert tempUser != null;
     }
 }

@@ -29,6 +29,7 @@ import static ca.ualberta.cmput301.t03.commontesting.Matchers.withAdaptedData;
 
 import static android.support.test.espresso.matcher.ViewMatchers.withTagKey;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static ca.ualberta.cmput301.t03.commontesting.PauseForAnimation.pause;
 import static java.lang.Thread.sleep;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.allOf;
@@ -86,20 +87,15 @@ public class FriendsListTest {
 
         mActivity = mActivityRule.getActivity();
         InstrumentationRegistry.getInstrumentation();
-        try {
-            sleep(4000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
         Context ctx = InstrumentationRegistry.getTargetContext();
-
         Configuration c = new Configuration(ctx);
-
         c.setApplicationUserName(TEST_OTHER_USER);
-
+        pause();
         onView(withContentDescription("Open navigation drawer")).check(matches(isDisplayed())).perform(click());
+        pause();
         onView(withText("Friends")).check(matches(isDisplayed())).perform(click());
+        pause();
     }
 
 
@@ -110,14 +106,18 @@ public class FriendsListTest {
     public void testAddFriend() throws Exception{
 
         onView(withId(R.id.addFriendFab)).perform(click());
+        pause();
         onView(withClassName(new StringContains("EditText"))).
                 perform(typeText(TEST_OTHER_USER),
                         closeSoftKeyboard());
+        pause();
         onView(withText("Add")).
                 perform(click());
+        pause();
         onData(hasToString(TEST_OTHER_USER))
                 .inAdapterView(withId(R.id.friendsListListView))
                 .check(matches(isDisplayed()));
+        pause();
     }
 
     /**
@@ -127,19 +127,23 @@ public class FriendsListTest {
     public void testAddAndRemoveFriend() throws InterruptedException {
 
         onView(withId(R.id.addFriendFab)).perform(click());
+        pause();
         onView(withClassName(new StringContains("EditText")))
                 .perform(typeText(TEST_OTHER_USER),
                         closeSoftKeyboard());
+        pause();
         onView(withText("Add"))
                 .perform(click());
+        pause();
         onData(hasToString(TEST_OTHER_USER))
                 .inAdapterView(withId(R.id.friendsListListView))
                 .check(matches(isDisplayed()));
-
+        pause();
         onView(withText(TEST_OTHER_USER)).perform(longClick());
-        sleep(3000);
+        pause();
         onView(withId(R.id.friendsListListView))
                 .check(matches(not(withAdaptedData(hasToString(TEST_OTHER_USER)))));
+        pause();
 
     }
 
@@ -151,19 +155,24 @@ public class FriendsListTest {
     @Test
     public void testViewFriendProfile() {
         onView(withId(R.id.addFriendFab)).perform(click());
+        pause();
         onView(withClassName(new StringContains("EditText")))
                 .perform(typeText(TEST_OTHER_USER),
                         closeSoftKeyboard());
+        pause();
         onView(withText("Add"))
                 .perform(click());
+        pause();
         onData(hasToString(TEST_OTHER_USER))
                 .inAdapterView(withId(R.id.friendsListListView))
                 .check(matches(isDisplayed()));
-
+        pause();
         onView(withText(TEST_OTHER_USER)).perform(click());
+        pause();
         onView(withId(R.id.viewProfileUsername))
                 .check(matches(allOf(isDisplayed(),
                         withText(TEST_OTHER_USER))));
+        pause();
     }
 
 }

@@ -32,6 +32,9 @@ import java.io.IOException;
 
 import ca.ualberta.cmput301.t03.R;
 
+/**
+ * View component of the Initialize user workflow. To be entered if no user is found locally.
+ */
 public class InitializeUserActivity extends AppCompatActivity {
 
     private String toast;
@@ -42,6 +45,12 @@ public class InitializeUserActivity extends AppCompatActivity {
     private Button doneButton;
     private InitializeUserController controller;
 
+    /**
+     * set on click listeners and members relating to the view elements. Gets called on acitvity
+     * startup.
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,31 +74,63 @@ public class InitializeUserActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * prevent user from exiting activity until they have properly filled in the form.
+     */
     @Override
     public void onBackPressed() {
         doneButton.performClick();
     }
 
+    /**
+     * Getter for userNameEditText view element.
+     *
+     * @return view element
+     */
     public EditText getUserNameEditText() {
         return userNameEditText;
     }
 
+    /**
+     * Gett for emailEditText view element.
+     *
+     * @return view element
+     */
     public EditText getEmailEditText() {
         return emailEditText;
     }
 
+    /**
+     * Getter for citEditText view element.
+     *
+     * @return view element
+     */
     public EditText getCityEditText() {
         return cityEditText;
     }
 
+    /**
+     * Getter for phoneNumberEditText view element.
+     *
+     * @return view element
+     */
     public EditText getPhoneNumberEditText() {
         return phoneNumberEditText;
     }
 
+    /**
+     * Getter for doneButton view element.
+     *
+     * @return view element
+     */
     public Button getDoneButton() {
         return doneButton;
     }
 
+    /**
+     * Callback on done button being pressed. does basic validation and passed off info to
+     * controller if checks pass.
+     */
     public void onDoneButtonClick() {
         // todo : some of this code should be in the controller
 
@@ -134,6 +175,11 @@ public class InitializeUserActivity extends AppCompatActivity {
         thread.start();
     }
 
+    /**
+     * Toast a message to the user.
+     *
+     * @param toastError the error text you want to print
+     */
     public void toastMessage(final String toastError) {
         runOnUiThread(new Runnable() {
             @Override
@@ -144,7 +190,11 @@ public class InitializeUserActivity extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * Get the last toast message that was displayed.
+     *
+     * @return toast message
+     */
     public String getToast() {
         return toast;
     }

@@ -1,16 +1,12 @@
 package ca.ualberta.cmput301.t03;
 
-import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
-import android.view.KeyEvent;
-import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 
 import java.io.IOException;
-import java.nio.channels.SelectableChannel;
 
 import ca.ualberta.cmput301.t03.commontesting.PrimaryUserHelper;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
@@ -38,7 +34,6 @@ public class UserCreationTest extends ActivityInstrumentationTestCase2{
 
     @Override
     public void tearDown() throws Exception {
-        PrimaryUserHelper.tearDown(this.getInstrumentation().getTargetContext());
 
         Context context = getInstrumentation().getTargetContext();
         DataManager dataManager = new CachedDataManager(new HttpDataManager(context, true), context, true);
@@ -50,7 +45,11 @@ public class UserCreationTest extends ActivityInstrumentationTestCase2{
             dataManager.deleteIfExists(new DataKey(FriendsList.type, configuration.getApplicationUserName()));
         } catch (IOException e) {
             e.printStackTrace();
-        }        super.tearDown();
+        }
+
+        PrimaryUserHelper.tearDown(this.getInstrumentation().getTargetContext());
+
+        super.tearDown();
     }
 
     /**
@@ -58,8 +57,20 @@ public class UserCreationTest extends ActivityInstrumentationTestCase2{
      * testCreateDuplicateProfile() now covered in here
     */
     public void testCreateProfile() {
+
         Configuration configuration = new Configuration(getInstrumentation().getTargetContext());
-        configuration.clearApplicaitonUserName();
+
+        Context context = getInstrumentation().getTargetContext();
+        DataManager dataManager = new CachedDataManager(new HttpDataManager(context, true), context, true);
+        configuration.setApplicationUserName("JUNIT_TEST_USER_DO_NOT_USE_THIS_NAME2");
+        try {
+            dataManager.deleteIfExists(new DataKey(UserProfile.type, configuration.getApplicationUserName()));
+            dataManager.deleteIfExists(new DataKey(Inventory.type, configuration.getApplicationUserName()));
+            dataManager.deleteIfExists(new DataKey(FriendsList.type, configuration.getApplicationUserName()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        configuration.clearApplicationUserName();
 
 
         Instrumentation.ActivityMonitor am = getInstrumentation().addMonitor(InitializeUserActivity.class.getName(), null, false);
@@ -86,7 +97,7 @@ public class UserCreationTest extends ActivityInstrumentationTestCase2{
         });
 
         getInstrumentation().waitForIdleSync();
-        android.os.SystemClock.sleep(1500);
+        android.os.SystemClock.sleep(2500);
         String expectedToast = getInstrumentation().getTargetContext().getString(R.string.userNameTakenToast);
         assertEquals(initActivity.getToast(), expectedToast);
 
@@ -100,7 +111,7 @@ public class UserCreationTest extends ActivityInstrumentationTestCase2{
         });
 
         getInstrumentation().waitForIdleSync();
-        android.os.SystemClock.sleep(1500);
+        android.os.SystemClock.sleep(2500);
         expectedToast = getInstrumentation().getTargetContext().getString(R.string.noCityToast);
         assertEquals(initActivity.getToast(), expectedToast);
 
@@ -140,6 +151,7 @@ public class UserCreationTest extends ActivityInstrumentationTestCase2{
         } catch (IOException e) {
             e.printStackTrace();
         }
+        configuration.setApplicationUserName("JUNIT_TEST_USER_DO_NOT_USE_THIS_NAME");
 
         activity.finish();
     }

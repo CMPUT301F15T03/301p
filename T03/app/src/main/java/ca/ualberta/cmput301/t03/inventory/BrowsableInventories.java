@@ -36,6 +36,8 @@ package ca.ualberta.cmput301.t03.inventory;
  */
 
 
+import android.util.Log;
+
 import org.parceler.Transient;
 
 import java.io.IOException;
@@ -78,18 +80,17 @@ public class BrowsableInventories implements Filterable<Item>, Observer, Observa
 
 
     public ArrayList<Item> getBrowsables() {
+        Inventory tempInventory = new Inventory();
         ArrayList<Item> list = new ArrayList<Item>();
 
         for(User friend: friends.getFriends()){
             try {
-                for (Item item : friend.getInventory().getItems().values()) {
+                tempInventory = friend.getInventory();
+                for (Item item : tempInventory.getItems().values()) {
                     list.add(item);
                 }
-            }catch (Exception e){
-                for(int i=0; i < 5; i++){
-                    list.add(new Item("test", "test"));
-                }
-            }
+                tempInventory = new Inventory();
+            }catch (Exception e){ e.printStackTrace(); Log.d("Q", "Couldnt get friend(" + friend.getUsername() + ")'s Inventory");}
         }
 
         return list;
