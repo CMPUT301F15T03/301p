@@ -55,16 +55,6 @@ public class UserInventoryController {
 //        throw new UnsupportedOperationException();
         Intent intent = new Intent(context, AddItemView.class);
         context.startActivity(intent);
-
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                inventory.notifyObservers();
-            }
-        });
-        thread.start();
-
-
     }
 
     public void addingItemToInventory(Item item) {
