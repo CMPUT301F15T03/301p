@@ -19,7 +19,7 @@
     <string name="browseTitle">Browse</string>
     <string name="tradeTitle">Trades</string>
     <string name="friendsTitle">Friends</string>
-    <string name="editProfileTitle">Edit Profile</string>
+    <string name="editProfileTitle">My Profile</string>
 
     <!--Configuration strings-->
     <string name="configurationOfflineMode">Offline Mode</string>

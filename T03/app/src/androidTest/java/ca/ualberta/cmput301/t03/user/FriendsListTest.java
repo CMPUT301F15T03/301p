@@ -30,7 +30,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-
+import static ca.ualberta.cmput301.t03.commontesting.Matchers.withAdaptedData;
 
 import static android.support.test.espresso.matcher.ViewMatchers.withTagKey;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -140,6 +140,8 @@ public class FriendsListTest {
 
     }
 
+
+
     /**
      * UC02.05.01
      */
@@ -161,30 +163,4 @@ public class FriendsListTest {
                         withText(TEST_USER_NAME))));
     }
 
-    private static Matcher<View> withAdaptedData(final Matcher<Object> dataMatcher) {
-        return new TypeSafeMatcher<View>() {
-
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("with class name: ");
-                dataMatcher.describeTo(description);
-            }
-
-            @Override
-            public boolean matchesSafely(View view) {
-                if (!(view instanceof AdapterView)) {
-                    return false;
-                }
-
-                @SuppressWarnings("rawtypes")
-                Adapter adapter = ((AdapterView) view).getAdapter();
-                for (int i = 0; i < adapter.getCount(); i++) {
-                    if (dataMatcher.matches(adapter.getItem(i))) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-        };
-    }
 }
