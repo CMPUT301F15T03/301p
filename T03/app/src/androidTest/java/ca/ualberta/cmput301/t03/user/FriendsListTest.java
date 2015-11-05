@@ -74,7 +74,6 @@ public class FriendsListTest {
      * the {@link ActivityTestRule#getActivity()} method.
      */
 
-
     @Rule
     public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
             MainActivity.class);
@@ -84,7 +83,7 @@ public class FriendsListTest {
     @Before
     public void setActivity() {
         mActivity = mActivityRule.getActivity();
-        onView(withContentDescription("Open navigation drawer")).perform(click());
+        onView(withContentDescription("Open navigation drawer")).check(matches(isDisplayed())).perform(click());
         onView(withText("Friends")).check(matches(isDisplayed())).perform(click());
     }
 
@@ -94,12 +93,19 @@ public class FriendsListTest {
     public void testAddFriend() throws Exception{
 
 
-//        onView(withId(R.id.fab)).perform(click());
+        onView(withId(R.id.addFriendFab)).perform(click());
+
+    }
+
+    @Test
+    public void testAddAndRemoveFriend() {
+        onView(withId(R.id.addFriendFab)).perform(click());
 
     }
 
     @Test
     public void testViewFriendProfile() {
 
+        onView(withText("John")).check(matches(isDisplayed())).perform(click());
     }
 }
