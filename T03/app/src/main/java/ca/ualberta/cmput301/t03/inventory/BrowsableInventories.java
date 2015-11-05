@@ -37,7 +37,6 @@ import ca.ualberta.cmput301.t03.user.User;
 import ca.ualberta.cmput301.t03.user.UserInventoryController;
 
 public class BrowsableInventories implements Filterable<Item>, Observer, Observable {
-    private BrowsableInventories self;
     private FriendsList friends;
 
 
@@ -46,7 +45,6 @@ public class BrowsableInventories implements Filterable<Item>, Observer, Observa
 
 
     public BrowsableInventories() {
-        self = this;
         observers = new HashSet<>();
         Thread worker = new Thread(new Runnable() {
             @Override
@@ -54,7 +52,7 @@ public class BrowsableInventories implements Filterable<Item>, Observer, Observa
                 try {
                     User user = PrimaryUser.getInstance();
                     friends = user.getFriends();
-                    friends.addObserver(self);
+                    friends.addObserver(BrowsableInventories.this);
                     Log.d("Q","Added myself as observer");
                 } catch (IOException e) {
                     e.printStackTrace();
