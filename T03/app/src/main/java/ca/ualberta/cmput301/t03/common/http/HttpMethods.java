@@ -26,6 +26,7 @@ import java.net.ProtocolException;
 import ca.ualberta.cmput301.t03.common.exceptions.NotImplementedException;
 
 /**
+ * Major HTTP methods/verbs.
  * Created by rishi on 15-10-31.
  */
 public enum HttpMethods {
@@ -37,11 +38,18 @@ public enum HttpMethods {
         this.methodName = methodName;
     }
 
+    /**
+     * Returns the name of the HTTP Method.
+     */
     @Override
     public String toString() {
         return methodName;
     }
 
+    /**
+     * Sets a {@link HttpURLConnection} to use the HTTP method.
+     * @param connection The {@link HttpURLConnection} object to be modified.
+     */
     public void setMethod(HttpURLConnection connection) {
         try {
             connection.setRequestMethod(methodName);
