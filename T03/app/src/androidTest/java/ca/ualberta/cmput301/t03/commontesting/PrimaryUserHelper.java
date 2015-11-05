@@ -16,6 +16,10 @@ import ca.ualberta.cmput301.t03.user.UserProfile;
  * Created by kyleoshaughnessy on 2015-11-04.
  */
 public class PrimaryUserHelper {
+    public static final String CITY = "Edmonton";
+    public static final String EMAIL = "TESTUSER@gualberta.ca";
+    public static final String PHONE = "5555550123";
+    public static final String USER_ID = "JUNIT_TEST_USER_DO_NOT_USE_THIS_NAME";
     private static String previousUser;
 
     public static void setup(Context context) throws Exception {
@@ -24,14 +28,14 @@ public class PrimaryUserHelper {
             previousUser = configuration.getApplicationUserName();
         }
         configuration.clearApplicationUserName();
-        configuration.setApplicationUserName("JUNIT_TEST_USER_DO_NOT_USE_THIS_NAME");
+        configuration.setApplicationUserName(USER_ID);
         User temp = new User(configuration.getApplicationUserName(), context);
         temp.getFriends();
         temp.getInventory();
         UserProfile prof = temp.getProfile();
-        prof.setCity("Edmonton");
-        prof.setEmail("TESTUSER@gualberta.ca");
-        prof.setPhone("5555550123");
+        prof.setCity(CITY);
+        prof.setEmail(EMAIL);
+        prof.setPhone(PHONE);
         prof.commitChanges();
     }
 
