@@ -1,3 +1,23 @@
+/*
+ * Copyright (C) 2015 Kyle O'Shaughnessy, Ross Anderson, Michelle Mabuyo, John Slevinsky, Udey Rishi, Quentin Lautischer
+ * Photography equipment trading application for CMPUT 301 at the University of Alberta.
+ *
+ * This file is part of {ApplicationName}
+ *
+ * {ApplicationName} is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package ca.ualberta.cmput301.t03;
 
 import static android.support.test.espresso.Espresso.onData;
@@ -61,8 +81,6 @@ public class TradeUITest
         mActivity = getActivity();
         mContext = this.getInstrumentation().getTargetContext();
 
-        PrimaryUserHelper.setup(mContext);
-
         /**
          * Setup users.
          * user
@@ -73,10 +91,12 @@ public class TradeUITest
          *  - clear friends
          *  - clear items
          */
+        PrimaryUserHelper.setup(mContext);
         User user = PrimaryUser.getInstance();
         user.getFriends().setFriends(new ArrayList<User>());
         user.getInventory().setItems(new LinkedHashMap<UUID, Item>());
         user.setTrades(new LinkedHashMap<UUID, Trade>());
+
         User userFriend1 = new User(TEST_USER_FRIEND_1, mContext);
         userFriend1.getFriends().setFriends(new ArrayList<User>());
         userFriend1.getInventory().setItems(new LinkedHashMap<UUID, Item>());
