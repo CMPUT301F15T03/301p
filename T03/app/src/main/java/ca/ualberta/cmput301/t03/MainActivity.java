@@ -41,11 +41,11 @@ import java.io.IOException;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.configuration.ConfigurationActivity;
 import ca.ualberta.cmput301.t03.inventory.BrowseInventoryFragment;
+import ca.ualberta.cmput301.t03.inventory.UserInventoryFragment;
 import ca.ualberta.cmput301.t03.trading.TradeOfferHistoryFragment;
 import ca.ualberta.cmput301.t03.user.FriendsListFragment;
 import ca.ualberta.cmput301.t03.user.InitializeUserActivity;
 import ca.ualberta.cmput301.t03.user.User;
-import ca.ualberta.cmput301.t03.user.UserInventoryFragment;
 import ca.ualberta.cmput301.t03.user.ViewProfileFragment;
 
 /**
@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity
     /**
      * called when the activity is requested, used to initialize most of the view elements and
      * start the main application flow.
+     *
      * @param savedInstanceState
      */
     @Override
@@ -100,6 +101,7 @@ public class MainActivity extends AppCompatActivity
      * Callback for startActivityForResult, this will help delay the call of afterUserSetup until
      * we have setup an application username in configuration. This will get called upon exit of
      * the InitializeUserActivity intent.
+     *
      * @param requestCode
      * @param resultCode
      * @param data
@@ -127,6 +129,7 @@ public class MainActivity extends AppCompatActivity
 
     /**
      * handler called to inflate the options menu.
+     *
      * @param menu menu to inflate a layout into
      * @return true == success, false == failure
      */
@@ -140,6 +143,7 @@ public class MainActivity extends AppCompatActivity
     /**
      * Handler for opions menu item clicks, User primarily to enter the configuration view of the
      * application.
+     *
      * @param item the menu item that was selected
      * @return true == success, false == failure
      */
@@ -163,6 +167,7 @@ public class MainActivity extends AppCompatActivity
     /**
      * Toggle between the different fragments in the navigation menu, this handler will swap out
      * the requested fragment and replace the nav bar title.
+     *
      * @param item the navigation menu item that was selected
      * @return success == true, failure == false.
      */
