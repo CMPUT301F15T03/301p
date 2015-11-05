@@ -113,14 +113,12 @@ public class Inventory implements Filterable<Item>, Observable, Observer {
     @Override
     public void notifyObservers() {
         for (Observer o: observers) {
-            Log.d("Q", "inventory is notifying " + o.toString());
             o.update(this);
         }
     }
 
     @Override
     public void addObserver(Observer observer) {
-        Log.d("Q", "adding " + observer.toString() + " to Inventory");
         observers.add(observer);
     }
 
