@@ -30,10 +30,16 @@ import org.w3c.dom.Text;
 import java.util.UnknownFormatConversionException;
 
 /**
- * Created by ross on 15-10-29.
+ * Controller for UserProfile.
+ *
+ *
  */
 public class UserProfileController {
     private UserProfile mUserProfile;
+
+    /**
+     * Used to observe a text field and update the model.
+     */
     TextWatcher cityWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {

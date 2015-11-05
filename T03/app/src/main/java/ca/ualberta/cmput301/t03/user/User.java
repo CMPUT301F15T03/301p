@@ -69,6 +69,7 @@ public class User implements Observable, Observer, Comparable<User> {
     /**
      * Constructor that should only be used
      * for Parceling and Unparceling {@link Parcel}
+     *
      * @param username The User's username.
      */
     @ParcelConstructor
@@ -85,8 +86,9 @@ public class User implements Observable, Observer, Comparable<User> {
 
     /**
      * Default constructor for a User.
+     *
      * @param username A string that uniquely identifies a User.
-     * @param context The current application context.
+     * @param context  The current application context.
      */
     public User(String username, Context context) {
         this.observers = new HashSet<>();
@@ -98,7 +100,6 @@ public class User implements Observable, Observer, Comparable<User> {
     /**
      * Gets the User's username. This will not hit the network.
      *
-     *
      * @return the User's username.
      */
     public String getUsername() {
@@ -107,7 +108,7 @@ public class User implements Observable, Observer, Comparable<User> {
 
     /**
      * Get the User's FriendsList.
-     *
+     * <p/>
      * WARNING: This might hit the network! It must be
      * run asynchronously.
      *
@@ -136,7 +137,7 @@ public class User implements Observable, Observer, Comparable<User> {
 
     /**
      * Get the User's UserProfile.
-     *
+     * <p/>
      * WARNING: This might hit the network! It must be run
      * asynchronously.
      *
@@ -149,8 +150,7 @@ public class User implements Observable, Observer, Comparable<User> {
             if (!dataManager.keyExists(key)) {
                 profile = new UserProfile();
                 dataManager.writeData(key, profile, UserProfile.class);
-            }
-            else {
+            } else {
                 profile = dataManager.getData(key, UserProfile.class);
             }
             profile.addObserver(this);
@@ -159,10 +159,10 @@ public class User implements Observable, Observer, Comparable<User> {
     }
 
     /**
-     *  Get the User's Inventory.
-     *
-     *  WARNING: This might hit the network! It must be run
-     *  asynchronously.
+     * Get the User's Inventory.
+     * <p/>
+     * WARNING: This might hit the network! It must be run
+     * asynchronously.
      *
      * @return Inventory populated with the User's items.
      * @throws IOException
@@ -173,8 +173,7 @@ public class User implements Observable, Observer, Comparable<User> {
             if (!dataManager.keyExists(key)) {
                 inventory = new Inventory();
                 dataManager.writeData(key, inventory, Inventory.class);
-            }
-            else {
+            } else {
                 inventory = dataManager.getData(key, Inventory.class);
             }
             inventory.addObserver(this);
@@ -185,24 +184,36 @@ public class User implements Observable, Observer, Comparable<User> {
         return inventory;
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void notifyObservers() {
-        for (Observer o: observers) {
+        for (Observer o : observers) {
             o.update(this);
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addObserver(Observer observer) {
         observers.add(observer);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void removeObserver(Observer observer) {
         observers.remove(observer);
     }
 
+    /**
+     * When called by the fields that User is observing, a dump of the field's data will happen
+     * using a DataManager.
+     */
     @Override
     public void update(Observable observable) {
         final Observable o = observable;
@@ -227,19 +238,28 @@ public class User implements Observable, Observer, Comparable<User> {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         return String.format("%s", getUsername());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int compareTo(User another) {
         return getUsername().compareTo(another.getUsername());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object o) {
-        if (super.equals(o)){
+        if (super.equals(o)) {
             return true;
         }
 
@@ -248,6 +268,9 @@ public class User implements Observable, Observer, Comparable<User> {
         return compareTo(other) == 0;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return super.hashCode();
