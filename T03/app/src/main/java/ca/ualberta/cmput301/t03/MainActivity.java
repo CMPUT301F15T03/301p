@@ -22,9 +22,11 @@ package ca.ualberta.cmput301.t03;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.AsyncTaskLoader;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -206,9 +208,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void afterUserSetup() {
-        Thread thread = new Thread(new Runnable() {
+
+        AsyncTask task = new AsyncTask() {
             @Override
-            public void run() {
+            protected Object doInBackground(Object[] params) {
                 PrimaryUser.setup(getApplicationContext());
                 User mainUser = PrimaryUser.getInstance();
                 runOnUiThread(  new Runnable() {
@@ -217,19 +220,20 @@ public class MainActivity extends AppCompatActivity
                         finishOnCreate();
                     }
                 });
+                return null;
             }
-        });
-        thread.start();
+        };
+
+        task.execute();
     }
 
     public void finishOnCreate(){
         addInitialFragment();
 
 
-
-        Thread thread = new Thread(new Runnable() {
+        AsyncTask task = new AsyncTask() {
             @Override
-            public void run() {
+            protected Object doInBackground(Object[] params) {
                 final String username = PrimaryUser.getInstance().getUsername();
                 String emailTemp = "";
                 try {
@@ -247,8 +251,11 @@ public class MainActivity extends AppCompatActivity
                         sidebarEmailTextView.setText(email);
                     }
                 });
+                return null;
             }
-        });
-        thread.start();
+        };
+
+        task.execute();
+
     }
 }
