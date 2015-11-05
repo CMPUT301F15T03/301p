@@ -28,6 +28,7 @@ import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard
 import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static android.support.test.espresso.matcher.ViewMatchers.withTagValue;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static java.lang.Thread.sleep;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
@@ -52,34 +53,46 @@ public class ItemsUITest extends ActivityInstrumentationTestCase2<MainActivity> 
         mActivity = getActivity();
 
         PrimaryUserHelper.setup(this.getInstrumentation().getTargetContext());
+
+        try {
+            sleep(4000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void tearDown() throws Exception {
         PrimaryUserHelper.tearDown(this.getInstrumentation().getTargetContext());
+        try {
+            sleep(4000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         super.tearDown();
+
     }
 
-    public void testAddAnItem() {
-        // UC1.01.01 AddAnItem
-        onView(withContentDescription("Open navigation drawer")).perform(click());
-        onView(withText("Inventory")).check(matches(isDisplayed())).perform(click());
-        onView(withId(R.id.addItemInventoryFab))
-                .perform(click());
-
-        String ITEM_NAME = "Camera";
-        onView(withId(R.id.itemName))
-                .perform(typeText(ITEM_NAME), closeSoftKeyboard());
-
-        String ITEM_CATEGORY = "Cameras";
-
-        onView(withId(R.id.itemCategory)).perform(click());
-        onData(allOf(is(instanceOf(String.class)), is(ITEM_CATEGORY))).perform(click());
-        onView(withId(R.id.itemCategory)).check(matches(withSpinnerText(containsString(ITEM_CATEGORY))));
-
-        onView(withId(R.id.addItem)).perform(click());
-    }
+//    public void testAddAnItem() {
+//        // UC1.01.01 AddAnItem
+//        onView(withContentDescription("Open navigation drawer")).perform(click());
+//        onView(withText("Inventory")).check(matches(isDisplayed())).perform(click());
+//        onView(withId(R.id.addItemInventoryFab))
+//                .perform(click());
+//
+//        String ITEM_NAME = "Camera";
+//        onView(withId(R.id.itemName))
+//                .perform(typeText(ITEM_NAME), closeSoftKeyboard());
+//
+//        String ITEM_CATEGORY = "Cameras";
+//
+//        onView(withId(R.id.itemCategory)).perform(click());
+//        onData(allOf(is(instanceOf(String.class)), is(ITEM_CATEGORY))).perform(click());
+//        onView(withId(R.id.itemCategory)).check(matches(withSpinnerText(containsString(ITEM_CATEGORY))));
+//
+//        onView(withId(R.id.addItem)).perform(click());
+//    }
 
     public void testRemoveAnItem() {
         //UC1.03.01 - Remove an Item
@@ -248,12 +261,14 @@ public class ItemsUITest extends ActivityInstrumentationTestCase2<MainActivity> 
         onView(withId(R.id.itemCategory)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is(ITEM_CATEGORY))).perform(click());
         onView(withId(R.id.itemCategory)).check(matches(withSpinnerText(containsString(ITEM_CATEGORY))));
-/*
+
         onView(withId(R.id.addItem)).perform(click());
 
         // should be back in inventory view so click on item tile that was just added
         // onData(allOf(is(instanceOf(Book.class)), withBookTitle(BOOK_TITLE))).perform(click());
-        onData(allOf(is(instanceOf(HashMap.class)), )).perform(click());
+        onData(withText(ITEM_NAME))
+                .inAdapterView(withId(R.id.InventoryListView))
+                .check(matches(isDisplayed()));
         onView(withId(R.id.editItem)).perform(click());
 
         // change item check box
@@ -261,8 +276,6 @@ public class ItemsUITest extends ActivityInstrumentationTestCase2<MainActivity> 
                 .perform(click());
 
         onView(withId(R.id.saveItem)).perform(click());
-
-        */
     }
 
 }
