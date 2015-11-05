@@ -28,7 +28,7 @@ import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.user.User;
 
 /**
- * Created by kyle on 15-11-03.
+ * PrimaryUser is a singleton which holds a reference to the Application's user.
  */
 public class PrimaryUser {
     private static User ourInstance = null;
@@ -39,15 +39,25 @@ public class PrimaryUser {
     private PrimaryUser() {
     }
 
+    /**
+     * Initializes the singleton with a context which it will user for both a User (dataManager)
+     * and Configuration, calling setup prior to getInstance prevents a runtime exception.
+     * @param context the application context
+     */
     public static void setup(Context context) {
         PrimaryUser.context = context;
         PrimaryUser.config = new Configuration(context);
         PrimaryUser.setupCalled = true;
     }
 
+    /**
+     * Get the User referenced by the singleton, fully initialized with Inventory, FriendsList,
+     * and UserProfile.
+     * @return the application's single user
+     */
     public static User getInstance() {
         if (!setupCalled) {
-            throw new RuntimeException("PrimaryUser must be setup() first.");
+            throw new RuntimeException("PrimaryUser must be setup(...) first.");
         }
         if (ourInstance == null) {
             try {
