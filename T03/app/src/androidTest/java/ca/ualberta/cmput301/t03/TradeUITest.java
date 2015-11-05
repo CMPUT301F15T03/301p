@@ -1,26 +1,23 @@
 package ca.ualberta.cmput301.t03;
 
+import android.support.test.InstrumentationRegistry;
+import android.test.ActivityInstrumentationTestCase2;
+
+import java.io.IOException;
+
+import ca.ualberta.cmput301.t03.commontesting.PrimaryUserHelper;
+import ca.ualberta.cmput301.t03.commontesting.SystemAnimations;
+import ca.ualberta.cmput301.t03.user.User;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withChild;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
-
-import android.support.test.InstrumentationRegistry;
-import android.test.ActivityInstrumentationTestCase2;
-
-import ca.ualberta.cmput301.t03.commontesting.PrimaryUserHelper;
-import ca.ualberta.cmput301.t03.inventory.Item;
-import ca.ualberta.cmput301.t03.trading.Trade;
-import ca.ualberta.cmput301.t03.user.User;
 
 /**
  * Created by rhanders on 2015-10-08.
@@ -28,7 +25,10 @@ import ca.ualberta.cmput301.t03.user.User;
 public class TradeUITest
         extends ActivityInstrumentationTestCase2<MainActivity> {
 
+    private final String testUsername2 = "TEST_JUNIT_2";
+
     private MainActivity mActivity;
+    private SystemAnimations mSystemAnimations;
 
     public TradeUITest() {
         super(MainActivity.class);
@@ -38,6 +38,8 @@ public class TradeUITest
     public void setUp() throws Exception {
         super.setUp();
         injectInstrumentation(InstrumentationRegistry.getInstrumentation());
+        mSystemAnimations = new SystemAnimations(getInstrumentation().getContext());
+        mSystemAnimations.disableAll();
         mActivity = getActivity();
 
         PrimaryUserHelper.setup(this.getInstrumentation().getTargetContext());
@@ -47,6 +49,7 @@ public class TradeUITest
     public void tearDown() throws Exception {
         PrimaryUserHelper.tearDown(this.getInstrumentation().getTargetContext());
 
+//        mSystemAnimations.enableAll();
         super.tearDown();
     }
 
@@ -54,6 +57,12 @@ public class TradeUITest
         //UC1.4.1 OfferTradeWithFriend
 
         // TODO create item in owner's inventory to trade for
+        User currentUser = PrimaryUser.getInstance();
+        try {
+            currentUser.getFriends().addFriend(new User(testUsername2, mActivity.getBaseContext()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         onView(withId(R.id.BrowseListView))
                 .perform(click());

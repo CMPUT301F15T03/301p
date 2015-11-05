@@ -50,3 +50,20 @@ dependencies {
     androidTestCompile 'com.android.support.test:rules:0.4'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
 }
+
+/**
+ * Apply the animation-setting permission.
+ * Important for reliable UI tests when using Espresso.
+ * Source: http://stackoverflow.com/q/29908110/112705
+ */
+// Get the path to ADB.  Required when running tests directly from Android Studio.
+// Source: http://stackoverflow.com/a/26771087/112705
+def adb = android.getAdbExe().toString()
+task grantAnimationPermission(type:Exec) << {
+    commandLine "$adb shell pm grant $android.defaultConfig.applicationId android.permission.SET_ANIMATION_SCALE".split(' ')
+}
+
+afterEvaluate {
+    grantAnimationPermission
+}
+
