@@ -23,6 +23,7 @@ package ca.ualberta.cmput301.t03.user;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import android.support.design.widget.Snackbar;
@@ -149,9 +150,9 @@ public class ViewProfileFragment extends Fragment implements Observer {
         phoneView = (TextView) getView().findViewById(R.id.viewProfilePhone);
         cityView = (TextView) getView().findViewById(R.id.viewProfileCity);
 
-        Thread t = new Thread(new Runnable() {
+        AsyncTask t = new AsyncTask() {
             @Override
-            public void run() {
+            protected Object doInBackground(Object[] params) {
                 //TODO is there a better way to do this?
                 mUserToView = new User(mUserToView.getUsername(), getContext());
 
@@ -160,16 +161,17 @@ public class ViewProfileFragment extends Fragment implements Observer {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         populateFields();
                     }
                 });
+
+                return null;
             }
-        });
-        t.start();
+        };
+        t.execute();
 
     }
 
