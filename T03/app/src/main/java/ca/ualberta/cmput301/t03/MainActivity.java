@@ -23,8 +23,9 @@ package ca.ualberta.cmput301.t03;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -32,22 +33,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import android.view.View;
 import android.widget.TextView;
 
 import java.io.IOException;
 
 import ca.ualberta.cmput301.t03.configuration.Configuration;
-import ca.ualberta.cmput301.t03.inventory.BrowseInventoryFragment;
 import ca.ualberta.cmput301.t03.configuration.ConfigurationActivity;
+import ca.ualberta.cmput301.t03.inventory.BrowseInventoryFragment;
+import ca.ualberta.cmput301.t03.inventory.UserInventoryFragment;
 import ca.ualberta.cmput301.t03.trading.TradeOfferHistoryFragment;
 import ca.ualberta.cmput301.t03.user.FriendsListFragment;
 import ca.ualberta.cmput301.t03.user.InitializeUserActivity;
 import ca.ualberta.cmput301.t03.user.User;
-import ca.ualberta.cmput301.t03.inventory.UserInventoryFragment;
 import ca.ualberta.cmput301.t03.user.ViewProfileFragment;
 
+/**
+ * The main view of our application.
+ */
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -55,6 +58,12 @@ public class MainActivity extends AppCompatActivity
     private TextView sidebarUsernameTextView;
     private TextView sidebarEmailTextView;
 
+    /**
+     * called when the activity is requested, used to initialize most of the view elements and
+     * start the main application flow.
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +71,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -82,14 +90,22 @@ public class MainActivity extends AppCompatActivity
         if (!config.isApplicationUserNameSet()) {
             Intent intent = new Intent(this, InitializeUserActivity.class);
             this.startActivityForResult(intent, 1);
-        }
-        else {
+        } else {
             afterUserSetup();
         }
 
 
     }
 
+    /**
+     * Callback for startActivityForResult, this will help delay the call of afterUserSetup until
+     * we have setup an application username in configuration. This will get called upon exit of
+     * the InitializeUserActivity intent.
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -98,6 +114,9 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Close the navigation menu if it is open, else, delegate back button press to base class.
+     */
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -108,6 +127,12 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * handler called to inflate the options menu.
+     *
+     * @param menu menu to inflate a layout into
+     * @return true == success, false == failure
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -115,6 +140,13 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    /**
+     * Handler for opions menu item clicks, User primarily to enter the configuration view of the
+     * application.
+     *
+     * @param item the menu item that was selected
+     * @return true == success, false == failure
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -132,15 +164,21 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Toggle between the different fragments in the navigation menu, this handler will swap out
+     * the requested fragment and replace the nav bar title.
+     *
+     * @param item the navigation menu item that was selected
+     * @return success == true, failure == false.
+     */
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-
         Fragment fragment = null;
         String title;
         Class fragmentClass;
 
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.nav_inventory:
                 fragmentClass = UserInventoryFragment.class;
                 title = getString(R.string.inventoryTitle);
@@ -180,7 +218,10 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void addInitialFragment(){
+    /**
+     * After loading the other UI pieces load the default ui fragment
+     */
+    private void addInitialFragment() {
         Fragment fragment = null;
         Class fragmentClass;
 
@@ -196,14 +237,17 @@ public class MainActivity extends AppCompatActivity
         setTitle(getString(R.string.browseTitle));
     }
 
+    /**
+     * After confirmation of Configuration holding a username, this method will setup and load
+     * the application's User singleton.
+     */
     private void afterUserSetup() {
-
         AsyncTask task = new AsyncTask() {
             @Override
             protected Object doInBackground(Object[] params) {
                 PrimaryUser.setup(getApplicationContext());
                 User mainUser = PrimaryUser.getInstance();
-                runOnUiThread(  new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         finishOnCreate();
@@ -212,14 +256,14 @@ public class MainActivity extends AppCompatActivity
                 return null;
             }
         };
-
         task.execute();
     }
 
-    public void finishOnCreate(){
+    /**
+     * Load the first fragment and load the username and email fields of the nav bar header.
+     */
+    public void finishOnCreate() {
         addInitialFragment();
-
-
         AsyncTask task = new AsyncTask() {
             @Override
             protected Object doInBackground(Object[] params) {
@@ -232,7 +276,6 @@ public class MainActivity extends AppCompatActivity
                 }
 
                 final String email = emailTemp;
-
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

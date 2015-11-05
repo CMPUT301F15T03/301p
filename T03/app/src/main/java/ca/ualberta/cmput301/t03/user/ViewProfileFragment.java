@@ -78,7 +78,7 @@ public class ViewProfileFragment extends Fragment implements Observer {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param username Parameter 1.
+     * @param user Parameter 1.
      * @return A new instance of fragment ViewProfileFragment.
      */
     // TODO: Rename and change types and number of parameters

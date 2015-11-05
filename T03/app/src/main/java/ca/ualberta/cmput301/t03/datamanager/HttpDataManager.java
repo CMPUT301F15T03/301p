@@ -34,7 +34,6 @@ import java.net.MalformedURLException;
 
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.common.Preconditions;
-import ca.ualberta.cmput301.t03.common.exceptions.HttpDataManagerInitializationException;
 import ca.ualberta.cmput301.t03.common.exceptions.NotImplementedException;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.common.http.HttpClient;

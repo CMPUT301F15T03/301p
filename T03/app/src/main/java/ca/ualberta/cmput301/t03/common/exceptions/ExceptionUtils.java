@@ -24,11 +24,19 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 /**
+ * Utility methods for {@link Exception}.
  * Created by rishi on 15-10-30.
  */
 public class ExceptionUtils {
 
     // Source: http://stackoverflow.com/questions/1149703/how-can-i-convert-a-stack-trace-to-a-string
+    // Date: 30 Oct, 2015
+
+    /**
+     * Extracts the stack trace from an {@link Exception} object to a formatted {@link String}.
+     * @param exception The {@link Exception} whose stack trace has to be extracted out.
+     * @return The extracted stack trace {@link String}.
+     */
     public static String getStackTrace(Exception exception) {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
