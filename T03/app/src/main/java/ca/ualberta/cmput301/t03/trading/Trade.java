@@ -43,6 +43,7 @@ import ca.ualberta.cmput301.t03.user.User;
  * Created by ross on 15-10-29.
  */
 public class Trade implements Observable, Observer {
+    public final static String type = "Trade";
     private TradeState state;
     private User borrower;
     private User owner;
@@ -94,6 +95,10 @@ public class Trade implements Observable, Observer {
 
     public Boolean isOpen() {
         return state.isOpen();
+    }
+
+    public Boolean isEditable() {
+        return state.isEditable();
     }
 
     public TradeState getState() {

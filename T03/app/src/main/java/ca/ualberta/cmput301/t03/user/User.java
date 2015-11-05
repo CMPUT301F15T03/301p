@@ -31,6 +31,8 @@ import org.parceler.Transient;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.UUID;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
@@ -41,6 +43,7 @@ import ca.ualberta.cmput301.t03.datamanager.HttpDataManager;
 import ca.ualberta.cmput301.t03.inventory.BrowsableInventories;
 import ca.ualberta.cmput301.t03.inventory.Inventory;
 import ca.ualberta.cmput301.t03.inventory.Item;
+import ca.ualberta.cmput301.t03.trading.Trade;
 
 /**
  * Model that represents application Users.
@@ -57,6 +60,8 @@ public class User implements Observable, Observer, Comparable<User> {
     private UserProfile profile;
     @Transient
     private Inventory inventory;
+    @Transient
+    private LinkedHashMap<UUID, Trade> trades;
     @Transient
     private BrowsableInventories browsableInventories; // not sure we need this
     @Transient
@@ -182,6 +187,38 @@ public class User implements Observable, Observer, Comparable<User> {
             item.addObserver(inventory);
         }
         return inventory;
+    }
+
+    /**
+     * Get Trades which the User is involved in.
+     * <p/>
+     * WARNING: This might hit the network! It must be run
+     * asynchronously.
+     *
+     * @return LinkedHashMap of Trades the user is involved in.
+     *         This is a map of tradeUUID->Trade.
+     * @throws IOException
+     */
+    public LinkedHashMap<UUID, Trade> getTrades() throws IOException {
+        if (trades == null) {
+            DataKey key = new DataKey(Trade.type, username);
+            if (!dataManager.keyExists(key)) {
+                trades = new LinkedHashMap<>();
+                dataManager.writeData(key, trades, Trade.class);
+            } else {
+                trades = dataManager.getData(key, Trade.class);
+            }
+        }
+        return trades;
+    }
+
+    /**
+     * Set Trades which the User is involved in.
+     *
+     * @param trades Trades the User is involved in
+     */
+    public void setTrades(LinkedHashMap<UUID, Trade> trades) {
+        this.trades = trades;
     }
 
     /**
