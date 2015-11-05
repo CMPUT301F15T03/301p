@@ -113,44 +113,9 @@ public class Configuration implements Observable {
     }
 
     /**
-     * Returns the current user of the application. User's getter have not been called yet, and
-     * need to be called in order for members to be initialized
-     * @return The empty User upon success, null if failure
-     */
-    @Deprecated
-    public User getApplicationUser() {
-        if (!isApplicationUserNameSet()) {
-            return null;
-        }
-        return new User(getApplicationUserName(), context);
-    }
-
-    /**
-     * Works similarly to getApplicationUser, but will return a user with all members initialized
-     * ahead of time
-     * @return a fully initialized user upon success, null if failure
-     */
-    @Deprecated
-    public User getFullApplicationUser() {
-        User fullUser = getApplicationUser();
-        if (fullUser == null) {
-            return fullUser;
-        }
-        try {
-            fullUser.getFriends();
-            fullUser.getInventory();
-            fullUser.getProfile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return fullUser;
-
-    }
-
-    /**
      * Remove the user id from this particular instance of the application
      */
-    public void clearApplicaitonUserName() {
+    public void clearApplicationUserName() {
         editor.remove(applicationUserName);
         editor.commit();
     }
