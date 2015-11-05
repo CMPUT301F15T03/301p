@@ -42,6 +42,7 @@ public class PrimaryUser {
     /**
      * Initializes the singleton with a context which it will user for both a User (dataManager)
      * and Configuration, calling setup prior to getInstance prevents a runtime exception.
+     *
      * @param context the application context
      */
     public static void setup(Context context) {
@@ -53,6 +54,7 @@ public class PrimaryUser {
     /**
      * Get the User referenced by the singleton, fully initialized with Inventory, FriendsList,
      * and UserProfile.
+     *
      * @return the application's single user
      */
     public static User getInstance() {

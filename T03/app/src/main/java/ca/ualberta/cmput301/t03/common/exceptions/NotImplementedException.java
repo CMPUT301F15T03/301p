@@ -21,21 +21,39 @@
 package ca.ualberta.cmput301.t03.common.exceptions;
 
 /**
+ * An {@link RuntimeException} thrown when an operation is not yet implemented.
  * Created by rishi on 15-10-29.
  */
 public class NotImplementedException extends RuntimeException {
+
+    /**
+     * Creates an instance of {@link NotImplementedException}.
+     */
     public NotImplementedException() {
         super();
     }
 
+    /**
+     * Creates an instance of {@link NotImplementedException}.
+     * @param message The detailed message describing the exception.
+     */
     public NotImplementedException(String message) {
         super(message);
     }
 
+    /**
+     * Creates an instance of {@link NotImplementedException}.
+     * @param cause The cause of this exception.
+     */
     public NotImplementedException(Throwable cause) {
         super(cause);
     }
 
+    /**
+     * Creates an instance of {@link NotImplementedException}.
+     * @param message The detailed message describing the exception.
+     * @param cause The cause of this exception.
+     */
     public NotImplementedException(String message, Throwable cause) {
         super(message, cause);
     }

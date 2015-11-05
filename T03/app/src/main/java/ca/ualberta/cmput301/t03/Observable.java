@@ -32,6 +32,7 @@ public interface Observable {
 
     /**
      * Add an Observer to a collection of Observers that should be updated upon a notify.
+     *
      * @param observer the Observer to add
      */
     void addObserver(Observer observer);
@@ -39,6 +40,7 @@ public interface Observable {
     /**
      * Remove an Observer from maintained collection of Observers. This Observer should no longer
      * be notified of changes.
+     *
      * @param observer the Observer to remove
      */
     void removeObserver(Observer observer);

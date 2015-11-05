@@ -86,7 +86,7 @@ public class UserCreationTest extends ActivityInstrumentationTestCase2{
         });
 
         getInstrumentation().waitForIdleSync();
-        android.os.SystemClock.sleep(250);
+        android.os.SystemClock.sleep(1500);
         String expectedToast = getInstrumentation().getTargetContext().getString(R.string.userNameTakenToast);
         assertEquals(initActivity.getToast(), expectedToast);
 
@@ -100,7 +100,7 @@ public class UserCreationTest extends ActivityInstrumentationTestCase2{
         });
 
         getInstrumentation().waitForIdleSync();
-        android.os.SystemClock.sleep(250);
+        android.os.SystemClock.sleep(1500);
         expectedToast = getInstrumentation().getTargetContext().getString(R.string.noCityToast);
         assertEquals(initActivity.getToast(), expectedToast);
 
