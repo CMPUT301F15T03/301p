@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Kyle O'Shaughnessy, Ross Anderson, Michelle Mabuyo, John Slevinsky, Udey Rishi
+ * Copyright (C) 2015 Kyle O'Shaughnessy, Ross Anderson, Michelle Mabuyo, John Slevinsky, Udey Rishi, Quentin Lautischer
  * Photography equipment trading application for CMPUT 301 at the University of Alberta.
  *
  * This file is part of {ApplicationName}
