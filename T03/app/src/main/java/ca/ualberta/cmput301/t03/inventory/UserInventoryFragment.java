@@ -211,14 +211,13 @@ public class UserInventoryFragment extends Fragment implements Observer {
 
     @Override
     public void update(Observable observable) {
-        Log.d("Q", "Updating Inven Frag");
-        onCreate(new Bundle());
-//        getActivity().runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                adapter.notifyDataSetChanged();
-//            }
-//        });
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                adapter.notifyDataSetChanged();
+                fragmentSetup(getView());
+            }
+        });
 //        throw new UnsupportedOperationException();
     }
 
