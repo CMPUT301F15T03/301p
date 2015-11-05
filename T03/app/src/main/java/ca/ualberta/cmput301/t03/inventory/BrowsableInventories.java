@@ -83,6 +83,10 @@ public class BrowsableInventories implements Filterable<Item>, Observer, Observa
         Inventory tempInventory = new Inventory();
         ArrayList<Item> list = new ArrayList<Item>();
 
+        if (friends == null){ //FIXME just did this so my tests work.
+            return new ArrayList<>();
+        }
+
         for(User friend: friends.getFriends()){
             try {
                 tempInventory = friend.getInventory();
