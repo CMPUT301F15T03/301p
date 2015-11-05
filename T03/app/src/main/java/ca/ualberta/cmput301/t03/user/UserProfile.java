@@ -32,7 +32,9 @@ import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
 
 /**
- * Created by ross on 15-10-29.
+ * Model that represents a given User's profile information.
+ * Contains various information, including contact information.
+ * Can be modified by the User at any time.
  */
 public class UserProfile implements Observable {
     public final static String type = "UserProfile";

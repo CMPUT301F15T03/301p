@@ -1,5 +1,6 @@
 package ca.ualberta.cmput301.t03.user;
 
+import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -12,12 +13,16 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ca.ualberta.cmput301.t03.MainActivity;
+import ca.ualberta.cmput301.t03.R;
+import ca.ualberta.cmput301.t03.commontesting.PrimaryUserHelper;
+import ca.ualberta.cmput301.t03.configuration.Configuration;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static java.lang.Thread.sleep;
 
@@ -52,7 +57,7 @@ public class UserProfileTest {
      * the {@link ActivityTestRule#getActivity()} method.
      */
 
-    private final String TEST_USER_NAME = "john";
+    private final String TEST_USER_NAME = "TEST_USER_DO_NOT_USE_1";
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
@@ -64,7 +69,9 @@ public class UserProfileTest {
     public void setActivity() {
 
         mActivity = mActivityRule.getActivity();
-        InstrumentationRegistry.getInstrumentation();
+        Context ctx = InstrumentationRegistry.getTargetContext();
+        Configuration c = new Configuration(ctx);
+        c.setApplicationUserName(TEST_USER_NAME);
         try {
             sleep(4000);
         } catch (InterruptedException e) {
@@ -77,6 +84,6 @@ public class UserProfileTest {
 
     @Test
     public void testViewUserProfile(){
-
+        onView(withId(R.id.viewProfileUsername)).check(matches(withText(TEST_USER_NAME)));
     }
 }
