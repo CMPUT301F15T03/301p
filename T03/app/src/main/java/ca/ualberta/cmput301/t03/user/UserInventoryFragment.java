@@ -82,11 +82,12 @@ public class UserInventoryFragment extends Fragment implements Observer {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        positionMap = new HashMap<>();
+
         final Configuration c = new Configuration(getContext());
         c.getApplicationUserName();
 
-        positionMap = new HashMap<>();
-        
+
         Thread worker = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -115,6 +116,7 @@ public class UserInventoryFragment extends Fragment implements Observer {
         worker.start();
 
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
