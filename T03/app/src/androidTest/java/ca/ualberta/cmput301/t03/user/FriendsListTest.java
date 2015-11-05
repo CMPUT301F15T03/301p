@@ -17,9 +17,12 @@ import android.support.test.runner.AndroidJUnit4;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.LargeTest;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ListView;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
+import org.hamcrest.core.StringContains;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -41,6 +44,10 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static java.lang.Thread.sleep;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.any;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.isEmptyString;
 
 import ca.ualberta.cmput301.t03.MainActivity;
 import ca.ualberta.cmput301.t03.R;
@@ -88,7 +95,7 @@ public class FriendsListTest {
         mActivity = mActivityRule.getActivity();
         InstrumentationRegistry.getInstrumentation();
         try {
-            sleep(1000);
+            sleep(4000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -104,12 +111,24 @@ public class FriendsListTest {
 
 
         onView(withId(R.id.addFriendFab)).perform(click());
+        onView(withClassName(new StringContains("EditText"))).perform(typeText("john"), closeSoftKeyboard());
+        onView(withText("Add")).perform(click());
 
+//        onView(withText("john")).check(matches(isDisplayed())).check();
+
+//        onData(allOf(containsString("john"))).check(matches(isDisplayed()));
     }
 
     @Test
     public void testAddAndRemoveFriend() {
+
         onView(withId(R.id.addFriendFab)).perform(click());
+        onView(withClassName(new StringContains("EditText"))).perform(typeText("john"), closeSoftKeyboard());
+        onView(withText("Add")).perform(click());
+        onData(any(User.class)).check(matches(isDisplayed()));
+
+
+        onView(withText("john")).perform(longClick());
 
     }
 
