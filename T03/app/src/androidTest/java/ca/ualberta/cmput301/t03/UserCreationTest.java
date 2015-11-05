@@ -38,7 +38,6 @@ public class UserCreationTest extends ActivityInstrumentationTestCase2{
 
     @Override
     public void tearDown() throws Exception {
-        PrimaryUserHelper.tearDown(this.getInstrumentation().getTargetContext());
 
         Context context = getInstrumentation().getTargetContext();
         DataManager dataManager = new CachedDataManager(new HttpDataManager(context, true), context, true);
@@ -50,7 +49,11 @@ public class UserCreationTest extends ActivityInstrumentationTestCase2{
             dataManager.deleteIfExists(new DataKey(FriendsList.type, configuration.getApplicationUserName()));
         } catch (IOException e) {
             e.printStackTrace();
-        }        super.tearDown();
+        }
+
+        PrimaryUserHelper.tearDown(this.getInstrumentation().getTargetContext());
+
+        super.tearDown();
     }
 
     /**
@@ -58,7 +61,19 @@ public class UserCreationTest extends ActivityInstrumentationTestCase2{
      * testCreateDuplicateProfile() now covered in here
     */
     public void testCreateProfile() {
+
         Configuration configuration = new Configuration(getInstrumentation().getTargetContext());
+
+        Context context = getInstrumentation().getTargetContext();
+        DataManager dataManager = new CachedDataManager(new HttpDataManager(context, true), context, true);
+        configuration.setApplicationUserName("JUNIT_TEST_USER_DO_NOT_USE_THIS_NAME2");
+        try {
+            dataManager.deleteIfExists(new DataKey(UserProfile.type, configuration.getApplicationUserName()));
+            dataManager.deleteIfExists(new DataKey(Inventory.type, configuration.getApplicationUserName()));
+            dataManager.deleteIfExists(new DataKey(FriendsList.type, configuration.getApplicationUserName()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         configuration.clearApplicaitonUserName();
 
 
@@ -86,7 +101,7 @@ public class UserCreationTest extends ActivityInstrumentationTestCase2{
         });
 
         getInstrumentation().waitForIdleSync();
-        android.os.SystemClock.sleep(1500);
+        android.os.SystemClock.sleep(2500);
         String expectedToast = getInstrumentation().getTargetContext().getString(R.string.userNameTakenToast);
         assertEquals(initActivity.getToast(), expectedToast);
 
@@ -100,7 +115,7 @@ public class UserCreationTest extends ActivityInstrumentationTestCase2{
         });
 
         getInstrumentation().waitForIdleSync();
-        android.os.SystemClock.sleep(1500);
+        android.os.SystemClock.sleep(2500);
         expectedToast = getInstrumentation().getTargetContext().getString(R.string.noCityToast);
         assertEquals(initActivity.getToast(), expectedToast);
 
@@ -140,6 +155,7 @@ public class UserCreationTest extends ActivityInstrumentationTestCase2{
         } catch (IOException e) {
             e.printStackTrace();
         }
+        configuration.setApplicationUserName("JUNIT_TEST_USER_DO_NOT_USE_THIS_NAME");
 
         activity.finish();
     }
