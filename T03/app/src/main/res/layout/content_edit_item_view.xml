@@ -99,12 +99,11 @@
                     android:layout_weight="0.25"
                     android:text="Category: " />
 
-                <EditText
+                <Spinner
                     android:id="@+id/itemCategory"
-                    android:layout_width="0dp"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.75"
-                    android:ems="10" />
+                    android:entries="@array/categories_array"/>
             </LinearLayout>
 
             <LinearLayout

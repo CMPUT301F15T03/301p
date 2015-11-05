@@ -73,7 +73,7 @@ public class UserInventoryController {
 
     public void inspectItem(Item item){
         Intent intent = new Intent(context, EditItemView.class);
-        intent.putExtra("ITEM_NAME", item.getItemName());
+        intent.putExtra("ITEM_UUID", item.getUuid().toString());
         context.startActivity(intent);
     }
 

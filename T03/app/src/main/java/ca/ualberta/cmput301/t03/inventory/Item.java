@@ -27,6 +27,7 @@ import org.parceler.Transient;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.UUID;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
@@ -53,15 +54,19 @@ public class Item  implements Observer, Observable{
     private boolean itemIsPrivate;
     @Expose
     private String itemDescription;
+    @Expose
+    private UUID uuid;
 
 
     public Item(String name, String category) {
+        uuid = UUID.randomUUID();
         setItemName(name);
         setItemCategory(category);
         observers = new HashSet<>();
     }
 
     public Item() {
+        uuid = UUID.randomUUID();
         observers = new HashSet<>();
     }
 
@@ -111,6 +116,15 @@ public class Item  implements Observer, Observable{
 
     public void setItemDescription(String itemDescription) {
         this.itemDescription = itemDescription;
+    }
+
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
     }
 
     public void commitChanges() {

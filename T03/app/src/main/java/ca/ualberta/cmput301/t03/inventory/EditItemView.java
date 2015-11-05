@@ -26,12 +26,15 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.UUID;
 
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
@@ -55,7 +58,7 @@ public class EditItemView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_edit_item_view);
 
-        String itemNameClicked = getIntent().getStringExtra("ITEM_NAME");
+        final UUID itemUUID = UUID.fromString(getIntent().getStringExtra("ITEM_UUID"));
 
         Configuration c = new Configuration(this.getBaseContext());
         c.getApplicationUserName();
@@ -67,16 +70,15 @@ public class EditItemView extends AppCompatActivity {
             public void run() {
                 try {
                     inventoryModel = user.getInventory();
-                    ArrayList<Item> items =  inventoryModel.getItems();
 
                     // get the actual item model clicked
-                    itemModel = items.get(0);
+                    itemModel = inventoryModel.getItems().get(itemUUID);
 
                     // populate with fields
                     final EditText itemNameText = (EditText) findViewById(R.id.itemName);
                     final EditText itemQuantityText = (EditText) findViewById(R.id.itemQuantity);
                     final EditText itemQualityText = (EditText) findViewById(R.id.itemQuality);
-                    final EditText itemCategoryText = (EditText) findViewById(R.id.itemCategory);
+                    final Spinner itemCategoryText = (Spinner) findViewById(R.id.itemCategory);
                     final CheckBox itemIsPrivateCheckBox = (CheckBox) findViewById(R.id.itemPrivateCheckBox);
                     final EditText itemDescriptionText = (EditText) findViewById(R.id.itemDescription);
 
@@ -88,13 +90,13 @@ public class EditItemView extends AppCompatActivity {
                             itemNameText.setText(itemModel.getItemName());
                             itemQuantityText.setText(String.valueOf(itemModel.getItemQuantity()));
                             itemQualityText.setText(itemModel.getItemQuality());
-                            itemCategoryText.setText(itemModel.getItemCategory());
+                            itemCategoryText.setSelection(((ArrayAdapter) itemCategoryText.getAdapter()).getPosition(itemModel.getItemCategory()));
                             itemIsPrivateCheckBox.setChecked(itemModel.isItemIsPrivate());
                             itemDescriptionText.setText(itemModel.getItemDescription());
                         }
                     });
                     //TODO: unique ids for items, or use ITEM_NAME from getExtra
-                    controller = new EditItemController(findViewById(R.id.edit_item_view), activity, inventoryModel, items.get(0));
+                    controller = new EditItemController(findViewById(R.id.edit_item_view), activity, inventoryModel, itemModel);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -107,6 +109,8 @@ public class EditItemView extends AppCompatActivity {
         this.findViewById(R.id.itemQuality).setFocusable(false);
         this.findViewById(R.id.itemQuantity).setFocusable(false);
         this.findViewById(R.id.itemCategory).setFocusable(false);
+        this.findViewById(R.id.itemCategory).setFocusableInTouchMode(false);
+        this.findViewById(R.id.itemCategory).setEnabled(false);
         this.findViewById(R.id.itemPrivateCheckBox).setFocusable(false);
         this.findViewById(R.id.itemPrivateCheckBox).setEnabled(false);
         this.findViewById(R.id.itemDescription).setFocusable(false);
