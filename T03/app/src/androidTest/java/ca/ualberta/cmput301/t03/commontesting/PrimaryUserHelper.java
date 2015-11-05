@@ -23,7 +23,7 @@ public class PrimaryUserHelper {
         if (configuration.isApplicationUserNameSet()) {
             previousUser = configuration.getApplicationUserName();
         }
-        configuration.clearApplicaitonUserName();
+        configuration.clearApplicationUserName();
         configuration.setApplicationUserName("JUNIT_TEST_USER_DO_NOT_USE_THIS_NAME");
         User temp = new User(configuration.getApplicationUserName(), context);
         temp.getFriends();
@@ -42,7 +42,7 @@ public class PrimaryUserHelper {
         dataManager.deleteIfExists(new DataKey(UserProfile.type, configuration.getApplicationUserName()));
         dataManager.deleteIfExists(new DataKey(Inventory.type, configuration.getApplicationUserName()));
         dataManager.deleteIfExists(new DataKey(FriendsList.type, configuration.getApplicationUserName()));
-        configuration.clearApplicaitonUserName();
+        configuration.clearApplicationUserName();
         if (previousUser != null) {
             configuration.setApplicationUserName(previousUser);
         }
