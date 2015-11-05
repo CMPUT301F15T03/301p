@@ -64,7 +64,7 @@ public class ViewProfileActivity extends AppCompatActivity {
 
 
 
-        getSupportFragmentManager().beginTransaction().add(android.R.id.content, ViewProfileFragment.newInstance(u)).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.viewProfileFragmentContent, ViewProfileFragment.newInstance(u)).commit();
 
     }
 

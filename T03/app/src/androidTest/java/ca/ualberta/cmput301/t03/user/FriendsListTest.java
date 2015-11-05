@@ -7,14 +7,19 @@ import android.support.test.runner.AndroidJUnit4;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.LargeTest;
 
+import org.hamcrest.CoreMatchers;
 import org.hamcrest.core.StringContains;
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.longClick;
@@ -40,6 +45,7 @@ import static org.hamcrest.Matchers.is;
 
 import ca.ualberta.cmput301.t03.MainActivity;
 import ca.ualberta.cmput301.t03.R;
+import ca.ualberta.cmput301.t03.commontesting.PrimaryUserHelper;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
 
 /**
@@ -83,14 +89,14 @@ public class FriendsListTest {
     private MainActivity mActivity = null;
 
     @Before
-    public void setActivity() {
+    public void setActivity() throws Exception {
 
         mActivity = mActivityRule.getActivity();
         InstrumentationRegistry.getInstrumentation();
 
-        Context ctx = InstrumentationRegistry.getTargetContext();
-        Configuration c = new Configuration(ctx);
-        c.setApplicationUserName(TEST_OTHER_USER);
+        PrimaryUserHelper.setup(InstrumentationRegistry.getTargetContext());
+        pause();
+
         pause();
         onView(withContentDescription("Open navigation drawer")).check(matches(isDisplayed())).perform(click());
         pause();
@@ -98,6 +104,11 @@ public class FriendsListTest {
         pause();
     }
 
+    @After
+    public void tearDown() throws Exception {
+        PrimaryUserHelper.tearDown(InstrumentationRegistry.getTargetContext());
+        pause();
+    }
 
     /**
      * US02.01.01, UC02.02.01
@@ -139,7 +150,9 @@ public class FriendsListTest {
                 .inAdapterView(withId(R.id.friendsListListView))
                 .check(matches(isDisplayed()));
         pause();
-        onView(withText(TEST_OTHER_USER)).perform(longClick());
+        onData(hasToString(TEST_OTHER_USER))
+                .inAdapterView(withId(R.id.friendsListListView))
+                .perform(longClick());
         pause();
         onView(withId(R.id.friendsListListView))
                 .check(matches(not(withAdaptedData(hasToString(TEST_OTHER_USER)))));
@@ -167,12 +180,59 @@ public class FriendsListTest {
                 .inAdapterView(withId(R.id.friendsListListView))
                 .check(matches(isDisplayed()));
         pause();
-        onView(withText(TEST_OTHER_USER)).perform(click());
+        onData(hasToString(TEST_OTHER_USER))
+                .inAdapterView(withId(R.id.friendsListListView))
+                .perform(click());
         pause();
+
+//        onData(hasToString(TEST_OTHER_USER))
+//                .inAdapterView(withId(R.id.friendsListListView))
+//                .check(matches(withText(TEST_OTHER_USER)));
         onView(withId(R.id.viewProfileUsername))
                 .check(matches(allOf(isDisplayed(),
                         withText(TEST_OTHER_USER))));
         pause();
     }
+
+
+    /**
+     * US02.01.01, UC02.02.01
+     */
+    @Test
+    public void testAddFriend_pressCancel(){
+        onView(withId(R.id.addFriendFab)).perform(click());
+        pause();
+        onView(withClassName(new StringContains("EditText")))
+                .perform(typeText(TEST_OTHER_USER),
+                        closeSoftKeyboard());
+        pause();
+        onView(withText("Cancel"))
+                .perform(click());
+
+        pause();
+        //check friend was not added.
+
+    }
+
+    /**
+     * US02.01.01, UC02.02.01
+     */
+//    @Test
+//    public void testAddFriend_emptyInput(){
+//        onView(withId(R.id.addFriendFab)).perform(click());
+//        pause();
+//        onView(withClassName(new StringContains("EditText")))
+//                .perform(clearText(),
+//                        closeSoftKeyboard());
+//        pause();
+//        onView(withText("Add"))
+//                .perform(click());
+//
+//        //move back to
+//    }
+
+
+
+
 
 }
