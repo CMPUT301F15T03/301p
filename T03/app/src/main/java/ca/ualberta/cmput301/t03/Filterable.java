@@ -20,13 +20,38 @@
 
 package ca.ualberta.cmput301.t03;
 
-/**
- * Created by ross on 15-10-29.
- */
 // TODO in the UML this interface has data members, which is not legal Java
+
+
+/**
+ * Filterable allows a collection of some data to have filters applied to it that will change
+ * what gets returned by getFilteredItems. This is useful for views that dont want to modify data,
+ * but just relieve filtered data.
+ * @param <T>
+ */
 public interface Filterable<T> {
+    /**
+     * Add a filter to the data, this may or may not modify what is returned by getFilteredItems()
+     * @param filter the filter you wish to apply
+     */
     void addFilter(Filter filter);
+
+    /**
+     * Remove a filter from the data, this may or may not modify what is returned by
+     * getFilteredItems().
+     * @param filter the filter you wish to remove
+     */
     void removeFilter(Filter filter);
+
+    /**
+     * Remove all filters from the data, this may or may not modify what is returned by
+     * getFilteredItems().
+     */
     void clearFilters();
+
+    /**
+     * Get the filtered T back from the model, this will be a subset of the non-filtered data.
+     * @return
+     */
     T getFilteredItems();
 }
