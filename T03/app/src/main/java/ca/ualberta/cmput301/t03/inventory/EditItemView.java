@@ -26,9 +26,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -76,7 +78,7 @@ public class EditItemView extends AppCompatActivity {
                     final EditText itemNameText = (EditText) findViewById(R.id.itemName);
                     final EditText itemQuantityText = (EditText) findViewById(R.id.itemQuantity);
                     final EditText itemQualityText = (EditText) findViewById(R.id.itemQuality);
-                    final EditText itemCategoryText = (EditText) findViewById(R.id.itemCategory);
+                    final Spinner itemCategoryText = (Spinner) findViewById(R.id.itemCategory);
                     final CheckBox itemIsPrivateCheckBox = (CheckBox) findViewById(R.id.itemPrivateCheckBox);
                     final EditText itemDescriptionText = (EditText) findViewById(R.id.itemDescription);
 
@@ -88,7 +90,7 @@ public class EditItemView extends AppCompatActivity {
                             itemNameText.setText(itemModel.getItemName());
                             itemQuantityText.setText(String.valueOf(itemModel.getItemQuantity()));
                             itemQualityText.setText(itemModel.getItemQuality());
-                            itemCategoryText.setText(itemModel.getItemCategory());
+                            itemCategoryText.setSelection(((ArrayAdapter) itemCategoryText.getAdapter()).getPosition(itemModel.getItemCategory()));
                             itemIsPrivateCheckBox.setChecked(itemModel.isItemIsPrivate());
                             itemDescriptionText.setText(itemModel.getItemDescription());
                         }
@@ -107,6 +109,8 @@ public class EditItemView extends AppCompatActivity {
         this.findViewById(R.id.itemQuality).setFocusable(false);
         this.findViewById(R.id.itemQuantity).setFocusable(false);
         this.findViewById(R.id.itemCategory).setFocusable(false);
+        this.findViewById(R.id.itemCategory).setFocusableInTouchMode(false);
+        this.findViewById(R.id.itemCategory).setEnabled(false);
         this.findViewById(R.id.itemPrivateCheckBox).setFocusable(false);
         this.findViewById(R.id.itemPrivateCheckBox).setEnabled(false);
         this.findViewById(R.id.itemDescription).setFocusable(false);
