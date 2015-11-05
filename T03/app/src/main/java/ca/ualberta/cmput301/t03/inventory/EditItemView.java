@@ -73,6 +73,7 @@ public class EditItemView extends AppCompatActivity {
 
                     // get the actual item model clicked
                     itemModel = inventoryModel.getItems().get(itemUUID);
+                    controller = new EditItemController(findViewById(R.id.edit_item_view), activity, inventoryModel, itemModel);
 
                     // populate with fields
                     final EditText itemNameText = (EditText) findViewById(R.id.itemName);
@@ -95,8 +96,6 @@ public class EditItemView extends AppCompatActivity {
                             itemDescriptionText.setText(itemModel.getItemDescription());
                         }
                     });
-                    //TODO: unique ids for items, or use ITEM_NAME from getExtra
-                    controller = new EditItemController(findViewById(R.id.edit_item_view), activity, inventoryModel, itemModel);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -139,7 +138,7 @@ public class EditItemView extends AppCompatActivity {
         deleteItemButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //controller.saveItemToInventoryButtonClicked();
+                controller.deleteItemButtonClicked(itemUUID);
             }
         });
     }

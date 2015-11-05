@@ -29,7 +29,12 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import java.io.IOException;
+import java.util.UUID;
+
+import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
+import ca.ualberta.cmput301.t03.user.User;
 
 /**
  * Created by mmabuyo on 2015-10-29.
@@ -40,12 +45,15 @@ public class EditItemController {
     private Activity activity;
     private Inventory inventory;
     private Spinner categorySelect;
+    private User user;
 
     public EditItemController(View v, Activity activity, Inventory inventory, Item item) {
         this.v = v;
         this.activity = activity;
-        this.inventory = inventory;
+        //this.inventory = inventory;
         itemModel = item;
+
+        user = PrimaryUser.getInstance();
 
         categorySelect = (Spinner) v.findViewById(R.id.itemCategory);
         categorySelect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -115,8 +123,24 @@ public class EditItemController {
         v.findViewById(R.id.itemDescription).setFocusableInTouchMode(true);
     }
 
-    public void deleteItemButtonClicked() {
-
+    public void deleteItemButtonClicked(UUID itemid) {
+        final UUID itemUUID = itemid;
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    inventory = user.getInventory();
+                    Item toBeRemoved = inventory.getItems().get(itemUUID);
+                    inventory.removeItem(toBeRemoved);
+                    Log.d("REMOVE", "Where is this failing");
+                    //itemModel.commitChanges();
+                    activity.finish();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread.start();
     }
 
 }
