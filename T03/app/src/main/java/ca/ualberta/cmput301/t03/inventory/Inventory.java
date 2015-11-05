@@ -81,7 +81,9 @@ public class Inventory implements Filterable<Item>, Observable, Observer {
     }
 
     public void removeItem(Item item) {
-        items.remove(item);
+        items.remove(item.getUuid() );
+        item.removeObserver(this);
+        notifyObservers();
     }
 
     public void commitChanges() {
