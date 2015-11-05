@@ -28,6 +28,7 @@ public interface Observer {
     /**
      * Called by the Observable that the Observer is observing when a change happens to the
      * Observable.
+     *
      * @param observable reference to the Observable that triggered the update()
      */
     void update(Observable observable);
