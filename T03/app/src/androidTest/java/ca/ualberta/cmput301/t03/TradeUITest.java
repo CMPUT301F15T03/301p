@@ -23,15 +23,10 @@ package ca.ualberta.cmput301.t03;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withChild;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static ca.ualberta.cmput301.t03.commontesting.PauseForAnimation.pause;
 import static org.hamcrest.Matchers.allOf;
@@ -95,7 +90,7 @@ public class TradeUITest
         User user = PrimaryUser.getInstance();
         user.getFriends().setFriends(new ArrayList<User>());
         user.getInventory().setItems(new LinkedHashMap<UUID, Item>());
-        user.setTrades(new LinkedHashMap<UUID, Trade>());
+        user.getTradeList().setTrades(new LinkedHashMap<UUID, Trade>());
 
         User userFriend1 = new User(TEST_USER_FRIEND_1, mContext);
         userFriend1.getFriends().setFriends(new ArrayList<User>());
@@ -152,14 +147,17 @@ public class TradeUITest
         pause();
 
         try {
-            assertEquals(1, user.getTrades().size());
-            assertNotNull(user.getTrades().get(0));
-            assertEquals(user.getUsername(), user.getTrades().get(0).getBorrower().getUsername());
-            assertEquals(owner.getUsername(), user.getTrades().get(0).getOwner().getUsername());
-            assertEquals(TradeStateOffered.class, user.getTrades().get(0).getState().getClass());
-            assertEquals(1, user.getTrades().get(0).getOwnersItems().size());
-            assertNotNull(user.getTrades().get(0).getOwnersItems().get(0));
-            assertEquals(ownerItem.getItemName(), user.getTrades().get(0).getOwnersItems().get(0));
+            assertEquals(1, user.getTradeList().getTrades().size());
+            Trade trade = null;
+            for (Trade t : user.getTradeList().getTrades().values()) {
+                trade = t;
+            }
+            assertEquals(user.getUsername(), trade.getBorrower().getUsername());
+            assertEquals(owner.getUsername(), trade.getOwner().getUsername());
+            assertEquals(TradeStateOffered.class, trade.getState().getClass());
+            assertEquals(1, trade.getOwnersItems().size());
+            assertNotNull(trade.getOwnersItems().get(0));
+            assertEquals(ownerItem.getItemName(), trade.getOwnersItems().get(0));
         } catch (IOException e) {
             assertTrue("IOException in testOfferTradeWithFriend", Boolean.FALSE);
         }
@@ -432,14 +430,12 @@ public class TradeUITest
          * Assert trade is in editable state
          */
         try {
+            assertEquals(1, user.getTradeList().getTrades().size());
             Trade trade = null;
-            int numTrades = 0;
-            for (Map.Entry<UUID, Trade> entry : user.getTrades().entrySet()) {
-                trade = entry.getValue();
-                assertTrue(trade.isEditable());
-                numTrades++;
+            for (Trade t : user.getTradeList().getTrades().values()) {
+                trade = t;
             }
-            assertEquals(1, numTrades);
+            assertTrue(trade.isEditable());
         } catch (IOException e) {
             assertTrue("IOException in testBorrowerEditsTrade", Boolean.FALSE);
         }
@@ -570,14 +566,18 @@ public class TradeUITest
         pause();
 
         try {
-            assertEquals(1, user.getTrades().size());
-            assertNotNull(user.getTrades().get(0));
-            assertEquals(user.getUsername(), user.getTrades().get(0).getBorrower().getUsername());
-            assertEquals(owner.getUsername(), user.getTrades().get(0).getOwner().getUsername());
-            assertEquals(TradeStateCancelled.class, user.getTrades().get(0).getState().getClass());
-            assertEquals(1, user.getTrades().get(0).getOwnersItems().size());
-            assertNotNull(user.getTrades().get(0).getOwnersItems().get(0));
-            assertEquals(ownerItem.getItemName(), user.getTrades().get(0).getOwnersItems().get(0));
+            assertEquals(1, user.getTradeList().getTrades().size());
+            Trade trade = null;
+            for (Trade t : user.getTradeList().getTrades().values()) {
+                trade = t;
+            }
+            assertNotNull(trade);
+            assertEquals(user.getUsername(), trade.getBorrower().getUsername());
+            assertEquals(owner.getUsername(), trade.getOwner().getUsername());
+            assertEquals(TradeStateCancelled.class, trade.getState().getClass());
+            assertEquals(1, trade.getOwnersItems().size());
+            assertNotNull(trade.getOwnersItems().get(0));
+            assertEquals(ownerItem.getItemName(), trade.getOwnersItems().get(0));
         } catch (IOException e) {
             assertTrue("IOException in testOfferTradeWithFriend", Boolean.FALSE);
         }
