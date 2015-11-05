@@ -36,6 +36,7 @@ package ca.ualberta.cmput301.t03.inventory;
  * limitations under the License.
  */
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -63,6 +64,9 @@ import ca.ualberta.cmput301.t03.user.User;
 
 
 public class UserInventoryFragment extends Fragment implements Observer {
+    Activity mActivity;
+    View mView;
+
     private Inventory model;
     private UserInventoryController controller;
     private User user;
@@ -85,6 +89,7 @@ public class UserInventoryFragment extends Fragment implements Observer {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mActivity = getActivity();
 
         final Configuration c = new Configuration(getContext());
         c.getApplicationUserName();
@@ -105,6 +110,7 @@ public class UserInventoryFragment extends Fragment implements Observer {
                         @Override
                         public void run() {
                             fragmentSetup(getView());
+                            setupFab(getView());
                         }
                     });
 
@@ -124,13 +130,12 @@ public class UserInventoryFragment extends Fragment implements Observer {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.fragment_user_inventory, container, false);
-
+        mView = v;
         return v;
     }
 
     private void fragmentSetup(View v){
         createListView(v);
-        setupFab(v);
         model.addObserver(this);
 
 
@@ -177,14 +182,14 @@ public class UserInventoryFragment extends Fragment implements Observer {
         List<HashMap<String,String>> tiles = buildTiles();
         String[] from = {"tileViewItemName", "tileViewItemCategory"};
         int[] to = {R.id.tileViewItemName, R.id.tileViewItemCategory};
-        adapter = new SimpleAdapter(getActivity().getBaseContext(), tiles, R.layout.fragment_item_tile, from, to);
+        adapter = new SimpleAdapter(mActivity.getBaseContext(), tiles, R.layout.fragment_item_tile, from, to);
         listview.setAdapter(adapter);
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 controller.inspectItem(model.getItems().get(positionMap.get(position)));
-                Toast.makeText(getActivity().getBaseContext(), "Inspect Item", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mActivity.getBaseContext(), "Inspect Item", Toast.LENGTH_SHORT).show();
                 
             }
         });
@@ -202,7 +207,7 @@ public class UserInventoryFragment extends Fragment implements Observer {
             @Override
             public void onClick(View view) {
                 controller.addItemButtonClicked();
-                Toast.makeText(getActivity().getBaseContext(), "ADD ITEM", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mActivity.getBaseContext(), "ADD ITEM", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -211,11 +216,11 @@ public class UserInventoryFragment extends Fragment implements Observer {
 
     @Override
     public void update(Observable observable) {
-        getActivity().runOnUiThread(new Runnable() {
+        mActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 adapter.notifyDataSetChanged();
-                fragmentSetup(getView());
+                fragmentSetup(mView);
             }
         });
 //        throw new UnsupportedOperationException();
