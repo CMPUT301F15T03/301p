@@ -135,7 +135,7 @@ public class User implements Observable, Observer, Comparable<User> {
             }
             inventory.addObserver(this);
         }
-        for (Item item : inventory.getItems()) {
+        for (Item item : inventory.getItems().values()) {
             item.addObserver(inventory);
         }
         return inventory;
