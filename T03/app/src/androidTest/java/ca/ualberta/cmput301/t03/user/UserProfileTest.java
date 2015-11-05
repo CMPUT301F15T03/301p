@@ -2,6 +2,7 @@ package ca.ualberta.cmput301.t03.user;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.base.DefaultFailureHandler;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.ActivityInstrumentationTestCase2;
@@ -55,6 +56,7 @@ public class UserProfileTest {
     public static final String VANCOUVER = "Vancouver";
     public static final String STRING_TO_BE_TYPED1 = "7781234567";
     public static final String TEST2_EXAMPLE_COM = "test2@example.com";
+    public static final String INVALID_EMAIL = "asdfadfadfsdd";
     /**
      * A JUnit {@link Rule @Rule} to launch your activity under test. This is a replacement
      * for {@link ActivityInstrumentationTestCase2}.
@@ -92,6 +94,10 @@ public class UserProfileTest {
         onView(withText("My Profile")).check(matches(isDisplayed())).perform(click());
     }
 
+
+    /**
+     * UC 10.02.03
+     */
     @Test
     public void testViewUserProfile(){
         onView(withId(R.id.viewProfileUsername)).check(matches(withText(TEST_USER_NAME)));
@@ -103,7 +109,7 @@ public class UserProfileTest {
      * @throws InterruptedException
      */
     @Test
-    public void testEditUserProfile() throws InterruptedException {
+    public void testEditUserProfile_validInputs() throws InterruptedException {
         onView(withId(R.id.edit_profile_button))
                 .check(matches(isDisplayed()))
                 .perform(click());
@@ -153,5 +159,26 @@ public class UserProfileTest {
                 .check(matches(withText(VANCOUVER)));
         onView(withId(R.id.viewProfilePhone))
                 .check(matches(withText(STRING_TO_BE_TYPED1)));
+    }
+
+    @Test
+    public void testEditUserProfile_invalidEmail(){
+        onView(withId(R.id.edit_profile_button))
+                .check(matches(isDisplayed()))
+                .perform(click());
+        onView(withId(R.id.profileEmailEditText))
+                .perform(clearText(),
+                        typeText(INVALID_EMAIL),
+                        closeSoftKeyboard());
+        onView(withId(R.id.profilePhoneEditText))
+                .perform(clearText(),
+                        typeText(STRING_TO_BE_TYPED),
+                        closeSoftKeyboard());
+        onView(withId(R.id.profileCityEditText)).
+                perform(clearText(),
+                        typeText(CALGARY),
+                        closeSoftKeyboard());
+        pressBack();
+
     }
 }
