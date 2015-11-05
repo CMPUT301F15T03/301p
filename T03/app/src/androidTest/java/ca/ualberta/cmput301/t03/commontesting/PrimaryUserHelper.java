@@ -35,6 +35,37 @@ public class PrimaryUserHelper {
         prof.commitChanges();
     }
 
+    public static void setupInventoryFriend1(Context context) throws Exception {
+        Configuration configuration = new Configuration(context);
+        if (configuration.isApplicationUserNameSet()) {
+            previousUser = configuration.getApplicationUserName();
+        }
+        configuration.clearApplicationUserName();
+        configuration.setApplicationUserName("GENERAL_INVENTORY_FRIEND_1");
+        User temp = new User(configuration.getApplicationUserName(), context);
+        temp.getFriends();
+        temp.getInventory();
+        UserProfile prof = temp.getProfile();
+        prof.setCity("Edmonton");
+        prof.setEmail("TESTUSER1@gualberta.ca");
+        prof.setPhone("5555550123");
+        prof.commitChanges();
+    }
+
+    public static void tearDownInventoryFriend1(Context context) throws Exception {
+        DataManager dataManager = new CachedDataManager(new HttpDataManager(context, true), context, true);
+        Configuration configuration = new Configuration(context);
+        configuration.setApplicationUserName("GENERAL_INVENTORY_FRIEND_1");
+        dataManager.deleteIfExists(new DataKey(UserProfile.type, configuration.getApplicationUserName()));
+        dataManager.deleteIfExists(new DataKey(Inventory.type, configuration.getApplicationUserName()));
+        dataManager.deleteIfExists(new DataKey(FriendsList.type, configuration.getApplicationUserName()));
+        configuration.clearApplicationUserName();
+        if (previousUser != null) {
+            configuration.setApplicationUserName(previousUser);
+        }
+        previousUser = null;
+    }
+
     public static void tearDown(Context context) throws Exception {
         DataManager dataManager = new CachedDataManager(new HttpDataManager(context, true), context, true);
         Configuration configuration = new Configuration(context);
