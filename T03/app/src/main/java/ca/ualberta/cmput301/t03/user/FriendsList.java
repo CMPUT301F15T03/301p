@@ -20,6 +20,8 @@
 
 package ca.ualberta.cmput301.t03.user;
 
+import android.util.Log;
+
 import com.google.gson.annotations.Expose;
 
 import java.util.ArrayList;
@@ -77,7 +79,7 @@ public class FriendsList implements Observable, Filterable {
     @Override
     public void notifyObservers() {
         for (Observer o: observers) {
-
+            Log.d("Q", "Notifying " + o.toString());
             o.update(this);
         }
     }
