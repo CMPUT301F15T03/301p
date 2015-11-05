@@ -53,7 +53,21 @@ import ca.ualberta.cmput301.t03.inventory.BrowsableInventories;
 import ca.ualberta.cmput301.t03.inventory.BrowseInventoryController;
 import ca.ualberta.cmput301.t03.user.AddFriendButtonOnClickListener;
 import ca.ualberta.cmput301.t03.user.User;
-
+/**
+ * Copyright 2015 Quentin Lautischer
+ * <p/>
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p/>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p/>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -107,8 +121,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
         Configuration c = new Configuration(getActivity().getApplicationContext());
         try{
             user = new User(c.getApplicationUserName(), getActivity().getApplicationContext());
-
-            // TODO: pass in a proper Browseable Inventories
+            model = new BrowsableInventories();
             controller = new BrowseInventoryController(getContext(), new BrowsableInventories());
         } catch (Exception e){
 
@@ -124,8 +137,8 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
 
     private ArrayList<HashMap<String, String>> buildTiles() {
         ArrayList<HashMap<String, String>> tiles = new ArrayList<>();
-        Item[] itemList = {new Item("test", "test"), new Item("test", "test"), new Item("test", "test"), new Item("test", "test"), new Item("test", "test") };
-        //SHOULD BE REPLACED WITH ONCE LINKED ArrayList<Item> itemList = model.getBrowsables();
+//        Item[] itemList = {new Item("test", "test"), new Item("test", "test"), new Item("test", "test"), new Item("test", "test"), new Item("test", "test") };
+        ArrayList<Item> itemList = model.getBrowsables();
         for (Item item: itemList){
             HashMap<String, String> hm = new HashMap<String, String>();
             hm.put("tileViewItemName", item.getItemName());
