@@ -88,13 +88,22 @@ public class FriendsListTest {
 
     private MainActivity mActivity = null;
 
+
+    @BeforeClass
+    public static void setupTestUser() throws Exception {
+        PrimaryUserHelper.setup(InstrumentationRegistry.getTargetContext());
+    }
+
+    @AfterClass
+    public static void restoreOriginalUser() throws Exception {
+        PrimaryUserHelper.tearDown(InstrumentationRegistry.getTargetContext());
+    }
+
     @Before
     public void setActivity() throws Exception {
 
         mActivity = mActivityRule.getActivity();
-        InstrumentationRegistry.getInstrumentation();
 
-        PrimaryUserHelper.setup(InstrumentationRegistry.getTargetContext());
         pause();
 
         pause();
@@ -106,7 +115,6 @@ public class FriendsListTest {
 
     @After
     public void tearDown() throws Exception {
-        PrimaryUserHelper.tearDown(InstrumentationRegistry.getTargetContext());
         pause();
     }
 
@@ -217,19 +225,21 @@ public class FriendsListTest {
     /**
      * US02.01.01, UC02.02.01
      */
-//    @Test
-//    public void testAddFriend_emptyInput(){
-//        onView(withId(R.id.addFriendFab)).perform(click());
-//        pause();
-//        onView(withClassName(new StringContains("EditText")))
-//                .perform(clearText(),
-//                        closeSoftKeyboard());
-//        pause();
-//        onView(withText("Add"))
-//                .perform(click());
-//
-//        //move back to
-//    }
+    @Test
+    public void testAddFriend_emptyInput(){
+        onView(withId(R.id.addFriendFab)).perform(click());
+        pause();
+        onView(withClassName(new StringContains("EditText")))
+                .perform(clearText(),
+                        closeSoftKeyboard());
+        pause();
+        onView(withText("Add"))
+                .perform(click());
+
+        //assert list does not contain friend
+
+
+    }
 
 
 

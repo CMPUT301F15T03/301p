@@ -17,7 +17,7 @@ package ca.ualberta.cmput301.t03.commontesting;
  */
 public class PauseForAnimation {
 
-    private static Integer TIME_TO_WAIT = 5000; // 5 seconds
+    private static Integer TIME_TO_WAIT = 500; // 5 seconds
 
     public static void pause(){
         customPause(TIME_TO_WAIT);
