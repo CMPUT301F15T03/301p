@@ -18,7 +18,11 @@ import ca.ualberta.cmput301.t03.commontesting.PrimaryUserHelper;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.pressBack;
+import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
@@ -45,6 +49,12 @@ import static java.lang.Thread.sleep;
 @LargeTest
 public class UserProfileTest {
 
+    public static final String TEST_EXAMPLE_COM = "test@example.com";
+    public static final String STRING_TO_BE_TYPED = "780 123 4567";
+    public static final String CALGARY = "Calgary";
+    public static final String VANCOUVER = "Vancouver";
+    public static final String STRING_TO_BE_TYPED1 = "7781234567";
+    public static final String TEST2_EXAMPLE_COM = "test2@example.com";
     /**
      * A JUnit {@link Rule @Rule} to launch your activity under test. This is a replacement
      * for {@link ActivityInstrumentationTestCase2}.
@@ -85,5 +95,63 @@ public class UserProfileTest {
     @Test
     public void testViewUserProfile(){
         onView(withId(R.id.viewProfileUsername)).check(matches(withText(TEST_USER_NAME)));
+    }
+
+
+    /**
+     * UC10.02.01
+     * @throws InterruptedException
+     */
+    @Test
+    public void testEditUserProfile() throws InterruptedException {
+        onView(withId(R.id.edit_profile_button))
+                .check(matches(isDisplayed()))
+                .perform(click());
+        onView(withId(R.id.profileEmailEditText))
+                .perform(clearText(),
+                        typeText(TEST_EXAMPLE_COM),
+                        closeSoftKeyboard());
+        onView(withId(R.id.profilePhoneEditText))
+                .perform(clearText(),
+                        typeText(STRING_TO_BE_TYPED),
+                        closeSoftKeyboard());
+        onView(withId(R.id.profileCityEditText)).
+                perform(clearText(),
+                        typeText(CALGARY),
+                        closeSoftKeyboard());
+        pressBack();
+
+        onView(withId(R.id.viewProfileEmail))
+                .check(matches(withText(TEST_EXAMPLE_COM)));
+        onView(withId(R.id.viewProfileCity))
+                .check(matches(withText(CALGARY)));
+        onView(withId(R.id.viewProfilePhone))
+                .check(matches(withText(STRING_TO_BE_TYPED)));
+
+        onView(withId(R.id.edit_profile_button))
+                .check(matches(isDisplayed()))
+                .perform(click());
+
+        onView(withId(R.id.profileEmailEditText))
+                .perform(clearText(),
+                        typeText(TEST2_EXAMPLE_COM),
+                        closeSoftKeyboard());
+        onView(withId(R.id.profilePhoneEditText))
+                .perform(clearText(),
+                        typeText(STRING_TO_BE_TYPED1),
+                        closeSoftKeyboard());
+        onView(withId(R.id.profileCityEditText)).
+                perform(clearText(),
+                        typeText(VANCOUVER),
+                        closeSoftKeyboard());
+
+        pressBack();
+
+        onView(withId(R.id.viewProfileEmail))
+                .check(matches(withText(TEST2_EXAMPLE_COM)));
+        onView(withId(R.id.viewProfileCity))
+                .check(matches(withText(VANCOUVER)));
+        onView(withId(R.id.viewProfilePhone))
+                .check(matches(withText(STRING_TO_BE_TYPED1)));
     }
 }
