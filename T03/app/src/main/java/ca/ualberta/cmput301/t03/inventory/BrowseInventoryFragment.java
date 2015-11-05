@@ -107,8 +107,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
         Configuration c = new Configuration(getActivity().getApplicationContext());
         try{
             user = new User(c.getApplicationUserName(), getActivity().getApplicationContext());
-
-            // TODO: pass in a proper Browseable Inventories
+            model = new BrowsableInventories();
             controller = new BrowseInventoryController(getContext(), new BrowsableInventories());
         } catch (Exception e){
 
@@ -124,8 +123,8 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
 
     private ArrayList<HashMap<String, String>> buildTiles() {
         ArrayList<HashMap<String, String>> tiles = new ArrayList<>();
-        Item[] itemList = {new Item("test", "test"), new Item("test", "test"), new Item("test", "test"), new Item("test", "test"), new Item("test", "test") };
-        //SHOULD BE REPLACED WITH ONCE LINKED ArrayList<Item> itemList = model.getBrowsables();
+//        Item[] itemList = {new Item("test", "test"), new Item("test", "test"), new Item("test", "test"), new Item("test", "test"), new Item("test", "test") };
+        ArrayList<Item> itemList = model.getBrowsables();
         for (Item item: itemList){
             HashMap<String, String> hm = new HashMap<String, String>();
             hm.put("tileViewItemName", item.getItemName());
