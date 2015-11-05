@@ -21,8 +21,15 @@
 package ca.ualberta.cmput301.t03;
 
 /**
- * Created by ross on 15-10-29.
+ * Observer in the Observer Pattern, responsible for changing their state told to update by an
+ * Observable they are observing.
  */
 public interface Observer {
+    /**
+     * Called by the Observable that the Observer is observing when a change happens to the
+     * Observable.
+     *
+     * @param observable reference to the Observable that triggered the update()
+     */
     void update(Observable observable);
 }
