@@ -41,7 +41,7 @@ public class PrimaryUser {
 
     /**
      * Initializes the singleton with a context which it will user for both a User (dataManager)
-     * and Configuration, calling setup prior to getInstance prevents a runtime exception
+     * and Configuration, calling setup prior to getInstance prevents a runtime exception.
      * @param context the application context
      */
     public static void setup(Context context) {
