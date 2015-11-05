@@ -68,6 +68,25 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setContentView(R.layout.activity_main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        View header = navigationView.inflateHeaderView(R.layout.nav_header_main);
+        sidebarUsernameTextView = (TextView) header.findViewById(R.id.SidebarUsernameTextView);
+        sidebarEmailTextView = (TextView) header.findViewById(R.id.sidebarEmailTextView);
+
         final Configuration config = new Configuration(getApplicationContext());
         if (!config.isApplicationUserNameSet()) {
             Intent intent = new Intent(this, InitializeUserActivity.class);
@@ -192,7 +211,7 @@ public class MainActivity extends AppCompatActivity
             public void run() {
                 PrimaryUser.setup(getApplicationContext());
                 User mainUser = PrimaryUser.getInstance();
-                runOnUiThread(new Runnable() {
+                runOnUiThread(  new Runnable() {
                     @Override
                     public void run() {
                         finishOnCreate();
@@ -204,24 +223,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void finishOnCreate(){
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
         addInitialFragment();
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        View header = navigationView.inflateHeaderView(R.layout.nav_header_main);
-        sidebarUsernameTextView = (TextView) header.findViewById(R.id.SidebarUsernameTextView);
-        sidebarEmailTextView = (TextView) header.findViewById(R.id.sidebarEmailTextView);
 
         Thread thread = new Thread(new Runnable() {
             @Override
