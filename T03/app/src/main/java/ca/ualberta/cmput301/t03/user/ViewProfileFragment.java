@@ -48,27 +48,17 @@ import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ViewProfileFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ViewProfileFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class ViewProfileFragment extends Fragment implements Observer {
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "user";
+
     private UserProfile model;
     private TextView cityView;
     private TextView phoneView;
     private TextView usernameView;
     private TextView emailView;
-    // TODO: Rename and change types of parameters
     private User mUserToView;
-
-    private OnFragmentInteractionListener mListener;
 
     public ViewProfileFragment() {
         // Required empty public constructor
@@ -81,7 +71,6 @@ public class ViewProfileFragment extends Fragment implements Observer {
      * @param user Parameter 1.
      * @return A new instance of fragment ViewProfileFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static ViewProfileFragment newInstance(User user) {
         ViewProfileFragment fragment = new ViewProfileFragment();
         Bundle args = new Bundle();
@@ -130,17 +119,8 @@ public class ViewProfileFragment extends Fragment implements Observer {
 
 
     void populateFields(){
-        String city = model.getCity();
-        String email = model.getEmail();
-        String phone = model.getPhone();
-        String username = mUserToView.getUsername();
-
-        cityView.setText(city);
-        emailView.setText(email);
-        phoneView.setText(phone);
-        usernameView.setText(username);
-
-
+        model.addObserver(this);
+        update(model);
     }
 
     @Override
@@ -154,7 +134,11 @@ public class ViewProfileFragment extends Fragment implements Observer {
             @Override
             protected Object doInBackground(Object[] params) {
                 //TODO is there a better way to do this?
-                mUserToView = new User(mUserToView.getUsername(), getContext());
+                if (!PrimaryUser.getInstance().equals(mUserToView)) {
+                    mUserToView = new User(mUserToView.getUsername(), getContext());
+                } else {
+                    mUserToView = PrimaryUser.getInstance();
+                }
 
                 try {
                     model = mUserToView.getProfile();
@@ -175,29 +159,17 @@ public class ViewProfileFragment extends Fragment implements Observer {
 
     }
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-//        return super.onOptionsItemSelected(item);
-
-        Snackbar.make(getView(), item.getTitle(), Snackbar.LENGTH_SHORT).show();
-
         switch (item.getItemId()) {
             case R.id.edit_profile_button:
-                Snackbar.make(getView(), "TODO open edit profile activity",Snackbar.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), EditProfileActivity.class);
-
                 startActivity(intent);
 
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
-        }
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
         }
     }
 
@@ -215,27 +187,26 @@ public class ViewProfileFragment extends Fragment implements Observer {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        model.removeObserver(this);
     }
 
     @Override
     public void update(Observable observable) {
-        throw new UnsupportedOperationException();
-    }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
-    }
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                String city = model.getCity();
+                String email = model.getEmail();
+                String phone = model.getPhone();
+                String username = mUserToView.getUsername();
 
+                cityView.setText(city);
+                emailView.setText(email);
+                phoneView.setText(phone);
+                usernameView.setText(username);
+            }
+        });
+
+    }
 }

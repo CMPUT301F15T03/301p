@@ -8,12 +8,18 @@ import android.support.test.runner.AndroidJUnit4;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.LargeTest;
 
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
+
 import ca.ualberta.cmput301.t03.MainActivity;
+import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.commontesting.PrimaryUserHelper;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
@@ -25,11 +31,14 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static ca.ualberta.cmput301.t03.commontesting.PauseForAnimation.pause;
 import static java.lang.Thread.sleep;
+import static junit.framework.Assert.assertEquals;
 
 /**
  * Copyright 2015 John Slevinsky
@@ -69,7 +78,6 @@ public class UserProfileTest {
      * the {@link ActivityTestRule#getActivity()} method.
      */
 
-    private final String TEST_USER_NAME = "TEST_USER_DO_NOT_USE_1";
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
@@ -77,21 +85,32 @@ public class UserProfileTest {
 
     private MainActivity mActivity = null;
 
+
+    @BeforeClass
+    public static void setupTestUser() throws Exception {
+        PrimaryUserHelper.setup(InstrumentationRegistry.getTargetContext());
+
+    }
+
+    @AfterClass
+    public static void restoreOriginalUser() throws Exception {
+        PrimaryUserHelper.tearDown(InstrumentationRegistry.getTargetContext());
+    }
+
     @Before
-    public void setActivity() {
+    public void setActivity() throws Exception {
 
         mActivity = mActivityRule.getActivity();
-        Context ctx = InstrumentationRegistry.getTargetContext();
-        Configuration c = new Configuration(ctx);
-        c.setApplicationUserName(TEST_USER_NAME);
-        try {
-            sleep(4000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
+        pause();
 
         onView(withContentDescription("Open navigation drawer")).check(matches(isDisplayed())).perform(click());
-        onView(withText("My Profile")).check(matches(isDisplayed())).perform(click());
+        onView(withText("My Profile")).perform(click());
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        pause();
     }
 
 
@@ -99,8 +118,22 @@ public class UserProfileTest {
      * UC 10.02.03
      */
     @Test
-    public void testViewUserProfile(){
-        onView(withId(R.id.viewProfileUsername)).check(matches(withText(TEST_USER_NAME)));
+    public void testViewUserProfile() throws IOException {
+
+        User user = PrimaryUser.getInstance();
+        UserProfile profile = PrimaryUser.getInstance().getProfile();
+
+        assertEquals(PrimaryUserHelper.USER_ID, user.getUsername());
+        assertEquals(PrimaryUserHelper.CITY, profile.getCity());
+        assertEquals(PrimaryUserHelper.EMAIL, profile.getEmail());
+        assertEquals(PrimaryUserHelper.PHONE, profile.getPhone());
+
+        onView(withId(R.id.viewProfileUsername)).check(matches(withText(PrimaryUserHelper.USER_ID)));
+        onView(withId(R.id.viewProfileCity)).check(matches(withText(PrimaryUserHelper.CITY)));
+        onView(withId(R.id.viewProfilePhone)).check(matches(withText(PrimaryUserHelper.PHONE)));
+        onView(withId(R.id.viewProfileEmail)).check(matches(withText(PrimaryUserHelper.EMAIL)));
+
+
     }
 
 
