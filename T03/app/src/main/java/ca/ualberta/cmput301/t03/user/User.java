@@ -43,7 +43,7 @@ import ca.ualberta.cmput301.t03.inventory.Inventory;
 import ca.ualberta.cmput301.t03.inventory.Item;
 
 /**
- * Created by ross on 15-10-29.
+ * Model for 
  */
 @Parcel
 public class User implements Observable, Observer, Comparable<User> {

@@ -1,17 +1,12 @@
 package ca.ualberta.cmput301.t03.user;
 
+import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.LargeTest;
-import android.view.View;
-import android.widget.Adapter;
-import android.widget.AdapterView;
 
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
 import org.hamcrest.core.StringContains;
 import org.junit.Before;
 import org.junit.Rule;
@@ -44,6 +39,7 @@ import static org.hamcrest.Matchers.is;
 
 import ca.ualberta.cmput301.t03.MainActivity;
 import ca.ualberta.cmput301.t03.R;
+import ca.ualberta.cmput301.t03.configuration.Configuration;
 
 /**
  * Copyright 2015 John Slevinsky
@@ -76,7 +72,8 @@ public class FriendsListTest {
      * the {@link ActivityTestRule#getActivity()} method.
      */
 
-    private final String TEST_USER_NAME = "john";
+    private final String TEST_OTHER_USER = "TEST_USER_DO_NOT_USE_2";
+    private final String TEST_CURRENT_USER = "TEST_USER_DO_NOT_USE_1";
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
@@ -95,6 +92,12 @@ public class FriendsListTest {
             e.printStackTrace();
         }
 
+        Context ctx = InstrumentationRegistry.getTargetContext();
+
+        Configuration c = new Configuration(ctx);
+
+        c.setApplicationUserName(TEST_OTHER_USER);
+
         onView(withContentDescription("Open navigation drawer")).check(matches(isDisplayed())).perform(click());
         onView(withText("Friends")).check(matches(isDisplayed())).perform(click());
     }
@@ -108,11 +111,11 @@ public class FriendsListTest {
 
         onView(withId(R.id.addFriendFab)).perform(click());
         onView(withClassName(new StringContains("EditText"))).
-                perform(typeText(TEST_USER_NAME),
+                perform(typeText(TEST_OTHER_USER),
                         closeSoftKeyboard());
         onView(withText("Add")).
                 perform(click());
-        onData(hasToString(TEST_USER_NAME))
+        onData(hasToString(TEST_OTHER_USER))
                 .inAdapterView(withId(R.id.friendsListListView))
                 .check(matches(isDisplayed()));
     }
@@ -125,18 +128,18 @@ public class FriendsListTest {
 
         onView(withId(R.id.addFriendFab)).perform(click());
         onView(withClassName(new StringContains("EditText")))
-                .perform(typeText(TEST_USER_NAME),
+                .perform(typeText(TEST_OTHER_USER),
                         closeSoftKeyboard());
         onView(withText("Add"))
                 .perform(click());
-        onData(hasToString(TEST_USER_NAME))
+        onData(hasToString(TEST_OTHER_USER))
                 .inAdapterView(withId(R.id.friendsListListView))
                 .check(matches(isDisplayed()));
 
-        onView(withText(TEST_USER_NAME)).perform(longClick());
+        onView(withText(TEST_OTHER_USER)).perform(longClick());
         sleep(3000);
         onView(withId(R.id.friendsListListView))
-                .check(matches(not(withAdaptedData(hasToString(TEST_USER_NAME)))));
+                .check(matches(not(withAdaptedData(hasToString(TEST_OTHER_USER)))));
 
     }
 
@@ -149,18 +152,18 @@ public class FriendsListTest {
     public void testViewFriendProfile() {
         onView(withId(R.id.addFriendFab)).perform(click());
         onView(withClassName(new StringContains("EditText")))
-                .perform(typeText(TEST_USER_NAME),
+                .perform(typeText(TEST_OTHER_USER),
                         closeSoftKeyboard());
         onView(withText("Add"))
                 .perform(click());
-        onData(hasToString(TEST_USER_NAME))
+        onData(hasToString(TEST_OTHER_USER))
                 .inAdapterView(withId(R.id.friendsListListView))
                 .check(matches(isDisplayed()));
 
-        onView(withText(TEST_USER_NAME)).perform(click());
+        onView(withText(TEST_OTHER_USER)).perform(click());
         onView(withId(R.id.viewProfileUsername))
                 .check(matches(allOf(isDisplayed(),
-                        withText(TEST_USER_NAME))));
+                        withText(TEST_OTHER_USER))));
     }
 
 }
