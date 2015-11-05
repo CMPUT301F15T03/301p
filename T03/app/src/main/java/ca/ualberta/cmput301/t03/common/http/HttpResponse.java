@@ -28,6 +28,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 
 /**
+ * A class modelling the response to an HTTP request.
  * Created by rishi on 15-10-31.
  */
 public class HttpResponse {
@@ -35,20 +36,33 @@ public class HttpResponse {
     private int responseCode;
     private byte[] contents;
 
+    /**
+     * Creates an instance of {@link HttpResponse}/
+     * @param responseCode The response's status code.
+     * @param contents The contents of the response. Can be null if the response had no contents.
+     */
     public HttpResponse(int responseCode, byte[] contents) {
         this.responseCode = responseCode;
         this.contents = contents;
     }
 
+    /**
+     * Creates an empty {@link HttpResponse} object with null contents and "-1" (invalid) status code.
+     */
     public HttpResponse() {
         this(-1, null);
     }
 
+    /**
+     * Reads the {@link HttpResponse} data from an {@link HttpURLConnection}.
+     * @param httpConnection The {@link HttpURLConnection} from which the response is to be read.
+     * @throws IOException Thrown, if the network connection fails.
+     */
     public void readFromHttpURLConnection(HttpURLConnection httpConnection) throws IOException {
         responseCode = httpConnection.getResponseCode();
 
         InputStream in;
-        if (responseCode >= HttpStatusCode.BAD_REQUEST.getStatusCode()) {
+        if (HttpStatusCode.isErrorCode(responseCode)) {
             in = new BufferedInputStream(httpConnection.getErrorStream());
         }
         else {
@@ -60,10 +74,18 @@ public class HttpResponse {
 
     }
 
+    /**
+     * Getter for the response contents.
+     * @return
+     */
     public byte[] getContents() {
         return contents;
     }
 
+    /**
+     * Getter for the response's status code.
+     * @return
+     */
     public int getResponseCode() {
         return responseCode;
     }
