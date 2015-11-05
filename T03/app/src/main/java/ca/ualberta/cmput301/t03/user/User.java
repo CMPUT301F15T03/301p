@@ -43,7 +43,8 @@ import ca.ualberta.cmput301.t03.inventory.Inventory;
 import ca.ualberta.cmput301.t03.inventory.Item;
 
 /**
- * Created by ross on 15-10-29.
+ * Model that represents application Users.
+ * The current user is a User, and all of his/her Friends are Users too.
  */
 @Parcel
 public class User implements Observable, Observer, Comparable<User> {
@@ -65,6 +66,11 @@ public class User implements Observable, Observer, Comparable<User> {
     @Transient
     private HashSet<Observer> observers;
 
+    /**
+     * Constructor that should only be used
+     * for Parceling and Unparceling {@link Parcel}
+     * @param username The User's username.
+     */
     @ParcelConstructor
     private User(String username) {
         /**
@@ -77,6 +83,11 @@ public class User implements Observable, Observer, Comparable<User> {
         this.username = username;
     }
 
+    /**
+     * Default constructor for a User.
+     * @param username A string that uniquely identifies a User.
+     * @param context The current application context.
+     */
     public User(String username, Context context) {
         this.observers = new HashSet<>();
         this.context = context;
@@ -84,10 +95,25 @@ public class User implements Observable, Observer, Comparable<User> {
         this.username = username;
     }
 
+    /**
+     * Gets the User's username. This will not hit the network.
+     *
+     *
+     * @return the User's username.
+     */
     public String getUsername() {
         return username;
     }
 
+    /**
+     * Get the User's FriendsList.
+     *
+     * WARNING: This might hit the network! It must be
+     * run asynchronously.
+     *
+     * @return FriendsList containing the User's Friends.
+     * @throws IOException
+     */
     public FriendsList getFriends() throws IOException {
         if (friends == null) {
             DataKey key = new DataKey(FriendsList.type, username);
@@ -108,6 +134,15 @@ public class User implements Observable, Observer, Comparable<User> {
         return friends;
     }
 
+    /**
+     * Get the User's UserProfile.
+     *
+     * WARNING: This might hit the network! It must be run
+     * asynchronously.
+     *
+     * @return UserProfile containing the User's profile information.
+     * @throws IOException
+     */
     public UserProfile getProfile() throws IOException {
         if (profile == null) {
             DataKey key = new DataKey(UserProfile.type, username);
@@ -123,6 +158,15 @@ public class User implements Observable, Observer, Comparable<User> {
         return profile;
     }
 
+    /**
+     *  Get the User's Inventory.
+     *
+     *  WARNING: This might hit the network! It must be run
+     *  asynchronously.
+     *
+     * @return Inventory populated with the User's items.
+     * @throws IOException
+     */
     public Inventory getInventory() throws IOException {
         if (inventory == null) {
             DataKey key = new DataKey(Inventory.type, username);
