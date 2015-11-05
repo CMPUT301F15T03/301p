@@ -34,6 +34,7 @@ import ca.ualberta.cmput301.t03.R;
 
 public class InitializeUserActivity extends AppCompatActivity {
 
+    private String toast;
     private EditText userNameEditText;
     private EditText emailEditText;
     private EditText cityEditText;
@@ -93,30 +94,32 @@ public class InitializeUserActivity extends AppCompatActivity {
         // todo : some of this code should be in the controller
 
         Thread thread = new Thread(new Runnable() {
+
             @Override
             public void run() {
+                InitializeUserActivity.this.toast = null;
                 if (userNameEditText.getText().toString().isEmpty()) {
-                    toastMessage("Please provide a username");
+                    toastMessage(getString(R.string.noUserNameToast));
                     return;
                 }
 
                 try {
                     if (controller.isUserNameTaken(userNameEditText.getText().toString())) {
-                        toastMessage("That username is taken, try again");
+                        toastMessage(getString(R.string.userNameTakenToast));
                         return;
                     }
                 } catch (IOException e) {
-                    toastMessage("Error with network, try again later");
+                    toastMessage(getString(R.string.problemWithNetworkToast));
                     return;
                 }
 
                 if (cityEditText.getText().toString().isEmpty()) {
-                    toastMessage("Please provide a city");
+                    toastMessage(getString(R.string.noCityToast));
                     return;
                 }
 
                 if (controller.isEmailInValid(emailEditText.getText().toString())) {
-                    toastMessage("Please provide a valid email address");
+                    toastMessage(getString(R.string.invalidEmailToast));
                     return;
                 }
 
@@ -135,8 +138,15 @@ public class InitializeUserActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                InitializeUserActivity.this.toast = toastError;
                 Toast.makeText(InitializeUserActivity.this, toastError, Toast.LENGTH_SHORT).show();
             }
         });
     }
+
+
+    public String getToast() {
+        return toast;
+    }
+
 }

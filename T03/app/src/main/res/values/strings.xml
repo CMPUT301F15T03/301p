@@ -60,5 +60,10 @@
     <string name="title_activity_edit_profile">EditProfileActivity</string>
     <string name="myProfileLabel">My Profile</string>
     <string name="title_activity_view_profile">ViewProfileActivity</string>
+    <string name="noUserNameToast">Please provide a username</string>
+    <string name="userNameTakenToast">That username is taken, try again</string>
+    <string name="problemWithNetworkToast">Error with network, try again later</string>
+    <string name="noCityToast">Please provide a city</string>
+    <string name="invalidEmailToast">Please provide a valid email address</string>
 
 </resources>
