@@ -20,15 +20,11 @@
 
 package ca.ualberta.cmput301.t03.inventory;
 
-import android.util.Log;
-
 import com.google.gson.annotations.Expose;
 
 import org.parceler.Parcel;
 import org.parceler.Transient;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -38,22 +34,10 @@ import ca.ualberta.cmput301.t03.Filter;
 import ca.ualberta.cmput301.t03.Filterable;
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
-import ca.ualberta.cmput301.t03.datamanager.DataManager;
 
 /**
- * Copyright 2015 Quentin Lautischer
- * <p/>
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p/>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p/>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Inventory maintains a collection of items and will notify the observing user of any changes.
+ * Represents the main model for the userinventory workflow and the browse inventories workflow.
  */
 @Parcel
 public class Inventory implements Filterable<Item>, Observable, Observer {
@@ -73,11 +57,20 @@ public class Inventory implements Filterable<Item>, Observable, Observer {
         items = new LinkedHashMap<>();
     }
 
+    /**
+     * Get the hashmap of items.
+     *
+     * @return the hashmap of items
+     */
     public HashMap<UUID, Item> getItems() {
         return items;
     }
 
-
+    /**
+     * Set the items, used by GSON
+     *
+     * @param items items to be set
+     */
     public void setItems(LinkedHashMap<UUID, Item> items) {
         this.items = items;
         for (Item item : items.values()) {
@@ -85,60 +78,126 @@ public class Inventory implements Filterable<Item>, Observable, Observer {
         }
     }
 
+    /**
+     * Get an Item.
+     *
+     * @param itemUUID the item's UUID
+     * @return the item
+     */
+    public Item getItem(UUID itemUUID) {
+        return items.get(itemUUID);
+    }
 
+    /**
+     * Get an Item.
+     *
+     * @param itemUUID the item's string representation of the UUID
+     * @return the item
+     */
+    public Item getItem(String itemUUID) {
+        return items.get(UUID.fromString(itemUUID));
+    }
+
+    /**
+     * add an item to inventory
+     *
+     * @param item item to add
+     */
     public void addItem(Item item) {
         items.put(item.getUuid(), item);
         item.addObserver(this);
         notifyObservers();
     }
 
+    /**
+     * remove an item from inventory
+     *
+     * @param item item to remove
+     */
     public void removeItem(Item item) {
-        items.remove(item.getUuid() );
+        items.remove(item.getUuid());
         item.removeObserver(this);
         notifyObservers();
     }
 
+    /**
+     * alias for notifyObservers, call this after modifying the inventory.
+     */
     public void commitChanges() {
         notifyObservers();
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param filter the filter you wish to apply
+     */
     @Override
     public void addFilter(Filter filter) {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param filter the filter you wish to remove
+     */
     @Override
     public void removeFilter(Filter filter) {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void clearFilters() {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Item getFilteredItems() {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void notifyObservers() {
-        for (Observer o: observers) {
+        for (Observer o : observers) {
             o.update(this);
         }
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param observer the Observer to add
+     */
     @Override
     public void addObserver(Observer observer) {
         observers.add(observer);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param observer the Observer to remove
+     */
     @Override
     public void removeObserver(Observer observer) {
         observers.remove(observer);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param observable reference to the Observable that triggered the update()
+     */
     @Override
     public void update(Observable observable) {
 
