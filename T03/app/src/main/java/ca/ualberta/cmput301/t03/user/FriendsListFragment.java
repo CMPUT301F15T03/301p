@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Kyle O'Shaughnessy, Ross Anderson, Michelle Mabuyo, John Slevinsky, Udey Rishi
+ * Copyright (C) 2015 Kyle O'Shaughnessy, Ross Anderson, Michelle Mabuyo, John Slevinsky, Udey Rishi, Quentin Lautischer
  * Photography equipment trading application for CMPUT 301 at the University of Alberta.
  *
  * This file is part of {ApplicationName}
@@ -17,7 +17,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package ca.ualberta.cmput301.t03.user;
 
 import android.app.Activity;
@@ -105,9 +104,9 @@ public class FriendsListFragment extends Fragment implements Observer {
 
         mUser = new User(c.getApplicationUserName(), getContext());
 
-        Thread worker = new Thread(new Runnable() {
+        AsyncTask worker = new AsyncTask() {
             @Override
-            public void run() {
+            protected Object doInBackground(Object[] params) {
                 try {
                     mModel = mUser.getFriends();
                     mController = new FriendsListController(getContext(), mModel);
@@ -121,14 +120,13 @@ public class FriendsListFragment extends Fragment implements Observer {
                     });
 
 
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
+                return null;
             }
-        });
-        worker.start();
+        };
+        worker.execute();
 //
 //        ArrayAdapter adapter = new ArrayAdapter(getContext(), R.id.friendsListRecyclerView);
 //
