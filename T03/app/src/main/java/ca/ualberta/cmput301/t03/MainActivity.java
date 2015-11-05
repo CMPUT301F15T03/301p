@@ -67,24 +67,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        addInitialFragment();
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        View header = navigationView.inflateHeaderView(R.layout.nav_header_main);
-        sidebarUsernameTextView = (TextView) header.findViewById(R.id.SidebarUsernameTextView);
-        sidebarEmailTextView = (TextView) header.findViewById(R.id.sidebarEmailTextView);
 
         final Configuration config = new Configuration(getApplicationContext());
         if (!config.isApplicationUserNameSet()) {
@@ -94,6 +76,8 @@ public class MainActivity extends AppCompatActivity
         else {
             afterUserSetup();
         }
+
+
     }
 
     @Override
@@ -202,26 +186,63 @@ public class MainActivity extends AppCompatActivity
         setTitle(getString(R.string.browseTitle));
     }
 
-
     private void afterUserSetup() {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 PrimaryUser.setup(getApplicationContext());
                 User mainUser = PrimaryUser.getInstance();
-                final String username = mainUser.getUsername();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        finishOnCreate();
+                    }
+                });
+            }
+        });
+        thread.start();
+    }
+
+    public void finishOnCreate(){
+        setContentView(R.layout.activity_main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        addInitialFragment();
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        View header = navigationView.inflateHeaderView(R.layout.nav_header_main);
+        sidebarUsernameTextView = (TextView) header.findViewById(R.id.SidebarUsernameTextView);
+        sidebarEmailTextView = (TextView) header.findViewById(R.id.sidebarEmailTextView);
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final String username = PrimaryUser.getInstance().getUsername();
+                String emailTemp = "";
                 try {
-                    final String email = mainUser.getProfile().getEmail();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            sidebarUsernameTextView.setText(username);
-                            sidebarEmailTextView.setText(email);
-                        }
-                    });
+                    emailTemp = PrimaryUser.getInstance().getProfile().getEmail();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    emailTemp = "";
                 }
+
+                final String email = emailTemp;
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        sidebarUsernameTextView.setText(username);
+                        sidebarEmailTextView.setText(email);
+                    }
+                });
             }
         });
         thread.start();
