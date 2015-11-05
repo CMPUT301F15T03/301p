@@ -105,9 +105,9 @@ public class FriendsListFragment extends Fragment implements Observer {
 
         mUser = new User(c.getApplicationUserName(), getContext());
 
-        Thread worker = new Thread(new Runnable() {
+        AsyncTask worker = new AsyncTask() {
             @Override
-            public void run() {
+            protected Object doInBackground(Object[] params) {
                 try {
                     mModel = mUser.getFriends();
                     mController = new FriendsListController(getContext(), mModel);
@@ -121,14 +121,13 @@ public class FriendsListFragment extends Fragment implements Observer {
                     });
 
 
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
+                return null;
             }
-        });
-        worker.start();
+        };
+        worker.execute();
 //
 //        ArrayAdapter adapter = new ArrayAdapter(getContext(), R.id.friendsListRecyclerView);
 //
