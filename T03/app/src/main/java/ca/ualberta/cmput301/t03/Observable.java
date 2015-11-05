@@ -21,10 +21,25 @@
 package ca.ualberta.cmput301.t03;
 
 /**
- * Created by ross on 15-10-29.
+ * The data object that is observed in the Observer Pattern. Responsible for triggering update() on
+ * its Observers and maintaining a list of those Observers.
  */
 public interface Observable {
+    /**
+     * Called when state of the Observable should be noticed by the Observers.
+     */
     void notifyObservers();
+
+    /**
+     * Add an Observer to a collection of Observers that should be updated upon a notify.
+     * @param observer the Observer to add
+     */
     void addObserver(Observer observer);
+
+    /**
+     * Remove an Observer from maintained collection of Observers. This Observer should no longer
+     * be notified of changes.
+     * @param observer the Observer to remove
+     */
     void removeObserver(Observer observer);
 }
