@@ -34,7 +34,7 @@ import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.photo.PhotoGallery;
 
 /**
- * Created by mmabuyo on 2015-10-29.
+ *
  */
 @Parcel
 public class Item  implements Observer, Observable{

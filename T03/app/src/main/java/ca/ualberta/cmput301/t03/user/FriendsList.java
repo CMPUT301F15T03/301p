@@ -26,7 +26,6 @@ import com.google.gson.annotations.Expose;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 
 import ca.ualberta.cmput301.t03.Filter;
 import ca.ualberta.cmput301.t03.Filterable;
@@ -53,6 +52,7 @@ public class FriendsList implements Observable, Filterable {
 
     /**
      * Gets the collection of Users representing a friendslist.
+     *
      * @return the friends.
      */
     public ArrayList<User> getFriends() {
@@ -61,6 +61,7 @@ public class FriendsList implements Observable, Filterable {
 
     /**
      * Set the friends, called by GSON mainly
+     *
      * @param friends friends to set
      */
     public void setFriends(ArrayList<User> friends) {
@@ -69,15 +70,17 @@ public class FriendsList implements Observable, Filterable {
 
     /**
      * See if the friendslist has the user in it
+     *
      * @param user the user we are checking
      * @return true == contains, false == does not contain
      */
-    public boolean containsFriend(User user){
+    public boolean containsFriend(User user) {
         return friends.contains(user);
     }
 
     /**
      * Add a friend to the friendslist
+     *
      * @param user user to add
      */
     public void addFriend(User user) {
@@ -87,6 +90,7 @@ public class FriendsList implements Observable, Filterable {
 
     /**
      * remove a friend
+     *
      * @param user use rot remove
      */
     public void removeFriend(User user) {
@@ -106,7 +110,7 @@ public class FriendsList implements Observable, Filterable {
      */
     @Override
     public void notifyObservers() {
-        for (Observer o: observers) {
+        for (Observer o : observers) {
             Log.d("Q", "Notifying " + o.toString());
             o.update(this);
         }
@@ -114,6 +118,7 @@ public class FriendsList implements Observable, Filterable {
 
     /**
      * {@inheritDoc}
+     * @param observer the Observer to add
      */
     @Override
     public void addObserver(Observer observer) {
@@ -122,6 +127,7 @@ public class FriendsList implements Observable, Filterable {
 
     /**
      * {@inheritDoc}
+     * @param observer the Observer to remove
      */
     @Override
     public void removeObserver(Observer observer) {
@@ -130,6 +136,7 @@ public class FriendsList implements Observable, Filterable {
 
     /**
      * {@inheritDoc}
+     * @param filter the filter you wish to apply
      */
     @Override
     public void addFilter(Filter filter) {
@@ -138,6 +145,7 @@ public class FriendsList implements Observable, Filterable {
 
     /**
      * {@inheritDoc}
+     * @param filter the filter you wish to remove
      */
     @Override
     public void removeFilter(Filter filter) {
@@ -163,7 +171,7 @@ public class FriendsList implements Observable, Filterable {
     /**
      * Get the number of friends.
      */
-    public int size(){
+    public int size() {
         return friends.size();
     }
 }
