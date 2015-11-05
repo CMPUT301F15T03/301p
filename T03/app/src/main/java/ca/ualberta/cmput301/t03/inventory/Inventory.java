@@ -45,10 +45,6 @@ public class Inventory implements Filterable<Item>, Observable, Observer {
     @Expose
     private LinkedHashMap<UUID, Item> items;
 
-    private String ownerName; // is this needed?
-    private String ownerId; // is this needed?
-
-
     @Transient
     private HashSet<Observer> observers;
 

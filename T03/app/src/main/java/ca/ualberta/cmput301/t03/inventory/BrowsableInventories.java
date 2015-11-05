@@ -52,7 +52,7 @@ import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.user.User;
 
 public class BrowsableInventories implements Filterable<Item>, Observer, Observable {
-    private FriendsList friends;
+    private FriendsList friendList;
 
 
     @Transient
@@ -66,9 +66,9 @@ public class BrowsableInventories implements Filterable<Item>, Observer, Observa
             public void run() {
                 try {
                     User user = PrimaryUser.getInstance();
-                    friends = user.getFriends();
+                    friendList = user.getFriends();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    throw new RuntimeException("Could not get user and associated friendList");
                 }
 
             }
@@ -80,16 +80,16 @@ public class BrowsableInventories implements Filterable<Item>, Observer, Observa
 
 
     public ArrayList<Item> getBrowsables() {
-        Inventory tempInventory = new Inventory();
+        Inventory tempInventory = null;
         ArrayList<Item> list = new ArrayList<Item>();
 
-        for(User friend: friends.getFriends()){
+        for(User friend: friendList.getFriends()){
             try {
                 tempInventory = friend.getInventory();
                 for (Item item : tempInventory.getItems().values()) {
                     list.add(item);
                 }
-                tempInventory = new Inventory();
+                tempInventory = null;
             }catch (Exception e){ e.printStackTrace(); Log.d("Q", "Couldnt get friend(" + friend.getUsername() + ")'s Inventory");}
         }
 

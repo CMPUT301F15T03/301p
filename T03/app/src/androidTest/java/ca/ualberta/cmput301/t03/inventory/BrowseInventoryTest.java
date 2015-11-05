@@ -25,6 +25,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static ca.ualberta.cmput301.t03.commontesting.PauseForAnimation.pause;
 import static java.lang.Thread.sleep;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.hasToString;
@@ -107,6 +108,7 @@ import static org.hamcrest.Matchers.hasToString;
 
         import ca.ualberta.cmput301.t03.MainActivity;
         import ca.ualberta.cmput301.t03.R;
+import ca.ualberta.cmput301.t03.commontesting.PrimaryUserHelper;
 
 /**
  * Copyright 2015 Quentin Lautischer
@@ -173,6 +175,36 @@ public class BrowseInventoryTest {
         onView(withId(R.id.addFilterBrowseFab)).perform(click());
     }
 
+
+    @Test
+    public void testTileViewBrowsableInventory() throws Exception{
+        PrimaryUserHelper.setupInventoryFriend1(mActivity.getBaseContext());
+        pause();
+        onView(withContentDescription("Open navigation drawer")).check(matches(isDisplayed())).perform(click());
+        pause();
+        onView(withText("Friends")).check(matches(isDisplayed())).perform(click());
+        pause();
+        onView(withId(R.id.addFriendFab)).perform(click());
+        pause();
+        onView(withClassName(new StringContains("EditText"))).
+                perform(typeText("GENERAL_INVENTORY_FRIEND_1"),
+                        closeSoftKeyboard());
+        pause();
+        onView(withText("Add")).
+                perform(click());
+        pause();
+        onData(hasToString("GENERAL_INVENTORY_FRIEND_1"))
+                .inAdapterView(withId(R.id.friendsListListView))
+                .check(matches(isDisplayed()));
+        pause();
+
+        onView(withContentDescription("Open navigation drawer")).check(matches(isDisplayed())).perform(click());
+        pause();
+        onView(withText("Browse")).check(matches(isDisplayed())).perform(click());
+        pause();
+
+        PrimaryUserHelper.tearDownInventoryFriend1(mActivity.getBaseContext());
+    }
     /**
      * UC02.03.01
      */
