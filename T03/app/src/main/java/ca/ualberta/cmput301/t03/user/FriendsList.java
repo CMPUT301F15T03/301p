@@ -26,7 +26,6 @@ import com.google.gson.annotations.Expose;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 
 import ca.ualberta.cmput301.t03.Filter;
 import ca.ualberta.cmput301.t03.Filterable;
@@ -34,7 +33,9 @@ import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
 
 /**
- * Created by ross on 15-10-29.
+ * Friendslist maintains a list of Users that that a User has, Remote data access is handled by the
+ * User which owns the friendslist. When a user receives an update from its friendslist, the data
+ * is written to the local index and the remote index.
  */
 public class FriendsList implements Observable, Filterable {
 
@@ -49,72 +50,128 @@ public class FriendsList implements Observable, Filterable {
         observers = new HashSet<>();
     }
 
+    /**
+     * Gets the collection of Users representing a friendslist.
+     *
+     * @return the friends.
+     */
     public ArrayList<User> getFriends() {
         return friends;
     }
 
-
+    /**
+     * Set the friends, called by GSON mainly
+     *
+     * @param friends friends to set
+     */
     public void setFriends(ArrayList<User> friends) {
         this.friends = friends;
     }
 
-    public boolean containsFriend(User user){
+    /**
+     * See if the friendslist has the user in it
+     *
+     * @param user the user we are checking
+     * @return true == contains, false == does not contain
+     */
+    public boolean containsFriend(User user) {
         return friends.contains(user);
     }
 
+    /**
+     * Add a friend to the friendslist
+     *
+     * @param user user to add
+     */
     public void addFriend(User user) {
         friends.add(user);
         notifyObservers();
     }
 
+    /**
+     * remove a friend
+     *
+     * @param user use rot remove
+     */
     public void removeFriend(User user) {
         friends.remove(user);
         notifyObservers();
     }
 
+    /**
+     * alias for notifyObservers, to be called after modifying the friendslist
+     */
     public void commitChanges() {
         notifyObservers();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void notifyObservers() {
-        for (Observer o: observers) {
+        for (Observer o : observers) {
             Log.d("Q", "Notifying " + o.toString());
             o.update(this);
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * @param observer the Observer to add
+     */
     @Override
     public void addObserver(Observer observer) {
         observers.add(observer);
     }
 
+    /**
+     * {@inheritDoc}
+     * @param observer the Observer to remove
+     */
     @Override
     public void removeObserver(Observer observer) {
         observers.remove(observer);
     }
 
+    /**
+     * {@inheritDoc}
+     * @param filter the filter you wish to apply
+     */
     @Override
     public void addFilter(Filter filter) {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * {@inheritDoc}
+     * @param filter the filter you wish to remove
+     */
     @Override
     public void removeFilter(Filter filter) {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void clearFilters() {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Object getFilteredItems() {
         throw new UnsupportedOperationException();
     }
 
-    public int size(){
+    /**
+     * Get the number of friends.
+     */
+    public int size() {
         return friends.size();
     }
 }

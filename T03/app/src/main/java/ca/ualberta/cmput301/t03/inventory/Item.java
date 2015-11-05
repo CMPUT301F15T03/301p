@@ -34,10 +34,10 @@ import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.photo.PhotoGallery;
 
 /**
- * Created by mmabuyo on 2015-10-29.
+ * Model for an Item, Is owned by an inventory which is owned by a user.
  */
 @Parcel
-public class Item  implements Observer, Observable{
+public class Item implements Observer, Observable {
     @Transient
     private PhotoGallery photoList; // we will expose this later
     @Transient
@@ -57,7 +57,6 @@ public class Item  implements Observer, Observable{
     @Expose
     private UUID uuid;
 
-
     public Item(String name, String category) {
         uuid = UUID.randomUUID();
         setItemName(name);
@@ -70,67 +69,142 @@ public class Item  implements Observer, Observable{
         observers = new HashSet<>();
     }
 
+    /**
+     * Get the item's name.
+     *
+     * @return item name
+     */
     public String getItemName() {
         return itemName;
     }
 
+    /**
+     * Set the item's name.
+     *
+     * @param itemName item's new name
+     */
     public void setItemName(String itemName) {
         this.itemName = itemName;
     }
 
+    /**
+     * Get the item quantity.
+     *
+     * @return new quantity
+     */
     public int getItemQuantity() {
         return itemQuantity;
     }
 
+    /**
+     * Set the item quantity.
+     *
+     * @param itemQuantity new quantity
+     */
     public void setItemQuantity(int itemQuantity) {
         this.itemQuantity = itemQuantity;
     }
 
+    /**
+     * Get the quality
+     *
+     * @return quality
+     */
     public String getItemQuality() {
         return itemQuality;
     }
 
+    /**
+     * Set the quality.
+     *
+     * @param itemQuality quality
+     */
     public void setItemQuality(String itemQuality) {
         this.itemQuality = itemQuality;
     }
 
+    /**
+     * Get category.
+     *
+     * @return category
+     */
     public String getItemCategory() {
         return itemCategory;
     }
 
+    /**
+     * Set the category.
+     *
+     * @param itemCategory new category
+     */
     public void setItemCategory(String itemCategory) {
         this.itemCategory = itemCategory;
     }
 
+    /**
+     * Check if item is private.
+     *
+     * @return true == private, false otherwise
+     */
     public boolean isItemIsPrivate() {
         return itemIsPrivate;
     }
 
+    /**
+     * Set private status.
+     *
+     * @param itemIsPrivate new private status
+     */
     public void setItemIsPrivate(boolean itemIsPrivate) {
         this.itemIsPrivate = itemIsPrivate;
     }
 
+    /**
+     * Get description.
+     *
+     * @return description
+     */
     public String getItemDescription() {
         return itemDescription;
     }
 
+    /**
+     * Set the description
+     *
+     * @param itemDescription new description
+     */
     public void setItemDescription(String itemDescription) {
         this.itemDescription = itemDescription;
     }
 
-
+    /**
+     * Get the UUID.
+     *
+     * @return uuid
+     */
     public UUID getUuid() {
         return uuid;
     }
 
+    /**
+     * Set the UUID.
+     *
+     * @param uuid new uuid
+     */
     public void setUuid(UUID uuid) {
         this.uuid = uuid;
     }
 
+    /**
+     * Alias for notify observers, call this when a change has been made.
+     */
     public void commitChanges() {
         notifyObservers();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void notifyObservers() {
         for (Observer observer : observers) {
@@ -138,16 +212,31 @@ public class Item  implements Observer, Observable{
         }
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param observer the Observer to add
+     */
     @Override
     public void addObserver(Observer observer) {
         observers.add(observer);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param observer the Observer to remove
+     */
     @Override
     public void removeObserver(Observer observer) {
         observers.remove(observer);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param observable reference to the Observable that triggered the update()
+     */
     @Override
     public void update(Observable observable) {
         notifyObservers();
