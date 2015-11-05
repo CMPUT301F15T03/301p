@@ -1,6 +1,7 @@
 package ca.ualberta.cmput301.t03.user;
 
 import android.app.Instrumentation;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.action.CoordinatesProvider;
@@ -38,6 +39,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static java.lang.Thread.sleep;
 import static org.hamcrest.Matchers.allOf;
 
 import ca.ualberta.cmput301.t03.MainActivity;
@@ -82,7 +84,15 @@ public class FriendsListTest {
 
     @Before
     public void setActivity() {
+
         mActivity = mActivityRule.getActivity();
+        InstrumentationRegistry.getInstrumentation();
+        try {
+            sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         onView(withContentDescription("Open navigation drawer")).check(matches(isDisplayed())).perform(click());
         onView(withText("Friends")).check(matches(isDisplayed())).perform(click());
     }
