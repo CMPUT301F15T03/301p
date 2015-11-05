@@ -18,31 +18,38 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ca.ualberta.cmput301.t03.user;
+package ca.ualberta.cmput301.t03.inventory;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.drawable.Icon;
-import android.net.Uri;
+/**
+ * Copyright 2015 Quentin Lautischer
+ * <p/>
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p/>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p/>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -52,10 +59,7 @@ import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
-import ca.ualberta.cmput301.t03.inventory.Item;
-import ca.ualberta.cmput301.t03.inventory.ItemTileFragment;
-import ca.ualberta.cmput301.t03.user.UserInventoryController;
-import ca.ualberta.cmput301.t03.inventory.Inventory;
+import ca.ualberta.cmput301.t03.user.User;
 
 
 public class UserInventoryFragment extends Fragment implements Observer {
