@@ -25,10 +25,18 @@ import junit.framework.AssertionFailedError;
 import ca.ualberta.cmput301.t03.common.exceptions.ExceptionUtils;
 
 /**
+ * Supplementary test methods to the JUnit test library for testing expected exceptions.
  * Created by rishi on 15-10-30.
  */
 public class ExceptionAsserter {
 
+    /**
+     * Asserts that a {@link Runnable} throws an expected exception. Asserts true if an exception of
+     * the provided class, or a child class is thrown.
+     * @param runnable The runnable to be tested.
+     * @param expectedExceptionType The {@link Class} for the expected exception.
+     * @param <TException> The generic type for the expected exception.
+     */
     public static <TException extends Exception> void assertThrowsException(Runnable runnable,
                                                                             Class<TException> expectedExceptionType) {
         try {
