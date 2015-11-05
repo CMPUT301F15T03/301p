@@ -52,8 +52,6 @@ public class BrowsableInventories implements Filterable<Item>, Observer, Observa
                 try {
                     User user = PrimaryUser.getInstance();
                     friends = user.getFriends();
-                    friends.addObserver(BrowsableInventories.this);
-                    Log.d("Q","Added myself as observer");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -68,8 +66,17 @@ public class BrowsableInventories implements Filterable<Item>, Observer, Observa
 
     public ArrayList<Item> getBrowsables() {
         ArrayList<Item> list = new ArrayList<Item>();
-        for(int i=0; i < 5; i++){
-            list.add(new Item("test", "test"));
+
+        for(User friend: friends.getFriends()){
+            try {
+                for (Item item : friend.getInventory().getItems().values()) {
+                    list.add(item);
+                }
+            }catch (Exception e){
+                for(int i=0; i < 5; i++){
+                    list.add(new Item("test", "test"));
+                }
+            }
         }
 
         return list;
@@ -97,7 +104,6 @@ public class BrowsableInventories implements Filterable<Item>, Observer, Observa
 
     @Override
     public void update(Observable observable) {
-        Log.d("Q", "I browsable was updated");
         notifyObservers();
     }
 
