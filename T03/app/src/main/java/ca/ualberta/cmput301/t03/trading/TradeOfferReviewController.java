@@ -26,7 +26,12 @@ import android.util.Log;
 import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeStateTransition;
 
 /**
- * Created by ross on 15-10-29.
+ * Controller for reviewing a trade which has been offered to the user.
+ *
+ * The current user is able to review trades which have been offered to them.
+ * Available actions are accepting, declining, and declining-and-counter-offering.
+ *
+ * Any given instance of TradeOfferReviewController is owned by a {@link TradeOfferReviewActivity}.
  */
 public class TradeOfferReviewController {
     private final String logTAG = "TradeOfferReview";
@@ -39,6 +44,13 @@ public class TradeOfferReviewController {
         this.model = model;
     }
 
+    /**
+     * Accept the trade.
+     *
+     * The IllegalTradeStateTransition should never be thrown/caught. If the user
+     * is in TradeOfferReviewActivity, they are reviewing a trade which is in
+     * {@link TradeStateOffered}. {@link TradeState#accept(Trade)} is a legal action.
+     */
     public void acceptTrade() {
         try {
             model.accept();
@@ -47,6 +59,13 @@ public class TradeOfferReviewController {
         }
     }
 
+    /**
+     * Decline the trade.
+     *
+     * The IllegalTradeStateTransition should never be thrown/caught. If the user
+     * is in TradeOfferReviewActivity, they are reviewing a trade which is in
+     * {@link TradeStateOffered}. Thus, {@link TradeState#decline(Trade)} is a legal action.
+     */
     public void declineTrade() {
         try {
             model.decline();
@@ -55,6 +74,13 @@ public class TradeOfferReviewController {
         }
     }
 
+    /**
+     * Decline the trade, and prepare to compose a new Counter-Trade
+     *
+     * The IllegalTradeStateTransition should never be thrown/caught. If the user
+     * is in TradeOfferReviewActivity, they are reviewing a trade which is in
+     * {@link TradeStateOffered}. Thus, {@link TradeState#decline(Trade)} is a legal action.
+     */
     public void declineAndCounterTrade() {
         try {
             model.decline();
