@@ -111,7 +111,6 @@ public class FriendsList implements Observable, Filterable {
     @Override
     public void notifyObservers() {
         for (Observer o : observers) {
-            Log.d("Q", "Notifying " + o.toString());
             o.update(this);
         }
     }
