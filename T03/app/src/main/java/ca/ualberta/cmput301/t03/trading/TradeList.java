@@ -32,7 +32,8 @@ import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
 
 /**
- * Created by ross on 15-11-05.
+ * TradeList represents a collection of trades a user is currently involved in. This is the model
+ * for the TradeHistory workflow.
  */
 public class TradeList implements Observable, Observer {
     public static final String type = "TradeList";
@@ -46,24 +47,43 @@ public class TradeList implements Observable, Observer {
         this.observers = new HashSet<>();
     }
 
+    /**
+     * Add a trade to the user.
+     * @param trade trade to be added
+     */
     public void addTrade(Trade trade) {
         this.trades.put(trade.getTradeUUID(), trade);
         commitChanges();
     }
 
+    /**
+     * Set the trades that the user has.
+     * @param trades trades to be applied.
+     */
     public void setTrades(LinkedHashMap<UUID, Trade> trades) {
         this.trades = trades;
+        // todo : if you found a bug here, kyle was right.
         commitChanges();
     }
 
+    /**
+     * Get all trades the user is involved in.
+     * @return the trades.
+     */
     public HashMap<UUID, Trade> getTrades() {
         return this.trades;
     }
 
+    /**
+     * An alias for notify observers.
+     */
     public void commitChanges() {
         notifyObservers();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void notifyObservers() {
         for (Observer o : observers) {
@@ -71,16 +91,28 @@ public class TradeList implements Observable, Observer {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * @param observer the Observer to add
+     */
     @Override
     public void addObserver(Observer observer) {
         this.observers.add(observer);
     }
 
+    /**
+     * {@inheritDoc}
+     * @param observer the Observer to remove
+     */
     @Override
     public void removeObserver(Observer observer) {
         this.observers.remove(observer);
     }
 
+    /**
+     * {@inheritDoc}
+     * @param observable reference to the Observable that triggered the update()
+     */
     @Override
     public void update(Observable observable) {
         notifyObservers();
