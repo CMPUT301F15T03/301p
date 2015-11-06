@@ -41,6 +41,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.parceler.Parcels;
 
@@ -177,10 +178,11 @@ public class FriendsListFragment extends Fragment implements Observer {
             @Override
             public void run() {
                 String usr = e.getText().toString();
+                if (usr.equals("")) return;
                 try {
                     mController.addFriend(usr);
                 } catch (IOException e1) {
-                    e1.printStackTrace();
+                    Snackbar.make(getView(), "There was a problem with the network", Snackbar.LENGTH_SHORT);
                 } catch (UserNotFoundException e2) {
                     Snackbar.make(getView(), String.format("User %s does not exist", usr), Snackbar.LENGTH_SHORT).show();
                 } catch (UserAlreadyAddedException e1) {
