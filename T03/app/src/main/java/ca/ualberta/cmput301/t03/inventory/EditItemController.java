@@ -119,7 +119,8 @@ public class EditItemController {
         v.findViewById(R.id.itemQuantity).setFocusableInTouchMode(true);
         v.findViewById(R.id.itemCategory).setFocusableInTouchMode(true);
         v.findViewById(R.id.itemCategory).setEnabled(true);
-        v.findViewById(R.id.itemPrivateCheckBox).setFocusableInTouchMode(true);
+        v.findViewById(R.id.itemPrivateCheckBox).setFocusable(true);
+        v.findViewById(R.id.itemPrivateCheckBox).setEnabled(true);
         v.findViewById(R.id.itemDescription).setFocusableInTouchMode(true);
     }
 
