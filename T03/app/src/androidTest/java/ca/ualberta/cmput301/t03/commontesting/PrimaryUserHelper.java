@@ -82,6 +82,7 @@ public class PrimaryUserHelper {
         DataManager dataManager = new CachedDataManager(new HttpDataManager(context, true), context, true);
         Configuration configuration = new Configuration(context);
         configuration.setApplicationUserName("GENERAL_INVENTORY_FRIEND_1");
+        User temp = new User(configuration.getApplicationUserName(), context);
         dataManager.deleteIfExists(new DataKey(UserProfile.type, configuration.getApplicationUserName()));
         dataManager.deleteIfExists(new DataKey(Inventory.type, configuration.getApplicationUserName()));
         dataManager.deleteIfExists(new DataKey(FriendsList.type, configuration.getApplicationUserName()));

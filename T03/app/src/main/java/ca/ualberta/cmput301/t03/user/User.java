@@ -180,9 +180,9 @@ public class User implements Observable, Observer, Comparable<User> {
             DataKey key = new DataKey(Inventory.type, username);
             if (!dataManager.keyExists(key)) {
                 inventory = new Inventory();
-                dataManager.writeData(key, inventory, new TypeToken<Inventory>(){}.getType());// Inventory.class);
+                dataManager.writeData(key, inventory, Inventory.class);
             } else {
-                inventory = dataManager.getData(key, new TypeToken<Inventory>(){}.getType());//Inventory.class);
+                inventory = dataManager.getData(key, Inventory.class);
             }
             inventory.addObserver(this);
         }

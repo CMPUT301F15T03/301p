@@ -191,7 +191,7 @@ public class BrowseInventoryTest {
         pause();
         onView(withContentDescription("Open navigation drawer")).check(matches(isDisplayed())).perform(click());
         pause();
-//        onView(withText("Friends")).check(matches(isDisplaTestyed())).perform(click());
+        onView(withText("Friends")).check(matches(isDisplayed())).perform(click());
         pause();
         onView(withId(R.id.addFriendFab)).perform(click());
         pause();
