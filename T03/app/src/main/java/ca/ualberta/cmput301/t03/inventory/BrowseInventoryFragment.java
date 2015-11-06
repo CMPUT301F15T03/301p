@@ -23,6 +23,7 @@ package ca.ualberta.cmput301.t03.inventory;
 import android.app.Activity;
 import android.app.ListFragment;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -39,6 +40,8 @@ import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
+
+import org.parceler.Parcels;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -69,7 +72,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
     Activity mActivity;
     View mView;
 
-
+    ArrayList<Item> allItems;
     ArrayList<HashMap<String,String>> listItems;
     SimpleAdapter adapter;
 
@@ -101,6 +104,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
             throw new RuntimeException();
         }
         listItems = new ArrayList<HashMap<String,String>>();
+        allItems = new ArrayList<Item>();
     }
 
     @Override
@@ -118,7 +122,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                controller.inspectItem(model.getItems().get(positionMap.get(position)));
+                inspectItem(allItems.get(position));
                 Toast.makeText(mActivity.getBaseContext(), "Inspect Item", Toast.LENGTH_SHORT).show();
 
             }
@@ -142,8 +146,8 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ArrayList<Item> items = model.getList();
-                        for(Item item: items){
+                        allItems = model.getList();
+                        for(Item item: allItems){
                             addToListView(item);
                         }
                     }
@@ -162,6 +166,14 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
         adapter.notifyDataSetChanged();
     }
 
+    public void inspectItem(Item item){
+
+        Intent intent = new Intent(getContext(), InspectItemView.class);
+        intent.putExtra("user", Parcels.wrap(user));
+        intent.putExtra("inventory/inspect/item", Parcels.wrap(item));
+
+        startActivity(intent);
+    }
         @Override
     public void onDestroy() {
         super.onDestroy();
