@@ -8,6 +8,7 @@ import ca.ualberta.cmput301.t03.datamanager.DataKey;
 import ca.ualberta.cmput301.t03.datamanager.DataManager;
 import ca.ualberta.cmput301.t03.datamanager.HttpDataManager;
 import ca.ualberta.cmput301.t03.inventory.Inventory;
+import ca.ualberta.cmput301.t03.inventory.Item;
 import ca.ualberta.cmput301.t03.user.FriendsList;
 import ca.ualberta.cmput301.t03.user.User;
 import ca.ualberta.cmput301.t03.user.UserProfile;
@@ -45,6 +46,7 @@ public class PrimaryUserHelper {
         User temp = new User(configuration.getApplicationUserName(), context);
         temp.getFriends();
         temp.getInventory();
+        temp.getInventory().addItem(new Item("test", "test"));
         UserProfile prof = temp.getProfile();
         prof.setCity("Edmonton");
         prof.setEmail("TESTUSER1@gualberta.ca");

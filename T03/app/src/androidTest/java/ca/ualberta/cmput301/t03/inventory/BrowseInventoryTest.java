@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ca.ualberta.cmput301.t03.MainActivity;
+import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 
 import static android.support.test.espresso.Espresso.onData;
@@ -180,9 +181,12 @@ public class BrowseInventoryTest {
     public void testTileViewBrowsableInventory() throws Exception{
         PrimaryUserHelper.setupInventoryFriend1(mActivity.getBaseContext());
         pause();
+        PrimaryUserHelper.setup(mActivity.getBaseContext());
+
+        pause();
         onView(withContentDescription("Open navigation drawer")).check(matches(isDisplayed())).perform(click());
         pause();
-        onView(withText("Friends")).check(matches(isDisplayed())).perform(click());
+//        onView(withText("Friends")).check(matches(isDisplaTestyed())).perform(click());
         pause();
         onView(withId(R.id.addFriendFab)).perform(click());
         pause();
@@ -203,6 +207,7 @@ public class BrowseInventoryTest {
         onView(withText("Browse")).check(matches(isDisplayed())).perform(click());
         pause();
 
+        PrimaryUserHelper.tearDown(mActivity.getBaseContext());
         PrimaryUserHelper.tearDownInventoryFriend1(mActivity.getBaseContext());
     }
     /**

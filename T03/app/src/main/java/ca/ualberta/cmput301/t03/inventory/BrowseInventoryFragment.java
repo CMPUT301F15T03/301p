@@ -24,6 +24,7 @@ import android.app.Activity;
 import android.app.ListFragment;
 import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -43,6 +44,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
@@ -52,6 +55,7 @@ import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.inventory.BrowsableInventories;
 import ca.ualberta.cmput301.t03.inventory.BrowseInventoryController;
 import ca.ualberta.cmput301.t03.user.AddFriendButtonOnClickListener;
+import ca.ualberta.cmput301.t03.user.FriendsListController;
 import ca.ualberta.cmput301.t03.user.User;
 /**
  * Copyright 2015 Quentin Lautischer
@@ -78,6 +82,10 @@ import ca.ualberta.cmput301.t03.user.User;
 public class BrowseInventoryFragment extends Fragment implements Observer {
     Activity mActivity;
     View mView;
+
+
+    ArrayList<HashMap<String,String>> listItems;
+    SimpleAdapter adapter;
 
     private BrowsableInventories model;
     private BrowseInventoryController controller;
@@ -106,6 +114,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
         } catch (Exception e){
             throw new RuntimeException();
         }
+        listItems = new ArrayList<HashMap<String,String>>();
     }
 
     @Override
@@ -113,46 +122,62 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_browse_inventory, container, false);
         mView = v;
-        setupFab(mView);
-        createListView(mView);
 
-        return v;
-    }
-
-    private ArrayList<HashMap<String, String>> buildTiles() {
-        ArrayList<HashMap<String, String>> tiles = new ArrayList<>();
-//        Item[] itemList = {new Item("test", "test"), new Item("test", "test"), new Item("test", "test"), new Item("test", "test"), new Item("test", "test") };
-        ArrayList<Item> itemList = model.getBrowsables();
-        for (Item item: itemList){
-            HashMap<String, String> hm = new HashMap<String, String>();
-            hm.put("tileViewItemName", item.getItemName());
-            hm.put("tileViewItemCategory", item.getItemCategory());
-            tiles.add(hm);
-        }
-        return tiles;
-    }
-    public void createListView(View v){
         ListView listview = (ListView) v.findViewById(R.id.BrowseListView);
-        List<HashMap<String,String>> tiles = buildTiles();
         String[] from = {"tileViewItemName", "tileViewItemCategory"};
         int[] to = {R.id.tileViewItemName, R.id.tileViewItemCategory};
-        SimpleAdapter adapter = new SimpleAdapter(mActivity.getBaseContext(), tiles, R.layout.fragment_item_tile, from, to);
+        adapter = new SimpleAdapter(mActivity.getBaseContext(), listItems, R.layout.fragment_item_tile, from, to);
         listview.setAdapter(adapter);
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getActivity().getBaseContext(), "Inspect Item", Toast.LENGTH_SHORT).show();
+//                controller.inspectItem(model.getItems().get(positionMap.get(position)));
+                Toast.makeText(mActivity.getBaseContext(), "Inspect Item", Toast.LENGTH_SHORT).show();
 
-                // TODO: actually get item clicked. this is for testing purposes
-                Item itemTest = new Item("TestItem", "TestCategory");
-                itemTest.setItemQuantity(1);
-                itemTest.setItemQuality("Good");
-                itemTest.setItemDescription("Pretty good");
-
-                controller.inspectItem(itemTest);
             }
         });
+
+        setupListView();
+        setupFab(mView);
+
+        return v;
+    }
+
+    private void setupListView(){
+        Thread worker = model.getBrowsables();
+        ExecutorService pool = Executors.newSingleThreadExecutor();
+        pool.submit(worker);
+
+        worker = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ArrayList<Item> items = model.getList();
+                        for(Item item: items){
+                            addToListView(item);
+                        }
+                    }
+                });
+            }
+        });
+        try{
+            worker.join();
+        } catch (InterruptedException e){
+
+        }
+        pool.submit(worker);
+        pool.shutdown();
+    }
+
+    public void addToListView(Item item){
+        HashMap<String, String> hm = new HashMap<String, String>();
+        hm.put("tileViewItemName", item.getItemName());
+        hm.put("tileViewItemCategory", item.getItemCategory());
+        listItems.add(hm);
+        adapter.notifyDataSetChanged();
     }
 
         @Override
