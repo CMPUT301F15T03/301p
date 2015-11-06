@@ -20,19 +20,6 @@
 
 package ca.ualberta.cmput301.t03;
 
-import static android.support.test.espresso.Espresso.onData;
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static ca.ualberta.cmput301.t03.commontesting.PauseForAnimation.pause;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.anything;
-import static org.hamcrest.Matchers.hasToString;
-
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.test.ActivityInstrumentationTestCase2;
@@ -40,7 +27,6 @@ import android.test.ActivityInstrumentationTestCase2;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.UUID;
 
 import ca.ualberta.cmput301.t03.commontesting.PrimaryUserHelper;
@@ -52,6 +38,19 @@ import ca.ualberta.cmput301.t03.trading.TradeStateDeclined;
 import ca.ualberta.cmput301.t03.trading.TradeStateOffered;
 import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeStateTransition;
 import ca.ualberta.cmput301.t03.user.User;
+
+import static android.support.test.espresso.Espresso.onData;
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static ca.ualberta.cmput301.t03.commontesting.PauseForAnimation.pause;
+import static org.hamcrest.Matchers.anything;
+import static org.hamcrest.Matchers.hasEntry;
+import static org.hamcrest.Matchers.hasToString;
 
 /**
  * Created by rhanders on 2015-10-08.
@@ -114,6 +113,11 @@ public class TradeUITest
          */
         User user = PrimaryUser.getInstance();
         User owner = new User(TEST_USER_FRIEND_1, mContext);
+        try {
+            owner.getTradeList().clear();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         Item ownerItem = new Item(TEST_ITEM_1_NAME, TEST_ITEM_1_CATEGORY);
         try {
             owner.getInventory().addItem(ownerItem);
@@ -131,10 +135,18 @@ public class TradeUITest
         }
 
         /**
+         * Open 'browse friends inventories'
+         */
+        onView(withContentDescription("Open navigation drawer")).perform(click());
+        onView(withText(getActivity().getString(R.string.browseTitle)))
+                .check(matches(isDisplayed()))
+                .perform(click());
+
+        /**
          * Create a trade using the UI
          */
         pause();
-        onData(anything())
+        onData(hasEntry(anything(), hasToString(ownerItem.getItemName())))
                 .inAdapterView(withId(R.id.BrowseListView))
                 .atPosition(0)
                 .perform(click());
@@ -148,18 +160,19 @@ public class TradeUITest
 
         try {
             assertEquals(1, user.getTradeList().getTrades().size());
-            Trade trade = null;
-            for (Trade t : user.getTradeList().getTrades().values()) {
-                trade = t;
-            }
+            assertEquals(1, owner.getTradeList().getTrades().size());
+            Trade trade = user.getTradeList().getTradesAsList().get(0);
+
             assertEquals(user.getUsername(), trade.getBorrower().getUsername());
             assertEquals(owner.getUsername(), trade.getOwner().getUsername());
+
             assertEquals(TradeStateOffered.class, trade.getState().getClass());
+
             assertEquals(1, trade.getOwnersItems().size());
             assertNotNull(trade.getOwnersItems().get(0));
-            assertEquals(ownerItem.getItemName(), trade.getOwnersItems().get(0));
+            assertEquals(ownerItem.getItemName(), trade.getOwnersItems().get(0).getItemName());
         } catch (IOException e) {
-            assertTrue("IOException in testOfferTradeWithFriend", Boolean.FALSE);
+            fail("IOException in testOfferTradeWithFriend");
         }
     }
 
