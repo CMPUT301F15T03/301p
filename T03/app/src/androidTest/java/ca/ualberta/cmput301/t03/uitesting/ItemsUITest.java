@@ -1,16 +1,8 @@
 package ca.ualberta.cmput301.t03.uitesting;
 
 import android.content.Context;
-import android.support.test.InstrumentationRegistry;
 import android.test.ActivityInstrumentationTestCase2;
-import android.view.View;
-
-import org.hamcrest.Matcher;
-import org.junit.Ignore;
-
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.UUID;
 
@@ -18,9 +10,7 @@ import ca.ualberta.cmput301.t03.MainActivity;
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.commontesting.PrimaryUserHelper;
-import ca.ualberta.cmput301.t03.datamanager.DataKey;
 import ca.ualberta.cmput301.t03.datamanager.HttpDataManager;
-import ca.ualberta.cmput301.t03.inventory.Inventory;
 import ca.ualberta.cmput301.t03.inventory.Item;
 import ca.ualberta.cmput301.t03.user.User;
 
@@ -28,32 +18,28 @@ import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.pressBack;
-import static android.support.test.espresso.action.ViewActions.typeTextIntoFocusedView;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayingAtLeast;
-import static android.support.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
-import static android.support.test.espresso.matcher.ViewMatchers.withTagValue;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static java.lang.Thread.sleep;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
-import static org.hamcrest.Matchers.hasToString;
-import static org.hamcrest.core.StringStartsWith.startsWith;
 
 /**
  * Created by mmabuyo on 2015-11-04.
+ *
+ *   CODE REUSE
+ *   Source: http://stackoverflow.com/questions/22965839/espresso-click-by-text-in-list-view
+ *   Accessed November 5, 2015. Used to select the first item in inventory
+ *      onData(anything()).inAdapterView(withId(R.id.InventoryListView)).atPosition(0).perform(click());
  */
 public class ItemsUITest extends ActivityInstrumentationTestCase2<MainActivity> {
     private MainActivity mActivity;
@@ -80,7 +66,6 @@ public class ItemsUITest extends ActivityInstrumentationTestCase2<MainActivity> 
         mActivity = getActivity();
 
         PrimaryUserHelper.setup(mContext);
-
     }
 
     @Override
@@ -88,7 +73,6 @@ public class ItemsUITest extends ActivityInstrumentationTestCase2<MainActivity> 
         PrimaryUserHelper.tearDown(mContext);
 
         super.tearDown();
-
     }
 
     public void testAddAnItem() {
@@ -113,7 +97,6 @@ public class ItemsUITest extends ActivityInstrumentationTestCase2<MainActivity> 
 
         // precondition: user does not have the item!
         final int[] inventory_size = new int[1];
-
         try {
             assertFalse(user.getInventory().getItems().containsKey(item.getUuid()));
             inventory_size[0] = user.getInventory().getItems().size();
@@ -122,7 +105,7 @@ public class ItemsUITest extends ActivityInstrumentationTestCase2<MainActivity> 
         }
 
         // TODO precondition: elastic search does not have a record of the item
-        //dataManager.keyExists(item.getUuid());
+
 
         // UI: navigate to inventory and click add an item
         onView(withContentDescription("Open navigation drawer")).perform(click());
@@ -136,8 +119,6 @@ public class ItemsUITest extends ActivityInstrumentationTestCase2<MainActivity> 
         onView(withId(R.id.itemCategory)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is(ITEM_CATEGORY))).perform(click());
         onView(withId(R.id.itemCategory)).check(matches(withSpinnerText(containsString(ITEM_CATEGORY))));
-        //Source: https://github.com/jordanterry/Espresso-Examples/blob/master/app/src/androidTest/java/test/nice/testproject/MainActivityTests.java
-        // Accessed November 5, 2015
         if (ITEM_PRIVATE) {
             onView(withId(R.id.itemPrivateCheckBox)).perform(click());
         }
@@ -148,7 +129,8 @@ public class ItemsUITest extends ActivityInstrumentationTestCase2<MainActivity> 
 
         // check that it actually got added to inventory
         try {
-            // inventory size should have increased by one!
+            // check inventory, and inventory size should have increased by one!
+            assertTrue(user.getInventory().getItems().containsKey(item.getUuid()));
             assertEquals(inventory_size[0] + 1, user.getInventory().getItems().size());
         } catch (IOException e) {
             assertTrue("IOException in testAddAnItem", Boolean.FALSE);
@@ -177,7 +159,6 @@ public class ItemsUITest extends ActivityInstrumentationTestCase2<MainActivity> 
 
         // precondition: user already has the item! so add it.
         final int[] inventory_size = new int[1];
-        UUID test_item_uuid = item.getUuid();
 
         try {
             // add item to inventory
@@ -246,7 +227,6 @@ public class ItemsUITest extends ActivityInstrumentationTestCase2<MainActivity> 
 
         // precondition: user already has the item! so add it.
         final int[] inventory_size = new int[1];
-        UUID test_item_uuid = item.getUuid();
 
         try {
             // add item to inventory
@@ -263,8 +243,6 @@ public class ItemsUITest extends ActivityInstrumentationTestCase2<MainActivity> 
         onView(withText("Inventory")).check(matches(isDisplayed())).perform(click());
 
         // should be back in inventory view so click on item tile that was just added
-        // Source: http://stackoverflow.com/questions/22965839/espresso-click-by-text-in-list-view
-        // Accessed November 5, 2015
         onData(anything()).inAdapterView(withId(R.id.InventoryListView)).atPosition(0).perform(click());
         onView(withId(R.id.deleteItem)).perform(click());
 
@@ -276,6 +254,7 @@ public class ItemsUITest extends ActivityInstrumentationTestCase2<MainActivity> 
             assertTrue("IOException in testRemoveAnItem", Boolean.FALSE);
         }
 
+        // TODO: assert view that there is nothing in inventory any more.
     }
 
     public void testViewOwnInventory() {
@@ -305,6 +284,8 @@ public class ItemsUITest extends ActivityInstrumentationTestCase2<MainActivity> 
                     .inAdapterView(withId(R.id.InventoryListView))
                     .check(doesNotExist());
         }
+
+        // TODO: assert views
     }
 
     public void testViewItem() {
@@ -366,7 +347,6 @@ public class ItemsUITest extends ActivityInstrumentationTestCase2<MainActivity> 
 
         // precondition: user already has the item! so add it.
         final int[] inventory_size = new int[1];
-        UUID test_item_uuid = item.getUuid();
         try {
             // add item to inventory
             user.getInventory().addItem(item);
@@ -397,7 +377,7 @@ public class ItemsUITest extends ActivityInstrumentationTestCase2<MainActivity> 
             assertTrue(user.getInventory().getItems().containsKey(item.getUuid()));
             assertEquals(inventory_size[0], user.getInventory().getItems().size());
 
-            // it should have a new item name and new item quality
+            // it should have the new item name and new item quality
             Item testItem = user.getInventory().getItem(item.getUuid());
             assertEquals(NEW_ITEM_CATEGORY, testItem.getItemCategory());
         } catch (IOException e) {
@@ -497,6 +477,7 @@ public class ItemsUITest extends ActivityInstrumentationTestCase2<MainActivity> 
 
         // item was public, now make it private
         onView(withId(R.id.itemPrivateCheckBox)).perform(click());
+        onView(withId(R.id.saveItem)).perform(click());
 
         try {
             // get item from inventory
