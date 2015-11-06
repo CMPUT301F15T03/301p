@@ -47,11 +47,8 @@ import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.user.User;
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * to handle interaction events.
- * Use the {@link BrowseInventoryFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Fragment that displays a ListView containing all Items from all friends.
+ * This can (later) be filtered by friends, category, and Texttual Query.
  */
 public class BrowseInventoryFragment extends Fragment implements Observer {
     Activity mActivity;
@@ -75,6 +72,11 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
         return new BrowseInventoryFragment();
     }
 
+    /**
+     * Gets User associated to system config. Loads any data associated to Browsables.
+     * Namely Users friendList.
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,6 +121,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
         return v;
     }
 
+
     private void setupListView() {
         Thread tGetBrowsables = model.getBrowsables();
         ExecutorService pool = Executors.newSingleThreadExecutor();
@@ -143,6 +146,10 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
         pool.shutdown();
     }
 
+    /**
+     * Used to add Items to the ListView.
+     * @param item
+     */
     public void addToListView(Item item){
         HashMap<String, String> hm = new HashMap<String, String>();
         hm.put("tileViewItemName", item.getItemName());
@@ -151,6 +158,10 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
         adapter.notifyDataSetChanged();
     }
 
+    /**
+     * Starts intent for inspecting item
+     * @param item
+     */
     public void inspectItem(Item item){
 
         Intent intent = new Intent(getContext(), InspectItemView.class);
@@ -159,7 +170,11 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
 
         startActivity(intent);
     }
-        @Override
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void onDestroy() {
         super.onDestroy();
     }

@@ -119,7 +119,7 @@ import ca.ualberta.cmput301.t03.user.UserProfile;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class UserInventoryTest {
+public class UserInventoryUITest {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
