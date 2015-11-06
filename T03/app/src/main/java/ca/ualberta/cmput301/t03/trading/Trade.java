@@ -106,8 +106,8 @@ public class Trade implements Observable {
     public Trade(User borrower, User owner,
                  Collection<Item> borrowersItems, Collection<Item> ownersItems,
                  Context context) {
-        this.borrower = borrower;
-        this.owner = owner;
+        this.borrower = new User(borrower, context);
+        this.owner = new User(owner, context);
         this.borrowersItems = new ArrayList<>();
         this.ownersItems = new ArrayList<>();
         for (Item item : borrowersItems) {
@@ -141,9 +141,9 @@ public class Trade implements Observable {
         try {
             if (dataManager.keyExists(key)) {
                 Trade t = dataManager.getData(key, Trade.class);
-                this.setState(t.getState());
-                this.setBorrowersItems(t.getBorrowersItems());
-                this.setComments(t.getComments());
+                this.setState(t.state);
+                this.setBorrowersItems(t.borrowersItems);
+                this.setComments(t.comments);
             }
         } catch (IOException e) {
             throw new RuntimeException("Failed to load trade with UUID " + this.getTradeUUID().toString());
@@ -361,5 +361,10 @@ public class Trade implements Observable {
     @Override
     public void removeObserver(Observer observer) {
         observers.remove(observer);
+    }
+
+    @Override
+    public String toString() {
+        return this.getTradeUUID().toString();
     }
 }
