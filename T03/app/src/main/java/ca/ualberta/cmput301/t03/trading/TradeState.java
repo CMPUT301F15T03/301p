@@ -23,20 +23,82 @@ package ca.ualberta.cmput301.t03.trading;
 import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeStateTransition;
 
 /**
- * Created by ross on 15-10-29.
+ * class TradeState uses the State Pattern to manage the various states a {@link Trade}
+ * can be in.
+ *
+ * @see <a href="https://en.wikipedia.org/wiki/State_pattern">Wikipedia: State Pattern</a>
  */
 public interface TradeState {
+    /**
+     * Returns whether the TradeState is Closed.
+     *
+     * A Closed trade is one which has been accepted or declined.
+     * That is, a Closed trade can no longer be interacted with.
+     *
+     * @return True if the trade is Closed. Returns false otherwise.
+     */
     Boolean isClosed();
 
+    /**
+     * Returns whether the TradeState is Open.
+     *
+     * An open trade is one which has been neither accepted nor declined.
+     * That is, an open trade can be interacted with in some way.
+     *
+     * @return True if the trade is Open. Returns false otherwise.
+     */
     Boolean isOpen();
 
+    /**
+     * Returns whether the TradeState is Editable.
+     *
+     * An editable trade is one which has not yet been offered.
+     *
+     * @return True if the trade is Editable. Returns false otherwise.
+     */
     Boolean isEditable();
 
+    /**
+     * Offer a trade.
+     *
+     * A trade can only be offered if it is currently being composed, that is,
+     * if the current TradeState is {@link TradeStateComposing}.
+     *
+     * @param trade Trade to be offered.
+     * @throws IllegalTradeStateTransition if the trade is in an illegal state and cannot be offered.
+     */
     void offer(Trade trade) throws IllegalTradeStateTransition;
 
+    /**
+     * Cancel a trade.
+     *
+     * A trade can only be cancelled if it is currently being composed, that is,
+     * if the current TradeState is {@link TradeStateComposing}.
+     *
+     * @param trade Trade to be cancelled.
+     * @throws IllegalTradeStateTransition if the trade is in an illegal state and cannot be cancelled.
+     */
     void cancel(Trade trade) throws IllegalTradeStateTransition;
 
+    /**
+     * Accept a trade.
+     *
+     * A trade can only be accepted if it has been offered, that is,
+     * if the current TradeState is {@link TradeStateOffered}.
+     *
+     * @param trade Trade to be accepted.
+     * @throws IllegalTradeStateTransition if the trade is in an illegal state and cannot be accepted.
+     */
     void accept(Trade trade) throws IllegalTradeStateTransition;
 
+    /**
+     * Decline a trade.
+     *
+     * A trade can only be declined if it has been offered, that is,
+     * if the current TradeState is {@link TradeStateOffered}.
+     *
+     * @param trade Trade to be declined.
+     * @throws IllegalTradeStateTransition if the trade is in an illegal state and cannot be declined.
+     */
     void decline(Trade trade) throws IllegalTradeStateTransition;
 }
