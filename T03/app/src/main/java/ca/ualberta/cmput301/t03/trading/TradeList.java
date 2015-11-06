@@ -22,9 +22,11 @@ package ca.ualberta.cmput301.t03.trading;
 
 import com.google.gson.annotations.Expose;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -68,10 +70,18 @@ public class TradeList implements Observable, Observer {
 
     /**
      * Get all trades the user is involved in.
-     * @return the trades.
+     * @return the trades, as a hash map
      */
     public HashMap<UUID, Trade> getTrades() {
         return this.trades;
+    }
+
+    /**
+     * Get all trades the user is involved in.
+     * @return the trades, as a list
+     */
+    public List<Trade> getTradesAsList() {
+        return new ArrayList<Trade>(getTrades().values());
     }
 
     /**

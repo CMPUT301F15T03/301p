@@ -20,8 +20,14 @@
 
 package ca.ualberta.cmput301.t03.trading.exceptions;
 
+import ca.ualberta.cmput301.t03.trading.Trade;
+import ca.ualberta.cmput301.t03.trading.TradeState;
+
 /**
- * Created by ross on 15-11-03.
+ * class IllegalTradeModificationException extends {@link Throwable}
+ *
+ * It is thrown when something attempts to modify a {@link Trade} which
+ * is not {@link TradeState#isEditable()}.
  */
 public class IllegalTradeModificationException extends Throwable {
     public IllegalTradeModificationException(String msg) {
