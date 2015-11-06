@@ -38,6 +38,7 @@ import ca.ualberta.cmput301.t03.photo.PhotoGallery;
  */
 @Parcel
 public class Item implements Observer, Observable {
+
     @Transient
     private PhotoGallery photoList; // we will expose this later
     @Transient
@@ -56,6 +57,7 @@ public class Item implements Observer, Observable {
     private String itemDescription;
     @Expose
     private UUID uuid;
+
 
     public Item(String name, String category) {
         uuid = UUID.randomUUID();
@@ -195,6 +197,14 @@ public class Item implements Observer, Observable {
         this.uuid = uuid;
     }
 
+    public PhotoGallery getPhotoList() {
+        return photoList;
+    }
+
+    public void setPhotoList(PhotoGallery photoList) {
+        this.photoList = photoList;
+    }
+
     /**
      * Alias for notify observers, call this when a change has been made.
      */
@@ -242,4 +252,6 @@ public class Item implements Observer, Observable {
         notifyObservers();
         // todo this likely has something to do with one of the photos changing
     }
+
+
 }

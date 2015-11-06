@@ -37,6 +37,19 @@ public class Photo {
     private Uri location;
     private DataManager dataManager;
     private Collection<Observer> observers;
+    private boolean isDownloaded;
+
+    public Photo() {
+
+    }
+
+    public boolean isDownloaded() {
+        return this.isDownloaded;
+    }
+
+    public void downloadPhoto() {
+        throw new UnsupportedOperationException();
+    }
 
     public void load() { throw new UnsupportedOperationException(); }
     public void save() { throw new UnsupportedOperationException(); }
