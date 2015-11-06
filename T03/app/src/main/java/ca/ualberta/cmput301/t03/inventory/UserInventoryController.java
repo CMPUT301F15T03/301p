@@ -21,16 +21,11 @@
 package ca.ualberta.cmput301.t03.inventory;
 
 import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
 
 import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.datamanager.DataManager;
 import ca.ualberta.cmput301.t03.datamanager.HttpDataManager;
-import ca.ualberta.cmput301.t03.inventory.AddItemView;
-import ca.ualberta.cmput301.t03.inventory.EditItemView;
-import ca.ualberta.cmput301.t03.inventory.Inventory;
-import ca.ualberta.cmput301.t03.inventory.Item;
+
 public class UserInventoryController {
     public final static String ITEM_NAME = null;
 
@@ -46,7 +41,6 @@ public class UserInventoryController {
         this.configuration = new Configuration(context);
         this.dataManager = new HttpDataManager(context);
     }
-
 
 
     public void addingItemToInventory(Item item) {

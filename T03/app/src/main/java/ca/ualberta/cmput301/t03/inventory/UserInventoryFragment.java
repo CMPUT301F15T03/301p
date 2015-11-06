@@ -27,15 +27,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.Toast;
 
 import org.parceler.Parcels;
 
@@ -49,7 +46,6 @@ import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
-import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.user.User;
 
 
@@ -73,7 +69,7 @@ public class UserInventoryFragment extends Fragment implements Observer {
         // Required empty public constructor
     }
 
-    public static UserInventoryFragment newInstance(User u){
+    public static UserInventoryFragment newInstance(User u) {
         UserInventoryFragment fragment = new UserInventoryFragment();
         Bundle args = new Bundle();
         args.putParcelable(ARG_PARAM1, Parcels.wrap(u));
@@ -81,8 +77,9 @@ public class UserInventoryFragment extends Fragment implements Observer {
         fragment.setArguments(args);
         return fragment;
     }
+
     public static UserInventoryFragment newInstance() {
-        return  new UserInventoryFragment();
+        return new UserInventoryFragment();
     }
 
     @Override
@@ -96,7 +93,7 @@ public class UserInventoryFragment extends Fragment implements Observer {
         if (getArguments() != null) {
 //            String username = getArguments().getString(ARG_PARAM1);
             user = Parcels.unwrap(getArguments().getParcelable(ARG_PARAM1));
-            if(PrimaryUser.getInstance().equals(user)){
+            if (PrimaryUser.getInstance().equals(user)) {
                 user = PrimaryUser.getInstance();
             } else {
                 user = new User(user.getUsername(), getActivity().getApplicationContext());
@@ -109,7 +106,7 @@ public class UserInventoryFragment extends Fragment implements Observer {
         AsyncTask task = new AsyncTask() {
             @Override
             protected Object doInBackground(Object[] params) {
-                try{
+                try {
 //                    user = PrimaryUser.getInstance();
 
                     model = user.getInventory();
@@ -123,7 +120,6 @@ public class UserInventoryFragment extends Fragment implements Observer {
                             setupFab(getView());
                         }
                     });
-
 
 
                 } catch (IOException e) {
@@ -151,7 +147,7 @@ public class UserInventoryFragment extends Fragment implements Observer {
         return v;
     }
 
-    private void fragmentSetup(View v){
+    private void fragmentSetup(View v) {
         createListView(v);
         model.addObserver(this);
 
@@ -183,7 +179,7 @@ public class UserInventoryFragment extends Fragment implements Observer {
         //ArrayList<Item> itemList = (ArrayList<Item>) model.getItems().values();
         int i = 0;
         positionMap.clear();
-        for (Item item: model.getItems().values()){
+        for (Item item : model.getItems().values()) {
             HashMap<String, String> hm = new HashMap<String, String>();
             hm.put("tileViewItemName", item.getItemName());
             hm.put("tileViewItemCategory", item.getItemCategory());
@@ -194,9 +190,9 @@ public class UserInventoryFragment extends Fragment implements Observer {
         return tiles;
     }
 
-    public void createListView(View v){
+    public void createListView(View v) {
         listview = (ListView) v.findViewById(R.id.InventoryListView);
-        List<HashMap<String,String>> tiles = buildTiles();
+        List<HashMap<String, String>> tiles = buildTiles();
         String[] from = {"tileViewItemName", "tileViewItemCategory"};
         int[] to = {R.id.tileViewItemName, R.id.tileViewItemCategory};
         adapter = new SimpleAdapter(mActivity.getBaseContext(), tiles, R.layout.fragment_item_tile, from, to);
@@ -211,10 +207,10 @@ public class UserInventoryFragment extends Fragment implements Observer {
 
     }
 
-    public void inspectItem(Item item){
+    public void inspectItem(Item item) {
 
         Intent intent = null;
-        if (PrimaryUser.getInstance().equals(user)){
+        if (PrimaryUser.getInstance().equals(user)) {
             intent = new Intent(getContext(), EditItemView.class);
             intent.putExtra("user", Parcels.wrap(user));
             intent.putExtra("ITEM_UUID", item.getUuid().toString());
@@ -234,9 +230,9 @@ public class UserInventoryFragment extends Fragment implements Observer {
         super.onDestroy();
     }
 
-    private void setupFab(View v){
+    private void setupFab(View v) {
         addItemFab = (FloatingActionButton) v.findViewById(R.id.addItemInventoryFab);
-        if (PrimaryUser.getInstance().equals(user)){
+        if (PrimaryUser.getInstance().equals(user)) {
             addItemFab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

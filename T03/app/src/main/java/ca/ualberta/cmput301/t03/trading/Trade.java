@@ -92,8 +92,6 @@ public class Trade implements Observable {
 
         this.dataManager = new CachedDataManager(new HttpDataManager(context, true), context, true);
         this.observers = new HashSet<>();
-        this.addObserver(this.getOwner());
-        this.addObserver(this.getBorrower());
 
         this.tradeUUID = UUID.randomUUID();
         this.commitChanges();
