@@ -213,6 +213,7 @@ public class User implements Observable, Observer, Comparable<User> {
         } else {
             tradeList = dataManager.getData(key, TradeList.class);
         }
+        tradeList.addObserver(this);
         return tradeList;
     }
 
