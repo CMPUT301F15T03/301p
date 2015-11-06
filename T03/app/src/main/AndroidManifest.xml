@@ -77,6 +77,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ca.ualberta.cmput301.t03.MainActivity" />
         </activity>
+        <activity android:name=".user.ViewInventoryActivity" >
+        </activity>
     </application>
 
 </manifest>

@@ -62,11 +62,7 @@ public class UserInventoryController {
         this.dataManager = new HttpDataManager(context);
     }
 
-    public void addItemButtonClicked() {
-//        throw new UnsupportedOperationException();
-        Intent intent = new Intent(context, AddItemView.class);
-        context.startActivity(intent);
-    }
+
 
     public void addingItemToInventory(Item item) {
         inventory.addItem(item);
