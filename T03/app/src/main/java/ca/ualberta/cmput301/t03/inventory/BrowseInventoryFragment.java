@@ -64,7 +64,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
     private BrowsableInventories model;
     private BrowseInventoryController controller;
 
-    private FloatingActionButton ilterBrowseFab;
+    private FloatingActionButton addFilterBrowseFab;
     private User user;
 
     public BrowseInventoryFragment() {
