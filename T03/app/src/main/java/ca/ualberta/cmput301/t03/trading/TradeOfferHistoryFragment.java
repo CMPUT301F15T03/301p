@@ -21,22 +21,34 @@
 package ca.ualberta.cmput301.t03.trading;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import org.parceler.Parcels;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
-
+import ca.ualberta.cmput301.t03.common.exceptions.NotImplementedException;
+import ca.ualberta.cmput301.t03.user.User;
+import ca.ualberta.cmput301.t03.user.ViewProfileActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -48,7 +60,12 @@ import ca.ualberta.cmput301.t03.R;
  */
 public class TradeOfferHistoryFragment extends Fragment implements Observer {
 
-    private Collection<Trade> model;
+    private TradeList model;
+    private List<Trade> adapterModel;
+
+    private ListView listView;
+    private ArrayAdapter<Trade> adapter;
+    private TradeOfferHistoryController controller;
 
     public TradeOfferHistoryFragment() {
         // Required empty public constructor
@@ -62,16 +79,60 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer {
      */
     // TODO: Rename and change types and number of parameters
     public static TradeOfferHistoryFragment newInstance() {
-        TradeOfferHistoryFragment fragment = new TradeOfferHistoryFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
+        return new TradeOfferHistoryFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        AsyncTask worker = new AsyncTask() {
+            @Override
+            protected Object doInBackground(Object[] params) {
+                try {
+                    model = PrimaryUser.getInstance().getTradeList();
+                    adapterModel = new ArrayList<>(model.getTrades().values());
+                    controller = new TradeOfferHistoryController(model);
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            setupListView();
+                            observeModel();
+                        }
+                    });
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Object o) {
+                super.onPostExecute(o);
+            }
+        };
+        worker.execute();
+    }
+
+    private void setupListView() {
+        listView = (ListView) getActivity().findViewById(R.id.tradeHistoryListView);
+
+        adapter = new ArrayAdapter<Trade>(getContext(), android.R.layout.simple_list_item_1, adapterModel);
+        listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                controller.reviewTrade();
+                Snackbar.make(getView(), "review trade unimplemented", Snackbar.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void observeModel() {
+        model.addObserver(this);
     }
 
     @Override
@@ -79,13 +140,6 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_trade_offer_history, container, false);
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-////            mListener.onFragmentInteraction(uri);
-//        }
     }
 
     @Override
@@ -99,30 +153,15 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer {
         }
     }
 
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
-
     @Override
     public void update(Observable observable) {
-        throw new UnsupportedOperationException();
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                adapterModel = new ArrayList<>(model.getTrades().values());
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-//    public interface OnFragmentInteractionListener {
-//        // TODO: Update argument type and name
-//        public void onFragmentInteraction(Uri uri);
-//    }
 
 }
