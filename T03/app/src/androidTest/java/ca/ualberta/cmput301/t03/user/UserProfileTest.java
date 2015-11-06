@@ -97,7 +97,6 @@ public class UserProfileTest {
     @BeforeClass
     public static void setupTestUser() throws Exception {
         PrimaryUserHelper.setup(InstrumentationRegistry.getTargetContext());
-
     }
 
     @AfterClass
@@ -105,25 +104,22 @@ public class UserProfileTest {
         PrimaryUserHelper.tearDown(InstrumentationRegistry.getTargetContext());
     }
 
+
     @Before
     public void setActivity() throws Exception {
-//        PrimaryUserHelper.setup(InstrumentationRegistry.getTargetContext());
         pause();
         mActivity = mActivityRule.getActivity();
 
+        User u = PrimaryUser.getInstance();
+        UserProfile p = u.getProfile();
+        p.setCity(PrimaryUserHelper.CITY);
+        p.setEmail(PrimaryUserHelper.EMAIL);
+        p.setPhone(PrimaryUserHelper.PHONE);
         pause();
 
         onView(withContentDescription("Open navigation drawer")).check(matches(isDisplayed())).perform(click());
         onView(withText("My Profile")).perform(click());
     }
-
-    @After
-    public void tearDown() throws Exception {
-//        PrimaryUserHelper.tearDown(InstrumentationRegistry.getTargetContext());
-
-        pause();
-    }
-
 
     /**
      * UC02.04.01
@@ -143,8 +139,6 @@ public class UserProfileTest {
         onView(withId(R.id.viewProfileCity)).check(matches(withText(PrimaryUserHelper.CITY)));
         onView(withId(R.id.viewProfilePhone)).check(matches(withText(PrimaryUserHelper.PHONE)));
         onView(withId(R.id.viewProfileEmail)).check(matches(withText(PrimaryUserHelper.EMAIL)));
-
-
     }
 
 
