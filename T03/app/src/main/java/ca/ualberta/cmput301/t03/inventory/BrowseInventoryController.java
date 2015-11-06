@@ -50,9 +50,4 @@ public class BrowseInventoryController {
         throw new UnsupportedOperationException();
     }
 
-    public void inspectItem(Item item){
-        Intent intent = new Intent(context, InspectItemView.class);
-        intent.putExtra("inventory/inspect/item", Parcels.wrap(item));
-        context.startActivity(intent);
-    }
 }
