@@ -142,7 +142,7 @@ public class TradeUITest
         onView(withId(R.id.proposeTradeButton))
                 .perform(click());
         pause();
-        onView(withId(R.id.tradeComposeConfirm))
+        onView(withId(R.id.tradeComposeOffer))
                 .perform(click());
         pause();
 
@@ -384,7 +384,7 @@ public class TradeUITest
         // TODO assert counter offer was created
 
         // TODO remove fail
-        fail("test not completely written");
+        fail("test functionality not yet implemented");
     }
 
     /**
@@ -452,7 +452,7 @@ public class TradeUITest
          */
 
         // TODO remove fail
-        fail("test not completely written");
+        fail("test functionality not yet implemented");
     }
 
     /**
@@ -520,7 +520,7 @@ public class TradeUITest
         // TODO assert counter offer updated
 
         // TODO remove fail
-        fail("test not completely written");
+        fail("test functionality not yet implemented");
     }
 
     /**
@@ -646,14 +646,14 @@ public class TradeUITest
         // TODO assert counter offer cancelled
 
         // TODO remove fail
-        fail("test not completely written");
+        fail("test functionality not yet implemented");
     }
 
     /**
      * UC1.4.7.1 OwnerWritesTradeAcceptComments
      */
     public void testOwnerWritesTradeAcceptComments() {
-        fail("test not completely written");
+        fail("test functionality not yet implemented");
 //        TradeManager tradeManager = new TradeManager();
 //
 //        User owner = new User("User A");
@@ -676,7 +676,7 @@ public class TradeUITest
      * UC1.4.7.2 OwnerAndBorrowerReceiveTradeDetailsEmail
      */
     public void testOwnerAndBorrowerReceiveTradeDetailsEmail() {
-        fail("test not completely written");
+        fail("test functionality not yet implemented");
 //        TradeManager tradeManager = new TradeManager();
 //
 //        User owner = new User("User A");
@@ -720,14 +720,14 @@ public class TradeUITest
         // TODO assert each non-user trade is not in the list
 
         // TODO remove fail
-        fail("test not completely written");
+        fail("test functionality not yet implemented");
     }
 
     /**
      * UC1.4.1 OfferTradeWithFriend
      */
     public void testOfferTradeWithFriendWhileOffline() {
-        fail("test not completely written");
+        fail("test functionality not yet implemented");
 //        TradeManager tradeManager = new TradeManager();
 //
 //        User owner = new User("User A");

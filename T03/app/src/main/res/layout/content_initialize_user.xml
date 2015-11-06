@@ -33,7 +33,7 @@
         android:clickable="false"
         android:hint="@string/userNameHint"
         android:inputType="textVisiblePassword|text|textNoSuggestions"
-        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890" />
+        android:digits="@string/allowable_username_characters" />
 
     <EditText
         android:layout_width="wrap_content"

@@ -64,9 +64,9 @@ public class PrimaryUserHelper {
 
 
     public static void createAndLoadUserWithFriendThatHasInventory(Context context){
-        String GENERAL_INVENTORY_FRIEND_1 = "GENERAL_INVENTORY_FRIEND_1";
-        String FRIEND_WITH_AN_INVENTORY = "FRIEND_WITH_AN_INVENTORY";
-        String FRIEND_WITH_AN_INVENTORY2 = "FRIEND_WITH_AN_INVENTORY2";
+        String GENERAL_INVENTORY_FRIEND_1 = "GENERALINVENTORYFRIEND1";
+        String FRIEND_WITH_AN_INVENTORY = "FRIENDWITHANINVENTORY";
+        String FRIEND_WITH_AN_INVENTORY2 = "FRIENDWITHANINVENTORY2";
 
         Configuration configuration = new Configuration(context);
         if (configuration.isApplicationUserNameSet()) {
@@ -159,13 +159,13 @@ public class PrimaryUserHelper {
             item1.setItemQuantity(1);
             item1.setItemDescription("Test Description FX10");
 
-            Item item2 = new Item("testItem1", "testQuality");
+            Item item2 = new Item("testItem2", "testQuality");
             item2.setItemCategory("Stands");
             item2.setItemIsPrivate(false);
             item2.setItemQuantity(1);
             item2.setItemDescription("Test Description FX9");
 
-            Item item3 = new Item("testItem1", "testQuality");
+            Item item3 = new Item("testItem3", "testQuality");
             item3.setItemCategory("Cameras");
             item3.setItemIsPrivate(true);
             item3.setItemQuantity(1);
@@ -182,22 +182,12 @@ public class PrimaryUserHelper {
         }
 
         configuration.setApplicationUserName(GENERAL_INVENTORY_FRIEND_1);
-        User temp = new User(GENERAL_INVENTORY_FRIEND_1, context);
-        try{
-            temp.getFriends();
-            temp.getInventory();
-            UserProfile prof = temp.getProfile();
-            prof.commitChanges();
-        } catch (IOException e){
-            throw new RuntimeException();
-        }
-
     }
 
     public static void deleteAndUnloadUserWithFriendThatHasInventory(Context context){
-        String GENERAL_INVENTORY_FRIEND_1 = "GENERAL_INVENTORY_FRIEND_1";
-        String FRIEND_WITH_AN_INVENTORY = "FRIEND_WITH_AN_INVENTORY";
-        String FRIEND_WITH_AN_INVENTORY2 = "FRIEND_WITH_AN_INVENTORY2";
+        String GENERAL_INVENTORY_FRIEND_1 = "GENERALINVENTORYFRIEND1";
+        String FRIEND_WITH_AN_INVENTORY = "FRIENDWITHANINVENTORY";
+        String FRIEND_WITH_AN_INVENTORY2 = "FRIENDWITHANINVENTORY2";
 
         DataManager dataManager = new CachedDataManager(new HttpDataManager(context, true), context, true);
         Configuration configuration = new Configuration(context);
@@ -229,7 +219,7 @@ public class PrimaryUserHelper {
     public static void tearDown(Context context) throws Exception {
         DataManager dataManager = new CachedDataManager(new HttpDataManager(context, true), context, true);
         Configuration configuration = new Configuration(context);
-        configuration.setApplicationUserName("JUNIT_TEST_USER_DO_NOT_USE_THIS_NAME");
+        configuration.setApplicationUserName(USER_ID);
         dataManager.deleteIfExists(new DataKey(UserProfile.type, configuration.getApplicationUserName()));
         dataManager.deleteIfExists(new DataKey(Inventory.type, configuration.getApplicationUserName()));
         dataManager.deleteIfExists(new DataKey(FriendsList.type, configuration.getApplicationUserName()));

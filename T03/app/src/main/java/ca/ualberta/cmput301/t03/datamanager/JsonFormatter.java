@@ -23,6 +23,10 @@ package ca.ualberta.cmput301.t03.datamanager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import ca.ualberta.cmput301.t03.trading.TradeState;
+import ca.ualberta.cmput301.t03.trading.serialization.TradeStateDeserializer;
+import ca.ualberta.cmput301.t03.trading.serialization.TradeStateSerializer;
+
 /**
  * A class for specifying the JSON format the {@link JsonDataManager} should use.
  * Created by rishi on 15-10-30.
@@ -95,6 +99,13 @@ public class JsonFormatter {
         if (getUseExplicitExposeAnnotation()) {
             gsonBuilder.excludeFieldsWithoutExposeAnnotation();
         }
+
+        /**
+         * Register custom serializers
+         */
+        // Trading
+        gsonBuilder.registerTypeHierarchyAdapter(TradeState.class, new TradeStateSerializer());
+        gsonBuilder.registerTypeHierarchyAdapter(TradeState.class, new TradeStateDeserializer());
 
         return gsonBuilder.create();
     }

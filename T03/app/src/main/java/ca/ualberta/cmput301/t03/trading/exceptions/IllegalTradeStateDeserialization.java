@@ -18,27 +18,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ca.ualberta.cmput301.t03.user;
+package ca.ualberta.cmput301.t03.trading.exceptions;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.support.design.widget.Snackbar;
-import android.view.View;
-import android.widget.EditText;
-
-public class AddFriendButtonOnClickListener implements View.OnClickListener {
-
-    @Override
-    public void onClick(View v) {
-        Snackbar.make(v, "Adding a friend", Snackbar.LENGTH_SHORT).show();
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-        builder.setView(new EditText(v.getContext())); //todo replace with layout
-        builder.setCancelable(false);
-        builder.setNegativeButton("Cancel", null);
-        builder.setPositiveButton("Add", null);
-        builder.setTitle("Add a Friend");
-        AlertDialog d = builder.create();
-        d.show();
-    }
+/**
+ * Created by ross on 15-11-06.
+ */
+public class IllegalTradeStateDeserialization extends Throwable {
 }
