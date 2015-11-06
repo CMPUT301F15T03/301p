@@ -76,6 +76,8 @@ public class FriendsListFragment extends Fragment implements Observer {
     private ListView mListView;
     private ArrayAdapter<User> mAdapter;
 
+    private Activity mActivity;
+
     public FriendsListFragment() {
         // Required empty public constructor
     }
@@ -310,7 +312,8 @@ public class FriendsListFragment extends Fragment implements Observer {
     @Override
     public void update(Observable observable) {
 
-        getActivity().runOnUiThread(new Runnable() {
+        Activity activity = getActivity();
+        activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 mAdapter.notifyDataSetChanged();
