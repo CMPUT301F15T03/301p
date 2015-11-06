@@ -67,26 +67,21 @@ public class BrowsableInventories implements Filterable<Item>, Observer, Observa
     }
 
     public Thread getBrowsables() {
-        if (friendList == null){
-            Log.d("Q", "friendList is null");
-            return null;
-        } else {
-            Thread worker = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        for (User friend : friendList.getFriends()) {
-                            for (Item item : friend.getInventory().getItems().values()) {
-                                list.add(item);
-                            }
+        Thread worker = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    for (User friend : friendList.getFriends()) {
+                        for (Item item : friend.getInventory().getItems().values()) {
+                            list.add(item);
                         }
-                    } catch (IOException e) {
-                        throw new RuntimeException("Could not get user and associated friendList");
                     }
+                } catch (IOException e) {
+                    throw new RuntimeException("Could not get user and associated friendList");
                 }
-            });
-            return worker;
-        }
+            }
+        });
+        return worker;
     }
 
     public ArrayList<Item> getList(){
