@@ -69,12 +69,6 @@ public class TradeStateComposing implements TradeState {
     @Override
     public void cancel(Trade trade) {
         trade.setState(new TradeStateCancelled());
-        /**
-         * TODO perform required tasks on cancel
-         * - update elasticsearch
-         * - notify observers
-         */
-        throw new NotImplementedException();
     }
 
     /**
