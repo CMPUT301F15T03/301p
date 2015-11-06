@@ -64,6 +64,7 @@ import static org.hamcrest.Matchers.hasToString;
 import static org.hamcrest.Matchers.is;
 
 import ca.ualberta.cmput301.t03.MainActivity;
+import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.commontesting.PrimaryUserHelper;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
@@ -84,7 +85,7 @@ public class FriendsListTest {
      * the {@link ActivityTestRule#getActivity()} method.
      */
 
-    private final String TEST_OTHER_USER = "john";
+    private final String TEST_OTHER_USER = PrimaryUserHelper.FRIEND_WITH_AN_INVENTORY2;
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
@@ -95,12 +96,12 @@ public class FriendsListTest {
 
     @BeforeClass
     public static void setupTestUser() throws Exception {
-        PrimaryUserHelper.setup(InstrumentationRegistry.getTargetContext());
+        PrimaryUserHelper.createUserWithFriend(InstrumentationRegistry.getTargetContext());
     }
 
     @AfterClass
     public static void restoreOriginalUser() throws Exception {
-        PrimaryUserHelper.tearDown(InstrumentationRegistry.getTargetContext());
+        PrimaryUserHelper.deleteUserWithFriend(InstrumentationRegistry.getTargetContext());
     }
 
     @Before
@@ -212,7 +213,7 @@ public class FriendsListTest {
         onView(withId(R.id.addFriendFab)).perform(click());
         pause();
         onView(withClassName(new StringContains("EditText")))
-                .perform(typeText(TEST_OTHER_USER),
+                .perform(typeText(PrimaryUserHelper.FRIEND_WITH_AN_INVENTORY),
                         closeSoftKeyboard());
         pause();
         onView(withText("Cancel"))
@@ -221,7 +222,7 @@ public class FriendsListTest {
         pause();
         //check friend was not added.
         onView(withId(R.id.friendsListListView))
-                .check(matches(not(withAdaptedData(hasToString(TEST_OTHER_USER)))));
+                .check(matches(not(withAdaptedData(hasToString(PrimaryUserHelper.FRIEND_WITH_AN_INVENTORY)))));
         pause();
 
     }
@@ -242,7 +243,7 @@ public class FriendsListTest {
 
         //assert list does not contain friend
         onView(withId(R.id.friendsListListView))
-                .check(matches(not(withAdaptedData(hasToString(TEST_OTHER_USER)))));
+                .check(matches(not(withAdaptedData(hasToString(PrimaryUserHelper.FRIEND_WITH_AN_INVENTORY)))));
         pause();
 
 
