@@ -20,27 +20,17 @@
 
 package ca.ualberta.cmput301.t03.inventory;
 
-import android.app.Activity;
-import android.net.Uri;
-import android.os.Bundle;
 import android.app.Fragment;
-import android.util.Log;
+import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.R;
 
-public class ItemTileFragment extends Fragment implements Observer{
+public class ItemTileFragment extends Fragment implements Observer {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_NAME = "name";
     private static final String ARG_CATEGORY = "category";

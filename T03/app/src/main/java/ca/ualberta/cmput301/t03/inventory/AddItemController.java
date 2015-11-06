@@ -21,18 +21,13 @@
 package ca.ualberta.cmput301.t03.inventory;
 
 import android.app.Activity;
-import android.content.Context;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import java.io.IOException;
 
 import ca.ualberta.cmput301.t03.R;
 
@@ -123,7 +118,8 @@ public class AddItemController {
         // the only things required are item name and category
         if (itemName.length() == 0) {
             return false;
-        } if (itemModel.getItemCategory().length() == 0) {
+        }
+        if (itemModel.getItemCategory().length() == 0) {
             return false;
         }
 
