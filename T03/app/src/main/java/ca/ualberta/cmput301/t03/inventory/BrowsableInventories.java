@@ -39,6 +39,10 @@ public class BrowsableInventories implements Filterable<Item>, Observer, Observa
     private FriendsList friendList;
     private ArrayList<Item> list;
 
+    private Thread constructorThread;
+    public Thread getConstructorThread() {
+        return constructorThread;
+    }
 
     @Transient
     private HashSet<Observer> observers;
@@ -47,7 +51,7 @@ public class BrowsableInventories implements Filterable<Item>, Observer, Observa
     public BrowsableInventories() {
         observers = new HashSet<>();
         list = new ArrayList<Item>();
-        Thread worker = new Thread(new Runnable() {
+        constructorThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -59,7 +63,7 @@ public class BrowsableInventories implements Filterable<Item>, Observer, Observa
 
             }
         });
-        worker.start();
+
     }
 
     public Thread getBrowsables() {
