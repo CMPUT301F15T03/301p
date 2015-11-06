@@ -32,6 +32,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import org.parceler.Parcels;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -59,9 +61,6 @@ public class EditItemView extends AppCompatActivity {
         setContentView(R.layout.content_edit_item_view);
 
         final UUID itemUUID = UUID.fromString(getIntent().getStringExtra("ITEM_UUID"));
-
-        Configuration c = new Configuration(this.getBaseContext());
-        c.getApplicationUserName();
 
         user = PrimaryUser.getInstance();
 

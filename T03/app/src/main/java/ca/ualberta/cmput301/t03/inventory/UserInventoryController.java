@@ -53,10 +53,4 @@ public class UserInventoryController {
         inventory.addItem(item);
     }
 
-    public void inspectItem(Item item){
-        Intent intent = new Intent(context, EditItemView.class);
-        intent.putExtra("ITEM_UUID", item.getUuid().toString());
-        context.startActivity(intent);
-    }
-
 }

@@ -96,9 +96,6 @@ public class ViewProfileFragment extends Fragment implements Observer {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final Configuration c = new Configuration(getContext());
-
-
 
         if (getArguments() != null) {
 //            String username = getArguments().getString(ARG_PARAM1);
