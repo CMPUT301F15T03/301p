@@ -120,6 +120,7 @@ public class Trade implements Observable {
         this.dataManager = new CachedDataManager(new HttpDataManager(context, true), context, true);
         this.observers = new HashSet<>();
 
+        this.state = new TradeStateComposing();
         this.tradeUUID = UUID.randomUUID();
         this.commitChanges();
     }
