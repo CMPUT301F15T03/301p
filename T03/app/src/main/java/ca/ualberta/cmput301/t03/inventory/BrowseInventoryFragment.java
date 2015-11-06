@@ -46,6 +46,7 @@ import java.util.List;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
+import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.common.exceptions.ExceptionUtils;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
@@ -85,7 +86,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
 
         Configuration c = new Configuration(getActivity().getApplicationContext());
         try{
-            user = new User(c.getApplicationUserName(), mActivity.getApplicationContext());
+            user = PrimaryUser.getInstance();
             model = new BrowsableInventories();
             controller = new BrowseInventoryController(getContext(), model);
         } catch (Exception e){

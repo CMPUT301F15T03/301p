@@ -67,7 +67,7 @@ public class UserInventoryFragment extends Fragment implements Observer {
 
     // TODO: Rename and change types and number of parameters
     public static UserInventoryFragment newInstance() {
-        return  new UserInventoryFragment();
+        return new UserInventoryFragment();
     }
 
     @Override
@@ -76,10 +76,6 @@ public class UserInventoryFragment extends Fragment implements Observer {
         mActivity = getActivity();
 
         positionMap = new HashMap<>();
-
-        final Configuration c = new Configuration(getContext());
-        c.getApplicationUserName();
-
 
         Thread worker = new Thread(new Runnable() {
             @Override
@@ -90,7 +86,6 @@ public class UserInventoryFragment extends Fragment implements Observer {
                     model = user.getInventory();
                     controller = new UserInventoryController(getContext(), model);
 
-
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -98,13 +93,9 @@ public class UserInventoryFragment extends Fragment implements Observer {
                             setupFab(getView());
                         }
                     });
-
-
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
             }
         });
         worker.start();
