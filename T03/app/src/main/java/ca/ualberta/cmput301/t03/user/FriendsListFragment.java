@@ -24,13 +24,11 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -41,19 +39,15 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import org.parceler.Parcels;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
-import ca.ualberta.cmput301.t03.configuration.Configuration;
 
 
 //https://guides.codepath.com/android/using-the-recyclerview
@@ -98,9 +92,6 @@ public class FriendsListFragment extends Fragment implements Observer {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-
-        }
         setHasOptionsMenu(true);
 
         mUser = PrimaryUser.getInstance();
@@ -128,12 +119,6 @@ public class FriendsListFragment extends Fragment implements Observer {
             }
         };
         worker.execute();
-//
-//        ArrayAdapter adapter = new ArrayAdapter(getContext(), R.id.friendsListRecyclerView);
-//
-//        new ArrayAdapter<String>();
-//
-//        mRecyclerView.setAdapter();
     }
 
     public void populateFields() {
@@ -155,48 +140,55 @@ public class FriendsListFragment extends Fragment implements Observer {
         addFriendFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createAlertDialog().show();
+                createAddFriendDialog().show();
             }
         });
         addFriendFab.setImageResource(R.drawable.ic_add_white_24dp);
     }
 
 
+    DialogInterface.OnClickListener addFriendListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
 
-    private AlertDialog createAlertDialog() {
+        }
+    };
+
+
+    private AlertDialog createAddFriendDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        View dialogContent = View.inflate(getContext(), R.layout.content_add_friend_dialog, null);
+        final EditText e = (EditText) dialogContent.findViewById(R.id.addFriendEditText);
 
-        final EditText e = new EditText(getContext());
-        builder.setView(e); //todo replace with layout
+        builder.setView(dialogContent); //todo replace with layout
         builder.setCancelable(false);
         builder.setNegativeButton("Cancel", null);
-        builder.setPositiveButton("Add", null);
+        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                final String usr =  e.getText().toString().trim();
+
+                AsyncTask t = new AsyncTask() {
+                    @Override
+                    protected Object doInBackground(Object[] params) {
+
+                        if (usr.equals("")) return null;
+                        try {
+                            mController.addFriend(usr);
+                        } catch (IOException e1) {
+                            Snackbar.make(getView(), "There was a problem with the network", Snackbar.LENGTH_SHORT);
+                        } catch (UserNotFoundException e2) {
+                            Snackbar.make(getView(), String.format("User %s does not exist", usr), Snackbar.LENGTH_SHORT).show();
+                        } catch (UserAlreadyAddedException e1) {
+                            Snackbar.make(getView(), String.format("User %s is already added!", usr), Snackbar.LENGTH_SHORT).show();
+                        }
+                        return null;
+                    }
+                };
+                t.execute();
+            }
+        });
         builder.setTitle("Add a Friend");
-        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                String usr = e.getText().toString();
-                if (usr.equals("")) return;
-                try {
-                    mController.addFriend(usr);
-                } catch (IOException e1) {
-                    Snackbar.make(getView(), "There was a problem with the network", Snackbar.LENGTH_SHORT);
-                } catch (UserNotFoundException e2) {
-                    Snackbar.make(getView(), String.format("User %s does not exist", usr), Snackbar.LENGTH_SHORT).show();
-                } catch (UserAlreadyAddedException e1) {
-                    Snackbar.make(getView(), String.format("User %s is already added!", usr), Snackbar.LENGTH_SHORT).show();
-                }
-
-            }
-        });
-        t.start();
-
-            }
-        });
         AlertDialog d = builder.create();
         return d;
     }
@@ -211,24 +203,10 @@ public class FriendsListFragment extends Fragment implements Observer {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        setupFab();
-
-
-//        setupRecyclerView();
-
-//        setupListView();
-
     }
 
     private void setupListView(){
         mListView = (ListView) getActivity().findViewById(R.id.friendsListListView);
-
-//        FriendsList friendsList = new FriendsList();
-//        friendsList.addFriend(new User("steve", getContext()));
-
-//        FriendsListListAdapter adapter = new FriendsListListAdapter(getContext(), friendsList);
-
-
         mAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, mModel.getFriends());
         mListView.setAdapter(mAdapter);
 
@@ -241,8 +219,6 @@ public class FriendsListFragment extends Fragment implements Observer {
                 Intent intent = new Intent(getActivity(), ViewProfileActivity.class);
                 intent.putExtra("user", Parcels.wrap(user));
                 startActivity(intent);
-
-//                Snackbar.make(getView(), user.getUsername(), Snackbar.LENGTH_SHORT).show();
 
             }
         });
@@ -268,47 +244,6 @@ public class FriendsListFragment extends Fragment implements Observer {
 
     }
 
-
-//    private void setupRecyclerView() {
-//        mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.friendsListRecyclerView);
-//
-//        FriendsList friendsList = new FriendsList();
-//
-//        friendsList.addFriend(new User("steve", getContext()));
-//
-//        FriendsListAdapter adapter = new FriendsListAdapter(friendsList);
-//
-//        mRecyclerView.setAdapter(adapter);
-//
-//        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-//
-//
-//    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-////            mListener.onFragmentInteraction(uri);
-//        }
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-//            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
-
     @Override
     public void update(Observable observable) {
 
@@ -320,21 +255,4 @@ public class FriendsListFragment extends Fragment implements Observer {
             }
         });
     }
-
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-//    public interface OnFragmentInteractionListener {
-//        // TODO: Update argument type and name
-//        public void onFragmentInteraction(Uri uri);
-//    }
-
 }
