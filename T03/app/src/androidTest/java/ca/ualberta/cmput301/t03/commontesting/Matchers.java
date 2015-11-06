@@ -29,6 +29,15 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
 public class Matchers {
+    /**
+     * Based on:
+     * http://stackoverflow.com/questions/21173253/android-espresso-ondata-with-doesnotexist
+     *
+     * Accessed 2 Nov 2015
+     *
+     * @param dataMatcher
+     * @return
+     */
     public static Matcher<View> withAdaptedData(final Matcher<Object> dataMatcher) {
         return new TypeSafeMatcher<View>() {
 
