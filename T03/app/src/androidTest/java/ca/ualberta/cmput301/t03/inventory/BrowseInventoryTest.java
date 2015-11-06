@@ -48,6 +48,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static ca.ualberta.cmput301.t03.commontesting.PauseForAnimation.pause;
 import static java.lang.Thread.sleep;
+import static junit.framework.Assert.fail;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.hasToString;
 
@@ -175,6 +176,7 @@ public class BrowseInventoryTest {
     public void testAddFilterToBrowse() throws Exception{
 
         onView(withId(R.id.addFilterBrowseFab)).perform(click());
+        fail();
     }
 
 
@@ -190,6 +192,7 @@ public class BrowseInventoryTest {
         pause();
 
         PrimaryUserHelper.deleteAndUnloadUserWithFriendThatHasInventory(mActivity.getBaseContext());
+
     }
     /**
      * UC02.03.01

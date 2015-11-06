@@ -134,7 +134,7 @@ public class PrimaryUserHelper {
     public static void tearDown(Context context) throws Exception {
         DataManager dataManager = new CachedDataManager(new HttpDataManager(context, true), context, true);
         Configuration configuration = new Configuration(context);
-        configuration.setApplicationUserName("JUNIT_TEST_USER_DO_NOT_USE_THIS_NAME");
+        configuration.setApplicationUserName(USER_ID);
         dataManager.deleteIfExists(new DataKey(UserProfile.type, configuration.getApplicationUserName()));
         dataManager.deleteIfExists(new DataKey(Inventory.type, configuration.getApplicationUserName()));
         dataManager.deleteIfExists(new DataKey(FriendsList.type, configuration.getApplicationUserName()));
