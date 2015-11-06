@@ -37,10 +37,10 @@
     <string name="httpDataManagerRootUrl">http://cmput301.softwareprocess.es:8080/cmput301f15t03/</string>
     <string name="friendSearch">search</string>
     <string name="trade_tile_blank">A Trade Tile</string>
-    <string name="title_activity_add_item_view">AddItemView</string>
+    <string name="title_activity_add_item_view">Add New Item</string>
 
-    <string name="title_activity_edit_item_view">EditItemView</string>
-    <string name="title_activity_inspect_item_view">EditItemView</string>
+    <string name="title_activity_edit_item_view">Edit Item</string>
+    <string name="title_activity_inspect_item_view">Inspect Item</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="editProfile">Edit Profile</string>
@@ -57,9 +57,9 @@
         <item>Stands</item>
         <item>Photographic Films</item>
     </string-array>
-    <string name="title_activity_edit_profile">EditProfileActivity</string>
+    <string name="title_activity_edit_profile">Edit Profile</string>
     <string name="myProfileLabel">My Profile</string>
-    <string name="title_activity_view_profile">ViewProfileActivity</string>
+    <string name="title_activity_view_profile">View Profile</string>
     <string name="noUserNameToast">Please provide a username</string>
     <string name="userNameTakenToast">That username is taken, try again</string>
     <string name="problemWithNetworkToast">Error with network, try again later</string>
