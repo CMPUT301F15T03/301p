@@ -144,6 +144,7 @@ public class FriendsListFragment extends Fragment implements Observer {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (mModel!=null) mModel.removeObserver(this);
     }
 
     private void setupFab() {
