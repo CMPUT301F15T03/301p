@@ -139,8 +139,8 @@ public class UserInventoryTest {
         /**
          * Methods create and cleanup template user and friends.
          */
-//        PrimaryUserHelper.deleteAndUnloadUserWithFriendThatHasInventory(mActivity.getBaseContext());
-//        PrimaryUserHelper.createAndLoadUserWithFriendThatHasInventory(mActivity.getBaseContext());
+        PrimaryUserHelper.deleteAndUnloadUserWithFriendThatHasInventory(mActivity.getBaseContext());
+        PrimaryUserHelper.createAndLoadUserWithFriendThatHasInventory(mActivity.getBaseContext());
 
         Configuration configuration = new Configuration(InstrumentationRegistry.getInstrumentation().getTargetContext());
         configuration.setApplicationUserName("GENERALINVENTORYFRIEND1");
@@ -168,7 +168,7 @@ public class UserInventoryTest {
      */
     @After
     public void cleanup(){
-//        PrimaryUserHelper.deleteAndUnloadUserWithFriendThatHasInventory(mActivity.getBaseContext());
+        PrimaryUserHelper.deleteAndUnloadUserWithFriendThatHasInventory(mActivity.getBaseContext());
     }
 
     /**
