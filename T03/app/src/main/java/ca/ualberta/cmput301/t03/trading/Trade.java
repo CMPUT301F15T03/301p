@@ -21,7 +21,6 @@
 package ca.ualberta.cmput301.t03.trading;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.google.gson.annotations.Expose;
 
@@ -29,13 +28,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.Set;
 import java.util.UUID;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
-import ca.ualberta.cmput301.t03.common.exceptions.NotImplementedException;
 import ca.ualberta.cmput301.t03.datamanager.CachedDataManager;
 import ca.ualberta.cmput301.t03.datamanager.DataKey;
 import ca.ualberta.cmput301.t03.datamanager.DataManager;
@@ -75,6 +72,7 @@ public class Trade implements Observable {
     @Expose
     private String comments;
 
+    private Context context;
     private DataManager dataManager;
     private Set<Observer> observers;
 
@@ -88,10 +86,10 @@ public class Trade implements Observable {
      */
     public Trade(UUID tradeUUID, Context context) {
         this.tradeUUID = tradeUUID;
-        this.load();
-
+        this.context = context;
         this.dataManager = new CachedDataManager(new HttpDataManager(context, true), context, true);
         this.observers = new HashSet<>();
+        this.load();
     }
 
     /**
@@ -117,6 +115,7 @@ public class Trade implements Observable {
             this.ownersItems.add(item);
         }
 
+        this.context = context;
         this.dataManager = new CachedDataManager(new HttpDataManager(context, true), context, true);
         this.observers = new HashSet<>();
 
@@ -133,22 +132,23 @@ public class Trade implements Observable {
      * - state
      * - borrowersItems
      * - comments
-     *
-     * TODO set all the other private fields on first load()
      */
     private void load() {
         DataKey key = new DataKey(Trade.type, this.getTradeUUID().toString());
         try {
             if (dataManager.keyExists(key)) {
                 Trade t = dataManager.getData(key, Trade.class);
-                this.setState(t.state);
-                this.setBorrowersItems(t.borrowersItems);
-                this.setComments(t.comments);
+                this.state = t.state;
+                this.borrowersItems = t.borrowersItems;
+                this.comments = t.comments;
+
+                this.borrower = new User(t.borrower.getUsername(), context);
+                this.owner = new User(t.owner.getUsername(), context);
+                this.ownersItems = t.ownersItems;
+                this.commitChanges();
             }
         } catch (IOException e) {
             throw new RuntimeException("Failed to load trade with UUID " + this.getTradeUUID().toString());
-        } catch (IllegalTradeModificationException e) {
-            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -253,7 +253,7 @@ public class Trade implements Observable {
     public void setBorrowersItems(ArrayList<Item> newBorrowersItems) throws IllegalTradeModificationException {
         if (!state.isEditable()) {
             String msg = String.format("Trade %s in state %s is uneditable",
-                    getTradeUUID().toString(), getState().toString());
+                    tradeUUID.toString(), state.toString());
             throw new IllegalTradeModificationException(msg);
         }
         this.borrowersItems = newBorrowersItems;
