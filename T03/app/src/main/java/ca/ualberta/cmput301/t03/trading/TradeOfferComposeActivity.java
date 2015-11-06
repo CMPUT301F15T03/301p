@@ -20,6 +20,8 @@
 
 package ca.ualberta.cmput301.t03.trading;
 
+import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -47,6 +49,8 @@ public class TradeOfferComposeActivity extends AppCompatActivity {
     private Trade model;
     private TradeOfferComposeController controller;
 
+    private TextView ownerUsername;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,23 +58,35 @@ public class TradeOfferComposeActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        model = new Trade(Parcels.<User>unwrap(getIntent().getParcelableExtra("trade/compose/borrower")),
-                Parcels.<User>unwrap(getIntent().getParcelableExtra("trade/compose/owner")),
-                new ArrayList<Item>(),
-                new ArrayList<Item>() {{
-                    add(Parcels.<Item>unwrap(getIntent().getParcelableExtra("trade/compose/item")));
-                }},
-                this.getBaseContext());
-        controller = new TradeOfferComposeController(this.getBaseContext(), model);
+        ownerUsername = (TextView) findViewById(R.id.tradeComposeOtherUser);
 
-        final TextView ownerUsername = (TextView) findViewById(R.id.tradeComposeOtherUser);
-
-        runOnUiThread(new Runnable() {
+        AsyncTask worker = new AsyncTask() {
             @Override
-            public void run() {
-                ownerUsername.setText(model.getOwner().getUsername());
+            protected Object doInBackground(Object[] params) {
+                Context c = (Context) params[0];
+                model = new Trade(Parcels.<User>unwrap(getIntent().getParcelableExtra("trade/compose/borrower")),
+                        Parcels.<User>unwrap(getIntent().getParcelableExtra("trade/compose/owner")),
+                        new ArrayList<Item>(),
+                        new ArrayList<Item>() {{
+                            add(Parcels.<Item>unwrap(getIntent().getParcelableExtra("trade/compose/item")));
+                        }},
+                        c);
+                controller = new TradeOfferComposeController(c, model);
+                return null;
             }
-        });
+
+            @Override
+            protected void onPostExecute(Object o) {
+                super.onPostExecute(o);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ownerUsername.setText(model.getOwner().getUsername());
+                    }
+                });
+            }
+        };
+        worker.execute(getBaseContext());
     }
 
     @Override
