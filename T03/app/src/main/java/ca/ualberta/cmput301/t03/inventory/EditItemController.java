@@ -36,7 +36,7 @@ import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.user.User;
 
 /**
- * Created by mmabuyo on 2015-10-29.
+ * Controls editing an item.
  */
 public class EditItemController {
     private Item itemModel;
@@ -45,6 +45,7 @@ public class EditItemController {
     private Inventory inventory;
     private Spinner categorySelect;
     private User user;
+
 
     public EditItemController(View v, Activity activity, Inventory inventory, Item item) {
         this.v = v;
@@ -69,6 +70,9 @@ public class EditItemController {
         });
     }
 
+    /**
+     * Saves edited item to inventory. Should not create a new item.
+     */
     public void saveItemToInventory() {
         // get views and resave
         EditText itemNameText = (EditText) v.findViewById(R.id.itemName);
@@ -106,6 +110,9 @@ public class EditItemController {
         thread.start();
     }
 
+    /**
+     * Controls what happens when Edit button is clicked. Enables fields to be changed by the user.
+     */
     public void editItemButtonClicked() {
         // show save button, upload photos button, and hide edit button
         v.findViewById(R.id.saveItem).setVisibility(View.VISIBLE);
@@ -123,6 +130,10 @@ public class EditItemController {
         v.findViewById(R.id.itemDescription).setFocusableInTouchMode(true);
     }
 
+    /**
+     * Deletes item from inventory.
+     * @param itemid
+     */
     public void deleteItemButtonClicked(UUID itemid) {
         final UUID itemUUID = itemid;
         Thread thread = new Thread(new Runnable() {
@@ -132,8 +143,6 @@ public class EditItemController {
                     inventory = user.getInventory();
                     Item toBeRemoved = inventory.getItems().get(itemUUID);
                     inventory.removeItem(toBeRemoved);
-                    Log.d("REMOVE", "Where is this failing");
-                    //itemModel.commitChanges();
                     activity.finish();
                 } catch (IOException e) {
                     e.printStackTrace();
