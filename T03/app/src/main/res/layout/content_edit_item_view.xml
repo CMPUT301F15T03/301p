@@ -101,7 +101,7 @@
 
                 <Spinner
                     android:id="@+id/itemCategory"
-                    android:layout_width="fill_parent"
+                    android:layout_width="300px"
                     android:layout_height="wrap_content"
                     android:entries="@array/categories_array"/>
             </LinearLayout>

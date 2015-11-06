@@ -17,6 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package ca.ualberta.cmput301.t03.user;
 
 import android.app.Activity;
@@ -49,6 +50,7 @@ import java.util.Collection;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
+import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
 
@@ -99,10 +101,7 @@ public class FriendsListFragment extends Fragment implements Observer {
         }
         setHasOptionsMenu(true);
 
-        Configuration c = new Configuration(getContext());
-        c.getApplicationUserName();
-
-        mUser = new User(c.getApplicationUserName(), getContext());
+        mUser = PrimaryUser.getInstance();
 
         AsyncTask worker = new AsyncTask() {
             @Override
@@ -135,7 +134,7 @@ public class FriendsListFragment extends Fragment implements Observer {
 //        mRecyclerView.setAdapter();
     }
 
-    public void populateFields(){
+    public void populateFields() {
         //do the listview here.
         setupFab();
         setupListView();
@@ -148,7 +147,7 @@ public class FriendsListFragment extends Fragment implements Observer {
         super.onDestroy();
     }
 
-    private void setupFab(){
+    private void setupFab() {
         addFriendFab = (FloatingActionButton)getActivity().findViewById(R.id.addFriendFab);
         addFriendFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -161,7 +160,7 @@ public class FriendsListFragment extends Fragment implements Observer {
 
 
 
-    private AlertDialog createAlertDialog(){
+    private AlertDialog createAlertDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
         final EditText e = new EditText(getContext());
@@ -313,7 +312,6 @@ public class FriendsListFragment extends Fragment implements Observer {
             @Override
             public void run() {
                 mAdapter.notifyDataSetChanged();
-
             }
         });
     }
