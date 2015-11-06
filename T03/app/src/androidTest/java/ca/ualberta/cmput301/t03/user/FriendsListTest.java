@@ -197,9 +197,7 @@ public class FriendsListTest {
                 .perform(click());
         pause();
 
-//        onData(hasToString(TEST_OTHER_USER))
-//                .inAdapterView(withId(R.id.friendsListListView))
-//                .check(matches(withText(TEST_OTHER_USER)));
+
         onView(withId(R.id.viewProfileUsername))
                 .check(matches(allOf(isDisplayed(),
                         withText(TEST_OTHER_USER))));
@@ -241,12 +239,10 @@ public class FriendsListTest {
                 .perform(click());
 
         //assert list does not contain friend
+        onView(withId(R.id.friendsListListView))
+                .check(matches(not(withAdaptedData(hasToString(TEST_OTHER_USER)))));
+        pause();
 
 
     }
-
-
-
-
-
 }
