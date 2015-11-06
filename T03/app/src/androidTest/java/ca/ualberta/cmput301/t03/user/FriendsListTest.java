@@ -109,7 +109,6 @@ public class FriendsListTest {
         mActivity = mActivityRule.getActivity();
 
         pause();
-
         pause();
         onView(withContentDescription("Open navigation drawer")).check(matches(isDisplayed())).perform(click());
         pause();
@@ -221,6 +220,9 @@ public class FriendsListTest {
 
         pause();
         //check friend was not added.
+        onView(withId(R.id.friendsListListView))
+                .check(matches(not(withAdaptedData(hasToString(TEST_OTHER_USER)))));
+        pause();
 
     }
 
