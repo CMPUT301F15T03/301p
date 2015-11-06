@@ -23,6 +23,7 @@ package ca.ualberta.cmput301.t03.user;
 import android.content.Context;
 
 import com.google.gson.annotations.Expose;
+import com.google.gson.reflect.TypeToken;
 
 import org.parceler.Parcel;
 import org.parceler.ParcelConstructor;
@@ -172,9 +173,9 @@ public class User implements Observable, Observer, Comparable<User> {
             DataKey key = new DataKey(Inventory.type, username);
             if (!dataManager.keyExists(key)) {
                 inventory = new Inventory();
-                dataManager.writeData(key, inventory, Inventory.class);
+                dataManager.writeData(key, inventory, new TypeToken<Inventory>(){}.getType());// Inventory.class);
             } else {
-                inventory = dataManager.getData(key, Inventory.class);
+                inventory = dataManager.getData(key, new TypeToken<Inventory>(){}.getType());//Inventory.class);
             }
             inventory.addObserver(this);
         }

@@ -53,6 +53,7 @@ import ca.ualberta.cmput301.t03.user.User;
 
 public class BrowsableInventories implements Filterable<Item>, Observer, Observable {
     private FriendsList friendList;
+    private ArrayList<Item> list;
 
 
     @Transient
@@ -61,6 +62,7 @@ public class BrowsableInventories implements Filterable<Item>, Observer, Observa
 
     public BrowsableInventories() {
         observers = new HashSet<>();
+        list = new ArrayList<Item>();
         Thread worker = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -74,26 +76,33 @@ public class BrowsableInventories implements Filterable<Item>, Observer, Observa
             }
         });
         worker.start();
-
     }
 
-
-
-    public ArrayList<Item> getBrowsables() {
-        Inventory tempInventory = null;
-        ArrayList<Item> list = new ArrayList<Item>();
-
-        for(User friend: friendList.getFriends()){
-            try {
-                tempInventory = friend.getInventory();
-                for (Item item : tempInventory.getItems().values()) {
-                    list.add(item);
+    public Thread getBrowsables() {
+        if (friendList == null){
+            Log.d("Q", "friendList is null");
+            return null;
+        } else {
+            Thread worker = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        for (User friend : friendList.getFriends()) {
+                            for (Item item : friend.getInventory().getItems().values()) {
+                                list.add(item);
+                            }
+                        }
+                    } catch (IOException e) {
+                        throw new RuntimeException("Could not get user and associated friendList");
+                    }
                 }
-                tempInventory = null;
-            }catch (Exception e){ e.printStackTrace(); Log.d("Q", "Couldnt get friend(" + friend.getUsername() + ")'s Inventory");}
+            });
+            return worker;
         }
+    }
 
-        return list;
+    public ArrayList<Item> getList(){
+        return this.list;
     }
 
     @Override
