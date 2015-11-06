@@ -53,6 +53,16 @@ public class InspectItemView extends AppCompatActivity {
         Configuration c = new Configuration(this.getBaseContext());
         c.getApplicationUserName();
 
+        User userFromIntent = Parcels.unwrap(getIntent().getParcelableExtra("user"));
+
+
+        if (userFromIntent==null || PrimaryUser.getInstance().equals(userFromIntent)){
+            user = PrimaryUser.getInstance();
+        } else {
+            user = new User(userFromIntent, getApplicationContext());
+        }
+
+
         user = PrimaryUser.getInstance();
         itemModel = Parcels.unwrap(getIntent().getParcelableExtra("inventory/inspect/item"));
 
