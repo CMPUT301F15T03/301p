@@ -21,6 +21,7 @@
 package ca.ualberta.cmput301.t03.inventory;
 
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
@@ -52,6 +53,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static ca.ualberta.cmput301.t03.commontesting.Matchers.withAdaptedData;
 import static java.lang.Thread.sleep;
+import static junit.framework.Assert.fail;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.not;
@@ -80,7 +82,9 @@ import static ca.ualberta.cmput301.t03.commontesting.PauseForAnimation.pause;
         import org.junit.Test;
         import org.junit.runner.RunWith;
 
-        import static android.support.test.espresso.Espresso.onData;
+import java.io.IOException;
+
+import static android.support.test.espresso.Espresso.onData;
         import static android.support.test.espresso.Espresso.onView;
         import static android.support.test.espresso.action.ViewActions.click;
         import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -107,12 +111,13 @@ import static ca.ualberta.cmput301.t03.commontesting.PauseForAnimation.pause;
         import ca.ualberta.cmput301.t03.MainActivity;
         import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.commontesting.PrimaryUserHelper;
+import ca.ualberta.cmput301.t03.configuration.Configuration;
+import ca.ualberta.cmput301.t03.user.User;
+import ca.ualberta.cmput301.t03.user.UserProfile;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class UserInventoryTest {
-
-    private final String TEST_USER_NAME = "quentin";
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
@@ -130,35 +135,55 @@ public class UserInventoryTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        PrimaryUserHelper.deleteAndUnloadUserWithFriendThatHasInventory(mActivity.getBaseContext());
-        PrimaryUserHelper.createAndLoadUserWithFriendThatHasInventory(mActivity.getBaseContext());
 
+        /**
+         * Methods create and cleanup template user and friends.
+         */
+//        PrimaryUserHelper.deleteAndUnloadUserWithFriendThatHasInventory(mActivity.getBaseContext());
+//        PrimaryUserHelper.createAndLoadUserWithFriendThatHasInventory(mActivity.getBaseContext());
+
+        Configuration configuration = new Configuration(InstrumentationRegistry.getInstrumentation().getTargetContext());
+        configuration.setApplicationUserName("GENERALINVENTORYFRIEND1");
+        User temp = new User(configuration.getApplicationUserName(), InstrumentationRegistry.getInstrumentation().getTargetContext());
+        try{
+            temp.getFriends();
+            temp.getInventory();
+            UserProfile prof = temp.getProfile();
+            prof.commitChanges();
+
+        } catch (IOException e){
+            throw new RuntimeException();
+        }
+
+
+        /**
+         * Go to inventory fragment
+         */
         onView(withContentDescription("Open navigation drawer")).check(matches(isDisplayed())).perform(click());
         onView(withText("Inventory")).check(matches(isDisplayed())).perform(click());
     }
 
+    /**
+     * Method cleanup template user and friends.
+     */
     @After
     public void cleanup(){
-        PrimaryUserHelper.deleteAndUnloadUserWithFriendThatHasInventory(mActivity.getBaseContext());
+//        PrimaryUserHelper.deleteAndUnloadUserWithFriendThatHasInventory(mActivity.getBaseContext());
     }
 
     /**
      *UC1.04.01 - View Own Inventory
-     *
+     * Preconditions: The Current user already has an inventory containing added items.
      * */
     @Test
     public void testViewOwnInventory() throws Exception{
-        onData(hasToString("testItem1"))
-                .inAdapterView(withId(R.id.InventoryListView))
-                .atPosition(0)
-                .check(matches(isDisplayed()));
-        onData(hasToString("testItem2"))
-                .inAdapterView(withId(R.id.InventoryListView))
-                .atPosition(1)
-                .check(matches(isDisplayed()));
-        onData(hasToString("testItem3"))
-                .inAdapterView(withId(R.id.InventoryListView))
-                .atPosition(2)
-                .check(matches(isDisplayed()));
+        /**
+         * Verify that three items are present as configured in the users template.
+         */
+
+        onView(withText("testItem1")).check(matches(isDisplayed()));
+        onView(withText("testItem2")).check(matches(isDisplayed()));
+        onView(withText("testItem3")).check(matches(isDisplayed()));
+
     }
 }

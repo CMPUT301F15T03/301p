@@ -21,6 +21,7 @@
 package ca.ualberta.cmput301.t03.inventory;
 
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
@@ -134,14 +135,13 @@ import static android.support.test.espresso.Espresso.onData;
         import ca.ualberta.cmput301.t03.MainActivity;
         import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.commontesting.PrimaryUserHelper;
+import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.user.User;
 import ca.ualberta.cmput301.t03.user.UserProfile;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class BrowseInventoryTest {
-
-    private final String TEST_USER_NAME = "quentin";
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
@@ -162,15 +162,18 @@ public class BrowseInventoryTest {
         /**
          * Methods create and cleanup template user and friends.
          */
-        PrimaryUserHelper.deleteAndUnloadUserWithFriendThatHasInventory(mActivity.getBaseContext());
-        PrimaryUserHelper.createAndLoadUserWithFriendThatHasInventory(mActivity.getBaseContext());
+//        PrimaryUserHelper.deleteAndUnloadUserWithFriendThatHasInventory(mActivity.getBaseContext());
+//        PrimaryUserHelper.createAndLoadUserWithFriendThatHasInventory(mActivity.getBaseContext());
 
-        User temp = new User("GENERALINVENTORYFRIEND1", mActivity.getBaseContext());
+        Configuration configuration = new Configuration(InstrumentationRegistry.getInstrumentation().getTargetContext());
+        configuration.setApplicationUserName("GENERALINVENTORYFRIEND1");
+        User temp = new User(configuration.getApplicationUserName(), InstrumentationRegistry.getInstrumentation().getTargetContext());
         try{
             temp.getFriends();
             temp.getInventory();
             UserProfile prof = temp.getProfile();
-//            prof.commitChanges();
+            prof.commitChanges();
+
         } catch (IOException e){
             throw new RuntimeException();
         }
@@ -190,7 +193,7 @@ public class BrowseInventoryTest {
      */
     @After
     public void cleanup(){
-        PrimaryUserHelper.deleteAndUnloadUserWithFriendThatHasInventory(mActivity.getBaseContext());
+//        PrimaryUserHelper.deleteAndUnloadUserWithFriendThatHasInventory(mActivity.getBaseContext());
     }
 
     /**
@@ -200,46 +203,19 @@ public class BrowseInventoryTest {
     @Test
     public void testSimpleBrowseSearch() throws Exception{
 
-        //        onView(withContentDescription("Open navigation drawer")).check(matches(isDisplayed())).perform(click());
-//        pause();
-//        onView(withText("Friends")).check(matches(isDisplayed())).perform(click());
-//        pause();
-//        onView(withId(R.id.addFriendFab)).perform(click());
-//        pause();
-//        onView(withClassName(new StringContains("EditText"))).
-//                perform(typeText("FRIENDWITHANINVENTORY"),
-//                        closeSoftKeyboard());
-//        pause();
-//        onView(withText("Add")).
-//                perform(click());
-//        pause();
-//        onData(hasToString("FRIENDWITHANINVENTORY"))
-//                .inAdapterView(withId(R.id.friendsListListView))
-//                .check(matches(isDisplayed()));
-//        pause();
-//        onView(withId(R.id.addFriendFab)).perform(click());
-//        pause();
-//        onView(withClassName(new StringContains("EditText"))).
-//                perform(typeText("FRIENDWITHANINVENTORY2"),
-//                        closeSoftKeyboard());
-//        pause();
-//        onView(withText("Add")).
-//                perform(click());
-//        pause();
-//        onData(hasToString("FRIENDWITHANINVENTORY2"))
-//                .inAdapterView(withId(R.id.friendsListListView))
-//                .check(matches(isDisplayed()));
-//        pause();
-//
-//        onView(withContentDescription("Open navigation drawer")).check(matches(isDisplayed())).perform(click());
-//        pause();
-//        onView(withText("Browse")).check(matches(isDisplayed())).perform(click());
-//        pause();
 
+        onView(withText("testItem1f1")).check(matches(isDisplayed()));
+        onView(withText("testItem2f1")).check(matches(isDisplayed()));
+        try {
+            onView(withText("testItem2f4")).check(matches(isDisplayed()));
+            fail("View should not be displayed");
+        } catch (NoMatchingViewException e) {
+            //pass
+        }
+//        onData(hasToString("testItem1f1"))
+//                .inAdapterView(withId(R.id.BrowseListView)).atPosition(0).onChildView(withId(R.id.tileViewItemName))
+//                .check(matches(isDisplayed()));
 
-        onData(hasToString("testItem1f1"))
-                .inAdapterView(withId(R.id.BrowseListView)).atPosition(0).onChildView(withId(R.id.tileViewItemName))
-                .check(matches(isDisplayed()));
     }
 
     /**
@@ -251,16 +227,22 @@ public class BrowseInventoryTest {
     @Test
     public void testBrowseAllFriendsGeneralSearch() throws Exception{
 
-        onData(hasToString("testItem2f1"))
-                .inAdapterView(withId(R.id.BrowseListView)).atPosition(1).onChildView(withId(R.id.tileViewItemName))
-                .check(matches(isDisplayed()));
-        onData(hasToString("testItem1f2"))
-                .inAdapterView(withId(R.id.BrowseListView)).atPosition(2).onChildView(withId(R.id.tileViewItemName))
-                .check(matches(isDisplayed()));
-        onData(hasToString("testItem2f2"))
-                .inAdapterView(withId(R.id.BrowseListView)).atPosition(3).onChildView(withId(R.id.tileViewItemName))
-                .check(matches(isDisplayed()));
-
+        onView(withText("testItem1f1")).check(matches(isDisplayed()));
+        onView(withText("testItem2f1")).check(matches(isDisplayed()));
+        onView(withText("testItem1f2")).check(matches(isDisplayed()));
+        onView(withText("testItem2f2")).check(matches(isDisplayed()));
+        try {
+            onView(withText("testItem3f1")).check(matches(isDisplayed()));
+            fail("View should not be displayed");
+        } catch (NoMatchingViewException e) {
+            //pass
+        }
+        try {
+            onView(withText("testItem3f2")).check(matches(isDisplayed()));
+            fail("View should not be displayed");
+        } catch (NoMatchingViewException e) {
+            //pass
+        }
     }
 
     /**
@@ -289,12 +271,53 @@ public class BrowseInventoryTest {
         /**
          * Checks that there are two items from the filtered friend
          */
-        onData(hasToString("testItem1f1"))
-                .inAdapterView(withId(R.id.BrowseListView)).atPosition(0).onChildView(withId(R.id.tileViewItemName))
-                .check(matches(isDisplayed()));
-        onData(hasToString("testItem2f1"))
-                .inAdapterView(withId(R.id.BrowseListView)).atPosition(1).onChildView(withId(R.id.tileViewItemName))
-                .check(matches(isDisplayed()));
+        onView(withText("testItem1f1")).check(matches(isDisplayed()));
+        onView(withText("testItem2f1")).check(matches(isDisplayed()));
+        try {
+            onView(withText("testItem1f2")).check(matches(isDisplayed()));
+            fail("View should not be displayed");
+        } catch (NoMatchingViewException e) {
+            //pass
+        }
+    }
+
+    /**
+     *UC3.1.2 BrowseFriendGeneralSearch
+     *Precondition User exists with friends that have inventories,
+     * with both private and public items.
+     * */
+    @Test
+    public void testBrowseFriendFromFriends() throws Exception{
+        /**
+         * Navigate to FriendList and Find Friend
+         */
+        onView(withContentDescription("Open navigation drawer")).check(matches(isDisplayed())).perform(click());
+        pause();
+        onView(withText("Friends")).check(matches(isDisplayed())).perform(click());
+        pause();
+
+        onData(hasToString("FRIENDWITHANINVENTORY"))
+                .inAdapterView(withId(R.id.friendsListListView))
+                .perform(click());
+        pause();
+
+        /**
+         * Click show inventory button
+         */
+        onView(withText("Inventory")).check(matches(isDisplayed())).perform(click());
+        pause();
+
+        /**
+         * Checks that there are two items from the filtered friend
+         */
+        onView(withText("testItem1f1")).check(matches(isDisplayed()));
+        onView(withText("testItem2f1")).check(matches(isDisplayed()));
+        try {
+            onView(withText("testItem3f1")).check(matches(isDisplayed()));
+            fail("View should not be displayed");
+        } catch (NoMatchingViewException e) {
+            //pass
+        }
     }
 
     /**
@@ -325,18 +348,16 @@ public class BrowseInventoryTest {
          * Checks that there are two items from the filtered friends and that they
          * are of category "stands".
          */
-        onData(hasToString("testItem2f1"))
-                .inAdapterView(withId(R.id.BrowseListView)).atPosition(0).onChildView(withId(R.id.tileViewItemName))
-                .check(matches(isDisplayed()));
-        onData(hasToString("Stands"))
-                .inAdapterView(withId(R.id.BrowseListView)).atPosition(0).onChildView(withId(R.id.tileViewItemCategory))
-                .check(matches(isDisplayed()));
-        onData(hasToString("testItem2f2"))
-                .inAdapterView(withId(R.id.BrowseListView)).atPosition(1).onChildView(withId(R.id.tileViewItemName))
-                .check(matches(isDisplayed()));
-        onData(hasToString("stands"))
-                .inAdapterView(withId(R.id.BrowseListView)).atPosition(1).onChildView(withId(R.id.tileViewItemCategory))
-                .check(matches(isDisplayed()));
+
+        onView(withText("testItem2f1")).check(matches(isDisplayed()));
+        onView(withText("testItem2f2")).check(matches(isDisplayed()));
+        onView(withText("Stands")).check(matches(isDisplayed()));
+        try {
+            onView(withText("Cameras")).check(matches(isDisplayed()));
+            fail("View should not be displayed");
+        } catch (NoMatchingViewException e) {
+            //pass
+        }
     }
 
     /**
@@ -378,12 +399,14 @@ public class BrowseInventoryTest {
         /**
          * Checks that there is one item from the filtered friend and that is has category "stand".
          */
-        onData(hasToString("testItem2f1"))
-                .inAdapterView(withId(R.id.BrowseListView)).atPosition(0).onChildView(withId(R.id.tileViewItemName))
-                .check(matches(isDisplayed()));
-        onData(hasToString("Stands"))
-                .inAdapterView(withId(R.id.BrowseListView)).atPosition(0).onChildView(withId(R.id.tileViewItemCategory))
-                .check(matches(isDisplayed()));
+        onView(withText("testItem2f1")).check(matches(isDisplayed()));
+        onView(withText("Stands")).check(matches(isDisplayed()));
+        try {
+            onView(withText("Cameras")).check(matches(isDisplayed()));
+            fail("View should not be displayed");
+        } catch (NoMatchingViewException e) {
+            //pass
+        }
     }
 
     /**
@@ -414,13 +437,8 @@ public class BrowseInventoryTest {
          * Checks that there are two items from the filtered friends and that have the
          * textual string "FX10"
          */
-        onData(hasToString("testItem1f1"))
-                .inAdapterView(withId(R.id.BrowseListView)).atPosition(0).onChildView(withId(R.id.tileViewItemName))
-                .check(matches(isDisplayed()));
-        onData(hasToString("testItem1f2"))
-                .inAdapterView(withId(R.id.BrowseListView)).atPosition(1).onChildView(withId(R.id.tileViewItemName))
-                .check(matches(isDisplayed()));
-
+        onView(withText("testItem1f1")).check(matches(isDisplayed()));
+        onView(withText("testItem1f2")).check(matches(isDisplayed()));
 
     }
 
@@ -463,9 +481,7 @@ public class BrowseInventoryTest {
         /**
          * Checks that there is one items from the filtered friend.
          */
-        onData(hasToString("testItem1f1"))
-                .inAdapterView(withId(R.id.BrowseListView)).atPosition(0).onChildView(withId(R.id.tileViewItemName))
-                .check(matches(isDisplayed()));
+        onView(withText("testItem1f1")).check(matches(isDisplayed()));
     }
 
 
@@ -480,15 +496,10 @@ public class BrowseInventoryTest {
         /**
          * Browse Inventories while online
          */
-        onData(hasToString("testItem2f1"))
-                .inAdapterView(withId(R.id.BrowseListView)).atPosition(1).onChildView(withId(R.id.tileViewItemName))
-                .check(matches(isDisplayed()));
-        onData(hasToString("testItem1f2"))
-                .inAdapterView(withId(R.id.BrowseListView)).atPosition(2).onChildView(withId(R.id.tileViewItemName))
-                .check(matches(isDisplayed()));
-        onData(hasToString("testItem2f2"))
-                .inAdapterView(withId(R.id.BrowseListView)).atPosition(3).onChildView(withId(R.id.tileViewItemName))
-                .check(matches(isDisplayed()));
+        onView(withText("testItem1f1")).check(matches(isDisplayed()));
+        onView(withText("testItem2f1")).check(matches(isDisplayed()));
+        onView(withText("testItem1f2")).check(matches(isDisplayed()));
+        onView(withText("testItem2f2")).check(matches(isDisplayed()));
 
         /**
          * Leave the browse Fragment
@@ -501,7 +512,9 @@ public class BrowseInventoryTest {
         /**
          * Go Offline
          */
-        //TODO GO OFFLINE
+        //TODO NetworkManager.setDeviceOffline();
+        fail();
+        //TODO assertTrue(NetworkManager.deviceIsOffline());
 
         /**
          * Return to Browse
@@ -514,15 +527,10 @@ public class BrowseInventoryTest {
         /**
          * Verify Can still see inventory items while offline.
          */
-        onData(hasToString("testItem2f1"))
-                .inAdapterView(withId(R.id.BrowseListView)).atPosition(1).onChildView(withId(R.id.tileViewItemName))
-                .check(matches(isDisplayed()));
-        onData(hasToString("testItem1f2"))
-                .inAdapterView(withId(R.id.BrowseListView)).atPosition(2).onChildView(withId(R.id.tileViewItemName))
-                .check(matches(isDisplayed()));
-        onData(hasToString("testItem2f2"))
-                .inAdapterView(withId(R.id.BrowseListView)).atPosition(3).onChildView(withId(R.id.tileViewItemName))
-                .check(matches(isDisplayed()));
+        onView(withText("testItem1f1")).check(matches(isDisplayed()));
+        onView(withText("testItem2f1")).check(matches(isDisplayed()));
+        onView(withText("testItem1f2")).check(matches(isDisplayed()));
+        onView(withText("testItem2f2")).check(matches(isDisplayed()));
     }
 
 

@@ -73,10 +73,10 @@ public class PrimaryUserHelper {
             previousUser = configuration.getApplicationUserName();
         }
         configuration.clearApplicationUserName();
+        configuration.setApplicationUserName(FRIEND_WITH_AN_INVENTORY);
 
         User friend = new User(FRIEND_WITH_AN_INVENTORY, context);
-        User friend2 = new User(FRIEND_WITH_AN_INVENTORY2, context);
-        User user = new User(GENERAL_INVENTORY_FRIEND_1, context);
+
         try {
             Inventory friendInventory = friend.getInventory();
 
@@ -111,6 +111,11 @@ public class PrimaryUserHelper {
             friendsfriendList.commitChanges();
             friendProfile.commitChanges();
 
+            configuration.clearApplicationUserName();
+            configuration.setApplicationUserName(FRIEND_WITH_AN_INVENTORY2);
+            User friend2 = new User(FRIEND_WITH_AN_INVENTORY2, context);
+
+
             Inventory friendInventory2 = friend2.getInventory();
 
             Item item1_f2 = new Item("testItem1f2", "testQuality");
@@ -143,6 +148,10 @@ public class PrimaryUserHelper {
             FriendsList friendsfriendList2 = friend2.getFriends();
             friendsfriendList2.commitChanges();
             friendProfile2.commitChanges();
+
+            configuration.clearApplicationUserName();
+            configuration.setApplicationUserName(GENERAL_INVENTORY_FRIEND_1);
+            User user = new User(GENERAL_INVENTORY_FRIEND_1, context);
 
             FriendsList friendsList = user.getFriends();
             friendsList.addFriend(friend);
@@ -181,7 +190,7 @@ public class PrimaryUserHelper {
             e.printStackTrace();
         }
 
-        configuration.setApplicationUserName(GENERAL_INVENTORY_FRIEND_1);
+
     }
 
     public static void deleteAndUnloadUserWithFriendThatHasInventory(Context context){
