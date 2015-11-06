@@ -20,6 +20,7 @@
 
 package ca.ualberta.cmput301.t03.trading;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -27,12 +28,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import org.parceler.Parcels;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
+import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.inventory.Item;
 import ca.ualberta.cmput301.t03.user.User;
@@ -43,10 +48,15 @@ import ca.ualberta.cmput301.t03.user.User;
  */
 public class TradeOfferComposeActivity extends AppCompatActivity {
 
+    private final Activity activity = this;
+
     private Trade model;
     private TradeOfferComposeController controller;
 
     private TextView ownerUsername;
+    private Button offerButton;
+    private Button cancelButton;
+    private Button addItemButton;
 
     /**
      * Sets up the view with all components, the model, and the controller
@@ -61,6 +71,9 @@ public class TradeOfferComposeActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         ownerUsername = (TextView) findViewById(R.id.tradeComposeOtherUser);
+        offerButton = (Button) findViewById(R.id.tradeComposeOffer);
+        cancelButton = (Button) findViewById(R.id.tradeComposeCancel);
+        addItemButton = (Button) findViewById(R.id.tradeComposeAddItem);
 
         AsyncTask worker = new AsyncTask() {
             @Override
@@ -73,6 +86,12 @@ public class TradeOfferComposeActivity extends AppCompatActivity {
                             add(Parcels.<Item>unwrap(getIntent().getParcelableExtra("trade/compose/item")));
                         }},
                         c);
+                try {
+                    model.getBorrower().getTradeList().addTrade(model);
+                    model.getOwner().getTradeList().addTrade(model);
+                } catch (IOException e) {
+                    throw new RuntimeException("Primary User failed to get TradeList");
+                }
                 controller = new TradeOfferComposeController(c, model);
                 return null;
             }
@@ -84,6 +103,34 @@ public class TradeOfferComposeActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         ownerUsername.setText(model.getOwner().getUsername());
+                        offerButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                AsyncTask worker = new AsyncTask() {
+                                    @Override
+                                    protected Object doInBackground(Object[] params) {
+                                        controller.offerTrade();
+                                        return null;
+                                    }
+                                };
+                                worker.execute();
+                                activity.finish();
+                            }
+                        });
+                        cancelButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                AsyncTask worker = new AsyncTask() {
+                                    @Override
+                                    protected Object doInBackground(Object[] params) {
+                                        controller.cancelTrade();
+                                        return null;
+                                    }
+                                };
+                                worker.execute();
+                                activity.finish();
+                            }
+                        });
                     }
                 });
             }

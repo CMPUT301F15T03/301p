@@ -148,29 +148,17 @@ public class UserInventoryTest {
      * */
     @Test
     public void testViewOwnInventory() throws Exception{
-        onView(withId(R.id.addItemInventoryFab))
-                .perform(click());
-
-        // UI: fill in all fields
-        onView(withId(R.id.itemName)).perform(typeText("testItem1"), closeSoftKeyboard());
-        onView(withId(R.id.itemQuality)).perform(typeText(""), closeSoftKeyboard());
-        onView(withId(R.id.itemDescription)).perform(typeText(""), closeSoftKeyboard());
-
-        // add item through UI
-        onView(withId(R.id.addItem)).perform(click());
-        pause();
-
         onData(hasToString("testItem1"))
                 .inAdapterView(withId(R.id.InventoryListView))
                 .atPosition(0)
                 .check(matches(isDisplayed()));
-//        onData(hasToString("testItem2"))
-//                .inAdapterView(withId(R.id.InventoryListView))
-//                .atPosition(1)
-//                .check(matches(isDisplayed()));
-//        onData(hasToString("testItem3"))
-//                .inAdapterView(withId(R.id.InventoryListView))
-//                .atPosition(0)
-//                .check(matches(isDisplayed()));
+        onData(hasToString("testItem2"))
+                .inAdapterView(withId(R.id.InventoryListView))
+                .atPosition(1)
+                .check(matches(isDisplayed()));
+        onData(hasToString("testItem3"))
+                .inAdapterView(withId(R.id.InventoryListView))
+                .atPosition(2)
+                .check(matches(isDisplayed()));
     }
 }

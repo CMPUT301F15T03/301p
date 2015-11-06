@@ -50,6 +50,9 @@ import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
 
 
+/**
+ *
+ */
 public class ViewProfileFragment extends Fragment implements Observer {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "user";
@@ -70,7 +73,7 @@ public class ViewProfileFragment extends Fragment implements Observer {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param user Parameter 1.
+     * @param user The User whose profile should be viewed.
      * @return A new instance of fragment ViewProfileFragment.
      */
     public static ViewProfileFragment newInstance(User user) {

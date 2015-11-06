@@ -30,7 +30,10 @@ import ca.ualberta.cmput301.t03.datamanager.DataManager;
 import ca.ualberta.cmput301.t03.datamanager.HttpDataManager;
 
 /**
- * Created by ross on 15-10-29.
+ * Controller for the FriendsList model.
+ *
+ * Automatically commits changes when friends are
+ * added and removed.
  */
 public class FriendsListController {
 
@@ -47,11 +50,29 @@ public class FriendsListController {
         mDataManager = new HttpDataManager(context);
     }
 
+    /**
+     * WARNING this may hit the network!
+     *
+     * Check if user exists on server.
+     *
+     * @param username Username to check
+     * @return true if user exists on server, false otherwise
+     * @throws IOException
+     */
     public boolean isUserNameTaken(String username) throws IOException {
         return mDataManager.keyExists(new DataKey(UserProfile.type, username));
     }
 
-
+    /**
+     * WARNING this may hit the network!
+     *
+     * Add a User as a friend.
+     *
+     * @param friend The friend to add.
+     * @throws UserNotFoundException
+     * @throws IOException
+     * @throws UserAlreadyAddedException
+     */
     public void addFriend(User friend) throws UserNotFoundException, IOException, UserAlreadyAddedException {
         // Check if friend is already added...
 
@@ -72,15 +93,40 @@ public class FriendsListController {
         }
     }
 
+    /**
+     * WARNING this may hit the network!
+     *
+     * Add a friend by username.
+     *
+     * @param friend Username of the friend to add
+     * @throws IOException
+     * @throws UserNotFoundException
+     * @throws UserAlreadyAddedException
+     */
     public void addFriend(String friend) throws IOException, UserNotFoundException, UserAlreadyAddedException {
         addFriend(new User(friend, mContext));
     }
 
+
+    /**
+     * WARNING this may hit the network!
+     *
+     * Remove a friend.
+     *
+     * @param friend User to remove from FriendsList
+     */
     public void removeFriend(User friend) {
         mFriendsList.removeFriend(friend);
         mFriendsList.commitChanges();
     }
 
+    /**
+     * WARNING this may hit the network!
+     *
+     * Remove a friend by username.
+     *
+     * @param friend String username of the friend to remove.
+     */
     public void removeFriend(String friend) {
         removeFriend(new User(friend, mContext));
     }

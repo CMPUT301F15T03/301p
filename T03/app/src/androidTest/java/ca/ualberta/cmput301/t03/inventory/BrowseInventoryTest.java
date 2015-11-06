@@ -49,6 +49,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static ca.ualberta.cmput301.t03.commontesting.PauseForAnimation.pause;
 import static java.lang.Thread.sleep;
+import static junit.framework.Assert.fail;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.hasToString;
 
@@ -104,7 +105,9 @@ import static org.hamcrest.Matchers.hasToString;
         import org.junit.Test;
         import org.junit.runner.RunWith;
 
-        import static android.support.test.espresso.Espresso.onData;
+import java.io.IOException;
+
+import static android.support.test.espresso.Espresso.onData;
         import static android.support.test.espresso.Espresso.onView;
         import static android.support.test.espresso.action.ViewActions.click;
         import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -131,6 +134,8 @@ import static org.hamcrest.Matchers.hasToString;
         import ca.ualberta.cmput301.t03.MainActivity;
         import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.commontesting.PrimaryUserHelper;
+import ca.ualberta.cmput301.t03.user.User;
+import ca.ualberta.cmput301.t03.user.UserProfile;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
@@ -154,122 +159,371 @@ public class BrowseInventoryTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
+        /**
+         * Methods create and cleanup template user and friends.
+         */
+        PrimaryUserHelper.deleteAndUnloadUserWithFriendThatHasInventory(mActivity.getBaseContext());
         PrimaryUserHelper.createAndLoadUserWithFriendThatHasInventory(mActivity.getBaseContext());
+
+        User temp = new User("GENERALINVENTORYFRIEND1", mActivity.getBaseContext());
+        try{
+            temp.getFriends();
+            temp.getInventory();
+            UserProfile prof = temp.getProfile();
+//            prof.commitChanges();
+        } catch (IOException e){
+            throw new RuntimeException();
+        }
+
+        /**
+         * Go to browse fragment
+         */
+        onView(withContentDescription("Open navigation drawer")).check(matches(isDisplayed())).perform(click());
+        pause();
+        onView(withText("Browse")).check(matches(isDisplayed())).perform(click());
+        pause();
+
     }
 
+    /**
+     * Methods cleanup template user and friends.
+     */
     @After
     public void cleanup(){
         PrimaryUserHelper.deleteAndUnloadUserWithFriendThatHasInventory(mActivity.getBaseContext());
     }
 
     /**
-     *UC3.1.1 BrowseAllFriendsGeneralSearch
-     *
-     * */
+     * Testing the browse test.
+     * @throws Exception
+     */
     @Test
-    public void testBrowseAllFriendsGeneralSearch() throws Exception{
-        onView(withContentDescription("Open navigation drawer")).check(matches(isDisplayed())).perform(click());
+    public void testSimpleBrowseSearch() throws Exception{
+
+        //        onView(withContentDescription("Open navigation drawer")).check(matches(isDisplayed())).perform(click());
 //        pause();
-        onView(withText("Friends")).check(matches(isDisplayed())).perform(click());
+//        onView(withText("Friends")).check(matches(isDisplayed())).perform(click());
 //        pause();
-        onView(withId(R.id.addFriendFab)).perform(click());
+//        onView(withId(R.id.addFriendFab)).perform(click());
 //        pause();
-        onView(withClassName(new StringContains("EditText"))).
-                perform(typeText("FRIEND_WITH_AN_INVENTORY"),
-                        closeSoftKeyboard());
+//        onView(withClassName(new StringContains("EditText"))).
+//                perform(typeText("FRIENDWITHANINVENTORY"),
+//                        closeSoftKeyboard());
 //        pause();
-        onView(withText("Add")).
-                perform(click());
+//        onView(withText("Add")).
+//                perform(click());
 //        pause();
-        onData(hasToString("FRIEND_WITH_AN_INVENTORY"))
-                .inAdapterView(withId(R.id.friendsListListView))
-                .check(matches(isDisplayed()));
+//        onData(hasToString("FRIENDWITHANINVENTORY"))
+//                .inAdapterView(withId(R.id.friendsListListView))
+//                .check(matches(isDisplayed()));
 //        pause();
-        onView(withId(R.id.addFriendFab)).perform(click());
+//        onView(withId(R.id.addFriendFab)).perform(click());
 //        pause();
-        onView(withClassName(new StringContains("EditText"))).
-                perform(typeText("FRIEND_WITH_AN_INVENTORY2"),
-                        closeSoftKeyboard());
+//        onView(withClassName(new StringContains("EditText"))).
+//                perform(typeText("FRIENDWITHANINVENTORY2"),
+//                        closeSoftKeyboard());
 //        pause();
-        onView(withText("Add")).
-                perform(click());
+//        onView(withText("Add")).
+//                perform(click());
 //        pause();
-        onData(hasToString("FRIEND_WITH_AN_INVENTORY2"))
-                .inAdapterView(withId(R.id.friendsListListView))
-                .check(matches(isDisplayed()));
+//        onData(hasToString("FRIENDWITHANINVENTORY2"))
+//                .inAdapterView(withId(R.id.friendsListListView))
+//                .check(matches(isDisplayed()));
 //        pause();
-        onView(withContentDescription("Open navigation drawer")).check(matches(isDisplayed())).perform(click());
+//
+//        onView(withContentDescription("Open navigation drawer")).check(matches(isDisplayed())).perform(click());
 //        pause();
-        onView(withText("Browse")).check(matches(isDisplayed())).perform(click());
-        pause();
-        onData(hasToString("tileViewItemName=testItem1f1"))
-                .inAdapterView(withId(R.id.BrowseListView))
+//        onView(withText("Browse")).check(matches(isDisplayed())).perform(click());
+//        pause();
+
+
+        onData(hasToString("testItem1f1"))
+                .inAdapterView(withId(R.id.BrowseListView)).atPosition(0).onChildView(withId(R.id.tileViewItemName))
                 .check(matches(isDisplayed()));
     }
 
     /**
-     *UC3.1.2 BrowseFriendGeneralSearch
-     *
+     *UC3.1.1 BrowseAllFriendsGeneralSearch
+     *UC3.2.1 SetPublicBrowseAndSearchInventory
+     * Precondition User exists with friends that have inventories,
+     * with both private and public items.
      * */
-//    @Test
-//    public void testBrowseFriendGeneralSearch() throws Exception{
-//
-//    }
+    @Test
+    public void testBrowseAllFriendsGeneralSearch() throws Exception{
+
+        onData(hasToString("testItem2f1"))
+                .inAdapterView(withId(R.id.BrowseListView)).atPosition(1).onChildView(withId(R.id.tileViewItemName))
+                .check(matches(isDisplayed()));
+        onData(hasToString("testItem1f2"))
+                .inAdapterView(withId(R.id.BrowseListView)).atPosition(2).onChildView(withId(R.id.tileViewItemName))
+                .check(matches(isDisplayed()));
+        onData(hasToString("testItem2f2"))
+                .inAdapterView(withId(R.id.BrowseListView)).atPosition(3).onChildView(withId(R.id.tileViewItemName))
+                .check(matches(isDisplayed()));
+
+    }
+
+    /**
+     *UC3.1.2 BrowseFriendGeneralSearch
+     *Precondition User exists with friends that have inventories,
+     * with both private and public items.
+     * */
+    @Test
+    public void testBrowseFriendGeneralSearch() throws Exception{
+        /**
+         * Adding filter of a friend to view single friends inventory.
+         */
+        //TODO onView(withId(R.id.addFilterButton)).perform(click());
+        onView(withClassName(new StringContains("AddFilterType"))).
+                perform(typeText("friend"),
+                        closeSoftKeyboard());
+        pause();
+        onView(withClassName(new StringContains("AddFilterText"))).
+                perform(typeText("FRIENDWITHANINVENTORY"),
+                        closeSoftKeyboard());
+        pause();
+        onView(withText("Add")).
+                perform(click());
+        pause();
+
+        /**
+         * Checks that there are two items from the filtered friend
+         */
+        onData(hasToString("testItem1f1"))
+                .inAdapterView(withId(R.id.BrowseListView)).atPosition(0).onChildView(withId(R.id.tileViewItemName))
+                .check(matches(isDisplayed()));
+        onData(hasToString("testItem2f1"))
+                .inAdapterView(withId(R.id.BrowseListView)).atPosition(1).onChildView(withId(R.id.tileViewItemName))
+                .check(matches(isDisplayed()));
+    }
 
     /**
      *UC3.1.3 BrowseAllFriendsCategorySearch
-     *
+     *Precondition User exists with friends that have inventories,
+     * with items of two separate categories.
      * */
-//    @Test
-//    public void testBrowseAllFriendsCategorySearch() throws Exception{
-//
-//    }
+    @Test
+    public void testBrowseAllFriendsCategorySearch() throws Exception{
+        /**
+         * Adding filter of a friend to view all friends inventories,
+         * filtering by a given category.
+         */
+        //TODO onView(withId(R.id.addFilterButton)).perform(click());
+        onView(withClassName(new StringContains("AddFilterType"))).
+                perform(typeText("category"),
+                        closeSoftKeyboard());
+        pause();
+        onView(withClassName(new StringContains("AddFilterText"))).
+                perform(typeText("Stands"),
+                        closeSoftKeyboard());
+        pause();
+        onView(withText("Add")).
+                perform(click());
+        pause();
+
+        /**
+         * Checks that there are two items from the filtered friends and that they
+         * are of category "stands".
+         */
+        onData(hasToString("testItem2f1"))
+                .inAdapterView(withId(R.id.BrowseListView)).atPosition(0).onChildView(withId(R.id.tileViewItemName))
+                .check(matches(isDisplayed()));
+        onData(hasToString("Stands"))
+                .inAdapterView(withId(R.id.BrowseListView)).atPosition(0).onChildView(withId(R.id.tileViewItemCategory))
+                .check(matches(isDisplayed()));
+        onData(hasToString("testItem2f2"))
+                .inAdapterView(withId(R.id.BrowseListView)).atPosition(1).onChildView(withId(R.id.tileViewItemName))
+                .check(matches(isDisplayed()));
+        onData(hasToString("stands"))
+                .inAdapterView(withId(R.id.BrowseListView)).atPosition(1).onChildView(withId(R.id.tileViewItemCategory))
+                .check(matches(isDisplayed()));
+    }
 
     /**
      *UC3.1.4 BrowseFriendCategorySearch
-     *
+     *Precondition User exists with friends that have inventories,
+     * with items of two separate categories.
      * */
-//    @Test
-//    public void testBrowseFriendCategorySearch() throws Exception{
-//
-//    }
+    @Test
+    public void testBrowseFriendCategorySearch() throws Exception{
+        /**
+         * Adding filter of a friend and a category to view single friends
+         * inventory of only items pertaining to a given category.
+         */
+        //TODO onView(withId(R.id.addFilterButton)).perform(click());
+        onView(withClassName(new StringContains("AddFilterType"))).
+                perform(typeText("friend"),
+                        closeSoftKeyboard());
+        pause();
+        onView(withClassName(new StringContains("AddFilterText"))).
+                perform(typeText("FRIENDWITHANINVENTORY"),
+                        closeSoftKeyboard());
+        pause();
+        onView(withText("Add")).
+                perform(click());
+        pause();
+        //TODO onView(withId(R.id.addFilterButton)).perform(click());
+        onView(withClassName(new StringContains("AddFilterType"))).
+                perform(typeText("category"),
+                        closeSoftKeyboard());
+        pause();
+        onView(withClassName(new StringContains("AddFilterText"))).
+                perform(typeText("Stands"),
+                        closeSoftKeyboard());
+        pause();
+        onView(withText("Add")).
+                perform(click());
+        pause();
+
+        /**
+         * Checks that there is one item from the filtered friend and that is has category "stand".
+         */
+        onData(hasToString("testItem2f1"))
+                .inAdapterView(withId(R.id.BrowseListView)).atPosition(0).onChildView(withId(R.id.tileViewItemName))
+                .check(matches(isDisplayed()));
+        onData(hasToString("Stands"))
+                .inAdapterView(withId(R.id.BrowseListView)).atPosition(0).onChildView(withId(R.id.tileViewItemCategory))
+                .check(matches(isDisplayed()));
+    }
 
     /**
      *UC3.1.5 BrowseAllFriendsTextualQuerySearch
-     *
+     *Precondition User exists with friends that have inventories,
+     * with items with textual attributes that can be used to filter results.
      * */
-//    @Test
-//    public void testBrowseAllFriendsTextualQuerySearch() throws Exception{
-//
-//    }
+    @Test
+    public void testBrowseAllFriendsTextualQuerySearch() throws Exception{
+        /**
+         * Adding filter of textualQuery to view all friends inventories,
+         * filtering by a given textualQuery.
+         */
+        //TODO onView(withId(R.id.addFilterButton)).perform(click());
+        onView(withClassName(new StringContains("AddFilterType"))).
+                perform(typeText("textual"),
+                        closeSoftKeyboard());
+        pause();
+        onView(withClassName(new StringContains("AddFilterText"))).
+                perform(typeText("FX10"),
+                        closeSoftKeyboard());
+        pause();
+        onView(withText("Add")).
+                perform(click());
+        pause();
+
+        /**
+         * Checks that there are two items from the filtered friends and that have the
+         * textual string "FX10"
+         */
+        onData(hasToString("testItem1f1"))
+                .inAdapterView(withId(R.id.BrowseListView)).atPosition(0).onChildView(withId(R.id.tileViewItemName))
+                .check(matches(isDisplayed()));
+        onData(hasToString("testItem1f2"))
+                .inAdapterView(withId(R.id.BrowseListView)).atPosition(1).onChildView(withId(R.id.tileViewItemName))
+                .check(matches(isDisplayed()));
+
+
+    }
 
     /**
      *UC3.1.6 BrowseFriendTextualQuerySearch
-     *
+     * Precondition User exists with friends that have inventories,
+     * with items with textual attributes that can be used to filter results.
      * */
-//    @Test
-//    public void testBrowseFriendTextualQuerySearch() throws Exception{
-//
-//    }
+    @Test
+    public void testBrowseFriendTextualQuerySearch() throws Exception{
+        /**
+         * Adding filter of a textualQuery and friend to view one friends inventory,
+         * filtered by a given textualQuery.
+         */
+        //TODO onView(withId(R.id.addFilterButton)).perform(click());
+        onView(withClassName(new StringContains("AddFilterType"))).
+                perform(typeText("friend"),
+                        closeSoftKeyboard());
+        pause();
+        onView(withClassName(new StringContains("AddFilterText"))).
+                perform(typeText("FRIENDWITHANINVENTORY"),
+                        closeSoftKeyboard());
+        pause();
+        onView(withText("Add")).
+                perform(click());
+        pause();
+        //TODO onView(withId(R.id.addFilterButton)).perform(click());
+        onView(withClassName(new StringContains("AddFilterType"))).
+                perform(typeText("textual"),
+                        closeSoftKeyboard());
+        pause();
+        onView(withClassName(new StringContains("AddFilterText"))).
+                perform(typeText("FX10"),
+                        closeSoftKeyboard());
+        pause();
+        onView(withText("Add")).
+                perform(click());
+        pause();
 
-    /**
-     *UC3.2.1 SetPublicBrowseAndSearchInventory
-     *
-     * */
-//    @Test
-//    public void testSetPublicBrowseAndSearchInventory() throws Exception{
-//
-//    }
+        /**
+         * Checks that there is one items from the filtered friend.
+         */
+        onData(hasToString("testItem1f1"))
+                .inAdapterView(withId(R.id.BrowseListView)).atPosition(0).onChildView(withId(R.id.tileViewItemName))
+                .check(matches(isDisplayed()));
+    }
+
 
     /**
      *UC3.3.1 OfflineBrowsing
-     *
+     *Precondition User exists with friends that have inventories,
+     * with items with textual attributes that can be used to filter results.
+     * User has enabled caching.
      * */
-//    @Test
-//    public void testOfflineBrowsing() throws Exception{
-//
-//    }
+    @Test
+    public void testOfflineBrowsing() throws Exception{
+        /**
+         * Browse Inventories while online
+         */
+        onData(hasToString("testItem2f1"))
+                .inAdapterView(withId(R.id.BrowseListView)).atPosition(1).onChildView(withId(R.id.tileViewItemName))
+                .check(matches(isDisplayed()));
+        onData(hasToString("testItem1f2"))
+                .inAdapterView(withId(R.id.BrowseListView)).atPosition(2).onChildView(withId(R.id.tileViewItemName))
+                .check(matches(isDisplayed()));
+        onData(hasToString("testItem2f2"))
+                .inAdapterView(withId(R.id.BrowseListView)).atPosition(3).onChildView(withId(R.id.tileViewItemName))
+                .check(matches(isDisplayed()));
+
+        /**
+         * Leave the browse Fragment
+         */
+        onView(withContentDescription("Open navigation drawer")).check(matches(isDisplayed())).perform(click());
+        pause();
+        onView(withText("Inventory")).check(matches(isDisplayed())).perform(click());
+        pause();
+
+        /**
+         * Go Offline
+         */
+        //TODO GO OFFLINE
+
+        /**
+         * Return to Browse
+         */
+        onView(withContentDescription("Open navigation drawer")).check(matches(isDisplayed())).perform(click());
+        pause();
+        onView(withText("Browse")).check(matches(isDisplayed())).perform(click());
+        pause();
+
+        /**
+         * Verify Can still see inventory items while offline.
+         */
+        onData(hasToString("testItem2f1"))
+                .inAdapterView(withId(R.id.BrowseListView)).atPosition(1).onChildView(withId(R.id.tileViewItemName))
+                .check(matches(isDisplayed()));
+        onData(hasToString("testItem1f2"))
+                .inAdapterView(withId(R.id.BrowseListView)).atPosition(2).onChildView(withId(R.id.tileViewItemName))
+                .check(matches(isDisplayed()));
+        onData(hasToString("testItem2f2"))
+                .inAdapterView(withId(R.id.BrowseListView)).atPosition(3).onChildView(withId(R.id.tileViewItemName))
+                .check(matches(isDisplayed()));
+    }
 
 
 }

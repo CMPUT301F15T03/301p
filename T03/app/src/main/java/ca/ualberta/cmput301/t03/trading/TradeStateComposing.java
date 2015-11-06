@@ -27,6 +27,8 @@ import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeStateTransition;
  * class TradeStateComposing implements {@link TradeState}
  */
 public class TradeStateComposing implements TradeState {
+    public final static String stateString = "TradeStateComposing";
+
     /**
      * {@inheritDoc}
      */
@@ -58,14 +60,6 @@ public class TradeStateComposing implements TradeState {
     @Override
     public void offer(Trade trade) {
         trade.setState(new TradeStateOffered());
-        /**
-         * TODO perform tasks needed on offer
-         * - notify borrower, either
-         *   - passively: update elasticsearch via datamanager
-         *   - actively: update elasticsearch, trigger actual notification
-         *   - TODO note: Trades drawer tab should have a (1) when there's new info
-         */
-        throw new NotImplementedException();
     }
 
     /**
@@ -75,12 +69,6 @@ public class TradeStateComposing implements TradeState {
     @Override
     public void cancel(Trade trade) {
         trade.setState(new TradeStateCancelled());
-        /**
-         * TODO perform required tasks on cancel
-         * - update elasticsearch
-         * - notify observers
-         */
-        throw new NotImplementedException();
     }
 
     /**
@@ -105,6 +93,6 @@ public class TradeStateComposing implements TradeState {
 
     @Override
     public String toString() {
-        return "TradeStateComposing";
+        return stateString;
     }
 }

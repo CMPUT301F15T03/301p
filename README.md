@@ -17,3 +17,9 @@
   
 ###Part 3
 UML diagrams can be found [here](https://github.com/CMPUT301F15T03/301p/tree/master/docs/uml). The master UML is [here](https://github.com/CMPUT301F15T03/301p/blob/master/docs/uml/master_uml.pdf).
+
+###Part 4
+ * Javadocs can either be accessed in code, or through exported HTML [here](https://github.com/CMPUT301F15T03/301p/tree/master/docs/javadocs)
+ * UML diagrams can be found [here](https://github.com/CMPUT301F15T03/301p/tree/master/docs/uml). The master UML is [here](https://github.com/CMPUT301F15T03/301p/blob/master/docs/uml/master_uml.pdf).
+ * Updates to the release planning can be seen in the [issues section](https://github.com/CMPUT301F15T03/301p/issues)
+ * References to external sources are present both as inline comments, and in this [wiki page](https://github.com/CMPUT301F15T03/301p/wiki/External-Sources).

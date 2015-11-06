@@ -102,3 +102,4 @@ public interface TradeState {
      */
     void decline(Trade trade) throws IllegalTradeStateTransition;
 }
+

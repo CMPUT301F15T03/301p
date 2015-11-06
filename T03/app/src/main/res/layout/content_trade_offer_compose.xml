@@ -84,11 +84,11 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/tradeComposeConfirm"
+            android:id="@+id/tradeComposeOffer"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Confirm" />
+            android:text="Offer" />
 
         <Button
             android:id="@+id/tradeComposeCancel"
