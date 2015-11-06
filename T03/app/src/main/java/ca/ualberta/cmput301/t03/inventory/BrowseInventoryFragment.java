@@ -130,12 +130,13 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
         return v;
     }
 
-    private void setupListView(){
-        Thread worker = model.getBrowsables();
+    private void setupListView() {
+        Thread tGetBrowsables = model.getBrowsables();
         ExecutorService pool = Executors.newSingleThreadExecutor();
-        pool.submit(worker);
+        pool.submit(model.getConstructorThread());
+        pool.submit(tGetBrowsables);
 
-        worker = new Thread(new Runnable() {
+        Thread tAddToListView = new Thread(new Runnable() {
             @Override
             public void run() {
                 getActivity().runOnUiThread(new Runnable() {
@@ -149,12 +150,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
                 });
             }
         });
-        try{
-            worker.join();
-        } catch (InterruptedException e){
-
-        }
-        pool.submit(worker);
+        pool.submit(tAddToListView);
         pool.shutdown();
     }
 
