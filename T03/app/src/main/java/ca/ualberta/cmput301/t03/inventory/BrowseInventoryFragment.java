@@ -22,6 +22,7 @@ package ca.ualberta.cmput301.t03.inventory;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -35,6 +36,7 @@ import android.widget.Toast;
 
 import org.parceler.Parcels;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
@@ -111,7 +113,6 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 inspectItem(allItems.get(position));
                 Toast.makeText(mActivity.getBaseContext(), "Inspect Item", Toast.LENGTH_SHORT).show();
-
             }
         });
 
@@ -162,13 +163,31 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
      * Starts intent for inspecting item
      * @param item
      */
-    public void inspectItem(Item item){
+    public void inspectItem(Item item) {
+        AsyncTask<Item, Void, Intent> findItemOwnerAndStartInspectItemActivity = new AsyncTask<Item, Void, Intent>() {
+            @Override
+            protected Intent doInBackground(Item[] items) {
+                Intent intent = new Intent(getContext(), InspectItemView.class);
+                intent.putExtra("inventory/inspect/item", Parcels.wrap(items[0]));
+                try {
+                    for (User friend : PrimaryUser.getInstance().getFriends().getFriends()) {
+                        if (friend.getInventory().getItems().containsKey(items[0].getUuid())) {
+                            intent.putExtra("user", Parcels.wrap(friend));
+                        }
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return intent;
+            }
 
-        Intent intent = new Intent(getContext(), InspectItemView.class);
-        intent.putExtra("user", Parcels.wrap(user));
-        intent.putExtra("inventory/inspect/item", Parcels.wrap(item));
-
-        startActivity(intent);
+            @Override
+            protected void onPostExecute(Intent i) {
+                super.onPostExecute(i);
+                startActivity(i);
+            }
+        };
+        findItemOwnerAndStartInspectItemActivity.execute(item);
     }
 
     /**

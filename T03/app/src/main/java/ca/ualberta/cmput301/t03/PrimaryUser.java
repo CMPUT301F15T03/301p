@@ -68,6 +68,7 @@ public class PrimaryUser implements Observer {
                 ourInstance.getInventory();
                 ourInstance.getFriends();
                 ourInstance.getProfile();
+                ourInstance.getTradeList();
             } catch (IOException e) {
                 throw new RuntimeException("Issue grabbing User's fields");
             }

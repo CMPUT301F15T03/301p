@@ -21,7 +21,7 @@
 package ca.ualberta.cmput301.t03.photo;
 
 /**
- * Created by mmabuyo on 2015-10-29.
+ * Controls attaching photos to an item.
  */
 public class AttachPhotosController {
     private PhotoGallery photoGalleryModel;
@@ -30,7 +30,18 @@ public class AttachPhotosController {
         this.photoGalleryModel = photoGalleryModel;
     }
 
+    /**
+     * Selects photo from a user's collection of photos.
+     */
     public void selectPhoto() { throw new UnsupportedOperationException(); }
+
+    /**
+     * Unselects photo from a user's collection of photos.
+     */
     public void unselectPhoto() { throw new UnsupportedOperationException(); }
+
+    /**
+     * User has finished selecting photos from the item.
+     */
     public void finishSelection() { throw new UnsupportedOperationException(); }
 }

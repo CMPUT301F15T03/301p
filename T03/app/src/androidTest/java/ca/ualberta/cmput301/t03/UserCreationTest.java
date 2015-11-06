@@ -111,7 +111,7 @@ public class UserCreationTest extends ActivityInstrumentationTestCase2{
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                userNameEditText.setText("JUNIT_TEST_USER_DO_NOT_USE_THIS_NAME");
+                userNameEditText.setText(PrimaryUserHelper.USER_ID);
                 doneButton.performClick();
             }
         });
@@ -120,6 +120,7 @@ public class UserCreationTest extends ActivityInstrumentationTestCase2{
         android.os.SystemClock.sleep(2500);
         String expectedToast = getInstrumentation().getTargetContext().getString(R.string.userNameTakenToast);
         assertEquals(initActivity.getToast(), expectedToast);
+
 
 
         activity.runOnUiThread(new Runnable() {
