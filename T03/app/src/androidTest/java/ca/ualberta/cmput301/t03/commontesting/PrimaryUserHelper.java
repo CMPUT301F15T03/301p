@@ -43,6 +43,8 @@ public class PrimaryUserHelper {
     public static final String EMAIL = "TESTUSER@gualberta.ca";
     public static final String PHONE = "5555550123";
     public static final String USER_ID = "JUNIT_TEST_USER_DO_NOT_USE_THIS_NAME";
+    public static final String FRIEND_WITH_AN_INVENTORY = "FRIEND_WITH_AN_INVENTORY";
+    public static final String GENERAL_INVENTORY_FRIEND_1 = "GENERAL_INVENTORY_FRIEND_1";
     private static String previousUser;
 
     public static void setup(Context context) throws Exception {
@@ -64,8 +66,6 @@ public class PrimaryUserHelper {
 
 
     public static void createAndLoadUserWithFriendThatHasInventory(Context context){
-        String GENERAL_INVENTORY_FRIEND_1 = "GENERAL_INVENTORY_FRIEND_1";
-        String FRIEND_WITH_AN_INVENTORY = "FRIEND_WITH_AN_INVENTORY";
 
         Configuration configuration = new Configuration(context);
         if (configuration.isApplicationUserNameSet()) {
@@ -73,7 +73,7 @@ public class PrimaryUserHelper {
         }
         configuration.clearApplicationUserName();
 
-        User friend = new User("FRIEND_WITH_AN_INVENTORY", context);
+        User friend = new User(FRIEND_WITH_AN_INVENTORY, context);
         User user = new User(GENERAL_INVENTORY_FRIEND_1, context);
         try {
             Inventory friendInventory = friend.getInventory();
@@ -105,8 +105,6 @@ public class PrimaryUserHelper {
     }
 
     public static void deleteAndUnloadUserWithFriendThatHasInventory(Context context){
-        String GENERAL_INVENTORY_FRIEND_1 = "GENERAL_INVENTORY_FRIEND_1";
-        String FRIEND_WITH_AN_INVENTORY = "FRIEND_WITH_AN_INVENTORY";
 
         DataManager dataManager = new CachedDataManager(new HttpDataManager(context, true), context, true);
         Configuration configuration = new Configuration(context);

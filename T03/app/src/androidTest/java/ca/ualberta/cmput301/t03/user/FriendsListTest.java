@@ -84,8 +84,7 @@ public class FriendsListTest {
      * the {@link ActivityTestRule#getActivity()} method.
      */
 
-    private final String TEST_OTHER_USER = "TEST_USER_DO_NOT_USE_2";
-    private final String TEST_CURRENT_USER = "TEST_USER_DO_NOT_USE_1";
+    private final String TEST_OTHER_USER = "john";
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
