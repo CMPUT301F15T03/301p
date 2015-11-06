@@ -23,7 +23,6 @@ package ca.ualberta.cmput301.t03.user;
 import android.content.Context;
 
 import com.google.gson.annotations.Expose;
-import com.google.gson.reflect.TypeToken;
 
 import org.parceler.Parcel;
 import org.parceler.ParcelConstructor;
@@ -43,6 +42,7 @@ import ca.ualberta.cmput301.t03.datamanager.HttpDataManager;
 import ca.ualberta.cmput301.t03.inventory.BrowsableInventories;
 import ca.ualberta.cmput301.t03.inventory.Inventory;
 import ca.ualberta.cmput301.t03.inventory.Item;
+import ca.ualberta.cmput301.t03.trading.Trade;
 import ca.ualberta.cmput301.t03.trading.TradeList;
 
 /**
@@ -204,16 +204,19 @@ public class User implements Observable, Observer, Comparable<User> {
      */
     public TradeList getTradeList() throws IOException {
         DataKey key = new DataKey(TradeList.type, username);
-        if (tradeList == null) {
-            if (!dataManager.keyExists(key)) {
-                tradeList = new TradeList();
-                dataManager.writeData(key, tradeList, TradeList.class);
-            } else {
-                tradeList = dataManager.getData(key, TradeList.class);
-            }
+        if (tradeList == null && !dataManager.keyExists(key)) {
+            tradeList = new TradeList();
+            dataManager.writeData(key, tradeList, TradeList.class);
         } else {
             tradeList = dataManager.getData(key, TradeList.class);
         }
+        ArrayList<Trade> temp = new ArrayList<>();
+        for (Trade t : tradeList.getTradesAsList()) {
+            temp.add(new Trade(t.getTradeUUID(), context));
+        }
+        tradeList.clear();
+        tradeList.addAll(temp);
+
         tradeList.addObserver(this);
         return tradeList;
     }
