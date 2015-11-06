@@ -28,25 +28,41 @@ import ca.ualberta.cmput301.t03.Observer;
 import java.util.Collection;
 
 /**
- * Created by mmabuyo on 2015-10-29.
+ * Created by mmabuyo on 2015-10-29 .
  */
 public class PhotoGallery {
     private Collection<Observer> observers;
     private Photo photoInFocus;
     private ArrayList<Photo> photos;
 
+    /**
+     * Gets photo that is in current full-view of the phone's screen.
+     * @return
+     */
     public Photo getPhotoInFocus() {
         return photoInFocus;
     }
 
+    /**
+     * Sets photo in focus to be current full-view of the phone's screen.
+     * @param photoInFocus
+     */
     public void setPhotoInFocus(Photo photoInFocus) {
         this.photoInFocus = photoInFocus;
     }
 
+    /**
+     * Retrieves the list of photos for the item.
+     * @return Array list of item's photos.
+     */
     public ArrayList<Photo> getPhotos() {
         return photos;
     }
 
+    /**
+     * Sets the given array list of photos to be the item's photos.
+     * @param photos
+     */
     public void setPhotos(ArrayList<Photo> photos) {
         this.photos = photos;
     }
@@ -54,7 +70,16 @@ public class PhotoGallery {
     public void load() { throw new UnsupportedOperationException(); }
     public void save() { throw new UnsupportedOperationException(); }
 
+    /**
+     * Removes the photo from the item's photo gallery.
+     * @param photo
+     */
     public void removePhoto(Photo photo) { throw new UnsupportedOperationException(); }
+
+    /**
+     * Adds the photo to the item's photo gallery providing it meets the photo limit for an item.
+     * @param photo
+     */
     public void addPhoto(Photo photo) { throw new UnsupportedOperationException(); }
 
 

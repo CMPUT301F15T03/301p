@@ -32,7 +32,7 @@ import android.widget.Toast;
 import ca.ualberta.cmput301.t03.R;
 
 /**
- * Created by mmabuyo on 2015-11-03.
+ * Controls adding an item to user's inventory.
  */
 public class AddItemController {
     Spinner categorySelect;
@@ -66,7 +66,9 @@ public class AddItemController {
         });
     }
 
-
+    /**
+     * Controls adding item to inventory.
+     */
     public void addItemToInventory() {
         // get fields
         EditText itemNameText = (EditText) v.findViewById(R.id.itemName);
@@ -111,6 +113,10 @@ public class AddItemController {
 
     }
 
+    /**
+     * Checks if item's fields are valid.
+     * @return if fields are valid
+     */
     public boolean checkFieldsValid() {
         EditText itemNameText = (EditText) v.findViewById(R.id.itemName);
         String itemName = itemNameText.getText().toString();

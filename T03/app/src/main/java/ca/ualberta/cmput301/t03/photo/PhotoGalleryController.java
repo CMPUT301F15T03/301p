@@ -21,7 +21,7 @@
 package ca.ualberta.cmput301.t03.photo;
 
 /**
- * Created by mmabuyo on 2015-10-29.
+ * Controls the photo gallery for an item.
  */
 public class PhotoGalleryController {
     private PhotoGallery photoGalleryModel;
@@ -30,9 +30,23 @@ public class PhotoGalleryController {
         this.photoGalleryModel = photoGalleryModel;
     }
 
+    /**
+     * Shows user the next photo in the photo gallery in full view, if there is one.
+     */
     public void swipeLeft() { throw new UnsupportedOperationException(); }
+
+    /**
+     * Shows user the previous photo in the photo gallery in full view, if there is one.
+     */
     public void swipeRight() { throw new UnsupportedOperationException(); }
+
+    /**
+     * Brings up the menu if the user wants to download the photo.
+     */
     public void longClick() { throw new UnsupportedOperationException(); }
+
+    /**
+     * Exits PhotoGallery view (no more full screen photo)
+     */
     public void swipeDown() { throw new UnsupportedOperationException(); }
-    public void click() { throw new UnsupportedOperationException(); }
 }
