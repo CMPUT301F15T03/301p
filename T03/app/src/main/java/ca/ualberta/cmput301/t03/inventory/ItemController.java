@@ -30,6 +30,11 @@ public class ItemController {
         this.itemModel = itemModel;
     }
 
-    public void saveToInventory() { throw new UnsupportedOperationException(); }
-    public void addToInventory() { throw new UnsupportedOperationException(); }
+    public void saveToInventory() {
+        throw new UnsupportedOperationException();
+    }
+
+    public void addToInventory() {
+        throw new UnsupportedOperationException();
+    }
 }
