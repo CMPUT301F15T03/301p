@@ -35,6 +35,7 @@ import java.util.HashSet;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
+import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.datamanager.CachedDataManager;
 import ca.ualberta.cmput301.t03.datamanager.DataKey;
 import ca.ualberta.cmput301.t03.datamanager.DataManager;
@@ -281,6 +282,8 @@ public class User implements Observable, Observer, Comparable<User> {
             } catch (IOException e) {
                 throw new RuntimeException("Unable to write trade list changes.");
             }
+        } else if (o.getClass().equals(Configuration.class)){
+            //noop
         } else {
             throw new RuntimeException("No rule found to update User using Observable: " + o.getClass());
         }
