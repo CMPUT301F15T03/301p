@@ -20,19 +20,10 @@
 
 package ca.ualberta.cmput301.t03.user;
 
-import android.app.Activity;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.AsyncTaskLoader;
-import android.support.v4.content.Loader;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Patterns;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +36,6 @@ import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
-import ca.ualberta.cmput301.t03.configuration.Configuration;
 
 
 /**

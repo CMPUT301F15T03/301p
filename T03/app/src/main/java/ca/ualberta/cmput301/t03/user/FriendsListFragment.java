@@ -50,15 +50,12 @@ import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 
 
-//https://guides.codepath.com/android/using-the-recyclerview
-
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
+ * Fragment that displays the User's FriendsList
+ * in a ListView.
  *
- * to handle interaction events.
- * Use the {@link FriendsListFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * The User can also add Friends here, by
+ * pressing the FloatingActionButton.
  */
 public class FriendsListFragment extends Fragment implements Observer {
     private FriendsList mModel;
@@ -121,6 +118,13 @@ public class FriendsListFragment extends Fragment implements Observer {
         worker.execute();
     }
 
+    /**
+     * Callback method after data has been loaded.
+     *
+     * Populates appropriate fields, and sets up
+     * observers.
+     *
+     */
     public void populateFields() {
         //do the listview here.
         setupFab();
@@ -129,12 +133,21 @@ public class FriendsListFragment extends Fragment implements Observer {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();
         if (mModel!=null) mModel.removeObserver(this);
     }
 
+    /**
+     * Helper method to set up the floatingActionButton.
+     *
+     * In this case, the button is used initiate an "add friend"
+     * action.
+     */
     private void setupFab() {
         addFriendFab = (FloatingActionButton)getActivity().findViewById(R.id.addFriendFab);
         addFriendFab.setOnClickListener(new View.OnClickListener() {
@@ -146,15 +159,16 @@ public class FriendsListFragment extends Fragment implements Observer {
         addFriendFab.setImageResource(R.drawable.ic_add_white_24dp);
     }
 
-
-    DialogInterface.OnClickListener addFriendListener = new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-
-        }
-    };
-
-
+    /**
+     * Creates a new AlertDialog which can be
+     * used to add friends.
+     *
+     * The alertDialog contains a single EditText
+     * where the user can enter the username to be
+     * added.
+     *
+     * @return the configured AlertDialog
+     */
     private AlertDialog createAddFriendDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         View dialogContent = View.inflate(getContext(), R.layout.content_add_friend_dialog, null);
@@ -193,6 +207,7 @@ public class FriendsListFragment extends Fragment implements Observer {
         return d;
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -205,6 +220,13 @@ public class FriendsListFragment extends Fragment implements Observer {
         super.onViewCreated(view, savedInstanceState);
     }
 
+    /**
+     * Helper method to set up the friendslist listview.
+     *
+     * Should only be called after model and controller
+     * have been initialized.
+     *
+     */
     private void setupListView(){
         mListView = (ListView) getActivity().findViewById(R.id.friendsListListView);
         mAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, mModel.getFriends());

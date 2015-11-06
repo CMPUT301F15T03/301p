@@ -40,6 +40,14 @@ import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.inventory.BrowseInventoryFragment;
 
+
+/**
+ * A skeleton activity to contain the view profile fragment.
+ *
+ * Use intent.PutExtra with a Parceled user and key "user"
+ * to specify which User's profile should be viewed.
+ *
+ */
 public class ViewProfileActivity extends AppCompatActivity {
 
     @Override
@@ -59,23 +67,5 @@ public class ViewProfileActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().add(R.id.viewProfileFragmentContent, ViewProfileFragment.newInstance(u)).commit();
 
     }
-
-
-//    private void addFragment(){
-//        Fragment fragment = null;
-//        FragmentManager fragmentManager;
-//        Class fragmentClass;
-//
-//        fragmentClass = ViewProfileFragment.class;
-//        try {
-//            fragment = (Fragment) fragmentClass.newInstance();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        fragmentManager = getSupportFragmentManager();
-//        fragmentManager.beginTransaction().add(R.id., fragment).commit();
-//        setTitle(getString(R.string.browseTitle));
-//    }
 
 }
