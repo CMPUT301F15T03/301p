@@ -22,6 +22,8 @@ package ca.ualberta.cmput301.t03.commontesting;
 
 import android.content.Context;
 
+import java.io.IOException;
+
 import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.datamanager.CachedDataManager;
 import ca.ualberta.cmput301.t03.datamanager.DataKey;
@@ -60,38 +62,74 @@ public class PrimaryUserHelper {
         prof.commitChanges();
     }
 
-    public static void setupInventoryFriend1(Context context) throws Exception {
+
+    public static void createAndLoadUserWithFriendThatHasInventory(Context context){
+        String GENERAL_INVENTORY_FRIEND_1 = "GENERAL_INVENTORY_FRIEND_1";
+        String FRIEND_WITH_AN_INVENTORY = "FRIEND_WITH_AN_INVENTORY";
+
         Configuration configuration = new Configuration(context);
         if (configuration.isApplicationUserNameSet()) {
             previousUser = configuration.getApplicationUserName();
         }
         configuration.clearApplicationUserName();
-        configuration.setApplicationUserName("GENERAL_INVENTORY_FRIEND_1");
-        User temp = new User(configuration.getApplicationUserName(), context);
-        temp.getFriends();
-        temp.getInventory();
-        temp.getInventory().addItem(new Item("test", "test"));
-        UserProfile prof = temp.getProfile();
-        prof.setCity("Edmonton");
-        prof.setEmail("TESTUSER1@gualberta.ca");
-        prof.setPhone("5555550123");
-        prof.commitChanges();
+
+        User friend = new User("FRIEND_WITH_AN_INVENTORY", context);
+        User user = new User(GENERAL_INVENTORY_FRIEND_1, context);
+        try {
+            Inventory friendInventory = friend.getInventory();
+            friendInventory.addItem(new Item("TestItem1", "TestItemQuality"));
+            UserProfile friendProfile = friend.getProfile();
+            friendProfile.setCity("Deadmonton");
+            friendProfile.setEmail("friend@email.com");
+            friendProfile.setPhone("1234567891");
+            friendProfile.commitChanges();
+            friendInventory.commitChanges();
+            FriendsList friendsfriendList = friend.getFriends();
+            friendsfriendList.commitChanges();
+
+            FriendsList friendsList = user.getFriends();
+            friendsList.addFriend(friend);
+            UserProfile userProfile = user.getProfile();
+            userProfile.setCity("Deadmonton");
+            userProfile.setEmail("friend@email.com");
+            userProfile.setPhone("1234567891");
+            userProfile.commitChanges();
+            friendsList.commitChanges();
+            Inventory userInventory = user.getInventory();
+            userInventory.commitChanges();
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+
+        configuration.setApplicationUserName(GENERAL_INVENTORY_FRIEND_1);
     }
 
-    public static void tearDownInventoryFriend1(Context context) throws Exception {
+    public static void deleteAndUnloadUserWithFriendThatHasInventory(Context context){
+        String GENERAL_INVENTORY_FRIEND_1 = "GENERAL_INVENTORY_FRIEND_1";
+        String FRIEND_WITH_AN_INVENTORY = "FRIEND_WITH_AN_INVENTORY";
+
         DataManager dataManager = new CachedDataManager(new HttpDataManager(context, true), context, true);
         Configuration configuration = new Configuration(context);
-        configuration.setApplicationUserName("GENERAL_INVENTORY_FRIEND_1");
-        User temp = new User(configuration.getApplicationUserName(), context);
-        dataManager.deleteIfExists(new DataKey(UserProfile.type, configuration.getApplicationUserName()));
-        dataManager.deleteIfExists(new DataKey(Inventory.type, configuration.getApplicationUserName()));
-        dataManager.deleteIfExists(new DataKey(FriendsList.type, configuration.getApplicationUserName()));
-        configuration.clearApplicationUserName();
-        if (previousUser != null) {
-            configuration.setApplicationUserName(previousUser);
+        configuration.setApplicationUserName(GENERAL_INVENTORY_FRIEND_1);
+        try {
+            dataManager.deleteIfExists(new DataKey(UserProfile.type, GENERAL_INVENTORY_FRIEND_1));
+            dataManager.deleteIfExists(new DataKey(Inventory.type, GENERAL_INVENTORY_FRIEND_1));
+            dataManager.deleteIfExists(new DataKey(FriendsList.type, GENERAL_INVENTORY_FRIEND_1));
+
+            dataManager.deleteIfExists(new DataKey(UserProfile.type, FRIEND_WITH_AN_INVENTORY));
+            dataManager.deleteIfExists(new DataKey(Inventory.type, FRIEND_WITH_AN_INVENTORY));
+            dataManager.deleteIfExists(new DataKey(FriendsList.type, FRIEND_WITH_AN_INVENTORY));
+        }catch (IOException e){
+            e.printStackTrace();
         }
-        previousUser = null;
+
+//        configuration.clearApplicationUserName();
+//        if (previousUser != null) {
+//            configuration.setApplicationUserName(previousUser);
+//        }
+//        previousUser = null;
     }
+
 
     public static void tearDown(Context context) throws Exception {
         DataManager dataManager = new CachedDataManager(new HttpDataManager(context, true), context, true);
