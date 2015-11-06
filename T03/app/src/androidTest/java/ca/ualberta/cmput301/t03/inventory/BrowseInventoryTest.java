@@ -26,6 +26,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
 
 import org.hamcrest.core.StringContains;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -135,18 +136,6 @@ import ca.ualberta.cmput301.t03.commontesting.PrimaryUserHelper;
 @LargeTest
 public class BrowseInventoryTest {
 
-    /**
-     * A JUnit {@link org.junit.Rule @Rule} to launch your activity under test. This is a replacement
-     * for {@link android.test.ActivityInstrumentationTestCase2}.
-     * <p>
-     * Rules are interceptors which are executed for each test method and will run before
-     * any of your setup code in the {@link org.junit.Before @Before} method.
-     * <p>
-     * {@link android.support.test.rule.ActivityTestRule} will create and launch of the activity for you and also expose
-     * the activity under test. To get a reference to the activity you can use
-     * the {@link android.support.test.rule.ActivityTestRule#getActivity()} method.
-     */
-
     private final String TEST_USER_NAME = "quentin";
 
     @Rule
@@ -165,62 +154,122 @@ public class BrowseInventoryTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        PrimaryUserHelper.createAndLoadUserWithFriendThatHasInventory(mActivity.getBaseContext());
     }
 
+    @After
+    public void cleanup(){
+        PrimaryUserHelper.deleteAndUnloadUserWithFriendThatHasInventory(mActivity.getBaseContext());
+    }
 
     /**
-     * US02.01.01, UC02.02.01
-     */
+     *UC3.1.1 BrowseAllFriendsGeneralSearch
+     *
+     * */
     @Test
-    public void testAddFilterToBrowse() throws Exception{
-
-        onView(withId(R.id.addFilterBrowseFab)).perform(click());
-    }
-
-
-    @Test
-    public void testTileViewBrowsableInventory() throws Exception{
-        PrimaryUserHelper.createAndLoadUserWithFriendThatHasInventory(mActivity.getBaseContext());
-
+    public void testBrowseAllFriendsGeneralSearch() throws Exception{
         onView(withContentDescription("Open navigation drawer")).check(matches(isDisplayed())).perform(click());
-        pause();
-//        onView(withText("Friends")).check(matches(isDisplayed())).perform(click());
+//        pause();
+        onView(withText("Friends")).check(matches(isDisplayed())).perform(click());
+//        pause();
+        onView(withId(R.id.addFriendFab)).perform(click());
+//        pause();
+        onView(withClassName(new StringContains("EditText"))).
+                perform(typeText("FRIEND_WITH_AN_INVENTORY"),
+                        closeSoftKeyboard());
+//        pause();
+        onView(withText("Add")).
+                perform(click());
+//        pause();
+        onData(hasToString("FRIEND_WITH_AN_INVENTORY"))
+                .inAdapterView(withId(R.id.friendsListListView))
+                .check(matches(isDisplayed()));
+//        pause();
+        onView(withId(R.id.addFriendFab)).perform(click());
+//        pause();
+        onView(withClassName(new StringContains("EditText"))).
+                perform(typeText("FRIEND_WITH_AN_INVENTORY2"),
+                        closeSoftKeyboard());
+//        pause();
+        onView(withText("Add")).
+                perform(click());
+//        pause();
+        onData(hasToString("FRIEND_WITH_AN_INVENTORY2"))
+                .inAdapterView(withId(R.id.friendsListListView))
+                .check(matches(isDisplayed()));
+//        pause();
+        onView(withContentDescription("Open navigation drawer")).check(matches(isDisplayed())).perform(click());
 //        pause();
         onView(withText("Browse")).check(matches(isDisplayed())).perform(click());
         pause();
-
-        PrimaryUserHelper.deleteAndUnloadUserWithFriendThatHasInventory(mActivity.getBaseContext());
+        onData(hasToString("tileViewItemName=testItem1f1"))
+                .inAdapterView(withId(R.id.BrowseListView))
+                .check(matches(isDisplayed()));
     }
+
     /**
-     * UC02.03.01
-     */
+     *UC3.1.2 BrowseFriendGeneralSearch
+     *
+     * */
 //    @Test
-//    public void testRemoveItemFromInventory() throws InterruptedException {
-//
-//        onView(withId(R.id.addItemInventoryFab)).perform(click());
-//        //TODO Ensure Can click delete Intent created and shown.
+//    public void testBrowseFriendGeneralSearch() throws Exception{
 //
 //    }
 
     /**
-     * UC02.05.01
-     */
+     *UC3.1.3 BrowseAllFriendsCategorySearch
+     *
+     * */
 //    @Test
-//    public void testViewFriendProfile() {
-//        onView(withId(R.id.addFriendFab)).perform(click());
-//        onView(withClassName(new StringContains("EditText")))
-//                .perform(typeText(TEST_USER_NAME),
-//                        closeSoftKeyboard());
-//        onView(withText("Add"))
-//                .perform(click());
-//        onData(hasToString(TEST_USER_NAME))
-//                .inAdapterView(withId(R.id.friendsListListView))
-//                .check(matches(isDisplayed()));
+//    public void testBrowseAllFriendsCategorySearch() throws Exception{
 //
-//        onView(withText(TEST_USER_NAME)).perform(click());
-//        onView(withId(R.id.viewProfileUsername))
-//                .check(matches(allOf(isDisplayed(),
-//                        withText(TEST_USER_NAME))));
 //    }
+
+    /**
+     *UC3.1.4 BrowseFriendCategorySearch
+     *
+     * */
+//    @Test
+//    public void testBrowseFriendCategorySearch() throws Exception{
+//
+//    }
+
+    /**
+     *UC3.1.5 BrowseAllFriendsTextualQuerySearch
+     *
+     * */
+//    @Test
+//    public void testBrowseAllFriendsTextualQuerySearch() throws Exception{
+//
+//    }
+
+    /**
+     *UC3.1.6 BrowseFriendTextualQuerySearch
+     *
+     * */
+//    @Test
+//    public void testBrowseFriendTextualQuerySearch() throws Exception{
+//
+//    }
+
+    /**
+     *UC3.2.1 SetPublicBrowseAndSearchInventory
+     *
+     * */
+//    @Test
+//    public void testSetPublicBrowseAndSearchInventory() throws Exception{
+//
+//    }
+
+    /**
+     *UC3.3.1 OfflineBrowsing
+     *
+     * */
+//    @Test
+//    public void testOfflineBrowsing() throws Exception{
+//
+//    }
+
 
 }

@@ -25,7 +25,9 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
 
+import org.hamcrest.CoreMatchers;
 import org.hamcrest.core.StringContains;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -46,12 +48,17 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static ca.ualberta.cmput301.t03.commontesting.Matchers.withAdaptedData;
 import static java.lang.Thread.sleep;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.hasToString;
+import static ca.ualberta.cmput301.t03.commontesting.PauseForAnimation.pause;
+
 
 
 
@@ -99,22 +106,11 @@ import static org.hamcrest.Matchers.hasToString;
 
         import ca.ualberta.cmput301.t03.MainActivity;
         import ca.ualberta.cmput301.t03.R;
+import ca.ualberta.cmput301.t03.commontesting.PrimaryUserHelper;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class UserInventoryTest {
-
-    /**
-     * A JUnit {@link org.junit.Rule @Rule} to launch your activity under test. This is a replacement
-     * for {@link android.test.ActivityInstrumentationTestCase2}.
-     * <p>
-     * Rules are interceptors which are executed for each test method and will run before
-     * any of your setup code in the {@link org.junit.Before @Before} method.
-     * <p>
-     * {@link android.support.test.rule.ActivityTestRule} will create and launch of the activity for you and also expose
-     * the activity under test. To get a reference to the activity you can use
-     * the {@link android.support.test.rule.ActivityTestRule#getActivity()} method.
-     */
 
     private final String TEST_USER_NAME = "quentin";
 
@@ -134,60 +130,47 @@ public class UserInventoryTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        PrimaryUserHelper.deleteAndUnloadUserWithFriendThatHasInventory(mActivity.getBaseContext());
+        PrimaryUserHelper.createAndLoadUserWithFriendThatHasInventory(mActivity.getBaseContext());
 
         onView(withContentDescription("Open navigation drawer")).check(matches(isDisplayed())).perform(click());
         onView(withText("Inventory")).check(matches(isDisplayed())).perform(click());
     }
 
-
-    /**
-     * US02.01.01, UC02.02.01
-     */
-    @Test
-    public void testAddItemToInventory() throws Exception{
-
-        onView(withId(R.id.addItemInventoryFab)).perform(click());
-        //TODO Ensure AddItemActivity Intent created and shown.
-        onView(withId(R.id.itemName)).perform(typeText("TestItem"));
-        onView(withId(R.id.itemQuantity)).perform(typeText("1"));
-        onView(withId(R.id.itemQuality)).perform(typeText("Good"));
-        //TODO SET Spinner to something
-        onView(withId(R.id.itemDescription)).perform(typeText("test test test"));
-        onView(withId(R.id.addItem)).perform(click());
-
-        sleep(4000);
+    @After
+    public void cleanup(){
+        PrimaryUserHelper.deleteAndUnloadUserWithFriendThatHasInventory(mActivity.getBaseContext());
     }
 
     /**
-     * UC02.03.01
-     */
-//    @Test
-//    public void testRemoveItemFromInventory() throws InterruptedException {
-//
-//        onView(withId(R.id.addItemInventoryFab)).perform(click());
-//        //TODO Ensure Can click delete Intent created and shown.
-//
-//    }
+     *UC1.04.01 - View Own Inventory
+     *
+     * */
+    @Test
+    public void testViewOwnInventory() throws Exception{
+        onView(withId(R.id.addItemInventoryFab))
+                .perform(click());
 
-    /**
-     * UC02.05.01
-     */
-//    @Test
-//    public void testViewFriendProfile() {
-//        onView(withId(R.id.addFriendFab)).perform(click());
-//        onView(withClassName(new StringContains("EditText")))
-//                .perform(typeText(TEST_USER_NAME),
-//                        closeSoftKeyboard());
-//        onView(withText("Add"))
-//                .perform(click());
-//        onData(hasToString(TEST_USER_NAME))
-//                .inAdapterView(withId(R.id.friendsListListView))
+        // UI: fill in all fields
+        onView(withId(R.id.itemName)).perform(typeText("testItem1"), closeSoftKeyboard());
+        onView(withId(R.id.itemQuality)).perform(typeText(""), closeSoftKeyboard());
+        onView(withId(R.id.itemDescription)).perform(typeText(""), closeSoftKeyboard());
+
+        // add item through UI
+        onView(withId(R.id.addItem)).perform(click());
+        pause();
+
+        onData(hasToString("testItem1"))
+                .inAdapterView(withId(R.id.InventoryListView))
+                .atPosition(0)
+                .check(matches(isDisplayed()));
+//        onData(hasToString("testItem2"))
+//                .inAdapterView(withId(R.id.InventoryListView))
+//                .atPosition(1)
 //                .check(matches(isDisplayed()));
-//
-//        onView(withText(TEST_USER_NAME)).perform(click());
-//        onView(withId(R.id.viewProfileUsername))
-//                .check(matches(allOf(isDisplayed(),
-//                        withText(TEST_USER_NAME))));
-//    }
-
+//        onData(hasToString("testItem3"))
+//                .inAdapterView(withId(R.id.InventoryListView))
+//                .atPosition(0)
+//                .check(matches(isDisplayed()));
+    }
 }
