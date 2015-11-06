@@ -46,7 +46,17 @@ import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeStateTransition;
 import ca.ualberta.cmput301.t03.user.User;
 
 /**
- * Model that represents a single trade.
+ * Model which represents a single trade.
+ *
+ * The Trade is immutable <strong>except for</strong> the following:
+ * - state
+ * - borrowersItems
+ * - comments
+ *
+ * In particular, {@link Trade#getTradeUUID()} will remain constant across modifications to these
+ * fields and also across all time and space.
+ *
+ * State is managed by the
  */
 public class Trade implements Observable {
     public final static String type = "Trade";
@@ -68,6 +78,14 @@ public class Trade implements Observable {
     private DataManager dataManager;
     private Set<Observer> observers;
 
+    /**
+     * Builds a Trade object from an existing Trade's UUID.
+     *
+     * This does <strong>not</strong> create a new Trade. Instead, it
+     * builds an object which represents the existing trade with the given UUID.
+     * @param tradeUUID
+     * @param context
+     */
     public Trade(UUID tradeUUID, Context context) {
         this.tradeUUID = tradeUUID;
         this.load();
@@ -76,6 +94,15 @@ public class Trade implements Observable {
         this.observers = new HashSet<>();
     }
 
+    /**
+     * Creates a new Trade, gives it a unique identifier ({@link UUID}), and persists it.
+     * 
+     * @param borrower User offering to trade for the owner's single item
+     * @param owner Owner of the single item
+     * @param borrowersItems Items borrower is offering for the owner's single item
+     * @param ownersItems List of owner's single item
+     * @param context The application context. Used to fetch and save data using @{link DataManager}.
+     */
     public Trade(User borrower, User owner,
                  Collection<Item> borrowersItems, Collection<Item> ownersItems,
                  Context context) {
@@ -97,6 +124,17 @@ public class Trade implements Observable {
         this.commitChanges();
     }
 
+    /**
+     * Fetches this {@link Trade} by {@link UUID} using {@link DataManager}
+     * and updates this Trade object with any new data.
+     *
+     * Fields updated, if changed:
+     * - state
+     * - borrowersItems
+     * - comments
+     *
+     * TODO set all the other private fields on first load()
+     */
     private void load() {
         DataKey key = new DataKey(Trade.type, this.getTradeUUID().toString());
         try {
@@ -113,6 +151,9 @@ public class Trade implements Observable {
         }
     }
 
+    /**
+     * Saves this {@link Trade} by its {@link UUID}
+     */
     private void save() {
         DataKey key = new DataKey(Trade.type, this.getTradeUUID().toString());
         try {
@@ -122,46 +163,92 @@ public class Trade implements Observable {
         }
     }
 
+    /**
+     * Saves this Trade, then notifies its observers of the changes
+     */
     public void commitChanges() {
         save();
         notifyObservers();
     }
 
+    /**
+     * @return True if this Trade is closed. Returns false otherwise.
+     */
     public Boolean isClosed() {
         return getState().isClosed();
     }
 
+    /**
+     * @return True if this Trade is open. Returns false otherwise.
+     */
     public Boolean isOpen() {
         return getState().isOpen();
     }
 
+    /**
+     * @return True if this Trade is editable. Returns false otherwise.
+     */
     public Boolean isEditable() {
         return getState().isEditable();
     }
 
+    /**
+     * Gets the current state of this Trade
+     *
+     * @return TradeState of this Trade
+     */
     public TradeState getState() {
         this.load();
         return state;
     }
 
-    public void setState(TradeState state) {
+    /**
+     * Sets the current state of this trade.
+     *
+     * This is intentionally package-private.
+     * It is only to be used by {@link TradeState} implementations.
+     *
+     * @param state TradeState to set
+     */
+    void setState(TradeState state) {
         this.state = state;
         this.commitChanges();
     }
 
+    /**
+     * Gets the 'borrower' user of this trade
+     *
+     * @return {@link User} who is the 'borrower' of this trade
+     */
     public User getBorrower() {
         return this.borrower;
     }
 
+    /**
+     * Gets the 'owner' user of this trade
+     *
+     * @return {@link User} who is the 'owner' of this trade
+     */
     public User getOwner() {
         return this.owner;
     }
 
+    /**
+     * Gets the items which the 'borrower' {@link User} is offering in this trade
+     *
+     * @return List of {@link Item}s which the borrower {@link User} is offering
+     */
     public ArrayList<Item> getBorrowersItems() {
         this.load();
         return this.borrowersItems;
     }
 
+    /**
+     * Sets the {@link Item}s which the 'borrower' @{link User} is offering in this trade
+     *
+     * @param newBorrowersItems List of {@link Item}s to offer
+     * @throws IllegalTradeModificationException if this trade is no longer in an editable {@link TradeState}
+     */
     public void setBorrowersItems(ArrayList<Item> newBorrowersItems) throws IllegalTradeModificationException {
         if (!state.isEditable()) {
             String msg = String.format("Trade %s in state %s is uneditable",
@@ -172,40 +259,84 @@ public class Trade implements Observable {
         this.commitChanges();
     }
 
+    /**
+     * Gets the items which the 'owner' {@link User} is offering in this trade
+     *
+     * @return List of {@link Item}s which the 'owner' {@link User} is offering
+     */
     public ArrayList<Item> getOwnersItems() {
         return this.ownersItems;
     }
 
+    /**
+     * Gets the unique trade identifier for this trade
+     *
+     * @return Unique trade identifier ({@link UUID})
+     */
     public UUID getTradeUUID() {
         return this.tradeUUID;
     }
 
+    /**
+     * Gets the owner comments for this trade. This becomes non-null once the trade is in state
+     * {@link TradeStateAccepted}
+     *
+     * @return The owner's comments
+     */
     public String getComments() {
         this.load();
         return this.comments;
     }
 
+    /**
+     * Sets the owner comments for this trade
+     *
+     * @param comments The owner's comments
+     */
     public void setComments(String comments) {
         this.comments = comments;
         this.commitChanges();
     }
 
+    /**
+     * Offers this trade. Only a trade with {@link TradeStateComposing} can be offered.
+     *
+     * @throws IllegalTradeStateTransition if this trade cannot be offered
+     */
     public void offer() throws IllegalTradeStateTransition {
         getState().offer(this);
     }
 
+    /**
+     * Cancels this trade. Only a trade with {@link TradeStateComposing} can be cancelled.
+     *
+     * @throws IllegalTradeStateTransition if this trade cannot be cancelled
+     */
     public void cancel() throws IllegalTradeStateTransition {
         getState().cancel(this);
     }
 
+    /**
+     * Accepts this trade. Only a trade with {@link TradeStateOffered} can be accepted.
+     *
+     * @throws IllegalTradeStateTransition if this trade cannot be accepted
+     */
     public void accept() throws IllegalTradeStateTransition {
         getState().accept(this);
     }
 
+    /**
+     * Declines this trade. Only a trade with {@link TradeStateOffered} can be declined.
+     *
+     * @throws IllegalTradeStateTransition if this trade cannot be declined
+     */
     public void decline() throws IllegalTradeStateTransition {
         getState().decline(this);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void notifyObservers() {
         for (Observer o : observers) {
@@ -213,11 +344,19 @@ public class Trade implements Observable {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * @param observer the Observer to add
+     */
     @Override
     public void addObserver(Observer observer) {
         observers.add(observer);
     }
 
+    /**
+     * {@inheritDoc}
+     * @param observer the Observer to remove
+     */
     @Override
     public void removeObserver(Observer observer) {
         observers.remove(observer);
