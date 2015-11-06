@@ -10,5 +10,5 @@
         android:layout_gravity="center_horizontal"
         android:maxLines="1"
         android:inputType="text"
-        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_"/>
+        android:digits="@string/allowable_username_characters"/>
 </LinearLayout>
