@@ -165,10 +165,6 @@ public class BrowseInventoryTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-//        onView(withContentDescription("Open navigation drawer")).check(matches(isDisplayed())).perform(click());
-//        onView(withText("Inventory")).check(matches(isDisplayed())).perform(click());
-//        onView(withText("Browse")).check(matches(isDisplayed())).perform(click());
     }
 
 
@@ -184,36 +180,16 @@ public class BrowseInventoryTest {
 
     @Test
     public void testTileViewBrowsableInventory() throws Exception{
-        PrimaryUserHelper.setupInventoryFriend1(mActivity.getBaseContext());
-        pause();
-        PrimaryUserHelper.setup(mActivity.getBaseContext());
-
-        pause();
-        onView(withContentDescription("Open navigation drawer")).check(matches(isDisplayed())).perform(click());
-        pause();
-        onView(withText("Friends")).check(matches(isDisplayed())).perform(click());
-        pause();
-        onView(withId(R.id.addFriendFab)).perform(click());
-        pause();
-        onView(withClassName(new StringContains("EditText"))).
-                perform(typeText("GENERAL_INVENTORY_FRIEND_1"),
-                        closeSoftKeyboard());
-        pause();
-        onView(withText("Add")).
-                perform(click());
-        pause();
-        onData(hasToString("GENERAL_INVENTORY_FRIEND_1"))
-                .inAdapterView(withId(R.id.friendsListListView))
-                .check(matches(isDisplayed()));
-        pause();
+        PrimaryUserHelper.createAndLoadUserWithFriendThatHasInventory(mActivity.getBaseContext());
 
         onView(withContentDescription("Open navigation drawer")).check(matches(isDisplayed())).perform(click());
         pause();
+//        onView(withText("Friends")).check(matches(isDisplayed())).perform(click());
+//        pause();
         onView(withText("Browse")).check(matches(isDisplayed())).perform(click());
         pause();
 
-        PrimaryUserHelper.tearDown(mActivity.getBaseContext());
-        PrimaryUserHelper.tearDownInventoryFriend1(mActivity.getBaseContext());
+        PrimaryUserHelper.deleteAndUnloadUserWithFriendThatHasInventory(mActivity.getBaseContext());
     }
     /**
      * UC02.03.01
