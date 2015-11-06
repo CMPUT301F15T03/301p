@@ -31,6 +31,7 @@ import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -99,6 +100,18 @@ public class EditProfileFragment extends Fragment implements Observer {
         mEmailField.setText(model.getEmail());
         mPhoneField.setText(model.getPhone());
 
+        mEmailField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus){
+                    TextView t = (TextView) v;
+                    if (controller.isEmailInValid(t.getText().toString())){
+                        Snackbar.make(getView(), "Invalid email!", Snackbar.LENGTH_SHORT).show();
+                        t.setText("");
+                    }
+                }
+            }
+        });
 
         mCityField.addTextChangedListener(controller.getCityWatcher());
         mPhoneField.addTextChangedListener(controller.getPhoneWatcher());
@@ -114,10 +127,10 @@ public class EditProfileFragment extends Fragment implements Observer {
         mEmailField = (EditText) getView().findViewById(R.id.profileEmailEditText);
         mPhoneField = (EditText) getView().findViewById(R.id.profilePhoneEditText);
 
-        Thread worker = new Thread(new Runnable() {
+        AsyncTask worker = new AsyncTask() {
             @Override
-            public void run() {
-                try {
+            protected Object doInBackground(Object[] params) {
+                try{
                     model = user.getProfile();
                     controller = new UserProfileController(model);
 
@@ -129,14 +142,13 @@ public class EditProfileFragment extends Fragment implements Observer {
                     });
 
 
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
+                return null;
             }
-        });
-        worker.start();
+        };
+        worker.execute();
 
 
 

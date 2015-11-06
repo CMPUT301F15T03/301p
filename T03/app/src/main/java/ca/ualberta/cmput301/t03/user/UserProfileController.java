@@ -22,6 +22,7 @@ package ca.ualberta.cmput301.t03.user;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Patterns;
 import android.view.KeyEvent;
 import android.widget.TextView;
 
@@ -106,12 +107,26 @@ public class UserProfileController {
     }
 
     public void setEmail(String email) {
-        mUserProfile.setEmail(email);
+        if(!isEmailInValid(email)){
+            mUserProfile.setEmail(email);
+        }
     }
 
     public void commitChanges() {
         mUserProfile.commitChanges();
     }
+
+
+    /**
+     * Check to see if an email matches the valid syntax.
+     *
+     * @param email email that will be validated
+     * @return true == valid, false == invalid
+     */
+    public boolean isEmailInValid(String email) {
+        return email.trim().isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
 
     public TextWatcher getCityWatcher() {
         return cityWatcher;

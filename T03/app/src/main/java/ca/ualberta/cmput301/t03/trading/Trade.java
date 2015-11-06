@@ -21,10 +21,15 @@
 package ca.ualberta.cmput301.t03.trading;
 
 import android.content.Context;
+import android.util.Log;
 
+import com.google.gson.annotations.Expose;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Set;
 import java.util.UUID;
 
@@ -32,6 +37,7 @@ import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.common.exceptions.NotImplementedException;
 import ca.ualberta.cmput301.t03.datamanager.CachedDataManager;
+import ca.ualberta.cmput301.t03.datamanager.DataKey;
 import ca.ualberta.cmput301.t03.datamanager.DataManager;
 import ca.ualberta.cmput301.t03.datamanager.HttpDataManager;
 import ca.ualberta.cmput301.t03.inventory.Item;
@@ -40,24 +46,34 @@ import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeStateTransition;
 import ca.ualberta.cmput301.t03.user.User;
 
 /**
- * Created by ross on 15-10-29.
+ * Model that represents a single trade.
  */
-public class Trade implements Observable, Observer {
+public class Trade implements Observable {
     public final static String type = "Trade";
+    @Expose
     private TradeState state;
+    @Expose
     private User borrower;
+    @Expose
     private User owner;
+    @Expose
     private ArrayList<Item> borrowersItems;
+    @Expose
     private ArrayList<Item> ownersItems;
+    @Expose
     private UUID tradeUUID;
+    @Expose
     private String comments;
 
     private DataManager dataManager;
     private Set<Observer> observers;
 
-    public Trade(UUID tradeUUID) {
+    public Trade(UUID tradeUUID, Context context) {
         this.tradeUUID = tradeUUID;
         this.load();
+
+        this.dataManager = new CachedDataManager(new HttpDataManager(context, true), context, true);
+        this.observers = new HashSet<>();
     }
 
     public Trade(User borrower, User owner,
@@ -76,37 +92,63 @@ public class Trade implements Observable, Observer {
 
         this.dataManager = new CachedDataManager(new HttpDataManager(context, true), context, true);
         this.observers = new HashSet<>();
+        this.addObserver(this.getOwner());
+        this.addObserver(this.getBorrower());
 
         this.tradeUUID = UUID.randomUUID();
-        // this.save();
+        this.commitChanges();
     }
 
-    public void load() {
-        throw new NotImplementedException();
+    private void load() {
+        DataKey key = new DataKey(Trade.type, this.getTradeUUID().toString());
+        try {
+            if (dataManager.keyExists(key)) {
+                Trade t = dataManager.getData(key, Trade.class);
+                this.setState(t.getState());
+                this.setBorrowersItems(t.getBorrowersItems());
+                this.setComments(t.getComments());
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to load trade with UUID " + this.getTradeUUID().toString());
+        } catch (IllegalTradeModificationException e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
-    public void save() {
-        throw new NotImplementedException();
+    private void save() {
+        DataKey key = new DataKey(Trade.type, this.getTradeUUID().toString());
+        try {
+            dataManager.writeData(key, this, Trade.class);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to save trade with UUID " + this.getTradeUUID().toString());
+        }
+    }
+
+    public void commitChanges() {
+        save();
+        notifyObservers();
     }
 
     public Boolean isClosed() {
-        return state.isClosed();
+        return getState().isClosed();
     }
 
     public Boolean isOpen() {
-        return state.isOpen();
+        return getState().isOpen();
     }
 
     public Boolean isEditable() {
-        return state.isEditable();
+        return getState().isEditable();
     }
 
     public TradeState getState() {
+        this.load();
         return state;
     }
 
     public void setState(TradeState state) {
         this.state = state;
+        this.commitChanges();
     }
 
     public User getBorrower() {
@@ -118,6 +160,7 @@ public class Trade implements Observable, Observer {
     }
 
     public ArrayList<Item> getBorrowersItems() {
+        this.load();
         return this.borrowersItems;
     }
 
@@ -128,6 +171,7 @@ public class Trade implements Observable, Observer {
             throw new IllegalTradeModificationException(msg);
         }
         this.borrowersItems = newBorrowersItems;
+        this.commitChanges();
     }
 
     public ArrayList<Item> getOwnersItems() {
@@ -139,27 +183,29 @@ public class Trade implements Observable, Observer {
     }
 
     public String getComments() {
+        this.load();
         return this.comments;
     }
 
     public void setComments(String comments) {
         this.comments = comments;
+        this.commitChanges();
     }
 
     public void offer() throws IllegalTradeStateTransition {
-        this.state.offer(this);
+        getState().offer(this);
     }
 
     public void cancel() throws IllegalTradeStateTransition {
-        this.state.cancel(this);
+        getState().cancel(this);
     }
 
     public void accept() throws IllegalTradeStateTransition {
-        this.state.accept(this);
+        getState().accept(this);
     }
 
     public void decline() throws IllegalTradeStateTransition {
-        this.state.decline(this);
+        getState().decline(this);
     }
 
     @Override
@@ -177,10 +223,5 @@ public class Trade implements Observable, Observer {
     @Override
     public void removeObserver(Observer observer) {
         observers.remove(observer);
-    }
-
-    @Override
-    public void update(Observable observable) {
-        throw new UnsupportedOperationException();
     }
 }

@@ -31,8 +31,6 @@ import org.parceler.Transient;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.UUID;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
@@ -43,7 +41,7 @@ import ca.ualberta.cmput301.t03.datamanager.HttpDataManager;
 import ca.ualberta.cmput301.t03.inventory.BrowsableInventories;
 import ca.ualberta.cmput301.t03.inventory.Inventory;
 import ca.ualberta.cmput301.t03.inventory.Item;
-import ca.ualberta.cmput301.t03.trading.Trade;
+import ca.ualberta.cmput301.t03.trading.TradeList;
 
 /**
  * Model that represents application Users.
@@ -61,7 +59,7 @@ public class User implements Observable, Observer, Comparable<User> {
     @Transient
     private Inventory inventory;
     @Transient
-    private LinkedHashMap<UUID, Trade> trades;
+    private TradeList tradeList;
     @Transient
     private BrowsableInventories browsableInventories; // not sure we need this
     @Transient
@@ -100,6 +98,10 @@ public class User implements Observable, Observer, Comparable<User> {
         this.context = context;
         this.dataManager = new CachedDataManager(new HttpDataManager(context, true), context, true);
         this.username = username;
+    }
+
+    public User(User user, Context context){
+        this(user.getUsername(), context);
     }
 
     /**
@@ -190,35 +192,27 @@ public class User implements Observable, Observer, Comparable<User> {
     }
 
     /**
-     * Get Trades which the User is involved in.
+     * Get TradeList of trades which the User is involved in.
      * <p/>
      * WARNING: This might hit the network! It must be run
      * asynchronously.
      *
-     * @return LinkedHashMap of Trades the user is involved in.
-     *         This is a map of tradeUUID->Trade.
+     * @return TradeList: trades which the user is involved in
      * @throws IOException
      */
-    public LinkedHashMap<UUID, Trade> getTrades() throws IOException {
-        if (trades == null) {
-            DataKey key = new DataKey(Trade.type, username);
+    public TradeList getTradeList() throws IOException {
+        DataKey key = new DataKey(TradeList.type, username);
+        if (tradeList == null) {
             if (!dataManager.keyExists(key)) {
-                trades = new LinkedHashMap<>();
-                dataManager.writeData(key, trades, Trade.class);
+                tradeList = new TradeList();
+                dataManager.writeData(key, tradeList, TradeList.class);
             } else {
-                trades = dataManager.getData(key, Trade.class);
+                tradeList = dataManager.getData(key, TradeList.class);
             }
+        } else {
+            tradeList = dataManager.getData(key, TradeList.class);
         }
-        return trades;
-    }
-
-    /**
-     * Set Trades which the User is involved in.
-     *
-     * @param trades Trades the User is involved in
-     */
-    public void setTrades(LinkedHashMap<UUID, Trade> trades) {
-        this.trades = trades;
+        return tradeList;
     }
 
     /**
@@ -272,6 +266,14 @@ public class User implements Observable, Observer, Comparable<User> {
             } catch (IOException e) {
                 throw new RuntimeException("Unable to write profile changes.");
             }
+        } else if (o == tradeList) {
+            try {
+                dataManager.writeData(new DataKey(TradeList.type, username), tradeList, TradeList.class);
+            } catch (IOException e) {
+                throw new RuntimeException("Unable to write trade list changes.");
+            }
+        } else {
+            throw new RuntimeException("No rule found to update User using Observable: " + o.getClass());
         }
     }
 
