@@ -36,6 +36,15 @@ import ca.ualberta.cmput301.t03.trading.TradeStateDeclined;
 import ca.ualberta.cmput301.t03.trading.TradeStateOffered;
 import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeStateDeserialization;
 
+/**
+ * class TradeStateDeserialize implements {@link JsonDeserializer<TradeState>}
+ *
+ * This class gives Gson the ability to deserialize a TradeState object.
+ *
+ * @see {@link TradeStateSerializer}
+ * @see <a href="https://github.com/google/gson">https://github.com/google/gson</a>
+ * @see <a href="https://sites.google.com/site/gson/gson-user-guide#TOC-Custom-Serialization-and-Deserialization">Gson Custom Serialization and Deserialization</a>
+ */
 public class TradeStateDeserializer implements JsonDeserializer<TradeState> {
 
     public TradeState deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
