@@ -79,11 +79,7 @@ public class EditProfileFragment extends Fragment implements Observer {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Configuration c = new Configuration(getContext());
-        c.getApplicationUserName();
-
         user = PrimaryUser.getInstance();
-
     }
 
     @Override

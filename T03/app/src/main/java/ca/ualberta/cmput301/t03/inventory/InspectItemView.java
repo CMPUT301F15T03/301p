@@ -50,8 +50,6 @@ public class InspectItemView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_inspect_item_view);
 
-        Configuration c = new Configuration(this.getBaseContext());
-        c.getApplicationUserName();
 
         User userFromIntent = Parcels.unwrap(getIntent().getParcelableExtra("user"));
 
