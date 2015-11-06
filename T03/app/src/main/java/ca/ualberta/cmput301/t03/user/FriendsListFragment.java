@@ -71,7 +71,6 @@ public class FriendsListFragment extends Fragment implements Observer {
     private RecyclerView mRecyclerView;
     private User mUser;
 
-
     private FloatingActionButton addFriendFab;
     private ListView mListView;
     private ArrayAdapter<User> mAdapter;
