@@ -204,7 +204,7 @@ public class User implements Observable, Observer, Comparable<User> {
      */
     public TradeList getTradeList() throws IOException {
         DataKey key = new DataKey(TradeList.type, username);
-        if (tradeList == null && !dataManager.keyExists(key)) {
+        if (!dataManager.keyExists(key)) {
             tradeList = new TradeList();
             dataManager.writeData(key, tradeList, TradeList.class);
         } else {
