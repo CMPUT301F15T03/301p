@@ -213,6 +213,7 @@ public class User implements Observable, Observer, Comparable<User> {
         } else {
             tradeList = dataManager.getData(key, TradeList.class);
         }
+        tradeList.addObserver(this);
         return tradeList;
     }
 
@@ -269,6 +270,13 @@ public class User implements Observable, Observer, Comparable<User> {
             }
         } else if (o == tradeList) {
             try {
+                /**
+                 * TODO solve tradeList update race condition:
+                 * - fetch tradeList again
+                 * - union the fetched tradeList and the local tradeList
+                 * - store the union as the local tradeList
+                 * - write the local tradeList
+                 */
                 dataManager.writeData(new DataKey(TradeList.type, username), tradeList, TradeList.class);
             } catch (IOException e) {
                 throw new RuntimeException("Unable to write trade list changes.");

@@ -24,24 +24,37 @@ import ca.ualberta.cmput301.t03.common.exceptions.NotImplementedException;
 import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeStateTransition;
 
 /**
- * Created by ross on 15-10-29.
+ * class TradeStateComposing implements {@link TradeState}
  */
 public class TradeStateComposing implements TradeState {
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Boolean isClosed() {
         return Boolean.FALSE;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Boolean isOpen() {
         return !isClosed();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Boolean isEditable() {
         return Boolean.TRUE;
     }
 
+    /**
+     * {@inheritDoc}
+     * @param trade Trade to be offered.
+     */
     @Override
     public void offer(Trade trade) {
         trade.setState(new TradeStateOffered());
@@ -55,6 +68,10 @@ public class TradeStateComposing implements TradeState {
         throw new NotImplementedException();
     }
 
+    /**
+     * {@inheritDoc}
+     * @param trade Trade to be cancelled.
+     */
     @Override
     public void cancel(Trade trade) {
         trade.setState(new TradeStateCancelled());
@@ -66,11 +83,21 @@ public class TradeStateComposing implements TradeState {
         throw new NotImplementedException();
     }
 
+    /**
+     * {@inheritDoc}
+     * @param trade Trade to be accepted.
+     * @throws IllegalTradeStateTransition
+     */
     @Override
     public void accept(Trade trade) throws IllegalTradeStateTransition {
         throw new IllegalTradeStateTransition("Trade being composed cannot be accepted");
     }
 
+    /**
+     * {@inheritDoc}
+     * @param trade Trade to be declined.
+     * @throws IllegalTradeStateTransition
+     */
     @Override
     public void decline(Trade trade) throws IllegalTradeStateTransition {
         throw new IllegalTradeStateTransition("Trade being composed cannot be declined");
