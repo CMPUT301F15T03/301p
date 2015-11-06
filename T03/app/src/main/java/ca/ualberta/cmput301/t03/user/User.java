@@ -42,6 +42,7 @@ import ca.ualberta.cmput301.t03.datamanager.HttpDataManager;
 import ca.ualberta.cmput301.t03.inventory.BrowsableInventories;
 import ca.ualberta.cmput301.t03.inventory.Inventory;
 import ca.ualberta.cmput301.t03.inventory.Item;
+import ca.ualberta.cmput301.t03.trading.TradeList;
 
 /**
  * Model that represents application Users.
@@ -58,6 +59,8 @@ public class User implements Observable, Observer, Comparable<User> {
     private UserProfile profile;
     @Transient
     private Inventory inventory;
+    @Transient
+    private TradeList tradeList;
     @Transient
     private BrowsableInventories browsableInventories; // not sure we need this
     @Transient
@@ -96,6 +99,10 @@ public class User implements Observable, Observer, Comparable<User> {
         this.context = context;
         this.dataManager = new CachedDataManager(new HttpDataManager(context, true), context, true);
         this.username = username;
+    }
+
+    public User(User user, Context context){
+        this(user.getUsername(), context);
     }
 
     /**
@@ -186,6 +193,30 @@ public class User implements Observable, Observer, Comparable<User> {
     }
 
     /**
+     * Get TradeList of trades which the User is involved in.
+     * <p/>
+     * WARNING: This might hit the network! It must be run
+     * asynchronously.
+     *
+     * @return TradeList: trades which the user is involved in
+     * @throws IOException
+     */
+    public TradeList getTradeList() throws IOException {
+        DataKey key = new DataKey(TradeList.type, username);
+        if (tradeList == null) {
+            if (!dataManager.keyExists(key)) {
+                tradeList = new TradeList();
+                dataManager.writeData(key, tradeList, TradeList.class);
+            } else {
+                tradeList = dataManager.getData(key, TradeList.class);
+            }
+        } else {
+            tradeList = dataManager.getData(key, TradeList.class);
+        }
+        return tradeList;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -236,6 +267,14 @@ public class User implements Observable, Observer, Comparable<User> {
             } catch (IOException e) {
                 throw new RuntimeException("Unable to write profile changes.");
             }
+        } else if (o == tradeList) {
+            try {
+                dataManager.writeData(new DataKey(TradeList.type, username), tradeList, TradeList.class);
+            } catch (IOException e) {
+                throw new RuntimeException("Unable to write trade list changes.");
+            }
+        } else {
+            throw new RuntimeException("No rule found to update User using Observable: " + o.getClass());
         }
     }
 

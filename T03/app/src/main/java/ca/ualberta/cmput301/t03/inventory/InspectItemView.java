@@ -50,10 +50,16 @@ public class InspectItemView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_inspect_item_view);
 
-        Configuration c = new Configuration(this.getBaseContext());
-        c.getApplicationUserName();
 
-        user = PrimaryUser.getInstance();
+        User userFromIntent = Parcels.unwrap(getIntent().getParcelableExtra("user"));
+
+
+        if (userFromIntent==null || PrimaryUser.getInstance().equals(userFromIntent)){
+            user = PrimaryUser.getInstance();
+        } else {
+            user = new User(userFromIntent, getApplicationContext());
+        }
+
         itemModel = Parcels.unwrap(getIntent().getParcelableExtra("inventory/inspect/item"));
 
         Thread worker = new Thread(new Runnable() {

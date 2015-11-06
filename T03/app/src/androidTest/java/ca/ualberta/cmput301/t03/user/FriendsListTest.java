@@ -1,3 +1,23 @@
+/*
+ * Copyright (C) 2015 Kyle O'Shaughnessy, Ross Anderson, Michelle Mabuyo, John Slevinsky, Udey Rishi, Quentin Lautischer
+ * Photography equipment trading application for CMPUT 301 at the University of Alberta.
+ *
+ * This file is part of {ApplicationName}
+ *
+ * {ApplicationName} is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package ca.ualberta.cmput301.t03.user;
 
 import android.content.Context;
@@ -7,14 +27,19 @@ import android.support.test.runner.AndroidJUnit4;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.LargeTest;
 
+import org.hamcrest.CoreMatchers;
 import org.hamcrest.core.StringContains;
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.longClick;
@@ -40,23 +65,9 @@ import static org.hamcrest.Matchers.is;
 
 import ca.ualberta.cmput301.t03.MainActivity;
 import ca.ualberta.cmput301.t03.R;
+import ca.ualberta.cmput301.t03.commontesting.PrimaryUserHelper;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
 
-/**
- * Copyright 2015 John Slevinsky
- * <p/>
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p/>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p/>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class FriendsListTest {
@@ -82,15 +93,24 @@ public class FriendsListTest {
 
     private MainActivity mActivity = null;
 
+
+    @BeforeClass
+    public static void setupTestUser() throws Exception {
+        PrimaryUserHelper.setup(InstrumentationRegistry.getTargetContext());
+    }
+
+    @AfterClass
+    public static void restoreOriginalUser() throws Exception {
+        PrimaryUserHelper.tearDown(InstrumentationRegistry.getTargetContext());
+    }
+
     @Before
-    public void setActivity() {
+    public void setActivity() throws Exception {
 
         mActivity = mActivityRule.getActivity();
-        InstrumentationRegistry.getInstrumentation();
 
-        Context ctx = InstrumentationRegistry.getTargetContext();
-        Configuration c = new Configuration(ctx);
-        c.setApplicationUserName(TEST_OTHER_USER);
+        pause();
+
         pause();
         onView(withContentDescription("Open navigation drawer")).check(matches(isDisplayed())).perform(click());
         pause();
@@ -98,6 +118,10 @@ public class FriendsListTest {
         pause();
     }
 
+    @After
+    public void tearDown() throws Exception {
+        pause();
+    }
 
     /**
      * US02.01.01, UC02.02.01
@@ -139,7 +163,9 @@ public class FriendsListTest {
                 .inAdapterView(withId(R.id.friendsListListView))
                 .check(matches(isDisplayed()));
         pause();
-        onView(withText(TEST_OTHER_USER)).perform(longClick());
+        onData(hasToString(TEST_OTHER_USER))
+                .inAdapterView(withId(R.id.friendsListListView))
+                .perform(longClick());
         pause();
         onView(withId(R.id.friendsListListView))
                 .check(matches(not(withAdaptedData(hasToString(TEST_OTHER_USER)))));
@@ -167,12 +193,61 @@ public class FriendsListTest {
                 .inAdapterView(withId(R.id.friendsListListView))
                 .check(matches(isDisplayed()));
         pause();
-        onView(withText(TEST_OTHER_USER)).perform(click());
+        onData(hasToString(TEST_OTHER_USER))
+                .inAdapterView(withId(R.id.friendsListListView))
+                .perform(click());
         pause();
+
+//        onData(hasToString(TEST_OTHER_USER))
+//                .inAdapterView(withId(R.id.friendsListListView))
+//                .check(matches(withText(TEST_OTHER_USER)));
         onView(withId(R.id.viewProfileUsername))
                 .check(matches(allOf(isDisplayed(),
                         withText(TEST_OTHER_USER))));
         pause();
     }
+
+
+    /**
+     * US02.01.01, UC02.02.01
+     */
+    @Test
+    public void testAddFriend_pressCancel(){
+        onView(withId(R.id.addFriendFab)).perform(click());
+        pause();
+        onView(withClassName(new StringContains("EditText")))
+                .perform(typeText(TEST_OTHER_USER),
+                        closeSoftKeyboard());
+        pause();
+        onView(withText("Cancel"))
+                .perform(click());
+
+        pause();
+        //check friend was not added.
+
+    }
+
+    /**
+     * US02.01.01, UC02.02.01
+     */
+    @Test
+    public void testAddFriend_emptyInput(){
+        onView(withId(R.id.addFriendFab)).perform(click());
+        pause();
+        onView(withClassName(new StringContains("EditText")))
+                .perform(clearText(),
+                        closeSoftKeyboard());
+        pause();
+        onView(withText("Add"))
+                .perform(click());
+
+        //assert list does not contain friend
+
+
+    }
+
+
+
+
 
 }
