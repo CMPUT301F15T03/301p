@@ -34,6 +34,11 @@ import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.user.FriendsList;
 import ca.ualberta.cmput301.t03.user.User;
 
+
+/**
+ * Model maintains a List of all of the user's friends and a list of all friends inventory items.
+ * Will notify the observing user and any others registered as observers of any change.
+ */
 public class BrowsableInventories implements Filterable<Item>, Observer, Observable {
     private FriendsList friendList;
     private ArrayList<Item> list;
@@ -60,12 +65,15 @@ public class BrowsableInventories implements Filterable<Item>, Observer, Observa
                 } catch (IOException e) {
                     throw new RuntimeException("Could not get user and associated friendList");
                 }
-
             }
         });
 
     }
 
+    /**
+     * Returns thread that can be used to generate updated list of user's friends items async.
+     * @return
+     */
     public Thread getBrowsables() {
         Thread worker = new Thread(new Runnable() {
             @Override
@@ -84,35 +92,59 @@ public class BrowsableInventories implements Filterable<Item>, Observer, Observa
         return worker;
     }
 
+    /**
+     * Return list of all user's freinds Items.
+     * @return list of all friends items
+     */
     public ArrayList<Item> getList() {
         return this.list;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addFilter(Filter filter) {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void removeFilter(Filter filter) {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void clearFilters() {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Item getFilteredItems() {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param observable reference to the Observable that triggered the update()
+     */
     @Override
     public void update(Observable observable) {
         notifyObservers();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void notifyObservers() {
         for (Observer o : observers) {
@@ -120,11 +152,20 @@ public class BrowsableInventories implements Filterable<Item>, Observer, Observa
         }
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param observer the Observer to add
+     */
     @Override
     public void addObserver(Observer observer) {
         observers.add(observer);
     }
-
+    /**
+     * {@inheritDoc}
+     *
+     * @param observer the Observer to remove
+     */
     @Override
     public void removeObserver(Observer observer) {
         observers.remove(observer);
