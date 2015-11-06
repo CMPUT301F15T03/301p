@@ -52,7 +52,7 @@ import ca.ualberta.cmput301.t03.user.ViewProfileFragment;
  * The main view of our application.
  */
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, Observer {
 
     public FragmentManager fragmentManager;
     private TextView sidebarUsernameTextView;
@@ -283,11 +283,31 @@ public class MainActivity extends AppCompatActivity
                         sidebarEmailTextView.setText(email);
                     }
                 });
+                try {
+                    PrimaryUser.getInstance().getProfile().addObserver(MainActivity.this);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 return null;
             }
         };
 
         task.execute();
 
+    }
+
+    @Override
+    public void update(Observable observable) {
+        try {
+            final String email = PrimaryUser.getInstance().getProfile().getEmail();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    sidebarEmailTextView.setText(email);
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
