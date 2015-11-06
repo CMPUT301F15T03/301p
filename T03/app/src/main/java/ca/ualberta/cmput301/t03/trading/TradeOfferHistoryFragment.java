@@ -61,7 +61,6 @@ import ca.ualberta.cmput301.t03.user.ViewProfileActivity;
 public class TradeOfferHistoryFragment extends Fragment implements Observer {
 
     private TradeList model;
-    private List<Trade> adapterModel;
 
     private ListView listView;
     private ArrayAdapter<Trade> adapter;
@@ -91,7 +90,6 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer {
             protected Object doInBackground(Object[] params) {
                 try {
                     model = PrimaryUser.getInstance().getTradeList();
-                    adapterModel = new ArrayList<>(model.getTrades().values());
                     controller = new TradeOfferHistoryController(model);
 
                     getActivity().runOnUiThread(new Runnable() {
@@ -119,7 +117,7 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer {
     private void setupListView() {
         listView = (ListView) getActivity().findViewById(R.id.tradeHistoryListView);
 
-        adapter = new ArrayAdapter<Trade>(getContext(), android.R.layout.simple_list_item_1, adapterModel);
+        adapter = new ArrayAdapter<Trade>(getContext(), android.R.layout.simple_list_item_1, model.getTradesAsList());
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -158,7 +156,6 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                adapterModel = new ArrayList<>(model.getTrades().values());
                 adapter.notifyDataSetChanged();
             }
         });
