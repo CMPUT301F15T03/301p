@@ -30,6 +30,11 @@ import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.datamanager.DataManager;
 import ca.ualberta.cmput301.t03.datamanager.HttpDataManager;
 
+/**
+ * Controller for the BrowsableInventories model
+ *
+ * Automatically commits changes when filters are added.
+ */
 public class BrowseInventoryController {
     public final static String FRIEND_NAME = null;
     public final static String ITEM_NAME = null;
@@ -39,6 +44,10 @@ public class BrowseInventoryController {
     Configuration configuration;
     DataManager dataManager;
 
+    /**
+     * @param browsableInventories The model Object containing the collection of friends Items
+     * @param context Activity Context
+     */
     public BrowseInventoryController(Context context, BrowsableInventories browsableInventories) {
         this.context = context;
         this.browsableInventories = browsableInventories;
@@ -46,6 +55,10 @@ public class BrowseInventoryController {
         this.dataManager = new HttpDataManager(context);
     }
 
+    /**
+     * Add a filter to the browsing list
+     * @param filter The filter to add.
+     */
     public void addFriendFilter(Filter filter) {
         throw new UnsupportedOperationException();
     }
