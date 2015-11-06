@@ -23,17 +23,10 @@ package ca.ualberta.cmput301.t03.trading;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 
 import org.parceler.Parcels;
@@ -44,6 +37,10 @@ import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.inventory.Item;
 import ca.ualberta.cmput301.t03.user.User;
 
+/**
+ * The view portion of the TradeOfferCompose triplet. this is the view a user will see when
+ * they wish to compose a trade with another user and their item.
+ */
 public class TradeOfferComposeActivity extends AppCompatActivity {
 
     private Trade model;
@@ -51,6 +48,11 @@ public class TradeOfferComposeActivity extends AppCompatActivity {
 
     private TextView ownerUsername;
 
+    /**
+     * Sets up the view with all components, the model, and the controller
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +91,12 @@ public class TradeOfferComposeActivity extends AppCompatActivity {
         worker.execute(getBaseContext());
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -96,6 +104,12 @@ public class TradeOfferComposeActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
