@@ -32,6 +32,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
@@ -212,10 +213,19 @@ public class UserInventoryFragment extends Fragment implements Observer {
     }
 
     public void inspectItem(Item item){
-        Intent intent = new Intent(getContext(), InspectItemView.class);
-        intent.putExtra("user", Parcels.wrap(user));
-        intent.putExtra("inventory/inspect/item", Parcels.wrap(item));
-//        intent.putExtra("inventory/inspect/item", item.getUuid().toString());
+
+        Intent intent = null;
+        if (PrimaryUser.getInstance().equals(user)){
+            intent = new Intent(getContext(), EditItemView.class);
+            intent.putExtra("user", Parcels.wrap(user));
+            intent.putExtra("ITEM_UUID", item.getUuid().toString());
+
+        } else {
+            intent = new Intent(getContext(), InspectItemView.class);
+            intent.putExtra("user", Parcels.wrap(user));
+            intent.putExtra("inventory/inspect/item", Parcels.wrap(item));
+        }
+
         startActivity(intent);
     }
 
