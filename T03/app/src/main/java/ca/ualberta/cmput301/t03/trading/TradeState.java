@@ -17,6 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package ca.ualberta.cmput301.t03.trading;
 
 import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeStateTransition;

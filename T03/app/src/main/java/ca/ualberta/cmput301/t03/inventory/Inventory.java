@@ -76,6 +76,7 @@ public class Inventory implements Filterable<Item>, Observable, Observer {
         for (Item item : items.values()) {
             item.addObserver(this);
         }
+        notifyObservers();
     }
 
     /**
