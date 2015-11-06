@@ -20,7 +20,10 @@
 
 package ca.ualberta.cmput301.t03.inventory;
 
+
 import android.app.Activity;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -32,6 +35,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
+
+import org.parceler.Parcels;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -51,6 +56,8 @@ public class UserInventoryFragment extends Fragment implements Observer {
     Activity mActivity;
     View mView;
 
+    private static final String ARG_PARAM1 = "user";
+
     private Inventory model;
     private UserInventoryController controller;
     private User user;
@@ -65,9 +72,16 @@ public class UserInventoryFragment extends Fragment implements Observer {
         // Required empty public constructor
     }
 
-    // TODO: Rename and change types and number of parameters
+    public static UserInventoryFragment newInstance(User u){
+        UserInventoryFragment fragment = new UserInventoryFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(ARG_PARAM1, Parcels.wrap(u));
+
+        fragment.setArguments(args);
+        return fragment;
+    }
     public static UserInventoryFragment newInstance() {
-        return new UserInventoryFragment();
+        return  new UserInventoryFragment();
     }
 
     @Override
@@ -77,14 +91,29 @@ public class UserInventoryFragment extends Fragment implements Observer {
 
         positionMap = new HashMap<>();
 
-        Thread worker = new Thread(new Runnable() {
+
+        if (getArguments() != null) {
+//            String username = getArguments().getString(ARG_PARAM1);
+            user = Parcels.unwrap(getArguments().getParcelable(ARG_PARAM1));
+            if(PrimaryUser.getInstance().equals(user)){
+                user = PrimaryUser.getInstance();
+            } else {
+                user = new User(user.getUsername(), getActivity().getApplicationContext());
+            }
+        } else {
+            user = PrimaryUser.getInstance();
+        }
+
+
+        AsyncTask task = new AsyncTask() {
             @Override
-            public void run() {
-                try {
-                    user = PrimaryUser.getInstance();
+            protected Object doInBackground(Object[] params) {
+                try{
+//                    user = PrimaryUser.getInstance();
 
                     model = user.getInventory();
                     controller = new UserInventoryController(getContext(), model);
+
 
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
@@ -93,13 +122,23 @@ public class UserInventoryFragment extends Fragment implements Observer {
                             setupFab(getView());
                         }
                     });
+
+
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                return null;
             }
-        });
-        worker.start();
+        };
+        task.execute();
 
+    }
+
+    public void addItemButtonClicked() {
+//        throw new UnsupportedOperationException();
+        Intent intent = new Intent(getContext(), AddItemView.class);
+        startActivity(intent);
     }
 
 
@@ -167,7 +206,6 @@ public class UserInventoryFragment extends Fragment implements Observer {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 controller.inspectItem(model.getItems().get(positionMap.get(position)));
                 Toast.makeText(mActivity.getBaseContext(), "Inspect Item", Toast.LENGTH_SHORT).show();
-                
             }
         });
 
@@ -180,13 +218,16 @@ public class UserInventoryFragment extends Fragment implements Observer {
 
     private void setupFab(View v){
         addItemFab = (FloatingActionButton) v.findViewById(R.id.addItemInventoryFab);
-        addItemFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                controller.addItemButtonClicked();
-                Toast.makeText(mActivity.getBaseContext(), "ADD ITEM", Toast.LENGTH_SHORT).show();
-            }
-        });
+        if (PrimaryUser.getInstance().equals(user)){
+            addItemFab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    addItemButtonClicked();
+                }
+            });
+        } else {
+            addItemFab.hide();
+        }
 
 
     }

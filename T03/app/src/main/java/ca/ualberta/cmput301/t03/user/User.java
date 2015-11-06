@@ -100,6 +100,10 @@ public class User implements Observable, Observer, Comparable<User> {
         this.username = username;
     }
 
+    public User(User user, Context context){
+        this(user.getUsername(), context);
+    }
+
     /**
      * Gets the User's username. This will not hit the network.
      *

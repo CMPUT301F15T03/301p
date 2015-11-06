@@ -96,6 +96,18 @@ public class EditProfileFragment extends Fragment implements Observer {
         mEmailField.setText(model.getEmail());
         mPhoneField.setText(model.getPhone());
 
+        mEmailField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus){
+                    TextView t = (TextView) v;
+                    if (controller.isEmailInValid(t.getText().toString())){
+                        Snackbar.make(getView(), "Invalid email!", Snackbar.LENGTH_SHORT).show();
+                        t.setText("");
+                    }
+                }
+            }
+        });
 
         mCityField.addTextChangedListener(controller.getCityWatcher());
         mPhoneField.addTextChangedListener(controller.getPhoneWatcher());

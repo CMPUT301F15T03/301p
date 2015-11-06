@@ -20,9 +20,7 @@
 
 package ca.ualberta.cmput301.t03.user;
 
-import android.content.Context;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.base.DefaultFailureHandler;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.ActivityInstrumentationTestCase2;
@@ -42,7 +40,6 @@ import ca.ualberta.cmput301.t03.MainActivity;
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.commontesting.PrimaryUserHelper;
-import ca.ualberta.cmput301.t03.configuration.Configuration;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
@@ -65,10 +62,10 @@ import static junit.framework.Assert.assertEquals;
 public class UserProfileTest {
 
     public static final String TEST_EXAMPLE_COM = "test@example.com";
-    public static final String STRING_TO_BE_TYPED = "780 123 4567";
+    public static final String PHONE_1 = "780 123 4567";
     public static final String CALGARY = "Calgary";
     public static final String VANCOUVER = "Vancouver";
-    public static final String STRING_TO_BE_TYPED1 = "7781234567";
+    public static final String PHONE_2 = "7781234567";
     public static final String TEST2_EXAMPLE_COM = "test2@example.com";
     public static final String INVALID_EMAIL = "asdfadfadfsdd";
     /**
@@ -157,7 +154,7 @@ public class UserProfileTest {
                         closeSoftKeyboard());
         onView(withId(R.id.profilePhoneEditText))
                 .perform(clearText(),
-                        typeText(STRING_TO_BE_TYPED),
+                        typeText(PHONE_1),
                         closeSoftKeyboard());
         onView(withId(R.id.profileCityEditText)).
                 perform(clearText(),
@@ -170,7 +167,7 @@ public class UserProfileTest {
         onView(withId(R.id.viewProfileCity))
                 .check(matches(withText(CALGARY)));
         onView(withId(R.id.viewProfilePhone))
-                .check(matches(withText(STRING_TO_BE_TYPED)));
+                .check(matches(withText(PHONE_1)));
 
         onView(withId(R.id.edit_profile_button))
                 .check(matches(isDisplayed()))
@@ -182,7 +179,7 @@ public class UserProfileTest {
                         closeSoftKeyboard());
         onView(withId(R.id.profilePhoneEditText))
                 .perform(clearText(),
-                        typeText(STRING_TO_BE_TYPED1),
+                        typeText(PHONE_2),
                         closeSoftKeyboard());
         onView(withId(R.id.profileCityEditText)).
                 perform(clearText(),
@@ -196,7 +193,7 @@ public class UserProfileTest {
         onView(withId(R.id.viewProfileCity))
                 .check(matches(withText(VANCOUVER)));
         onView(withId(R.id.viewProfilePhone))
-                .check(matches(withText(STRING_TO_BE_TYPED1)));
+                .check(matches(withText(PHONE_2)));
     }
 
     @Test
@@ -204,19 +201,34 @@ public class UserProfileTest {
         onView(withId(R.id.edit_profile_button))
                 .check(matches(isDisplayed()))
                 .perform(click());
+        pause();
         onView(withId(R.id.profileEmailEditText))
                 .perform(clearText(),
                         typeText(INVALID_EMAIL),
                         closeSoftKeyboard());
+        pause();
         onView(withId(R.id.profilePhoneEditText))
                 .perform(clearText(),
-                        typeText(STRING_TO_BE_TYPED),
+                        typeText(PHONE_1),
                         closeSoftKeyboard());
+        pause();
         onView(withId(R.id.profileCityEditText)).
                 perform(clearText(),
                         typeText(CALGARY),
                         closeSoftKeyboard());
+        pause();
         pressBack();
+
+        pause();
+        onView(withId(R.id.viewProfileEmail))
+                .check(matches(withText("")));
+        pause();
+        onView(withId(R.id.viewProfileCity))
+                .check(matches(withText(CALGARY)));
+        pause();
+        onView(withId(R.id.viewProfilePhone))
+                .check(matches(withText(PHONE_1)));
+        pause();
 
     }
 }

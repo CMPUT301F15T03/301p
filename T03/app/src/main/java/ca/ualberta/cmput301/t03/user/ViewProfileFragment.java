@@ -34,6 +34,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 
@@ -58,6 +59,7 @@ public class ViewProfileFragment extends Fragment implements Observer {
     private TextView phoneView;
     private TextView usernameView;
     private TextView emailView;
+    private Button browseInventoryButton;
     private User mUserToView;
 
     public ViewProfileFragment() {
@@ -110,6 +112,8 @@ public class ViewProfileFragment extends Fragment implements Observer {
 
     }
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -118,7 +122,19 @@ public class ViewProfileFragment extends Fragment implements Observer {
     }
 
 
+    void onBrowseInventoryButtonSelected(View v){
+        Intent intent = new Intent(v.getContext(), ViewInventoryActivity.class);
+        intent.putExtra("user", Parcels.wrap(mUserToView));
+        startActivity(intent);
+    }
+
     void populateFields(){
+        browseInventoryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBrowseInventoryButtonSelected(v);
+            }
+        });
         model.addObserver(this);
         update(model);
     }
@@ -129,6 +145,7 @@ public class ViewProfileFragment extends Fragment implements Observer {
         emailView = (TextView) getView().findViewById(R.id.viewProfileEmail);
         phoneView = (TextView) getView().findViewById(R.id.viewProfilePhone);
         cityView = (TextView) getView().findViewById(R.id.viewProfileCity);
+        browseInventoryButton = (Button) getView().findViewById(R.id.inventoryButton);
 
         AsyncTask t = new AsyncTask() {
             @Override
@@ -171,17 +188,6 @@ public class ViewProfileFragment extends Fragment implements Observer {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-//        try {
-//            mListener = (OnFragmentInteractionListener) activity;
-//        } catch (ClassCastException e) {
-//            throw new ClassCastException(activity.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
     }
 
     @Override
