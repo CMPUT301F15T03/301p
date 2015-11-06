@@ -31,6 +31,7 @@ import ca.ualberta.cmput301.t03.datamanager.DataManager;
 import ca.ualberta.cmput301.t03.datamanager.HttpDataManager;
 import ca.ualberta.cmput301.t03.inventory.Inventory;
 import ca.ualberta.cmput301.t03.inventory.Item;
+import ca.ualberta.cmput301.t03.trading.TradeList;
 import ca.ualberta.cmput301.t03.user.FriendsList;
 import ca.ualberta.cmput301.t03.user.User;
 import ca.ualberta.cmput301.t03.user.UserProfile;
@@ -229,6 +230,7 @@ public class PrimaryUserHelper {
         dataManager.deleteIfExists(new DataKey(UserProfile.type, configuration.getApplicationUserName()));
         dataManager.deleteIfExists(new DataKey(Inventory.type, configuration.getApplicationUserName()));
         dataManager.deleteIfExists(new DataKey(FriendsList.type, configuration.getApplicationUserName()));
+        dataManager.deleteIfExists(new DataKey(TradeList.type, configuration.getApplicationUserName()));
         configuration.clearApplicationUserName();
         if (previousUser != null) {
             configuration.setApplicationUserName(previousUser);
