@@ -20,6 +20,7 @@
 
 package ca.ualberta.cmput301.t03.photo;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import ca.ualberta.cmput301.t03.Observer;
@@ -32,6 +33,7 @@ import java.util.Collection;
 public class PhotoGallery {
     private Collection<Observer> observers;
     private Photo photoInFocus;
+    private ArrayList<Photo> photos;
 
     public Photo getPhotoInFocus() {
         return photoInFocus;
@@ -41,10 +43,19 @@ public class PhotoGallery {
         this.photoInFocus = photoInFocus;
     }
 
+    public ArrayList<Photo> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(ArrayList<Photo> photos) {
+        this.photos = photos;
+    }
+
     public void load() { throw new UnsupportedOperationException(); }
     public void save() { throw new UnsupportedOperationException(); }
 
     public void removePhoto(Photo photo) { throw new UnsupportedOperationException(); }
     public void addPhoto(Photo photo) { throw new UnsupportedOperationException(); }
+
 
 }
