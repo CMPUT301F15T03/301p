@@ -23,39 +23,68 @@ package ca.ualberta.cmput301.t03.trading;
 import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeStateTransition;
 
 /**
- * Created by ross on 15-10-29.
+ * class TradeStateAccepted implements {@link TradeState}
  */
 public class TradeStateAccepted implements TradeState {
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Boolean isClosed() {
         return Boolean.TRUE;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Boolean isOpen() {
         return !isClosed();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Boolean isEditable() {
         return Boolean.FALSE;
     }
 
+    /**
+     * {@inheritDoc}
+     * @param trade Trade to be offered.
+     * @throws IllegalTradeStateTransition
+     */
     @Override
     public void offer(Trade trade) throws IllegalTradeStateTransition {
         throw new IllegalTradeStateTransition("Accepted trade cannot be offered");
     }
 
+    /**
+     * {@inheritDoc}
+     * @param trade Trade to be cancelled.
+     * @throws IllegalTradeStateTransition
+     */
     @Override
     public void cancel(Trade trade) throws IllegalTradeStateTransition {
         throw new IllegalTradeStateTransition("Accepted trade cannot be cancelled");
     }
 
+    /**
+     * {@inheritDoc}
+     * @param trade Trade to be accepted.
+     * @throws IllegalTradeStateTransition
+     */
     @Override
     public void accept(Trade trade) throws IllegalTradeStateTransition {
         throw new IllegalTradeStateTransition("Accepted trade cannot be accepted");
     }
 
+    /**
+     * {@inheritDoc}
+     * @param trade Trade to be declined.
+     * @throws IllegalTradeStateTransition
+     */
     @Override
     public void decline(Trade trade) throws IllegalTradeStateTransition {
         throw new IllegalTradeStateTransition("Accepted trade cannot be declined");
