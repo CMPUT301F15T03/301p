@@ -37,16 +37,13 @@ import ca.ualberta.cmput301.t03.datamanager.HttpDataManager;
  */
 public class FriendsListController {
 
-    FriendsList mFriendsList;
-    Context mContext;
-    Configuration mConfiguration;
-    DataManager mDataManager;
+    private FriendsList mFriendsList;
+    private Context mContext;
+    private DataManager mDataManager;
 
     public FriendsListController(Context context, FriendsList friendsList){
         mFriendsList = friendsList;
         mContext = context;
-
-        mConfiguration = new Configuration(context);
         mDataManager = new HttpDataManager(context);
     }
 
