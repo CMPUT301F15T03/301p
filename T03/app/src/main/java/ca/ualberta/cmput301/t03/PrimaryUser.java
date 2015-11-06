@@ -30,7 +30,7 @@ import ca.ualberta.cmput301.t03.user.User;
 /**
  * PrimaryUser is a singleton which holds a reference to the Application's user.
  */
-public class PrimaryUser {
+public class PrimaryUser implements Observer {
     private static User ourInstance = null;
     private static Context context = null;
     private static Configuration config = null;
@@ -49,6 +49,7 @@ public class PrimaryUser {
         PrimaryUser.context = context;
         PrimaryUser.config = new Configuration(context);
         PrimaryUser.setupCalled = true;
+        config.addObserver(PrimaryUser.getInstance());
     }
 
     /**
@@ -72,5 +73,12 @@ public class PrimaryUser {
             }
         }
         return ourInstance;
+    }
+
+    @Override
+    public void update(Observable observable) {
+        if (observable.getClass().equals(Configuration.class)){
+            getInstance();
+        }
     }
 }
