@@ -60,9 +60,6 @@ public class EditItemView extends AppCompatActivity {
 
         final UUID itemUUID = UUID.fromString(getIntent().getStringExtra("ITEM_UUID"));
 
-        Configuration c = new Configuration(this.getBaseContext());
-        c.getApplicationUserName();
-
         user = PrimaryUser.getInstance();
 
         Thread worker = new Thread(new Runnable() {
