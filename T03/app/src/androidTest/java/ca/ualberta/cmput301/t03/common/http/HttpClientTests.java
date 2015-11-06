@@ -55,7 +55,8 @@ public class HttpClientTests extends TestCase {
                 HttpStatusCode.CREATED.getStatusCode() == response.getResponseCode());
 
         String responseData = new String(response.getContents());
-        ElasticSearchResponse<HashMap<String, String>> responseJson = new Gson().fromJson(responseData, new TypeToken<ElasticSearchResponse<HashMap<String, String>>>(){}.getType());
+        ElasticSearchResponse<HashMap<String, String>> responseJson = new Gson().fromJson(responseData, new TypeToken<ElasticSearchResponse<HashMap<String, String>>>() {
+        }.getType());
         assertEquals("123", responseJson.getId());
 
         try {
@@ -66,7 +67,8 @@ public class HttpClientTests extends TestCase {
 
         assertEquals(HttpStatusCode.OK.getStatusCode(), response.getResponseCode());
         responseData = new String(response.getContents());
-        responseJson = new Gson().fromJson(responseData, new TypeToken<ElasticSearchResponse<HashMap<String, String>>>(){}.getType());
+        responseJson = new Gson().fromJson(responseData, new TypeToken<ElasticSearchResponse<HashMap<String, String>>>() {
+        }.getType());
         assertEquals("123", responseJson.getId());
         assertTrue(responseJson.getIsFound());
         assertEquals("bar", responseJson.getSource().get("foo"));
@@ -99,7 +101,8 @@ public class HttpClientTests extends TestCase {
 
         assertEquals(HttpStatusCode.OK.getStatusCode(), response.getResponseCode());
         String responseData = new String(response.getContents());
-        ElasticSearchResponse<HashMap<String, String>> responseJson = new Gson().fromJson(responseData, new TypeToken<ElasticSearchResponse<HashMap<String, String>>>(){}.getType());
+        ElasticSearchResponse<HashMap<String, String>> responseJson = new Gson().fromJson(responseData, new TypeToken<ElasticSearchResponse<HashMap<String, String>>>() {
+        }.getType());
         assertEquals("123", responseJson.getId());
         assertTrue(responseJson.getIsFound());
         assertNull(responseJson.getSource());
@@ -112,7 +115,8 @@ public class HttpClientTests extends TestCase {
 
         assertEquals(HttpStatusCode.NOT_FOUND.getStatusCode(), response.getResponseCode());
         responseData = new String(response.getContents());
-        responseJson = new Gson().fromJson(responseData, new TypeToken<ElasticSearchResponse<HashMap<String, String>>>(){}.getType());
+        responseJson = new Gson().fromJson(responseData, new TypeToken<ElasticSearchResponse<HashMap<String, String>>>() {
+        }.getType());
         assertEquals("123", responseJson.getId());
         assertFalse(responseJson.getIsFound());
     }
@@ -129,7 +133,8 @@ public class HttpClientTests extends TestCase {
                 HttpStatusCode.CREATED.getStatusCode() == response.getResponseCode());
 
         String responseData = new String(response.getContents());
-        ElasticSearchResponse<HashMap<String, String>> responseJson = new Gson().fromJson(responseData, new TypeToken<ElasticSearchResponse<HashMap<String, String>>>(){}.getType());
+        ElasticSearchResponse<HashMap<String, String>> responseJson = new Gson().fromJson(responseData, new TypeToken<ElasticSearchResponse<HashMap<String, String>>>() {
+        }.getType());
         assertEquals("123", responseJson.getId());
 
         try {
@@ -140,7 +145,8 @@ public class HttpClientTests extends TestCase {
 
         assertEquals(HttpStatusCode.OK.getStatusCode(), response.getResponseCode());
         responseData = new String(response.getContents());
-        responseJson = new Gson().fromJson(responseData, new TypeToken<ElasticSearchResponse<HashMap<String, String>>>(){}.getType());
+        responseJson = new Gson().fromJson(responseData, new TypeToken<ElasticSearchResponse<HashMap<String, String>>>() {
+        }.getType());
         assertEquals("123", responseJson.getId());
         assertTrue(responseJson.getIsFound());
         assertEquals("bar", responseJson.getSource().get("foo"));

@@ -34,7 +34,8 @@ public class FragmentContainerActivity extends FragmentActivity {
 
     private static final int CONTAINER_ID = View.generateViewId();
 
-    @Override protected void onCreate(Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         FrameLayout.LayoutParams params =

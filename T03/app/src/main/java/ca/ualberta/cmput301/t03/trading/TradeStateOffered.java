@@ -55,6 +55,7 @@ public class TradeStateOffered implements TradeState {
 
     /**
      * {@inheritDoc}
+     *
      * @param trade Trade to be offered.
      * @throws IllegalTradeStateTransition
      */
@@ -65,6 +66,7 @@ public class TradeStateOffered implements TradeState {
 
     /**
      * {@inheritDoc}
+     *
      * @param trade Trade to be cancelled.
      * @throws IllegalTradeStateTransition
      */
@@ -75,6 +77,7 @@ public class TradeStateOffered implements TradeState {
 
     /**
      * {@inheritDoc}
+     *
      * @param trade Trade to be accepted.
      */
     @Override
@@ -90,6 +93,7 @@ public class TradeStateOffered implements TradeState {
 
     /**
      * {@inheritDoc}
+     *
      * @param trade Trade to be declined.
      */
     @Override

@@ -22,11 +22,11 @@ package ca.ualberta.cmput301.t03.user;
 
 public class UserNotFoundException extends Exception {
 
-    public UserNotFoundException(){
+    public UserNotFoundException() {
         super();
     }
 
-    public UserNotFoundException(String detailmessage){
+    public UserNotFoundException(String detailmessage) {
         super(detailmessage);
     }
 

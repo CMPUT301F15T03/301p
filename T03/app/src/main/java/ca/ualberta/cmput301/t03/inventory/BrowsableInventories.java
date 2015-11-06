@@ -44,14 +44,8 @@ public class BrowsableInventories implements Filterable<Item>, Observer, Observa
     private ArrayList<Item> list;
 
     private Thread constructorThread;
-
-    public Thread getConstructorThread() {
-        return constructorThread;
-    }
-
     @Transient
     private HashSet<Observer> observers;
-
 
     public BrowsableInventories() {
         observers = new HashSet<>();
@@ -70,8 +64,13 @@ public class BrowsableInventories implements Filterable<Item>, Observer, Observa
 
     }
 
+    public Thread getConstructorThread() {
+        return constructorThread;
+    }
+
     /**
      * Returns thread that can be used to generate updated list of user's friends items async.
+     *
      * @return
      */
     public Thread getBrowsables() {
@@ -94,6 +93,7 @@ public class BrowsableInventories implements Filterable<Item>, Observer, Observa
 
     /**
      * Return list of all user's freinds Items.
+     *
      * @return list of all friends items
      */
     public ArrayList<Item> getList() {
@@ -161,6 +161,7 @@ public class BrowsableInventories implements Filterable<Item>, Observer, Observa
     public void addObserver(Observer observer) {
         observers.add(observer);
     }
+
     /**
      * {@inheritDoc}
      *

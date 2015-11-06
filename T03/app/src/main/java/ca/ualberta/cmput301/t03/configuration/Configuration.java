@@ -45,7 +45,6 @@ public class Configuration implements Observable {
     private SharedPreferences.Editor editor;
 
     /**
-     *
      * @param context Application context provided by the caller to allow for persistent storage
      */
     public Configuration(Context context) {
@@ -65,6 +64,7 @@ public class Configuration implements Observable {
 
     /**
      * Check if download images is enabled for the application
+     *
      * @return Boolean representing if download images setting is enabled or not (true == enabled)
      */
     public Boolean isDownloadImagesEnabled() {
@@ -73,6 +73,7 @@ public class Configuration implements Observable {
 
     /**
      * Set the value of download images setting
+     *
      * @param state true == enabled, false == disable
      */
     public void setDownloadImages(Boolean state) {
@@ -82,6 +83,7 @@ public class Configuration implements Observable {
 
     /**
      * Check to see if a user's id has been assigned to this application
+     *
      * @return true == user id has been assigned, false == otherwise
      */
     public Boolean isApplicationUserNameSet() {
@@ -90,19 +92,20 @@ public class Configuration implements Observable {
 
     /**
      * Get the current user id associated with this application
+     *
      * @return the application's associated user id
      */
     public String getApplicationUserName() {
         if (isApplicationUserNameSet()) {
             return preferences.getString(applicationUserNameKey, "");
-        }
-        else {
+        } else {
             return null;
         }
     }
 
     /**
      * set the application's associated user id
+     *
      * @param userName the user id you want to associate with the application
      */
     public void setApplicationUserName(String userName) {
@@ -130,6 +133,7 @@ public class Configuration implements Observable {
 
     /**
      * {@inheritDoc}
+     *
      * @param observer
      */
     @Override
@@ -139,6 +143,7 @@ public class Configuration implements Observable {
 
     /**
      * {@inheritDoc}
+     *
      * @param observer
      */
     @Override

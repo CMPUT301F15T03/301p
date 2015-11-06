@@ -27,9 +27,6 @@ import java.util.Collection;
 import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.datamanager.DataManager;
 
-import android.net.Uri;
-import java.util.Collection;
-
 /**
  * Object for the item's photo. Belongs to an item's PhotoGallery.
  */
@@ -45,6 +42,7 @@ public class Photo {
 
     /**
      * Determines if the photo has been downloaded on the phone.
+     *
      * @return true if the photo has been downloaded, false if not
      */
     public boolean isDownloaded() {
@@ -58,6 +56,11 @@ public class Photo {
         throw new UnsupportedOperationException();
     }
 
-    public void load() { throw new UnsupportedOperationException(); }
-    public void save() { throw new UnsupportedOperationException(); }
+    public void load() {
+        throw new UnsupportedOperationException();
+    }
+
+    public void save() {
+        throw new UnsupportedOperationException();
+    }
 }

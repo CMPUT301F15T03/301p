@@ -35,6 +35,7 @@ public abstract class JsonDataManager implements DataManager {
 
     /**
      * Creates an instance of {@link JsonDataManager}.
+     *
      * @param useExplicitExposeAnnotation True, if the @expose annotations are to be explicitly used,
      *                                    else false. If this is set to true, only the fields with
      *                                    the annotation @expose will be serialized/de-serialized.
@@ -54,7 +55,8 @@ public abstract class JsonDataManager implements DataManager {
     /**
      * Serializes the passed object to a JSON string. A {@link JsonFormatter} with "useExplicitExposeAnnotation"
      * set to the construction time value, and "usePrettyJson" value set to true will be used.
-     * @param obj The object to be serialized.
+     *
+     * @param obj  The object to be serialized.
      * @param type The runtime {@link Type} of the object.
      * @return The serialized JSON.
      */
@@ -64,8 +66,9 @@ public abstract class JsonDataManager implements DataManager {
 
     /**
      * Serializes the passed object to a JSON string.
-     * @param obj The object to be serialized.
-     * @param type The runtime {@link Type} of the object.
+     *
+     * @param obj    The object to be serialized.
+     * @param type   The runtime {@link Type} of the object.
      * @param format The {@link JsonFormatter} to be used for serialization.
      * @return The serialized JSON.
      */
@@ -77,9 +80,10 @@ public abstract class JsonDataManager implements DataManager {
     /**
      * De-serializes the JSON to a Java object. A {@link JsonFormatter} with "useExplicitExposeAnnotation"
      * set to the construction time value, and "usePrettyJson" value set to true will be used.
-     * @param obj The JSON string.
+     *
+     * @param obj     The JSON string.
      * @param typeOfT The Java object's {@link Type}
-     * @param <T> The generic type param corresponding to the parameter "typeOfT"
+     * @param <T>     The generic type param corresponding to the parameter "typeOfT"
      * @return The de-serialized object.
      */
     protected <T> T deserialize(String obj, Type typeOfT) {
@@ -88,10 +92,11 @@ public abstract class JsonDataManager implements DataManager {
 
     /**
      * De-serializes the JSON to a Java object.
-     * @param obj The JSON string.
+     *
+     * @param obj     The JSON string.
      * @param typeOfT The Java object's {@link Type}
-     * @param format The {@link JsonFormatter} to be used for de-serialization.
-     * @param <T> The generic type param corresponding to the parameter "typeOfT"
+     * @param format  The {@link JsonFormatter} to be used for de-serialization.
+     * @param <T>     The generic type param corresponding to the parameter "typeOfT"
      * @return The de-serialized object.
      */
     protected <T> T deserialize(String obj, Type typeOfT, JsonFormatter format) {

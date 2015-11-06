@@ -27,7 +27,6 @@ import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
 
 import org.hamcrest.core.StringContains;
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -36,8 +35,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ca.ualberta.cmput301.t03.MainActivity;
-import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
+import ca.ualberta.cmput301.t03.commontesting.PrimaryUserHelper;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
@@ -53,93 +52,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static ca.ualberta.cmput301.t03.commontesting.PauseForAnimation.pause;
 import static java.lang.Thread.sleep;
 import static junit.framework.Assert.fail;
-import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.hasToString;
-
-        import android.support.test.InstrumentationRegistry;
-        import android.support.test.rule.ActivityTestRule;
-        import android.support.test.runner.AndroidJUnit4;
-        import android.test.suitebuilder.annotation.LargeTest;
-
-        import org.hamcrest.core.StringContains;
-        import org.junit.Before;
-        import org.junit.Rule;
-        import org.junit.Test;
-        import org.junit.runner.RunWith;
-
-        import ca.ualberta.cmput301.t03.MainActivity;
-        import ca.ualberta.cmput301.t03.R;
-
-        import static android.support.test.espresso.Espresso.onData;
-        import static android.support.test.espresso.Espresso.onView;
-        import static android.support.test.espresso.action.ViewActions.click;
-        import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
-        import static android.support.test.espresso.action.ViewActions.longClick;
-        import static android.support.test.espresso.action.ViewActions.typeText;
-        import static android.support.test.espresso.assertion.ViewAssertions.matches;
-        import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-        import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
-        import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
-        import static android.support.test.espresso.matcher.ViewMatchers.withId;
-        import static android.support.test.espresso.matcher.ViewMatchers.withText;
-        import static ca.ualberta.cmput301.t03.commontesting.Matchers.withAdaptedData;
-        import static java.lang.Thread.sleep;
-        import static org.hamcrest.CoreMatchers.not;
-        import static org.hamcrest.Matchers.allOf;
-        import static org.hamcrest.Matchers.hasToString;
-
-
-
-        import android.support.test.InstrumentationRegistry;
-        import android.support.test.rule.ActivityTestRule;
-        import android.support.test.runner.AndroidJUnit4;
-        import android.test.ActivityInstrumentationTestCase2;
-        import android.test.suitebuilder.annotation.LargeTest;
-        import android.view.View;
-        import android.widget.Adapter;
-        import android.widget.AdapterView;
-
-        import org.hamcrest.Description;
-        import org.hamcrest.Matcher;
-        import org.hamcrest.TypeSafeMatcher;
-        import org.hamcrest.core.StringContains;
-        import org.junit.Before;
-        import org.junit.Rule;
-        import org.junit.Test;
-        import org.junit.runner.RunWith;
-
-import java.io.IOException;
-
-import static android.support.test.espresso.Espresso.onData;
-        import static android.support.test.espresso.Espresso.onView;
-        import static android.support.test.espresso.action.ViewActions.click;
-        import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
-        import static android.support.test.espresso.action.ViewActions.longClick;
-        import static android.support.test.espresso.action.ViewActions.typeText;
-        import static android.support.test.espresso.assertion.ViewAssertions.matches;
-        import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
-        import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-        import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
-        import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
-        import static android.support.test.espresso.matcher.ViewMatchers.withId;
-        import static ca.ualberta.cmput301.t03.commontesting.Matchers.withAdaptedData;
-
-        import static android.support.test.espresso.matcher.ViewMatchers.withTagKey;
-        import static android.support.test.espresso.matcher.ViewMatchers.withText;
-        import static java.lang.Thread.sleep;
-        import static org.hamcrest.CoreMatchers.not;
-        import static org.hamcrest.Matchers.allOf;
-        import static org.hamcrest.Matchers.anything;
-        import static org.hamcrest.Matchers.contains;
-        import static org.hamcrest.Matchers.hasToString;
-        import static org.hamcrest.Matchers.is;
-
-        import ca.ualberta.cmput301.t03.MainActivity;
-        import ca.ualberta.cmput301.t03.R;
-import ca.ualberta.cmput301.t03.commontesting.PrimaryUserHelper;
-import ca.ualberta.cmput301.t03.configuration.Configuration;
-import ca.ualberta.cmput301.t03.user.User;
-import ca.ualberta.cmput301.t03.user.UserProfile;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
@@ -150,6 +63,20 @@ public class BrowseInventoryUITest {
             MainActivity.class);
 
     private MainActivity mActivity = null;
+
+    /**
+     * Methods cleanup template user and friends.
+     */
+    @BeforeClass
+    public static void setupTestUser() throws Exception {
+        PrimaryUserHelper.deleteAndUnloadUserWithFriendThatHasInventory(InstrumentationRegistry.getTargetContext());
+        PrimaryUserHelper.createAndLoadUserWithFriendThatHasInventory(InstrumentationRegistry.getTargetContext());
+    }
+
+    @AfterClass
+    public static void restoreOriginalUser() throws Exception {
+        PrimaryUserHelper.deleteAndUnloadUserWithFriendThatHasInventory(InstrumentationRegistry.getTargetContext());
+    }
 
     @Before
     public void setActivity() {
@@ -175,25 +102,12 @@ public class BrowseInventoryUITest {
     }
 
     /**
-     * Methods cleanup template user and friends.
-     */
-    @BeforeClass
-    public static void setupTestUser() throws Exception {
-        PrimaryUserHelper.deleteAndUnloadUserWithFriendThatHasInventory(InstrumentationRegistry.getTargetContext());
-        PrimaryUserHelper.createAndLoadUserWithFriendThatHasInventory(InstrumentationRegistry.getTargetContext());
-    }
-
-    @AfterClass
-    public static void restoreOriginalUser() throws Exception {
-        PrimaryUserHelper.deleteAndUnloadUserWithFriendThatHasInventory(InstrumentationRegistry.getTargetContext());
-    }
-
-    /**
      * Testing the browse test.
+     *
      * @throws Exception
      */
     @Test
-    public void testSimpleBrowseSearch() throws Exception{
+    public void testSimpleBrowseSearch() throws Exception {
 
 
         onView(withText("testItem1f1")).check(matches(isDisplayed()));
@@ -211,13 +125,13 @@ public class BrowseInventoryUITest {
     }
 
     /**
-     *UC3.1.1 BrowseAllFriendsGeneralSearch
-     *UC3.2.1 SetPublicBrowseAndSearchInventory
+     * UC3.1.1 BrowseAllFriendsGeneralSearch
+     * UC3.2.1 SetPublicBrowseAndSearchInventory
      * Precondition User exists with friends that have inventories,
      * with both private and public items.
-     * */
+     */
     @Test
-    public void testBrowseAllFriendsGeneralSearch() throws Exception{
+    public void testBrowseAllFriendsGeneralSearch() throws Exception {
 
         onView(withText("testItem1f1")).check(matches(isDisplayed()));
         onView(withText("testItem2f1")).check(matches(isDisplayed()));
@@ -238,12 +152,12 @@ public class BrowseInventoryUITest {
     }
 
     /**
-     *UC3.1.2 BrowseFriendGeneralSearch
-     *Precondition User exists with friends that have inventories,
+     * UC3.1.2 BrowseFriendGeneralSearch
+     * Precondition User exists with friends that have inventories,
      * with both private and public items.
-     * */
+     */
     @Test
-    public void testBrowseFriendGeneralSearch() throws Exception{
+    public void testBrowseFriendGeneralSearch() throws Exception {
         /**
          * Adding filter of a friend to view single friends inventory.
          */
@@ -274,12 +188,12 @@ public class BrowseInventoryUITest {
     }
 
     /**
-     *UC3.1.2 BrowseFriendGeneralSearch
-     *Precondition User exists with friends that have inventories,
+     * UC3.1.2 BrowseFriendGeneralSearch
+     * Precondition User exists with friends that have inventories,
      * with both private and public items.
-     * */
+     */
     @Test
-    public void testBrowseFriendFromFriends() throws Exception{
+    public void testBrowseFriendFromFriends() throws Exception {
         /**
          * Navigate to FriendList and Find Friend
          */
@@ -313,12 +227,12 @@ public class BrowseInventoryUITest {
     }
 
     /**
-     *UC3.1.3 BrowseAllFriendsCategorySearch
-     *Precondition User exists with friends that have inventories,
+     * UC3.1.3 BrowseAllFriendsCategorySearch
+     * Precondition User exists with friends that have inventories,
      * with items of two separate categories.
-     * */
+     */
     @Test
-    public void testBrowseAllFriendsCategorySearch() throws Exception{
+    public void testBrowseAllFriendsCategorySearch() throws Exception {
         /**
          * Adding filter of a friend to view all friends inventories,
          * filtering by a given category.
@@ -353,12 +267,12 @@ public class BrowseInventoryUITest {
     }
 
     /**
-     *UC3.1.4 BrowseFriendCategorySearch
-     *Precondition User exists with friends that have inventories,
+     * UC3.1.4 BrowseFriendCategorySearch
+     * Precondition User exists with friends that have inventories,
      * with items of two separate categories.
-     * */
+     */
     @Test
-    public void testBrowseFriendCategorySearch() throws Exception{
+    public void testBrowseFriendCategorySearch() throws Exception {
         /**
          * Adding filter of a friend and a category to view single friends
          * inventory of only items pertaining to a given category.
@@ -402,12 +316,12 @@ public class BrowseInventoryUITest {
     }
 
     /**
-     *UC3.1.5 BrowseAllFriendsTextualQuerySearch
-     *Precondition User exists with friends that have inventories,
+     * UC3.1.5 BrowseAllFriendsTextualQuerySearch
+     * Precondition User exists with friends that have inventories,
      * with items with textual attributes that can be used to filter results.
-     * */
+     */
     @Test
-    public void testBrowseAllFriendsTextualQuerySearch() throws Exception{
+    public void testBrowseAllFriendsTextualQuerySearch() throws Exception {
         /**
          * Adding filter of textualQuery to view all friends inventories,
          * filtering by a given textualQuery.
@@ -435,12 +349,12 @@ public class BrowseInventoryUITest {
     }
 
     /**
-     *UC3.1.6 BrowseFriendTextualQuerySearch
+     * UC3.1.6 BrowseFriendTextualQuerySearch
      * Precondition User exists with friends that have inventories,
      * with items with textual attributes that can be used to filter results.
-     * */
+     */
     @Test
-    public void testBrowseFriendTextualQuerySearch() throws Exception{
+    public void testBrowseFriendTextualQuerySearch() throws Exception {
         /**
          * Adding filter of a textualQuery and friend to view one friends inventory,
          * filtered by a given textualQuery.
@@ -478,13 +392,13 @@ public class BrowseInventoryUITest {
 
 
     /**
-     *UC3.3.1 OfflineBrowsing
-     *Precondition User exists with friends that have inventories,
+     * UC3.3.1 OfflineBrowsing
+     * Precondition User exists with friends that have inventories,
      * with items with textual attributes that can be used to filter results.
      * User has enabled caching.
-     * */
+     */
     @Test
-    public void testOfflineBrowsing() throws Exception{
+    public void testOfflineBrowsing() throws Exception {
         /**
          * Browse Inventories while online
          */

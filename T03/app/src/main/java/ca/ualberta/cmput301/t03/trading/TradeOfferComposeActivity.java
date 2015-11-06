@@ -37,7 +37,6 @@ import org.parceler.Parcels;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.inventory.Item;
 import ca.ualberta.cmput301.t03.user.User;

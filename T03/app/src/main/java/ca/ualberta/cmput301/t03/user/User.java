@@ -102,7 +102,7 @@ public class User implements Observable, Observer, Comparable<User> {
         this.username = username;
     }
 
-    public User(User user, Context context){
+    public User(User user, Context context) {
         this(user.getUsername(), context);
     }
 
@@ -117,7 +117,7 @@ public class User implements Observable, Observer, Comparable<User> {
 
     /**
      * Get the User's FriendsList.
-     * <p/>
+     * <p>
      * WARNING: This might hit the network! It must be
      * run asynchronously.
      *
@@ -146,7 +146,7 @@ public class User implements Observable, Observer, Comparable<User> {
 
     /**
      * Get the User's UserProfile.
-     * <p/>
+     * <p>
      * WARNING: This might hit the network! It must be run
      * asynchronously.
      *
@@ -169,7 +169,7 @@ public class User implements Observable, Observer, Comparable<User> {
 
     /**
      * Get the User's Inventory.
-     * <p/>
+     * <p>
      * WARNING: This might hit the network! It must be run
      * asynchronously.
      *
@@ -195,7 +195,7 @@ public class User implements Observable, Observer, Comparable<User> {
 
     /**
      * Get TradeList of trades which the User is involved in.
-     * <p/>
+     * <p>
      * WARNING: This might hit the network! It must be run
      * asynchronously.
      *
@@ -285,7 +285,7 @@ public class User implements Observable, Observer, Comparable<User> {
             } catch (IOException e) {
                 throw new RuntimeException("Unable to write trade list changes.");
             }
-        } else if (o.getClass().equals(Configuration.class)){
+        } else if (o.getClass().equals(Configuration.class)) {
             //noop
         } else {
             throw new RuntimeException("No rule found to update User using Observable: " + o.getClass());

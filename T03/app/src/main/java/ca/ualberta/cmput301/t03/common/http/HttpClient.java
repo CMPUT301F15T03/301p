@@ -38,6 +38,7 @@ public class HttpClient {
 
     /**
      * Creates an instance of {@link HttpClient}.
+     *
      * @param root The root URL to be used for the requests.
      * @throws MalformedURLException Thrown, if the root URL is malformed.
      */
@@ -47,6 +48,7 @@ public class HttpClient {
 
     /**
      * Creates an instance of {@link HttpClient}/
+     *
      * @param root The root {@link URL} for the requests.
      */
     public HttpClient(URL root) {
@@ -55,6 +57,7 @@ public class HttpClient {
 
     /**
      * Performs an HTTP GET request at the URL formed using the provided suffix appended to the root.
+     *
      * @param suffix The suffix to be appended to the root URL.
      * @return The received {@link HttpResponse}.
      * @throws IOException Thrown, if the network connection fails.
@@ -65,6 +68,7 @@ public class HttpClient {
 
     /**
      * Performs an HTTP DELETE request at the URL formed using the provided suffix appended to the root.
+     *
      * @param suffix The suffix to be appended to the root URL.
      * @return The received {@link HttpResponse}.
      * @throws IOException Thrown, if the network connection fails.
@@ -75,7 +79,8 @@ public class HttpClient {
 
     /**
      * Performs an HTTP POST request at the URL formed using the provided suffix appended to the root.
-     * @param suffix The suffix to be appended to the root URL.
+     *
+     * @param suffix   The suffix to be appended to the root URL.
      * @param postData The byte array to be sent as the contents of the request.
      * @return The received {@link HttpResponse}.
      * @throws IOException Thrown, if the network connection fails.
@@ -86,7 +91,8 @@ public class HttpClient {
 
     /**
      * Performs an HTTP PUT request at the URL formed using the provided suffix appended to the root.
-     * @param suffix The suffix to be appended to the root URL.
+     *
+     * @param suffix  The suffix to be appended to the root URL.
      * @param putData The byte array to be sent as the contents of the request.
      * @return The received {@link HttpResponse}.
      * @throws IOException Thrown, if the network connection fails.

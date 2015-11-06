@@ -35,6 +35,7 @@ public class ArgumentNullException extends IllegalArgumentException {
 
     /**
      * Creates an instance of {@link ArgumentNullException}.
+     *
      * @param message The detail message for this exception.
      */
     public ArgumentNullException(String message) {
@@ -43,6 +44,7 @@ public class ArgumentNullException extends IllegalArgumentException {
 
     /**
      * Creates an instance of {@link ArgumentNullException}.
+     *
      * @param cause The cause of this exception, may be {@code null}.
      */
     public ArgumentNullException(Throwable cause) {
@@ -51,8 +53,9 @@ public class ArgumentNullException extends IllegalArgumentException {
 
     /**
      * Creates an instance of {@link ArgumentNullException}.
+     *
      * @param message The detail message for this exception.
-     * @param cause The cause of this exception, may be {@code null}.
+     * @param cause   The cause of this exception, may be {@code null}.
      */
     public ArgumentNullException(String message, Throwable cause) {
         super(message, cause);

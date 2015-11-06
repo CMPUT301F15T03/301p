@@ -25,8 +25,12 @@ package ca.ualberta.cmput301.t03.datamanager;
  */
 public interface DataManagerApiTests {
     void testKeyExists();
+
     void testGetDataWhenKeyDoesNotExistThrowsException();
+
     void testWriteData();
+
     void testDelete();
+
     void testIsOperational();
 }

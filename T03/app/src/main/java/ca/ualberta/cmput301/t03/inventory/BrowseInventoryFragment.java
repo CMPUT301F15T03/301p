@@ -48,6 +48,7 @@ import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.user.User;
+
 /**
  * Fragment that displays a ListView containing all Items from all friends.
  * This can (later) be filtered by friends, category, and Texttual Query.
@@ -57,7 +58,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
     View mView;
 
     ArrayList<Item> allItems;
-    ArrayList<HashMap<String,String>> listItems;
+    ArrayList<HashMap<String, String>> listItems;
     SimpleAdapter adapter;
 
     private BrowsableInventories model;
@@ -77,6 +78,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
     /**
      * Gets User associated to system config. Loads any data associated to Browsables.
      * Namely Users friendList.
+     *
      * @param savedInstanceState
      */
     @Override
@@ -85,14 +87,14 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
         mActivity = getActivity();
 
         Configuration c = new Configuration(getActivity().getApplicationContext());
-        try{
+        try {
             user = PrimaryUser.getInstance();
             model = new BrowsableInventories();
             controller = new BrowseInventoryController(getContext(), model);
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException();
         }
-        listItems = new ArrayList<HashMap<String,String>>();
+        listItems = new ArrayList<HashMap<String, String>>();
         allItems = new ArrayList<Item>();
     }
 
@@ -136,7 +138,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
                     @Override
                     public void run() {
                         allItems = model.getList();
-                        for(Item item: allItems){
+                        for (Item item : allItems) {
                             addToListView(item);
                         }
                     }
@@ -149,9 +151,10 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
 
     /**
      * Used to add Items to the ListView.
+     *
      * @param item
      */
-    public void addToListView(Item item){
+    public void addToListView(Item item) {
         HashMap<String, String> hm = new HashMap<String, String>();
         hm.put("tileViewItemName", item.getItemName());
         hm.put("tileViewItemCategory", item.getItemCategory());
@@ -161,6 +164,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
 
     /**
      * Starts intent for inspecting item
+     *
      * @param item
      */
     public void inspectItem(Item item) {
@@ -198,7 +202,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
         super.onDestroy();
     }
 
-    private void setupFab(View v){
+    private void setupFab(View v) {
         addFilterBrowseFab = (FloatingActionButton) v.findViewById(R.id.addFilterBrowseFab);
         addFilterBrowseFab.setOnClickListener(new View.OnClickListener() {
             @Override

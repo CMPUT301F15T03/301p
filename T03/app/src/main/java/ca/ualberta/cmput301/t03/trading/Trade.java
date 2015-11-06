@@ -44,15 +44,15 @@ import ca.ualberta.cmput301.t03.user.User;
 
 /**
  * Model which represents a single trade.
- *
+ * <p>
  * The Trade is immutable <strong>except for</strong> the following:
  * - state
  * - borrowersItems
  * - comments
- *
+ * <p>
  * In particular, {@link Trade#getTradeUUID()} will remain constant across modifications to these
  * fields and also across all time and space.
- *
+ * <p>
  * State is managed by the
  */
 public class Trade implements Observable {
@@ -78,9 +78,10 @@ public class Trade implements Observable {
 
     /**
      * Builds a Trade object from an existing Trade's UUID.
-     *
+     * <p>
      * This does <strong>not</strong> create a new Trade. Instead, it
      * builds an object which represents the existing trade with the given UUID.
+     *
      * @param tradeUUID
      * @param context
      */
@@ -94,12 +95,12 @@ public class Trade implements Observable {
 
     /**
      * Creates a new Trade, gives it a unique identifier ({@link UUID}), and persists it.
-     * 
-     * @param borrower User offering to trade for the owner's single item
-     * @param owner Owner of the single item
+     *
+     * @param borrower       User offering to trade for the owner's single item
+     * @param owner          Owner of the single item
      * @param borrowersItems Items borrower is offering for the owner's single item
-     * @param ownersItems List of owner's single item
-     * @param context The application context. Used to fetch and save data using @{link DataManager}.
+     * @param ownersItems    List of owner's single item
+     * @param context        The application context. Used to fetch and save data using @{link DataManager}.
      */
     public Trade(User borrower, User owner,
                  Collection<Item> borrowersItems, Collection<Item> ownersItems,
@@ -127,7 +128,7 @@ public class Trade implements Observable {
     /**
      * Fetches this {@link Trade} by {@link UUID} using {@link DataManager}
      * and updates this Trade object with any new data.
-     *
+     * <p>
      * Fields updated, if changed:
      * - state
      * - borrowersItems
@@ -205,7 +206,7 @@ public class Trade implements Observable {
 
     /**
      * Sets the current state of this trade.
-     *
+     * <p>
      * This is intentionally package-private.
      * It is only to be used by {@link TradeState} implementations.
      *
@@ -347,6 +348,7 @@ public class Trade implements Observable {
 
     /**
      * {@inheritDoc}
+     *
      * @param observer the Observer to add
      */
     @Override
@@ -356,6 +358,7 @@ public class Trade implements Observable {
 
     /**
      * {@inheritDoc}
+     *
      * @param observer the Observer to remove
      */
     @Override

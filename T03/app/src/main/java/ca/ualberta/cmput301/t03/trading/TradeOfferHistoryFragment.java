@@ -33,8 +33,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
@@ -81,7 +79,7 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer {
             protected Object doInBackground(Object[] params) {
                 try {
                     model = PrimaryUser.getInstance().getTradeList();
-                    
+
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

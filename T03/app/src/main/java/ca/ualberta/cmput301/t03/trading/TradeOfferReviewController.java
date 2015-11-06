@@ -27,10 +27,10 @@ import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeStateTransition;
 
 /**
  * Controller for reviewing a trade which has been offered to the user.
- *
+ * <p>
  * The current user is able to review trades which have been offered to them.
  * Available actions are accepting, declining, and declining-and-counter-offering.
- *
+ * <p>
  * Any given instance of TradeOfferReviewController is owned by a {@link TradeOfferReviewActivity}.
  */
 public class TradeOfferReviewController {
@@ -46,7 +46,7 @@ public class TradeOfferReviewController {
 
     /**
      * Accept the trade.
-     *
+     * <p>
      * The IllegalTradeStateTransition should never be thrown/caught. If the user
      * is in TradeOfferReviewActivity, they are reviewing a trade which is in
      * {@link TradeStateOffered}. {@link TradeState#accept(Trade)} is a legal action.
@@ -61,7 +61,7 @@ public class TradeOfferReviewController {
 
     /**
      * Decline the trade.
-     *
+     * <p>
      * The IllegalTradeStateTransition should never be thrown/caught. If the user
      * is in TradeOfferReviewActivity, they are reviewing a trade which is in
      * {@link TradeStateOffered}. Thus, {@link TradeState#decline(Trade)} is a legal action.
@@ -76,7 +76,7 @@ public class TradeOfferReviewController {
 
     /**
      * Decline the trade, and prepare to compose a new Counter-Trade
-     *
+     * <p>
      * The IllegalTradeStateTransition should never be thrown/caught. If the user
      * is in TradeOfferReviewActivity, they are reviewing a trade which is in
      * {@link TradeStateOffered}. Thus, {@link TradeState#decline(Trade)} is a legal action.

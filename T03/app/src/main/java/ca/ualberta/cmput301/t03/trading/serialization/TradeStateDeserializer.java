@@ -38,7 +38,7 @@ import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeStateDeserializat
 
 /**
  * class TradeStateDeserialize implements {@link JsonDeserializer<TradeState>}
- *
+ * <p>
  * This class gives Gson the ability to deserialize a TradeState object.
  *
  * @see {@link TradeStateSerializer}
@@ -46,16 +46,6 @@ import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeStateDeserializat
  * @see <a href="https://sites.google.com/site/gson/gson-user-guide#TOC-Custom-Serialization-and-Deserialization">Gson Custom Serialization and Deserialization</a>
  */
 public class TradeStateDeserializer implements JsonDeserializer<TradeState> {
-
-    public TradeState deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
-            throws JsonParseException {
-        try {
-            return TradeStateDeserializer.fromString(json.getAsString());
-        } catch (IllegalTradeStateDeserialization illegalTradeStateDeserialization) {
-            illegalTradeStateDeserialization.printStackTrace();
-            return null;
-        }
-    }
 
     private static TradeState fromString(String str) throws IllegalTradeStateDeserialization {
         switch (str) {
@@ -71,6 +61,16 @@ public class TradeStateDeserializer implements JsonDeserializer<TradeState> {
                 return new TradeStateDeclined();
             default:
                 throw new IllegalTradeStateDeserialization();
+        }
+    }
+
+    public TradeState deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+            throws JsonParseException {
+        try {
+            return TradeStateDeserializer.fromString(json.getAsString());
+        } catch (IllegalTradeStateDeserialization illegalTradeStateDeserialization) {
+            illegalTradeStateDeserialization.printStackTrace();
+            return null;
         }
     }
 }

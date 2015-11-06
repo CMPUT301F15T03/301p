@@ -74,7 +74,8 @@ public class JsonDataManagerTests extends TestCase {
             }
         };
 
-        Type hashMapType = new TypeToken<HashMap<String, Integer>>(){}.getType();
+        Type hashMapType = new TypeToken<HashMap<String, Integer>>() {
+        }.getType();
         String json = testDataManager.serialize(testObj, hashMapType);
         Gson gson = new Gson();
         HashMap<String, Integer> deserialized = gson.fromJson(json, hashMapType);
@@ -93,7 +94,8 @@ public class JsonDataManagerTests extends TestCase {
 
     public void testExplitExposeSerializationTrue() {
         TestDto obj = new TestDto(1, "One", true, "hidden");
-        Type testDtoType = new TypeToken<TestDto>(){}.getType();
+        Type testDtoType = new TypeToken<TestDto>() {
+        }.getType();
 
         String json = testDataManager.serialize(obj, testDtoType,
                 new JsonFormatter(true, true));
@@ -107,7 +109,8 @@ public class JsonDataManagerTests extends TestCase {
 
     public void testExplitExposeSerializationFalse() {
         TestDto obj = new TestDto(1, "One", true, "hidden");
-        Type testDtoType = new TypeToken<TestDto>(){}.getType();
+        Type testDtoType = new TypeToken<TestDto>() {
+        }.getType();
 
         String json = testDataManager.serialize(obj, testDtoType,
                 new JsonFormatter(false, true));
@@ -121,7 +124,8 @@ public class JsonDataManagerTests extends TestCase {
 
     public void testExplitExposeDeserializationTrue() {
         String json = "{\"aNumber\" : 1, \"aString\" : \"One\", \"aBoolean\" : True, \"aHiddenString\" : \"hidden\"}";
-        Type testDtoType = new TypeToken<TestDto>(){}.getType();
+        Type testDtoType = new TypeToken<TestDto>() {
+        }.getType();
         TestDto deserialized = testDataManager.deserialize(json, testDtoType, new JsonFormatter(true, true));
         assertEquals(1, deserialized.getaNumber());
         assertEquals("One", deserialized.getaString());
@@ -131,7 +135,8 @@ public class JsonDataManagerTests extends TestCase {
 
     public void testExplitExposeDeserializationFalse() {
         String json = "{\"aNumber\" : 1, \"aString\" : \"One\", \"aBoolean\" : True, \"aHiddenString\" : \"hidden\"}";
-        Type testDtoType = new TypeToken<TestDto>(){}.getType();
+        Type testDtoType = new TypeToken<TestDto>() {
+        }.getType();
         TestDto deserialized = testDataManager.deserialize(json, testDtoType, new JsonFormatter(false, true));
         assertEquals(1, deserialized.getaNumber());
         assertEquals("One", deserialized.getaString());

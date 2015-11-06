@@ -20,21 +20,19 @@
 
 package ca.ualberta.cmput301.t03.user;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import org.parceler.Parcels;
 
 import ca.ualberta.cmput301.t03.R;
-import ca.ualberta.cmput301.t03.inventory.BrowseInventoryFragment;
 import ca.ualberta.cmput301.t03.inventory.UserInventoryFragment;
 
 /**
  * A skeleton activity to contain the view inventory fragment.
- *
+ * <p>
  * Use intent.PutExtra with a Parceled user and key "user"
  * to specify which User's inventory should be viewed.
- *
  */
 public class ViewInventoryActivity extends AppCompatActivity {
 

@@ -31,7 +31,7 @@ import ca.ualberta.cmput301.t03.R;
 /**
  * class TradeOfferReviewActivity is the View for reviewing a trade which
  * has been offered to the current user.
- *
+ * <p>
  * On interaction, it delegates to a {@link TradeOfferReviewController}.
  */
 public class TradeOfferReviewActivity extends AppCompatActivity {

@@ -31,7 +31,7 @@ import ca.ualberta.cmput301.t03.Observer;
  * Model that represents a given User's profile information.
  * Contains various information, including contact information.
  * Can be modified by the Application User at any time.
- * <p/>
+ * <p>
  * Will notify the parent user of an changes made
  */
 public class UserProfile implements Observable {

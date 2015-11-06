@@ -80,7 +80,7 @@ public class EditProfileFragment extends Fragment implements Observer {
 
     }
 
-    public void populateFields(){
+    public void populateFields() {
         mNameField.setText(user.getUsername());
         mCityField.setText(model.getCity());
         mEmailField.setText(model.getEmail());
@@ -89,9 +89,9 @@ public class EditProfileFragment extends Fragment implements Observer {
         mEmailField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus){
+                if (!hasFocus) {
                     TextView t = (TextView) v;
-                    if (controller.isEmailInValid(t.getText().toString())){
+                    if (controller.isEmailInValid(t.getText().toString())) {
                         Snackbar.make(getView(), "Invalid email!", Snackbar.LENGTH_SHORT).show();
                         t.setText("");
                     }
@@ -116,7 +116,7 @@ public class EditProfileFragment extends Fragment implements Observer {
         AsyncTask worker = new AsyncTask() {
             @Override
             protected Object doInBackground(Object[] params) {
-                try{
+                try {
                     model = user.getProfile();
                     controller = new UserProfileController(model);
 
@@ -137,14 +137,13 @@ public class EditProfileFragment extends Fragment implements Observer {
         worker.execute();
 
 
-
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
 
-        new AsyncTask<Object, Object, Object>(){
+        new AsyncTask<Object, Object, Object>() {
 
             @Override
             protected Object doInBackground(Object... params) {

@@ -260,8 +260,8 @@ public class TradeUITest
          */
         onView(withContentDescription("Open navigation drawer")).perform(click());
         onView(withText(getActivity().getString(R.string.tradeTitle)))
-            .check(matches(isDisplayed()))
-            .perform(click());
+                .check(matches(isDisplayed()))
+                .perform(click());
 
         /**
          * Open trade review

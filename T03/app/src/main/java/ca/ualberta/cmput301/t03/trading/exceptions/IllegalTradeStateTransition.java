@@ -20,12 +20,11 @@
 
 package ca.ualberta.cmput301.t03.trading.exceptions;
 
-import ca.ualberta.cmput301.t03.trading.Trade;
 import ca.ualberta.cmput301.t03.trading.TradeState;
 
 /**
  * class IllegalTradeStateTransition extends {@link Throwable}
- *
+ * <p>
  * It is thrown when something attempts a transition from one
  * {@link TradeState} to another which is illogical, disallowed,
  * or silly.

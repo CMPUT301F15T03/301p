@@ -84,7 +84,7 @@ public class TestDto {
             return false;
         }
 
-        TestDto rhs = (TestDto)obj;
+        TestDto rhs = (TestDto) obj;
 
         return this.getaBoolean() == rhs.getaBoolean() &&
                 this.getaHiddenString().equals(rhs.getaHiddenString()) &&

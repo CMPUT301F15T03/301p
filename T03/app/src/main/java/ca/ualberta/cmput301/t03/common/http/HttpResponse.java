@@ -38,8 +38,9 @@ public class HttpResponse {
 
     /**
      * Creates an instance of {@link HttpResponse}/
+     *
      * @param responseCode The response's status code.
-     * @param contents The contents of the response. Can be null if the response had no contents.
+     * @param contents     The contents of the response. Can be null if the response had no contents.
      */
     public HttpResponse(int responseCode, byte[] contents) {
         this.responseCode = responseCode;
@@ -55,6 +56,7 @@ public class HttpResponse {
 
     /**
      * Reads the {@link HttpResponse} data from an {@link HttpURLConnection}.
+     *
      * @param httpConnection The {@link HttpURLConnection} from which the response is to be read.
      * @throws IOException Thrown, if the network connection fails.
      */
@@ -64,8 +66,7 @@ public class HttpResponse {
         InputStream in;
         if (HttpStatusCode.isErrorCode(responseCode)) {
             in = new BufferedInputStream(httpConnection.getErrorStream());
-        }
-        else {
+        } else {
             in = new BufferedInputStream(httpConnection.getInputStream());
         }
 
@@ -76,6 +77,7 @@ public class HttpResponse {
 
     /**
      * Getter for the response contents.
+     *
      * @return
      */
     public byte[] getContents() {
@@ -84,6 +86,7 @@ public class HttpResponse {
 
     /**
      * Getter for the response's status code.
+     *
      * @return
      */
     public int getResponseCode() {

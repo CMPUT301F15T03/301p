@@ -51,6 +51,7 @@ public class TradeList implements Observable, Observer {
 
     /**
      * Add a trade to the user.
+     *
      * @param trade trade to be added
      */
     public void addTrade(Trade trade) {
@@ -60,6 +61,7 @@ public class TradeList implements Observable, Observer {
 
     /**
      * Add each trade in a list to the user
+     *
      * @param trades list of trades to be added
      */
     public void addAll(List<Trade> trades) {
@@ -77,7 +79,17 @@ public class TradeList implements Observable, Observer {
     }
 
     /**
+     * Get all trades the user is involved in.
+     *
+     * @return the trades, as a hash map
+     */
+    public HashMap<UUID, Trade> getTrades() {
+        return this.trades;
+    }
+
+    /**
      * Set the trades that the user has.
+     *
      * @param trades trades to be applied.
      */
     public void setTrades(LinkedHashMap<UUID, Trade> trades) {
@@ -88,14 +100,7 @@ public class TradeList implements Observable, Observer {
 
     /**
      * Get all trades the user is involved in.
-     * @return the trades, as a hash map
-     */
-    public HashMap<UUID, Trade> getTrades() {
-        return this.trades;
-    }
-
-    /**
-     * Get all trades the user is involved in.
+     *
      * @return the trades, as a list
      */
     public List<Trade> getTradesAsList() {
@@ -121,6 +126,7 @@ public class TradeList implements Observable, Observer {
 
     /**
      * {@inheritDoc}
+     *
      * @param observer the Observer to add
      */
     @Override
@@ -130,6 +136,7 @@ public class TradeList implements Observable, Observer {
 
     /**
      * {@inheritDoc}
+     *
      * @param observer the Observer to remove
      */
     @Override
@@ -139,6 +146,7 @@ public class TradeList implements Observable, Observer {
 
     /**
      * {@inheritDoc}
+     *
      * @param observable reference to the Observable that triggered the update()
      */
     @Override

@@ -20,13 +20,9 @@
 
 package ca.ualberta.cmput301.t03.user;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -37,9 +33,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-
 import org.parceler.Parcels;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 
@@ -47,7 +41,6 @@ import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
-import ca.ualberta.cmput301.t03.configuration.Configuration;
 
 
 /**
@@ -90,7 +83,7 @@ public class ViewProfileFragment extends Fragment implements Observer {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        if(PrimaryUser.getInstance().equals(mUserToView)) {
+        if (PrimaryUser.getInstance().equals(mUserToView)) {
             inflater.inflate(R.menu.fragment_view_profile, menu);
         }
     }
@@ -113,7 +106,6 @@ public class ViewProfileFragment extends Fragment implements Observer {
     }
 
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -122,13 +114,13 @@ public class ViewProfileFragment extends Fragment implements Observer {
     }
 
 
-    void onBrowseInventoryButtonSelected(View v){
+    void onBrowseInventoryButtonSelected(View v) {
         Intent intent = new Intent(v.getContext(), ViewInventoryActivity.class);
         intent.putExtra("user", Parcels.wrap(mUserToView));
         startActivity(intent);
     }
 
-    void populateFields(){
+    void populateFields() {
         browseInventoryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -20,8 +20,6 @@
 
 package ca.ualberta.cmput301.t03.user;
 
-import android.util.Log;
-
 import com.google.gson.annotations.Expose;
 
 import java.util.ArrayList;
@@ -117,6 +115,7 @@ public class FriendsList implements Observable, Filterable {
 
     /**
      * {@inheritDoc}
+     *
      * @param observer the Observer to add
      */
     @Override
@@ -126,6 +125,7 @@ public class FriendsList implements Observable, Filterable {
 
     /**
      * {@inheritDoc}
+     *
      * @param observer the Observer to remove
      */
     @Override
@@ -135,6 +135,7 @@ public class FriendsList implements Observable, Filterable {
 
     /**
      * {@inheritDoc}
+     *
      * @param filter the filter you wish to apply
      */
     @Override
@@ -144,6 +145,7 @@ public class FriendsList implements Observable, Filterable {
 
     /**
      * {@inheritDoc}
+     *
      * @param filter the filter you wish to remove
      */
     @Override

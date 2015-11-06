@@ -33,20 +33,28 @@ public class PhotoGalleryController {
     /**
      * Shows user the next photo in the photo gallery in full view, if there is one.
      */
-    public void swipeLeft() { throw new UnsupportedOperationException(); }
+    public void swipeLeft() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * Shows user the previous photo in the photo gallery in full view, if there is one.
      */
-    public void swipeRight() { throw new UnsupportedOperationException(); }
+    public void swipeRight() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * Brings up the menu if the user wants to download the photo.
      */
-    public void longClick() { throw new UnsupportedOperationException(); }
+    public void longClick() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * Exits PhotoGallery view (no more full screen photo)
      */
-    public void swipeDown() { throw new UnsupportedOperationException(); }
+    public void swipeDown() {
+        throw new UnsupportedOperationException();
+    }
 }

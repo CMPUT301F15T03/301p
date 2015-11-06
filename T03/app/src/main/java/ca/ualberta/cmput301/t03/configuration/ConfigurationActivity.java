@@ -43,6 +43,7 @@ public class ConfigurationActivity extends AppCompatActivity implements Observer
     /**
      * onCreate will setup the callbacks for switch toggles to the controller which will modify
      * the model that it is listening too.
+     *
      * @param savedInstanceState
      */
     @Override
@@ -80,6 +81,7 @@ public class ConfigurationActivity extends AppCompatActivity implements Observer
     /**
      * update triggers a refresh of the view elements when called by a model that
      * ConfigurationActivity has registered with.
+     *
      * @param observable The observable which triggered the update
      */
     @Override
@@ -89,6 +91,7 @@ public class ConfigurationActivity extends AppCompatActivity implements Observer
 
     /**
      * Get the model currently in use by the ConfigurationActivity
+     *
      * @return Activity's model
      */
     public Configuration getModel() {
@@ -97,6 +100,7 @@ public class ConfigurationActivity extends AppCompatActivity implements Observer
 
     /**
      * Get the downloadImagesSwitch view used by the ConfigurationActivity
+     *
      * @return Activities downloadImagesSwitch
      */
     public Switch getDownloadImagesSwitch() {

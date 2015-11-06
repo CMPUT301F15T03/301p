@@ -28,7 +28,7 @@ import ca.ualberta.cmput301.t03.datamanager.HttpDataManager;
 
 /**
  * Controller for the Inventory model.
- *
+ * <p>
  * Automatically commits changes when items are added.
  */
 public class UserInventoryController {
@@ -41,7 +41,7 @@ public class UserInventoryController {
 
     /**
      * @param inventory The model Object containing the users Items
-     * @param context Activity Context
+     * @param context   Activity Context
      */
     public UserInventoryController(Context context, Inventory inventory) {
         this.inventory = inventory;
@@ -52,7 +52,8 @@ public class UserInventoryController {
     }
 
     /**
-     *Add an Item to Inventory
+     * Add an Item to Inventory
+     *
      * @param item User new item
      */
     public void addingItemToInventory(Item item) {

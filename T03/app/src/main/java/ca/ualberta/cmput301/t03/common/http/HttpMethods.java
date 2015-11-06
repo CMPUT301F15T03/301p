@@ -48,6 +48,7 @@ public enum HttpMethods {
 
     /**
      * Sets a {@link HttpURLConnection} to use the HTTP method.
+     *
      * @param connection The {@link HttpURLConnection} object to be modified.
      */
     public void setMethod(HttpURLConnection connection) {

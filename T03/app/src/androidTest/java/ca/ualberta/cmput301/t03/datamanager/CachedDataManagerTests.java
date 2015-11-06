@@ -24,10 +24,8 @@ import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.net.MalformedURLException;
 import java.util.HashMap;
 
-import ca.ualberta.cmput301.t03.common.exceptions.NotImplementedException;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 
 import static ca.ualberta.cmput301.t03.commontesting.ExceptionAsserter.assertThrowsException;
@@ -71,7 +69,8 @@ public class CachedDataManagerTests extends BaseDataManagerTests<CachedDataManag
         InMemoryDataManager mockDataManager = new InMemoryDataManager();
         CachedDataManager cachedDataManager = new CachedDataManager(mockDataManager, getContext());
 
-        Type type = new TypeToken<TestDto>() {}.getType();
+        Type type = new TypeToken<TestDto>() {
+        }.getType();
 
         assertFalse(cachedDataManager.keyExists(dataKey));
         cachedDataManager.writeData(dataKey, testDto, type);
@@ -89,7 +88,8 @@ public class CachedDataManagerTests extends BaseDataManagerTests<CachedDataManag
         InMemoryDataManager mockDataManager = new InMemoryDataManager();
         final CachedDataManager cachedDataManager = new CachedDataManager(mockDataManager, getContext());
 
-        final Type type = new TypeToken<TestDto>() {}.getType();
+        final Type type = new TypeToken<TestDto>() {
+        }.getType();
 
         assertFalse(cachedDataManager.keyExists(dataKey));
         mockDataManager.setIsOperational(false);
@@ -121,7 +121,7 @@ public class CachedDataManagerTests extends BaseDataManagerTests<CachedDataManag
 
         @Override
         public <T> T getData(DataKey key, Type typeOfT) throws IOException {
-            return (T)inMemoryDataRepository.get(key.toString());
+            return (T) inMemoryDataRepository.get(key.toString());
         }
 
         @Override
