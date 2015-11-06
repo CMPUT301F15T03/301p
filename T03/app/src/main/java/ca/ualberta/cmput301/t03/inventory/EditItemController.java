@@ -21,7 +21,6 @@
 package ca.ualberta.cmput301.t03.inventory;
 
 import android.app.Activity;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
@@ -132,6 +131,7 @@ public class EditItemController {
 
     /**
      * Deletes item from inventory.
+     *
      * @param itemid
      */
     public void deleteItemButtonClicked(UUID itemid) {

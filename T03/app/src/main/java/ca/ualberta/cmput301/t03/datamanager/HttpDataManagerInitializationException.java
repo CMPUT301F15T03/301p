@@ -35,6 +35,7 @@ public class HttpDataManagerInitializationException extends RuntimeException {
 
     /**
      * Create an instance of {@link HttpDataManagerInitializationException}.
+     *
      * @param message The detailed message describing the exception.
      */
     public HttpDataManagerInitializationException(String message) {

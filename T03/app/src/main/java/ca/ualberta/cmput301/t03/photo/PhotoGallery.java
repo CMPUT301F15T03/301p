@@ -25,8 +25,6 @@ import java.util.Collection;
 
 import ca.ualberta.cmput301.t03.Observer;
 
-import java.util.Collection;
-
 /**
  * Created by mmabuyo on 2015-10-29 .
  */
@@ -37,6 +35,7 @@ public class PhotoGallery {
 
     /**
      * Gets photo that is in current full-view of the phone's screen.
+     *
      * @return
      */
     public Photo getPhotoInFocus() {
@@ -45,6 +44,7 @@ public class PhotoGallery {
 
     /**
      * Sets photo in focus to be current full-view of the phone's screen.
+     *
      * @param photoInFocus
      */
     public void setPhotoInFocus(Photo photoInFocus) {
@@ -53,6 +53,7 @@ public class PhotoGallery {
 
     /**
      * Retrieves the list of photos for the item.
+     *
      * @return Array list of item's photos.
      */
     public ArrayList<Photo> getPhotos() {
@@ -61,26 +62,38 @@ public class PhotoGallery {
 
     /**
      * Sets the given array list of photos to be the item's photos.
+     *
      * @param photos
      */
     public void setPhotos(ArrayList<Photo> photos) {
         this.photos = photos;
     }
 
-    public void load() { throw new UnsupportedOperationException(); }
-    public void save() { throw new UnsupportedOperationException(); }
+    public void load() {
+        throw new UnsupportedOperationException();
+    }
+
+    public void save() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * Removes the photo from the item's photo gallery.
+     *
      * @param photo
      */
-    public void removePhoto(Photo photo) { throw new UnsupportedOperationException(); }
+    public void removePhoto(Photo photo) {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * Adds the photo to the item's photo gallery providing it meets the photo limit for an item.
+     *
      * @param photo
      */
-    public void addPhoto(Photo photo) { throw new UnsupportedOperationException(); }
+    public void addPhoto(Photo photo) {
+        throw new UnsupportedOperationException();
+    }
 
 
 }

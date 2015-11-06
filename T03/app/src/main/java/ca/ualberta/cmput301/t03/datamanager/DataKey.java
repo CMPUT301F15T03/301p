@@ -34,8 +34,9 @@ public class DataKey {
 
     /**
      * Creates a new instance of {@link DataKey}
+     *
      * @param type A string describing the type of object being stored using this {@link DataKey}.
-     * @param id A string describing the unique ID of the object.
+     * @param id   A string describing the unique ID of the object.
      * @throws IllegalArgumentException Thrown, if either of the parameters are null or whitespace.
      */
     public DataKey(String type, String id) throws IllegalArgumentException {
@@ -45,6 +46,7 @@ public class DataKey {
 
     /**
      * Gets the ID for the {@link DataKey}.
+     *
      * @return The ID for the {@link DataKey}.
      */
     public String getId() {
@@ -53,6 +55,7 @@ public class DataKey {
 
     /**
      * Sets the ID for the {@link DataKey}.
+     *
      * @param id The new ID.
      * @throws IllegalArgumentException Thrown, if the new ID is either null or whitespace.
      */
@@ -62,6 +65,7 @@ public class DataKey {
 
     /**
      * Gets the object type for this {@link DataKey}.
+     *
      * @return The object type for this {@link DataKey}.
      */
     public String getType() {
@@ -70,6 +74,7 @@ public class DataKey {
 
     /**
      * Sets the object type for this {@link DataKey}.
+     *
      * @param type The new object type.
      * @throws IllegalArgumentException Thrown, if the new type is either null or whitespace.
      */
@@ -79,6 +84,7 @@ public class DataKey {
 
     /**
      * Returns a string representation of the {@link DataKey} as a path in the format: type/ID
+     *
      * @return The path representation of the {@link DataKey}.
      */
     @Override

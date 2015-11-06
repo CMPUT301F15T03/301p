@@ -37,12 +37,13 @@ public class JsonFormatter {
 
     /**
      * Creates an instance of the {@link JsonFormatter}.
+     *
      * @param useExplicitExposeAnnotation True, if the @expose annotations are to be explicitly used,
      *                                    else false. If this is set to true, only the fields with
      *                                    the annotation @expose will be serialized/de-serialized.
-     * @param usePrettyJson True, if the serialized JSON needs to be in "pretty" format (with
-     *                      appropriate newlines and indentations). False, if the JSON needs to be
-     *                      in a single line.
+     * @param usePrettyJson               True, if the serialized JSON needs to be in "pretty" format (with
+     *                                    appropriate newlines and indentations). False, if the JSON needs to be
+     *                                    in a single line.
      */
     public JsonFormatter(boolean useExplicitExposeAnnotation, boolean usePrettyJson) {
         setUseExplicitExposeAnnotation(useExplicitExposeAnnotation);
@@ -52,6 +53,7 @@ public class JsonFormatter {
     /**
      * Gets the {@link JsonFormatter}'s current "use explicit expose annotation" setting. If this is
      * set to true, only the fields with the annotation @expose will be serialized/de-serialized.
+     *
      * @return The current "use explicit expose annotation" setting.
      */
     public boolean getUseExplicitExposeAnnotation() {
@@ -61,6 +63,7 @@ public class JsonFormatter {
     /**
      * Sets the {@link JsonFormatter}'s current "use explicit expose annotation" setting. If this is
      * set to true, only the fields with the annotation @expose will be serialized/de-serialized.
+     *
      * @param useExplicitExposeAnnotation The new "use explicit expose annotation" setting.
      */
     public void setUseExplicitExposeAnnotation(boolean useExplicitExposeAnnotation) {
@@ -69,8 +72,9 @@ public class JsonFormatter {
 
     /**
      * Gets the {@link JsonFormatter}'s current "use pretty JSON" setting.
+     *
      * @return True, if the serialized JSON needs to be in "pretty" format (with appropriate
-     *         newlines and indentations). False, if the JSON needs to be in a single line.
+     * newlines and indentations). False, if the JSON needs to be in a single line.
      */
     public boolean getUsePrettyJson() {
         return usePrettyJson;
@@ -78,6 +82,7 @@ public class JsonFormatter {
 
     /**
      * Sets the {@link JsonFormatter}'s current "use pretty JSON" setting.
+     *
      * @param usePrettyJson True, if the serialized JSON needs to be in "pretty" format (with appropriate
      *                      newlines and indentations). False, if the JSON needs to be in a single line.
      */
@@ -87,6 +92,7 @@ public class JsonFormatter {
 
     /**
      * Gets the {@link Gson} object configured with the settings of this {@link JsonFormatter}.
+     *
      * @return The properly configured {@link Gson}.
      */
     public Gson getGson() {

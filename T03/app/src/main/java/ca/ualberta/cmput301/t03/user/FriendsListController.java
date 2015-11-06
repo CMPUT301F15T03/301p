@@ -24,14 +24,13 @@ import android.content.Context;
 
 import java.io.IOException;
 
-import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.datamanager.DataKey;
 import ca.ualberta.cmput301.t03.datamanager.DataManager;
 import ca.ualberta.cmput301.t03.datamanager.HttpDataManager;
 
 /**
  * Controller for the FriendsList model.
- *
+ * <p>
  * Automatically commits changes when friends are
  * added and removed.
  */
@@ -41,7 +40,7 @@ public class FriendsListController {
     private Context mContext;
     private DataManager mDataManager;
 
-    public FriendsListController(Context context, FriendsList friendsList){
+    public FriendsListController(Context context, FriendsList friendsList) {
         mFriendsList = friendsList;
         mContext = context;
         mDataManager = new HttpDataManager(context);
@@ -49,7 +48,7 @@ public class FriendsListController {
 
     /**
      * WARNING this may hit the network!
-     *
+     * <p>
      * Check if user exists on server.
      *
      * @param username Username to check
@@ -62,7 +61,7 @@ public class FriendsListController {
 
     /**
      * WARNING this may hit the network!
-     *
+     * <p>
      * Add a User as a friend.
      *
      * @param friend The friend to add.
@@ -73,14 +72,14 @@ public class FriendsListController {
     public void addFriend(User friend) throws UserNotFoundException, IOException, UserAlreadyAddedException {
         // Check if friend is already added...
 
-        if (mFriendsList.containsFriend(friend)){
+        if (mFriendsList.containsFriend(friend)) {
             throw new UserAlreadyAddedException("User %s is already in your friends list!");
         }
 
         // Check if friend exists
         boolean doesUserExist = isUserNameTaken(friend.getUsername());
 
-        if (doesUserExist){
+        if (doesUserExist) {
             //IF exists add it.
             User friendToAdd = friend;
             mFriendsList.addFriend(friendToAdd);
@@ -92,7 +91,7 @@ public class FriendsListController {
 
     /**
      * WARNING this may hit the network!
-     *
+     * <p>
      * Add a friend by username.
      *
      * @param friend Username of the friend to add
@@ -107,7 +106,7 @@ public class FriendsListController {
 
     /**
      * WARNING this may hit the network!
-     *
+     * <p>
      * Remove a friend.
      *
      * @param friend User to remove from FriendsList
@@ -119,7 +118,7 @@ public class FriendsListController {
 
     /**
      * WARNING this may hit the network!
-     *
+     * <p>
      * Remove a friend by username.
      *
      * @param friend String username of the friend to remove.

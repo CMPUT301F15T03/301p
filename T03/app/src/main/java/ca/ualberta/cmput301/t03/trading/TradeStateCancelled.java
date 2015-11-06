@@ -27,6 +27,7 @@ import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeStateTransition;
  */
 public class TradeStateCancelled implements TradeState {
     public final static String stateString = "TradeStateCancelled";
+
     /**
      * {@inheritDoc}
      */
@@ -53,6 +54,7 @@ public class TradeStateCancelled implements TradeState {
 
     /**
      * {@inheritDoc}
+     *
      * @param trade Trade to be offered.
      * @throws IllegalTradeStateTransition
      */
@@ -63,6 +65,7 @@ public class TradeStateCancelled implements TradeState {
 
     /**
      * {@inheritDoc}
+     *
      * @param trade Trade to be cancelled.
      * @throws IllegalTradeStateTransition
      */
@@ -73,6 +76,7 @@ public class TradeStateCancelled implements TradeState {
 
     /**
      * {@inheritDoc}
+     *
      * @param trade Trade to be accepted.
      * @throws IllegalTradeStateTransition
      */
@@ -83,6 +87,7 @@ public class TradeStateCancelled implements TradeState {
 
     /**
      * {@inheritDoc}
+     *
      * @param trade Trade to be declined.
      * @throws IllegalTradeStateTransition
      */

@@ -33,10 +33,11 @@ public class Preconditions {
     /**
      * Checks if the object passed is null or not. If null, then throws {@link ArgumentNullException}.
      * This should be ideally used in the beginning of a method.
-     * @param obj The object to be checked.
+     *
+     * @param obj          The object to be checked.
      * @param argumentName The name of the argument (of the original method) that this object corresponds
      *                     to.
-     * @param <T> The generic type of the object being checked.
+     * @param <T>          The generic type of the object being checked.
      * @return The passed object itself.
      * @throws ArgumentNullException Thrown, if the object is null.
      */
@@ -51,12 +52,13 @@ public class Preconditions {
      * Checks if the collection passed is null or not, and if it is not null, then if it is empty.
      * If null, then throws {@link ArgumentNullException}. If empty, throws {@link IllegalArgumentException}.
      * This should be ideally used in the beginning of a method.
-     * @param obj The collection object to be checked.
+     *
+     * @param obj          The collection object to be checked.
      * @param argumentName The name of the argument (of the original method) that this object corresponds
      *                     to.
-     * @param <T> The generic type of the object being checked.
+     * @param <T>          The generic type of the object being checked.
      * @return The passed object itself.
-     * @throws ArgumentNullException Thrown, if the collection is null.
+     * @throws ArgumentNullException    Thrown, if the collection is null.
      * @throws IllegalArgumentException Thrown, if the collection is empty.
      */
     public static <T extends Collection<?>> T checkNotNullOrEmpty(T obj, String argumentName) throws IllegalArgumentException {
@@ -70,11 +72,12 @@ public class Preconditions {
     /**
      * Checks if the passed string is null and/or whitespace. If it's null, then throws
      * {@link ArgumentNullException}. if it's whitespace, then throws {@link IllegalArgumentException}.
-     * @param str The string to be checked.
+     *
+     * @param str          The string to be checked.
      * @param argumentName The name of the argument (of the original method) that this object corresponds
      *                     to.
      * @return The passed string.
-     * @throws ArgumentNullException Thrown, if the string is null.
+     * @throws ArgumentNullException    Thrown, if the string is null.
      * @throws IllegalArgumentException Thrown, if the string is whitespace.
      */
     public static String checkNotNullOrWhitespace(String str, String argumentName) throws IllegalArgumentException {

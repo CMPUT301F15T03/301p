@@ -38,7 +38,18 @@ public enum HttpStatusCode {
     }
 
     /**
+     * Checks if the passed int status code corresponds to an error code or not.
+     *
+     * @param errorCode The error code to be checked.
+     * @return True, if the code corresponds to an error code.
+     */
+    public static boolean isErrorCode(int errorCode) {
+        return errorCode >= 400;
+    }
+
+    /**
      * Returns the int status code for the HTTP status code.
+     *
      * @return The integer associated to the HTTP status code.
      */
     public int getStatusCode() {
@@ -54,16 +65,8 @@ public enum HttpStatusCode {
     }
 
     /**
-     * Checks if the passed int status code corresponds to an error code or not.
-     * @param errorCode The error code to be checked.
-     * @return True, if the code corresponds to an error code.
-     */
-    public static boolean isErrorCode(int errorCode) {
-        return errorCode >= 400;
-    }
-
-    /**
      * Checks if this {@link HttpStatusCode} corresponds to an error code or not.
+     *
      * @return True, if the code corresponds to an error code.
      */
     public boolean isErrorCode() {

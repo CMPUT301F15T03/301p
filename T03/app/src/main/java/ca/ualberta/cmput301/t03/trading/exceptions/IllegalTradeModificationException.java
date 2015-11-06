@@ -25,7 +25,7 @@ import ca.ualberta.cmput301.t03.trading.TradeState;
 
 /**
  * class IllegalTradeModificationException extends {@link Throwable}
- *
+ * <p>
  * It is thrown when something attempts to modify a {@link Trade} which
  * is not {@link TradeState#isEditable()}.
  */

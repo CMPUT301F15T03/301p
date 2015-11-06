@@ -35,6 +35,7 @@ public class NotImplementedException extends RuntimeException {
 
     /**
      * Creates an instance of {@link NotImplementedException}.
+     *
      * @param message The detailed message describing the exception.
      */
     public NotImplementedException(String message) {
@@ -43,6 +44,7 @@ public class NotImplementedException extends RuntimeException {
 
     /**
      * Creates an instance of {@link NotImplementedException}.
+     *
      * @param cause The cause of this exception.
      */
     public NotImplementedException(Throwable cause) {
@@ -51,8 +53,9 @@ public class NotImplementedException extends RuntimeException {
 
     /**
      * Creates an instance of {@link NotImplementedException}.
+     *
      * @param message The detailed message describing the exception.
-     * @param cause The cause of this exception.
+     * @param cause   The cause of this exception.
      */
     public NotImplementedException(String message, Throwable cause) {
         super(message, cause);

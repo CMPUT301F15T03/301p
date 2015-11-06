@@ -22,6 +22,7 @@ package ca.ualberta.cmput301.t03.uitesting;
 
 import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
+
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.UUID;
@@ -38,13 +39,13 @@ import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.action.ViewActions.typeText;
-import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.containsString;
@@ -55,18 +56,13 @@ import static org.hamcrest.Matchers.anything;
 
 /**
  * Created by mmabuyo on 2015-11-04.
- *
- *   CODE REUSE
- *   Source: http://stackoverflow.com/questions/22965839/espresso-click-by-text-in-list-view
- *   Accessed November 5, 2015. Used to select the first item in inventory
- *      onData(anything()).inAdapterView(withId(R.id.InventoryListView)).atPosition(0).perform(click());
+ * <p>
+ * CODE REUSE
+ * Source: http://stackoverflow.com/questions/22965839/espresso-click-by-text-in-list-view
+ * Accessed November 5, 2015. Used to select the first item in inventory
+ * onData(anything()).inAdapterView(withId(R.id.InventoryListView)).atPosition(0).perform(click());
  */
 public class ItemsUITest extends ActivityInstrumentationTestCase2<MainActivity> {
-    private MainActivity mActivity;
-    private Context mContext;
-
-    private HttpDataManager dataManager;
-
     // TEST ITEM FIELDS
     String ITEM_NAME = "Camera";
     int ITEM_QUANTITY = 1;
@@ -74,6 +70,9 @@ public class ItemsUITest extends ActivityInstrumentationTestCase2<MainActivity> 
     String ITEM_CATEGORY = "Cameras";
     boolean ITEM_PRIVATE = false;
     String ITEM_DESCRIPTION = "Pretty great camera";
+    private MainActivity mActivity;
+    private Context mContext;
+    private HttpDataManager dataManager;
 
     public ItemsUITest() {
         super(MainActivity.class);

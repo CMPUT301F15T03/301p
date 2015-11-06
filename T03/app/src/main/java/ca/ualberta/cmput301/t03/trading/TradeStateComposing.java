@@ -20,7 +20,6 @@
 
 package ca.ualberta.cmput301.t03.trading;
 
-import ca.ualberta.cmput301.t03.common.exceptions.NotImplementedException;
 import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeStateTransition;
 
 /**
@@ -55,6 +54,7 @@ public class TradeStateComposing implements TradeState {
 
     /**
      * {@inheritDoc}
+     *
      * @param trade Trade to be offered.
      */
     @Override
@@ -64,6 +64,7 @@ public class TradeStateComposing implements TradeState {
 
     /**
      * {@inheritDoc}
+     *
      * @param trade Trade to be cancelled.
      */
     @Override
@@ -73,6 +74,7 @@ public class TradeStateComposing implements TradeState {
 
     /**
      * {@inheritDoc}
+     *
      * @param trade Trade to be accepted.
      * @throws IllegalTradeStateTransition
      */
@@ -83,6 +85,7 @@ public class TradeStateComposing implements TradeState {
 
     /**
      * {@inheritDoc}
+     *
      * @param trade Trade to be declined.
      * @throws IllegalTradeStateTransition
      */

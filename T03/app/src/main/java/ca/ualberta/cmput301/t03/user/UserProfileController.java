@@ -23,17 +23,11 @@ package ca.ualberta.cmput301.t03.user;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Patterns;
-import android.view.KeyEvent;
-import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import java.util.UnknownFormatConversionException;
 
 /**
  * Controller for UserProfile.
- *
- *
  */
 public class UserProfileController {
     private UserProfile mUserProfile;
@@ -107,7 +101,7 @@ public class UserProfileController {
     }
 
     public void setEmail(String email) {
-        if(!isEmailInValid(email)){
+        if (!isEmailInValid(email)) {
             mUserProfile.setEmail(email);
         }
     }

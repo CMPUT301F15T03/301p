@@ -21,9 +21,6 @@
 package ca.ualberta.cmput301.t03.inventory;
 
 import android.content.Context;
-import android.content.Intent;
-
-import org.parceler.Parcels;
 
 import ca.ualberta.cmput301.t03.Filter;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
@@ -32,7 +29,7 @@ import ca.ualberta.cmput301.t03.datamanager.HttpDataManager;
 
 /**
  * Controller for the BrowsableInventories model
- *
+ * <p>
  * Automatically commits changes when filters are added.
  */
 public class BrowseInventoryController {
@@ -46,7 +43,7 @@ public class BrowseInventoryController {
 
     /**
      * @param browsableInventories The model Object containing the collection of friends Items
-     * @param context Activity Context
+     * @param context              Activity Context
      */
     public BrowseInventoryController(Context context, BrowsableInventories browsableInventories) {
         this.context = context;
@@ -57,6 +54,7 @@ public class BrowseInventoryController {
 
     /**
      * Add a filter to the browsing list
+     *
      * @param filter The filter to add.
      */
     public void addFriendFilter(Filter filter) {

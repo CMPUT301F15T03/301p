@@ -40,7 +40,7 @@ import ca.ualberta.cmput301.t03.user.InitializeUserActivity;
 import ca.ualberta.cmput301.t03.user.User;
 import ca.ualberta.cmput301.t03.user.UserProfile;
 
-public class UserCreationTest extends ActivityInstrumentationTestCase2{
+public class UserCreationTest extends ActivityInstrumentationTestCase2 {
 
     public UserCreationTest() {
         super(ca.ualberta.cmput301.t03.MainActivity.class);
@@ -73,9 +73,9 @@ public class UserCreationTest extends ActivityInstrumentationTestCase2{
     }
 
     /**
-    * UC02.04.01
+     * UC02.04.01
      * testCreateDuplicateProfile() now covered in here
-    */
+     */
     public void testCreateProfile() {
 
         Configuration configuration = new Configuration(getInstrumentation().getTargetContext());
@@ -120,7 +120,6 @@ public class UserCreationTest extends ActivityInstrumentationTestCase2{
         android.os.SystemClock.sleep(2500);
         String expectedToast = getInstrumentation().getTargetContext().getString(R.string.userNameTakenToast);
         assertEquals(initActivity.getToast(), expectedToast);
-
 
 
         activity.runOnUiThread(new Runnable() {

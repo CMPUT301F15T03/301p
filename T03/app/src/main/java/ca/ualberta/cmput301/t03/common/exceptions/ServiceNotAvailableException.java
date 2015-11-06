@@ -34,6 +34,7 @@ public class ServiceNotAvailableException extends RuntimeException {
 
     /**
      * Creates an instance of {@link ServiceNotAvailableException}.
+     *
      * @param detailMessage The detailed message describing the exception.
      */
     public ServiceNotAvailableException(String detailMessage) {
@@ -42,8 +43,9 @@ public class ServiceNotAvailableException extends RuntimeException {
 
     /**
      * Creates an instance of {@link ServiceNotAvailableException}.
+     *
      * @param detailMessage The detailed message describing the exception.
-     * @param cause The cause of this exception.
+     * @param cause         The cause of this exception.
      */
     public ServiceNotAvailableException(String detailMessage, Throwable cause) {
         super(detailMessage, cause);
@@ -51,6 +53,7 @@ public class ServiceNotAvailableException extends RuntimeException {
 
     /**
      * Creates an instance of {@link ServiceNotAvailableException}.
+     *
      * @param cause The cause of this exception.
      */
     public ServiceNotAvailableException(Throwable cause) {

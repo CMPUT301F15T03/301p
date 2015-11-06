@@ -78,7 +78,7 @@ public class PrimaryUser implements Observer {
 
     @Override
     public void update(Observable observable) {
-        if (observable.getClass().equals(Configuration.class)){
+        if (observable.getClass().equals(Configuration.class)) {
             getInstance();
         }
     }

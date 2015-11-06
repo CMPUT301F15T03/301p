@@ -21,32 +21,22 @@
 package ca.ualberta.cmput301.t03.user;
 
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.AttributeSet;
-import android.view.View;
 
 import org.parceler.Parcels;
 
-import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
-import ca.ualberta.cmput301.t03.inventory.BrowseInventoryFragment;
 
 
 /**
  * A skeleton activity to contain the view profile fragment.
- *
+ * <p>
  * Use intent.PutExtra with a Parceled user and key "user"
  * to specify which User's profile should be viewed.
- *
  */
 public class ViewProfileActivity extends AppCompatActivity {
 
@@ -60,8 +50,7 @@ public class ViewProfileActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
-        User u = Parcels.unwrap((Parcelable)extras.get("user"));
-
+        User u = Parcels.unwrap((Parcelable) extras.get("user"));
 
 
         getSupportFragmentManager().beginTransaction().add(R.id.viewProfileFragmentContent, ViewProfileFragment.newInstance(u)).commit();

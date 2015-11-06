@@ -20,14 +20,6 @@
 
 package ca.ualberta.cmput301.t03;
 
-import android.test.ActivityInstrumentationTestCase2;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import ca.ualberta.cmput301.t03.inventory.Inventory;
-import ca.ualberta.cmput301.t03.user.User;
-
 /**
  * Created by quentinlautischer on 2015-10-07.
  */

@@ -9,7 +9,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ca.ualberta.cmput301.t03.MainActivity;
-import ca.ualberta.cmput301.t03.commontesting.PrimaryUserHelper;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -24,7 +23,7 @@ public class UserInventoryModelTest {
             MainActivity.class);
 
     @Test
-    public void testInventoryInit(){
+    public void testInventoryInit() {
         Inventory inventory = new Inventory();
         assertEquals(inventory.getItems().size(), 0);
     }

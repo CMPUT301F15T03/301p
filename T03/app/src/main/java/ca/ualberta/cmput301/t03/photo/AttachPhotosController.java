@@ -33,15 +33,21 @@ public class AttachPhotosController {
     /**
      * Selects photo from a user's collection of photos.
      */
-    public void selectPhoto() { throw new UnsupportedOperationException(); }
+    public void selectPhoto() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * Unselects photo from a user's collection of photos.
      */
-    public void unselectPhoto() { throw new UnsupportedOperationException(); }
+    public void unselectPhoto() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * User has finished selecting photos from the item.
      */
-    public void finishSelection() { throw new UnsupportedOperationException(); }
+    public void finishSelection() {
+        throw new UnsupportedOperationException();
+    }
 }

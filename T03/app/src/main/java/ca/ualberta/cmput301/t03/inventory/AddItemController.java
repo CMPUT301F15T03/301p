@@ -115,6 +115,7 @@ public class AddItemController {
 
     /**
      * Checks if item's fields are valid.
+     *
      * @return if fields are valid
      */
     public boolean checkFieldsValid() {

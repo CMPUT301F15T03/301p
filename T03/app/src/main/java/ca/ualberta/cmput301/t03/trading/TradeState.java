@@ -31,7 +31,7 @@ import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeStateTransition;
 public interface TradeState {
     /**
      * Returns whether the TradeState is Closed.
-     *
+     * <p>
      * A Closed trade is one which has been accepted or declined.
      * That is, a Closed trade can no longer be interacted with.
      *
@@ -41,7 +41,7 @@ public interface TradeState {
 
     /**
      * Returns whether the TradeState is Open.
-     *
+     * <p>
      * An open trade is one which has been neither accepted nor declined.
      * That is, an open trade can be interacted with in some way.
      *
@@ -51,7 +51,7 @@ public interface TradeState {
 
     /**
      * Returns whether the TradeState is Editable.
-     *
+     * <p>
      * An editable trade is one which has not yet been offered.
      *
      * @return True if the trade is Editable. Returns false otherwise.
@@ -60,7 +60,7 @@ public interface TradeState {
 
     /**
      * Offer a trade.
-     *
+     * <p>
      * A trade can only be offered if it is currently being composed, that is,
      * if the current TradeState is {@link TradeStateComposing}.
      *
@@ -71,7 +71,7 @@ public interface TradeState {
 
     /**
      * Cancel a trade.
-     *
+     * <p>
      * A trade can only be cancelled if it is currently being composed, that is,
      * if the current TradeState is {@link TradeStateComposing}.
      *
@@ -82,7 +82,7 @@ public interface TradeState {
 
     /**
      * Accept a trade.
-     *
+     * <p>
      * A trade can only be accepted if it has been offered, that is,
      * if the current TradeState is {@link TradeStateOffered}.
      *
@@ -93,7 +93,7 @@ public interface TradeState {
 
     /**
      * Decline a trade.
-     *
+     * <p>
      * A trade can only be declined if it has been offered, that is,
      * if the current TradeState is {@link TradeStateOffered}.
      *

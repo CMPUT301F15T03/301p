@@ -53,7 +53,7 @@ import ca.ualberta.cmput301.t03.R;
 /**
  * Fragment that displays the User's FriendsList
  * in a ListView.
- *
+ * <p>
  * The User can also add Friends here, by
  * pressing the FloatingActionButton.
  */
@@ -120,10 +120,9 @@ public class FriendsListFragment extends Fragment implements Observer {
 
     /**
      * Callback method after data has been loaded.
-     *
+     * <p>
      * Populates appropriate fields, and sets up
      * observers.
-     *
      */
     public void populateFields() {
         //do the listview here.
@@ -139,17 +138,17 @@ public class FriendsListFragment extends Fragment implements Observer {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mModel!=null) mModel.removeObserver(this);
+        if (mModel != null) mModel.removeObserver(this);
     }
 
     /**
      * Helper method to set up the floatingActionButton.
-     *
+     * <p>
      * In this case, the button is used initiate an "add friend"
      * action.
      */
     private void setupFab() {
-        addFriendFab = (FloatingActionButton)getActivity().findViewById(R.id.addFriendFab);
+        addFriendFab = (FloatingActionButton) getActivity().findViewById(R.id.addFriendFab);
         addFriendFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -162,7 +161,7 @@ public class FriendsListFragment extends Fragment implements Observer {
     /**
      * Creates a new AlertDialog which can be
      * used to add friends.
-     *
+     * <p>
      * The alertDialog contains a single EditText
      * where the user can enter the username to be
      * added.
@@ -180,7 +179,7 @@ public class FriendsListFragment extends Fragment implements Observer {
         builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                final String usr =  e.getText().toString().trim();
+                final String usr = e.getText().toString().trim();
 
                 AsyncTask t = new AsyncTask() {
                     @Override
@@ -222,12 +221,11 @@ public class FriendsListFragment extends Fragment implements Observer {
 
     /**
      * Helper method to set up the friendslist listview.
-     *
+     * <p>
      * Should only be called after model and controller
      * have been initialized.
-     *
      */
-    private void setupListView(){
+    private void setupListView() {
         mListView = (ListView) getActivity().findViewById(R.id.friendsListListView);
         mAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, mModel.getFriends());
         mListView.setAdapter(mAdapter);

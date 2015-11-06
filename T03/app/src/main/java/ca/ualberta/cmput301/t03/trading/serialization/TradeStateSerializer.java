@@ -1,6 +1,5 @@
 package ca.ualberta.cmput301.t03.trading.serialization;
 
-import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
@@ -12,7 +11,7 @@ import ca.ualberta.cmput301.t03.trading.TradeState;
 
 /**
  * class TradeStateSerialize implements {@link JsonSerializer<TradeState>}
- *
+ * <p>
  * This class gives Gson the ability to serialize a TradeState object.
  *
  * @see {@link TradeStateDeserializer}

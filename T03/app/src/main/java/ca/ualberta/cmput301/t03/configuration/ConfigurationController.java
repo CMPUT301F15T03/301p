@@ -28,7 +28,6 @@ public class ConfigurationController {
     private Configuration model;
 
     /**
-     *
      * @param model The model which this controller will be modifying
      */
     public ConfigurationController(Configuration model) {
@@ -37,6 +36,7 @@ public class ConfigurationController {
 
     /**
      * Set the state of download images in the configuration
+     *
      * @param state The state desired for downloadImages in the configuration
      */
     public void onDownloadImagesToggled(Boolean state) {

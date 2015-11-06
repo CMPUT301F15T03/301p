@@ -34,6 +34,7 @@ public class ExceptionUtils {
 
     /**
      * Extracts the stack trace from an {@link Exception} object to a formatted {@link String}.
+     *
      * @param exception The {@link Exception} whose stack trace has to be extracted out.
      * @return The extracted stack trace {@link String}.
      */

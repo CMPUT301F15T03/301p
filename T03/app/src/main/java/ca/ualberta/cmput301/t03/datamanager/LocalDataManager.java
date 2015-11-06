@@ -42,7 +42,8 @@ public class LocalDataManager extends JsonDataManager {
 
     /**
      * Creates an instance of the {@link LocalDataManager}.
-     * @param context The {@link Context} to be used for accessing the filesystem.
+     *
+     * @param context                     The {@link Context} to be used for accessing the filesystem.
      * @param useExplicitExposeAnnotation True, if the @expose annotations are to be explicitly used,
      *                                    else false. If this is set to true, only the fields with
      *                                    the annotation @expose will be serialized/de-serialized.
@@ -55,6 +56,7 @@ public class LocalDataManager extends JsonDataManager {
     /**
      * Creates an instance of the {@link LocalDataManager}. The "useExplicitExposeAnnotation"
      * value is set to false.
+     *
      * @param context The {@link Context} to be used for accessing the filesystem.
      */
     public LocalDataManager(Context context) {
@@ -133,6 +135,7 @@ public class LocalDataManager extends JsonDataManager {
 
     /**
      * Not applicable for LocalDataManager. Always returns true.
+     *
      * @return Always true.
      */
     @Override

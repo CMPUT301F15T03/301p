@@ -20,8 +20,6 @@
 
 package ca.ualberta.cmput301.t03.user;
 
-import android.app.Instrumentation;
-import android.os.Bundle;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -29,16 +27,12 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.LargeTest;
 import android.widget.TextView;
 
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.MethodRule;
 import org.junit.runner.RunWith;
-import org.junit.runners.model.FrameworkMethod;
-import org.junit.runners.model.Statement;
 
 import java.io.IOException;
 
@@ -54,13 +48,11 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static ca.ualberta.cmput301.t03.commontesting.PauseForAnimation.pause;
-import static java.lang.Thread.sleep;
 import static junit.framework.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
@@ -144,6 +136,7 @@ public class UserProfileTest {
 
     /**
      * UC10.02.01
+     *
      * @throws InterruptedException
      */
     @Test
@@ -200,7 +193,7 @@ public class UserProfileTest {
     }
 
     @Test
-    public void testEditUserProfile_invalidEmail(){
+    public void testEditUserProfile_invalidEmail() {
 
         TextView t = (TextView) mActivity.findViewById(R.id.viewProfileEmail);
         String email_before = t.getText().toString();

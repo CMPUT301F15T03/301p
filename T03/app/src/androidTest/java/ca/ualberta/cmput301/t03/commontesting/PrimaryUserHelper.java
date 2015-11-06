@@ -67,7 +67,7 @@ public class PrimaryUserHelper {
     }
 
 
-    public static void createAndLoadUserWithFriendThatHasInventory(Context context){
+    public static void createAndLoadUserWithFriendThatHasInventory(Context context) {
 
         Configuration configuration = new Configuration(context);
         if (configuration.isApplicationUserNameSet()) {
@@ -187,14 +187,14 @@ public class PrimaryUserHelper {
 
             userInventory.commitChanges();
             userProfile.commitChanges();
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
 
     }
 
-    public static void deleteAndUnloadUserWithFriendThatHasInventory(Context context){
+    public static void deleteAndUnloadUserWithFriendThatHasInventory(Context context) {
 
         DataManager dataManager = new CachedDataManager(new HttpDataManager(context, true), context, true);
         Configuration configuration = new Configuration(context);
@@ -211,7 +211,7 @@ public class PrimaryUserHelper {
             dataManager.deleteIfExists(new DataKey(UserProfile.type, FRIEND_WITH_AN_INVENTORY));
             dataManager.deleteIfExists(new DataKey(Inventory.type, FRIEND_WITH_AN_INVENTORY));
             dataManager.deleteIfExists(new DataKey(FriendsList.type, FRIEND_WITH_AN_INVENTORY));
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -223,8 +223,7 @@ public class PrimaryUserHelper {
     }
 
 
-
-    public static void createUserWithFriend(Context context){
+    public static void createUserWithFriend(Context context) {
 
         Configuration configuration = new Configuration(context);
         if (configuration.isApplicationUserNameSet()) {
@@ -342,7 +341,7 @@ public class PrimaryUserHelper {
 
             userInventory.commitChanges();
             userProfile.commitChanges();
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -370,7 +369,6 @@ public class PrimaryUserHelper {
             e.printStackTrace();
         }
     }
-
 
 
     public static void tearDown(Context context) throws Exception {

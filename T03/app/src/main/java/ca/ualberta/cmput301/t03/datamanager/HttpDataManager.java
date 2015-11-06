@@ -52,7 +52,8 @@ public class HttpDataManager extends JsonDataManager {
 
     /**
      * Creates an instance of {@link HttpDataManager}.
-     * @param context The context to be used for checking the network status of the phone.
+     *
+     * @param context                     The context to be used for checking the network status of the phone.
      * @param useExplicitExposeAnnotation True, if the @expose annotations are to be explicitly used,
      *                                    else false. If this is set to true, only the fields with
      *                                    the annotation @expose will be serialized/de-serialized.
@@ -72,6 +73,7 @@ public class HttpDataManager extends JsonDataManager {
     /**
      * Creates an instance of the {@link HttpDataManager}. The "useExplicitExposeAnnotation"
      * value is set to false.
+     *
      * @param context The context to be used for checking the network status of the phone.
      */
     public HttpDataManager(Context context) {
@@ -155,11 +157,9 @@ public class HttpDataManager extends JsonDataManager {
 
         if (response.getResponseCode() == HttpStatusCode.OK.getStatusCode()) {
             return true;
-        }
-        else if (response.getResponseCode() == HttpStatusCode.NOT_FOUND.getStatusCode()) {
+        } else if (response.getResponseCode() == HttpStatusCode.NOT_FOUND.getStatusCode()) {
             return false;
-        }
-        else {
+        } else {
             throw new NotImplementedException(String.format("Dev note: Unexpected response '%d' from the DELETE Elastic Search endpoint.",
                     response.getResponseCode()));
         }
@@ -167,6 +167,7 @@ public class HttpDataManager extends JsonDataManager {
 
     /**
      * True, if the phone is online, else false.
+     *
      * @return True, if the phone is online, else false.
      */
     @Override

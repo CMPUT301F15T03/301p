@@ -51,16 +51,14 @@ import ca.ualberta.cmput301.t03.user.User;
 
 /**
  * Fragment that displays the User's Inventory in a ListView.
- *
+ * <p>
  * By clicking the listed Items here the user can inspect, edit and delete.
  * The User can add an item by pressing the FloatingActionButton.
  */
 public class UserInventoryFragment extends Fragment implements Observer {
+    private static final String ARG_PARAM1 = "user";
     Activity mActivity;
     View mView;
-
-    private static final String ARG_PARAM1 = "user";
-
     private Inventory model;
     private UserInventoryController controller;
     private User user;
@@ -90,6 +88,7 @@ public class UserInventoryFragment extends Fragment implements Observer {
 
     /**
      * Gets User associated to system config. Loads any data associated to user.
+     *
      * @param savedInstanceState
      */
     @Override
@@ -205,6 +204,7 @@ public class UserInventoryFragment extends Fragment implements Observer {
 
     /**
      * Creates ListView Adapter and Item onClickListeners
+     *
      * @param v
      */
     public void createListView(View v) {
@@ -226,6 +226,7 @@ public class UserInventoryFragment extends Fragment implements Observer {
 
     /**
      * starts activity in which an Item Can be inspected
+     *
      * @param item
      */
     public void inspectItem(Item item) {
