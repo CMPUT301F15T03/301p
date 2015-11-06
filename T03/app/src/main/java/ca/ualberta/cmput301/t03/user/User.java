@@ -197,14 +197,16 @@ public class User implements Observable, Observer, Comparable<User> {
      * @throws IOException
      */
     public TradeList getTradeList() throws IOException {
+        DataKey key = new DataKey(TradeList.type, username);
         if (tradeList == null) {
-            DataKey key = new DataKey(TradeList.type, username);
             if (!dataManager.keyExists(key)) {
                 tradeList = new TradeList();
                 dataManager.writeData(key, tradeList, TradeList.class);
             } else {
                 tradeList = dataManager.getData(key, TradeList.class);
             }
+        } else {
+            tradeList = dataManager.getData(key, TradeList.class);
         }
         return tradeList;
     }
