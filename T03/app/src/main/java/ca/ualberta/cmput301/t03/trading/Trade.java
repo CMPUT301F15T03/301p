@@ -74,8 +74,6 @@ public class Trade implements Observable {
 
         this.dataManager = new CachedDataManager(new HttpDataManager(context, true), context, true);
         this.observers = new HashSet<>();
-        this.addObserver(this.getOwner());
-        this.addObserver(this.getBorrower());
     }
 
     public Trade(User borrower, User owner,
@@ -117,7 +115,17 @@ public class Trade implements Observable {
         }
     }
 
+    private void save() {
+        DataKey key = new DataKey(Trade.type, this.getTradeUUID().toString());
+        try {
+            dataManager.writeData(key, this, Trade.class);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to save trade with UUID " + this.getTradeUUID().toString());
+        }
+    }
+
     public void commitChanges() {
+        save();
         notifyObservers();
     }
 

@@ -51,11 +51,6 @@ public class TradeList implements Observable, Observer {
         commitChanges();
     }
 
-    public void removeTrade(Trade trade) {
-        this.trades.remove(trade.getTradeUUID());
-        commitChanges();
-    }
-
     public void setTrades(LinkedHashMap<UUID, Trade> trades) {
         this.trades = trades;
         commitChanges();
