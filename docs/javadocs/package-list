@@ -8,4 +8,5 @@ ca.ualberta.cmput301.t03.inventory
 ca.ualberta.cmput301.t03.photo
 ca.ualberta.cmput301.t03.trading
 ca.ualberta.cmput301.t03.trading.exceptions
+ca.ualberta.cmput301.t03.trading.serialization
 ca.ualberta.cmput301.t03.user

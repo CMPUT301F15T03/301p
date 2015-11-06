@@ -49,6 +49,12 @@ import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.user.User;
 
 
+/**
+ * Fragment that displays the User's Inventory in a ListView.
+ *
+ * By clicking the listed Items here the user can inspect, edit and delete.
+ * The User can add an item by pressing the FloatingActionButton.
+ */
 public class UserInventoryFragment extends Fragment implements Observer {
     Activity mActivity;
     View mView;
@@ -82,6 +88,10 @@ public class UserInventoryFragment extends Fragment implements Observer {
         return new UserInventoryFragment();
     }
 
+    /**
+     * Gets User associated to system config. Loads any data associated to user.
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,12 +142,6 @@ public class UserInventoryFragment extends Fragment implements Observer {
 
     }
 
-    public void addItemButtonClicked() {
-//        throw new UnsupportedOperationException();
-        Intent intent = new Intent(getContext(), AddItemView.class);
-        startActivity(intent);
-    }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -145,6 +149,15 @@ public class UserInventoryFragment extends Fragment implements Observer {
         final View v = inflater.inflate(R.layout.fragment_user_inventory, container, false);
         mView = v;
         return v;
+    }
+
+    /**
+     * Starts activity used to create a new item
+     */
+    public void addItemButtonClicked() {
+//        throw new UnsupportedOperationException();
+        Intent intent = new Intent(getContext(), AddItemView.class);
+        startActivity(intent);
     }
 
     private void fragmentSetup(View v) {
@@ -190,6 +203,10 @@ public class UserInventoryFragment extends Fragment implements Observer {
         return tiles;
     }
 
+    /**
+     * Creates ListView Adapter and Item onClickListeners
+     * @param v
+     */
     public void createListView(View v) {
         listview = (ListView) v.findViewById(R.id.InventoryListView);
         List<HashMap<String, String>> tiles = buildTiles();
@@ -207,6 +224,10 @@ public class UserInventoryFragment extends Fragment implements Observer {
 
     }
 
+    /**
+     * starts activity in which an Item Can be inspected
+     * @param item
+     */
     public void inspectItem(Item item) {
 
         Intent intent = null;
@@ -242,8 +263,6 @@ public class UserInventoryFragment extends Fragment implements Observer {
         } else {
             addItemFab.hide();
         }
-
-
     }
 
     @Override
