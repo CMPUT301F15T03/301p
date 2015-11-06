@@ -42,7 +42,7 @@ public class PrimaryUserHelper {
     public static final String CITY = "Edmonton";
     public static final String EMAIL = "TESTUSER@gualberta.ca";
     public static final String PHONE = "5555550123";
-    public static final String USER_ID = "JUNIT_TEST_USER_DO_NOT_USE_THIS_NAME";
+    public static final String USER_ID = "JUNITDUDE";
     public static final String FRIEND_WITH_AN_INVENTORY = "FRIENDWITHANINVENTORY";
     public static final String FRIEND_WITH_AN_INVENTORY2 = "FRIENDWITHANINVENTORY2";
     public static final String GENERAL_INVENTORY_FRIEND_1 = "GENERALINVENTORYFRIEND1";
