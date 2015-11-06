@@ -31,7 +31,7 @@ import android.net.Uri;
 import java.util.Collection;
 
 /**
- * Created by mmabuyo on 2015-10-29.
+ * Object for the item's photo. Belongs to an item's PhotoGallery.
  */
 public class Photo {
     private Uri location;
@@ -43,10 +43,17 @@ public class Photo {
 
     }
 
+    /**
+     * Determines if the photo has been downloaded on the phone.
+     * @return true if the photo has been downloaded, false if not
+     */
     public boolean isDownloaded() {
         return this.isDownloaded;
     }
 
+    /**
+     * Starts downloading the photo.
+     */
     public void downloadPhoto() {
         throw new UnsupportedOperationException();
     }

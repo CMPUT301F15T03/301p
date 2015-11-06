@@ -59,6 +59,24 @@ public class TradeList implements Observable, Observer {
     }
 
     /**
+     * Add each trade in a list to the user
+     * @param trades list of trades to be added
+     */
+    public void addAll(List<Trade> trades) {
+        for (Trade t : trades) {
+            this.addTrade(t);
+        }
+    }
+
+    /**
+     * Clear the list of trades. Use carefully.
+     */
+    public void clear() {
+        this.trades = new LinkedHashMap<>();
+        this.commitChanges();
+    }
+
+    /**
      * Set the trades that the user has.
      * @param trades trades to be applied.
      */
