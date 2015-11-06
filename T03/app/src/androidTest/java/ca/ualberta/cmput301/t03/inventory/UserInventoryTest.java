@@ -29,7 +29,9 @@ import android.test.suitebuilder.annotation.LargeTest;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.core.StringContains;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -127,7 +129,6 @@ public class UserInventoryTest {
 
     @Before
     public void setActivity() {
-
         mActivity = mActivityRule.getActivity();
         InstrumentationRegistry.getInstrumentation();
         try {
@@ -135,26 +136,6 @@ public class UserInventoryTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-        /**
-         * Methods create and cleanup template user and friends.
-         */
-        PrimaryUserHelper.deleteAndUnloadUserWithFriendThatHasInventory(mActivity.getBaseContext());
-        PrimaryUserHelper.createAndLoadUserWithFriendThatHasInventory(mActivity.getBaseContext());
-
-        Configuration configuration = new Configuration(InstrumentationRegistry.getInstrumentation().getTargetContext());
-        configuration.setApplicationUserName("GENERALINVENTORYFRIEND1");
-        User temp = new User(configuration.getApplicationUserName(), InstrumentationRegistry.getInstrumentation().getTargetContext());
-        try{
-            temp.getFriends();
-            temp.getInventory();
-            UserProfile prof = temp.getProfile();
-            prof.commitChanges();
-
-        } catch (IOException e){
-            throw new RuntimeException();
-        }
-
 
         /**
          * Go to inventory fragment
@@ -166,9 +147,16 @@ public class UserInventoryTest {
     /**
      * Method cleanup template user and friends.
      */
-    @After
-    public void cleanup(){
-        PrimaryUserHelper.deleteAndUnloadUserWithFriendThatHasInventory(mActivity.getBaseContext());
+
+    @BeforeClass
+    public static void setupTestUser() throws Exception {
+        PrimaryUserHelper.deleteAndUnloadUserWithFriendThatHasInventory(InstrumentationRegistry.getTargetContext());
+        PrimaryUserHelper.createAndLoadUserWithFriendThatHasInventory(InstrumentationRegistry.getTargetContext());
+    }
+
+    @AfterClass
+    public static void restoreOriginalUser() throws Exception {
+        PrimaryUserHelper.deleteAndUnloadUserWithFriendThatHasInventory(InstrumentationRegistry.getTargetContext());
     }
 
     /**
