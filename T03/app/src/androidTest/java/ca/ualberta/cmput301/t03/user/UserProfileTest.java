@@ -25,6 +25,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.LargeTest;
+import android.widget.TextView;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -101,7 +102,8 @@ public class UserProfileTest {
 
     @Before
     public void setActivity() throws Exception {
-
+//        PrimaryUserHelper.setup(InstrumentationRegistry.getTargetContext());
+        pause();
         mActivity = mActivityRule.getActivity();
 
         pause();
@@ -112,12 +114,14 @@ public class UserProfileTest {
 
     @After
     public void tearDown() throws Exception {
+//        PrimaryUserHelper.tearDown(InstrumentationRegistry.getTargetContext());
+
         pause();
     }
 
 
     /**
-     * UC 10.02.03
+     * UC02.04.01
      */
     @Test
     public void testViewUserProfile() throws IOException {
@@ -198,6 +202,10 @@ public class UserProfileTest {
 
     @Test
     public void testEditUserProfile_invalidEmail(){
+
+        TextView t = (TextView) mActivity.findViewById(R.id.viewProfileEmail);
+        String email_before = t.getText().toString();
+
         onView(withId(R.id.edit_profile_button))
                 .check(matches(isDisplayed()))
                 .perform(click());
@@ -221,7 +229,7 @@ public class UserProfileTest {
 
         pause();
         onView(withId(R.id.viewProfileEmail))
-                .check(matches(withText("")));
+                .check(matches(withText(email_before)));
         pause();
         onView(withId(R.id.viewProfileCity))
                 .check(matches(withText(CALGARY)));
