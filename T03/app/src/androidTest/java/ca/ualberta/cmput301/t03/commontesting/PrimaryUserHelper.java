@@ -66,6 +66,7 @@ public class PrimaryUserHelper {
     public static void createAndLoadUserWithFriendThatHasInventory(Context context){
         String GENERAL_INVENTORY_FRIEND_1 = "GENERAL_INVENTORY_FRIEND_1";
         String FRIEND_WITH_AN_INVENTORY = "FRIEND_WITH_AN_INVENTORY";
+        String FRIEND_WITH_AN_INVENTORY2 = "FRIEND_WITH_AN_INVENTORY2";
 
         Configuration configuration = new Configuration(context);
         if (configuration.isApplicationUserNameSet()) {
@@ -73,40 +74,130 @@ public class PrimaryUserHelper {
         }
         configuration.clearApplicationUserName();
 
-        User friend = new User("FRIEND_WITH_AN_INVENTORY", context);
+        User friend = new User(FRIEND_WITH_AN_INVENTORY, context);
+        User friend2 = new User(FRIEND_WITH_AN_INVENTORY2, context);
         User user = new User(GENERAL_INVENTORY_FRIEND_1, context);
         try {
             Inventory friendInventory = friend.getInventory();
-            friendInventory.addItem(new Item("TestItem1", "TestItemQuality"));
+
+            Item item1_f1 = new Item("testItem1f1", "testQuality");
+            item1_f1.setItemCategory("Cameras");
+            item1_f1.setItemIsPrivate(false);
+            item1_f1.setItemQuantity(1);
+            item1_f1.setItemDescription("Test Description FX10");
+
+            Item item2_f1 = new Item("testItem2f1", "testQuality");
+            item2_f1.setItemCategory("Stands");
+            item2_f1.setItemIsPrivate(false);
+            item2_f1.setItemQuantity(1);
+            item2_f1.setItemDescription("Test Description FX9");
+
+            Item item3_f1 = new Item("testItem3f1", "testQuality");
+            item3_f1.setItemCategory("Cameras");
+            item3_f1.setItemIsPrivate(true);
+            item3_f1.setItemQuantity(1);
+            item3_f1.setItemDescription("Test Description FX10");
+
+            friendInventory.addItem(item1_f1);
+            friendInventory.addItem(item2_f1);
+            friendInventory.addItem(item3_f1);
+
             UserProfile friendProfile = friend.getProfile();
             friendProfile.setCity("Deadmonton");
             friendProfile.setEmail("friend@email.com");
             friendProfile.setPhone("1234567891");
-            friendProfile.commitChanges();
             friendInventory.commitChanges();
             FriendsList friendsfriendList = friend.getFriends();
             friendsfriendList.commitChanges();
+            friendProfile.commitChanges();
+
+            Inventory friendInventory2 = friend2.getInventory();
+
+            Item item1_f2 = new Item("testItem1f2", "testQuality");
+            item1_f2.setItemCategory("Cameras");
+            item1_f2.setItemIsPrivate(false);
+            item1_f2.setItemQuantity(1);
+            item1_f2.setItemDescription("Test Description FX10");
+
+            Item item2_f2 = new Item("testItem2f2", "testQuality");
+            item2_f2.setItemCategory("Stands");
+            item2_f2.setItemIsPrivate(false);
+            item2_f2.setItemQuantity(1);
+            item2_f2.setItemDescription("Test Description FX9");
+
+            Item item3_f2 = new Item("testItem3f2", "testQuality");
+            item3_f2.setItemCategory("Cameras");
+            item3_f2.setItemIsPrivate(true);
+            item3_f2.setItemQuantity(1);
+            item3_f2.setItemDescription("Test Description FX10");
+
+            friendInventory2.addItem(item1_f2);
+            friendInventory2.addItem(item2_f2);
+            friendInventory2.addItem(item3_f2);
+
+            UserProfile friendProfile2 = friend2.getProfile();
+            friendProfile2.setCity("Deadmonton");
+            friendProfile2.setEmail("friend2@email.com");
+            friendProfile2.setPhone("1234567892");
+            friendInventory2.commitChanges();
+            FriendsList friendsfriendList2 = friend2.getFriends();
+            friendsfriendList2.commitChanges();
+            friendProfile2.commitChanges();
 
             FriendsList friendsList = user.getFriends();
             friendsList.addFriend(friend);
+            friendsList.addFriend(friend2);
+            friendsList.commitChanges();
             UserProfile userProfile = user.getProfile();
             userProfile.setCity("Deadmonton");
-            userProfile.setEmail("friend@email.com");
+            userProfile.setEmail("user@email.com");
             userProfile.setPhone("1234567891");
-            userProfile.commitChanges();
-            friendsList.commitChanges();
             Inventory userInventory = user.getInventory();
+            Item item1 = new Item("testItem1", "testQuality");
+            item1.setItemCategory("Cameras");
+            item1.setItemIsPrivate(false);
+            item1.setItemQuantity(1);
+            item1.setItemDescription("Test Description FX10");
+
+            Item item2 = new Item("testItem1", "testQuality");
+            item2.setItemCategory("Stands");
+            item2.setItemIsPrivate(false);
+            item2.setItemQuantity(1);
+            item2.setItemDescription("Test Description FX9");
+
+            Item item3 = new Item("testItem1", "testQuality");
+            item3.setItemCategory("Cameras");
+            item3.setItemIsPrivate(true);
+            item3.setItemQuantity(1);
+            item3.setItemDescription("Test Description FX10");
+
+            userInventory.addItem(item1);
+            userInventory.addItem(item2);
+            userInventory.addItem(item3);
+
             userInventory.commitChanges();
+            userProfile.commitChanges();
         } catch (IOException e){
             e.printStackTrace();
         }
 
         configuration.setApplicationUserName(GENERAL_INVENTORY_FRIEND_1);
+        User temp = new User(GENERAL_INVENTORY_FRIEND_1, context);
+        try{
+            temp.getFriends();
+            temp.getInventory();
+            UserProfile prof = temp.getProfile();
+            prof.commitChanges();
+        } catch (IOException e){
+            throw new RuntimeException();
+        }
+
     }
 
     public static void deleteAndUnloadUserWithFriendThatHasInventory(Context context){
         String GENERAL_INVENTORY_FRIEND_1 = "GENERAL_INVENTORY_FRIEND_1";
         String FRIEND_WITH_AN_INVENTORY = "FRIEND_WITH_AN_INVENTORY";
+        String FRIEND_WITH_AN_INVENTORY2 = "FRIEND_WITH_AN_INVENTORY2";
 
         DataManager dataManager = new CachedDataManager(new HttpDataManager(context, true), context, true);
         Configuration configuration = new Configuration(context);
@@ -115,6 +206,10 @@ public class PrimaryUserHelper {
             dataManager.deleteIfExists(new DataKey(UserProfile.type, GENERAL_INVENTORY_FRIEND_1));
             dataManager.deleteIfExists(new DataKey(Inventory.type, GENERAL_INVENTORY_FRIEND_1));
             dataManager.deleteIfExists(new DataKey(FriendsList.type, GENERAL_INVENTORY_FRIEND_1));
+
+            dataManager.deleteIfExists(new DataKey(UserProfile.type, FRIEND_WITH_AN_INVENTORY2));
+            dataManager.deleteIfExists(new DataKey(Inventory.type, FRIEND_WITH_AN_INVENTORY2));
+            dataManager.deleteIfExists(new DataKey(FriendsList.type, FRIEND_WITH_AN_INVENTORY2));
 
             dataManager.deleteIfExists(new DataKey(UserProfile.type, FRIEND_WITH_AN_INVENTORY));
             dataManager.deleteIfExists(new DataKey(Inventory.type, FRIEND_WITH_AN_INVENTORY));
