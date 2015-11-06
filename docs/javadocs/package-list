@@ -1,0 +1,11 @@
+ca.ualberta.cmput301.t03
+ca.ualberta.cmput301.t03.common
+ca.ualberta.cmput301.t03.common.exceptions
+ca.ualberta.cmput301.t03.common.http
+ca.ualberta.cmput301.t03.configuration
+ca.ualberta.cmput301.t03.datamanager
+ca.ualberta.cmput301.t03.inventory
+ca.ualberta.cmput301.t03.photo
+ca.ualberta.cmput301.t03.trading
+ca.ualberta.cmput301.t03.trading.exceptions
+ca.ualberta.cmput301.t03.user

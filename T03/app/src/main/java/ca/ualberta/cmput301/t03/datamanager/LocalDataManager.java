@@ -141,6 +141,7 @@ public class LocalDataManager extends JsonDataManager {
     }
 
     // Source: http://stackoverflow.com/questions/2130932/how-to-create-directory-automatically-on-sd-card
+    // Date: 30 Oct, 2015
     private File getTargetFile(DataKey key, boolean createTypeDirectoryIfNotExists) {
         File appContextRootDirectory = context.getFilesDir();
         File typeDirectory = new File(appContextRootDirectory, key.getType());
