@@ -27,7 +27,8 @@ import ca.ualberta.cmput301.t03.inventory.Item;
 import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeStateTransition;
 
 /**
- * Created by ross on 15-10-29.
+ * The controller portion of the TradeOfferCompose triplet. This will modify the Trade model upon
+ * request of the view.
  */
 public class TradeOfferComposeController {
     private final String logTAG = "TradeOfferCompose";
@@ -40,6 +41,10 @@ public class TradeOfferComposeController {
         this.context = context;
     }
 
+    /**
+     * Trigger an offer on the model, this may or may not transition based on the state of the
+     * model.
+     */
     public void offerTrade() {
         try {
             model.offer();
@@ -48,6 +53,10 @@ public class TradeOfferComposeController {
         }
     }
 
+    /**
+     * Trigger a cancel trade on the model, this may or may not transition based on the state of the
+     * model.
+     */
     public void cancelTrade() {
         try {
             model.cancel();
@@ -56,6 +65,11 @@ public class TradeOfferComposeController {
         }
     }
 
+    /**
+     * add an item to the borrower section of the trade barter.
+     *
+     * @param item item to be added
+     */
     public void addBorrowerItem(Item item) {
         model = new Trade(model.getBorrower(), model.getOwner(),
                 model.getBorrowersItems(), model.getOwnersItems(), this.context);

@@ -20,19 +20,18 @@
 
 package ca.ualberta.cmput301.t03.inventory;
 
-import android.util.Log;
-
 import org.parceler.Transient;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
+
 import ca.ualberta.cmput301.t03.Filter;
 import ca.ualberta.cmput301.t03.Filterable;
-import ca.ualberta.cmput301.t03.PrimaryUser;
-import ca.ualberta.cmput301.t03.user.FriendsList;
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
+import ca.ualberta.cmput301.t03.PrimaryUser;
+import ca.ualberta.cmput301.t03.user.FriendsList;
 import ca.ualberta.cmput301.t03.user.User;
 
 public class BrowsableInventories implements Filterable<Item>, Observer, Observable {
@@ -40,6 +39,7 @@ public class BrowsableInventories implements Filterable<Item>, Observer, Observa
     private ArrayList<Item> list;
 
     private Thread constructorThread;
+
     public Thread getConstructorThread() {
         return constructorThread;
     }
@@ -84,7 +84,7 @@ public class BrowsableInventories implements Filterable<Item>, Observer, Observa
         return worker;
     }
 
-    public ArrayList<Item> getList(){
+    public ArrayList<Item> getList() {
         return this.list;
     }
 
@@ -115,7 +115,7 @@ public class BrowsableInventories implements Filterable<Item>, Observer, Observa
 
     @Override
     public void notifyObservers() {
-        for (Observer o: observers) {
+        for (Observer o : observers) {
             o.update(this);
         }
     }
