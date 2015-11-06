@@ -24,13 +24,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
-import ca.ualberta.cmput301.t03.user.User;
 
 /**
  * Model component of the Configuration MVC triplet.
@@ -39,9 +37,9 @@ import ca.ualberta.cmput301.t03.user.User;
 public class Configuration implements Observable {
 
     private static final String downloadImagesKey = "DOWNLOAD_IMAGES_ENABLED";
-    private static final String applicationUserName = "APPLICATION_USER_NAME";
+    private static final String applicationUserNameKey = "APPLICATION_USER_NAME";
 
-    private  Context context;
+    private Context context;
     private Set<Observer> observers;
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
@@ -58,7 +56,7 @@ public class Configuration implements Observable {
         preferences.registerOnSharedPreferenceChangeListener(new SharedPreferences.OnSharedPreferenceChangeListener() {
             @Override
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-                if (key.equals(downloadImagesKey) || key.equals(applicationUserName)) {
+                if (key.equals(downloadImagesKey) || key.equals(applicationUserNameKey)) {
                     notifyObservers();
                 }
             }
@@ -87,7 +85,7 @@ public class Configuration implements Observable {
      * @return true == user id has been assigned, false == otherwise
      */
     public Boolean isApplicationUserNameSet() {
-        return preferences.contains(applicationUserName);
+        return preferences.contains(applicationUserNameKey);
     }
 
     /**
@@ -96,7 +94,7 @@ public class Configuration implements Observable {
      */
     public String getApplicationUserName() {
         if (isApplicationUserNameSet()) {
-            return preferences.getString(applicationUserName, "");
+            return preferences.getString(applicationUserNameKey, "");
         }
         else {
             return null;
@@ -105,10 +103,10 @@ public class Configuration implements Observable {
 
     /**
      * set the application's associated user id
-     * @param userID the user id you want to associate with the application
+     * @param userName the user id you want to associate with the application
      */
-    public void setApplicationUserName(String userID) {
-        editor.putString(applicationUserName, userID);
+    public void setApplicationUserName(String userName) {
+        editor.putString(applicationUserNameKey, userName);
         editor.commit();
     }
 
@@ -116,7 +114,7 @@ public class Configuration implements Observable {
      * Remove the user id from this particular instance of the application
      */
     public void clearApplicationUserName() {
-        editor.remove(applicationUserName);
+        editor.remove(applicationUserNameKey);
         editor.commit();
     }
 

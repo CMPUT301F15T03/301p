@@ -81,5 +81,16 @@
             android:id="@+id/viewProfileCity"
             android:layout_below="@+id/viewProfileCityLabel"
             android:layout_alignParentStart="true" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Inventory"
+            android:id="@+id/inventoryButton"
+            android:layout_below="@+id/viewProfilePhone"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="52dp"
+            android:layout_alignParentEnd="true"
+            android:nestedScrollingEnabled="false" />
     </RelativeLayout>
 </FrameLayout>

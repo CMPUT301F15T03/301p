@@ -1,3 +1,23 @@
+/*
+ * Copyright (C) 2015 Kyle O'Shaughnessy, Ross Anderson, Michelle Mabuyo, John Slevinsky, Udey Rishi, Quentin Lautischer
+ * Photography equipment trading application for CMPUT 301 at the University of Alberta.
+ *
+ * This file is part of {ApplicationName}
+ *
+ * {ApplicationName} is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package ca.ualberta.cmput301.t03.user;
 
 import android.content.Context;
@@ -48,21 +68,6 @@ import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.commontesting.PrimaryUserHelper;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
 
-/**
- * Copyright 2015 John Slevinsky
- * <p/>
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p/>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p/>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class FriendsListTest {
@@ -88,13 +93,22 @@ public class FriendsListTest {
 
     private MainActivity mActivity = null;
 
+
+    @BeforeClass
+    public static void setupTestUser() throws Exception {
+        PrimaryUserHelper.setup(InstrumentationRegistry.getTargetContext());
+    }
+
+    @AfterClass
+    public static void restoreOriginalUser() throws Exception {
+        PrimaryUserHelper.tearDown(InstrumentationRegistry.getTargetContext());
+    }
+
     @Before
     public void setActivity() throws Exception {
 
         mActivity = mActivityRule.getActivity();
-        InstrumentationRegistry.getInstrumentation();
 
-        PrimaryUserHelper.setup(InstrumentationRegistry.getTargetContext());
         pause();
 
         pause();
@@ -106,7 +120,6 @@ public class FriendsListTest {
 
     @After
     public void tearDown() throws Exception {
-        PrimaryUserHelper.tearDown(InstrumentationRegistry.getTargetContext());
         pause();
     }
 
@@ -217,19 +230,21 @@ public class FriendsListTest {
     /**
      * US02.01.01, UC02.02.01
      */
-//    @Test
-//    public void testAddFriend_emptyInput(){
-//        onView(withId(R.id.addFriendFab)).perform(click());
-//        pause();
-//        onView(withClassName(new StringContains("EditText")))
-//                .perform(clearText(),
-//                        closeSoftKeyboard());
-//        pause();
-//        onView(withText("Add"))
-//                .perform(click());
-//
-//        //move back to
-//    }
+    @Test
+    public void testAddFriend_emptyInput(){
+        onView(withId(R.id.addFriendFab)).perform(click());
+        pause();
+        onView(withClassName(new StringContains("EditText")))
+                .perform(clearText(),
+                        closeSoftKeyboard());
+        pause();
+        onView(withText("Add"))
+                .perform(click());
+
+        //assert list does not contain friend
+
+
+    }
 
 
 
