@@ -212,9 +212,10 @@ public class UserInventoryFragment extends Fragment implements Observer {
     }
 
     public void inspectItem(Item item){
-        Intent intent = new Intent(getContext(), EditItemView.class);
+        Intent intent = new Intent(getContext(), InspectItemView.class);
         intent.putExtra("user", Parcels.wrap(user));
-        intent.putExtra("ITEM_UUID", item.getUuid().toString());
+        intent.putExtra("inventory/inspect/item", Parcels.wrap(item));
+//        intent.putExtra("inventory/inspect/item", item.getUuid().toString());
         startActivity(intent);
     }
 

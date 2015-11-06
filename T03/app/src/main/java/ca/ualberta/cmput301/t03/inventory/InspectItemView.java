@@ -60,8 +60,6 @@ public class InspectItemView extends AppCompatActivity {
             user = new User(userFromIntent, getApplicationContext());
         }
 
-
-        user = PrimaryUser.getInstance();
         itemModel = Parcels.unwrap(getIntent().getParcelableExtra("inventory/inspect/item"));
 
         Thread worker = new Thread(new Runnable() {
