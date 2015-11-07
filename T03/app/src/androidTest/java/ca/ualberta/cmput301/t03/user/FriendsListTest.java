@@ -85,7 +85,7 @@ public class FriendsListTest {
 
     @BeforeClass
     public static void setupTestUser() throws Exception {
-        PrimaryUserHelper.createUserWithFriend(InstrumentationRegistry.getTargetContext());
+        PrimaryUserHelper.createUsers_NoFriendsAdded(InstrumentationRegistry.getTargetContext());
     }
 
     @AfterClass
