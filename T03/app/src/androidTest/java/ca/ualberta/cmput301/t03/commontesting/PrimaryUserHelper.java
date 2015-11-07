@@ -194,36 +194,13 @@ public class PrimaryUserHelper {
 
     }
 
-    public static void deleteAndUnloadUserWithFriendThatHasInventory(Context context) {
+    public static void deleteAndUnloadUserWithFriendThatHasInventory(Context context) throws Exception {
 
-        DataManager dataManager = new CachedDataManager(new HttpDataManager(context, true), context, true);
-        Configuration configuration = new Configuration(context);
-        configuration.setApplicationUserName(GENERAL_INVENTORY_FRIEND_1);
-        try {
-            dataManager.deleteIfExists(new DataKey(UserProfile.type, GENERAL_INVENTORY_FRIEND_1));
-            dataManager.deleteIfExists(new DataKey(Inventory.type, GENERAL_INVENTORY_FRIEND_1));
-            dataManager.deleteIfExists(new DataKey(FriendsList.type, GENERAL_INVENTORY_FRIEND_1));
-
-            dataManager.deleteIfExists(new DataKey(UserProfile.type, FRIEND_WITH_AN_INVENTORY2));
-            dataManager.deleteIfExists(new DataKey(Inventory.type, FRIEND_WITH_AN_INVENTORY2));
-            dataManager.deleteIfExists(new DataKey(FriendsList.type, FRIEND_WITH_AN_INVENTORY2));
-
-            dataManager.deleteIfExists(new DataKey(UserProfile.type, FRIEND_WITH_AN_INVENTORY));
-            dataManager.deleteIfExists(new DataKey(Inventory.type, FRIEND_WITH_AN_INVENTORY));
-            dataManager.deleteIfExists(new DataKey(FriendsList.type, FRIEND_WITH_AN_INVENTORY));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-//        configuration.clearApplicationUserName();
-//        if (previousUser != null) {
-//            configuration.setApplicationUserName(previousUser);
-//        }
-//        previousUser = null;
+        deleteUserWithFriend(context);
     }
 
 
-    public static void createUserWithFriend(Context context) {
+    public static void createUsers_NoFriendsAdded(Context context) {
 
         Configuration configuration = new Configuration(context);
         if (configuration.isApplicationUserNameSet()) {
@@ -348,26 +325,31 @@ public class PrimaryUserHelper {
 
     }
 
-    public static void deleteUserWithFriend(Context context) {
+    public static void deleteUserWithFriend(Context context) throws Exception {
 
         DataManager dataManager = new CachedDataManager(new HttpDataManager(context, true), context, true);
         Configuration configuration = new Configuration(context);
-        configuration.setApplicationUserName(GENERAL_INVENTORY_FRIEND_1);
-        try {
-            dataManager.deleteIfExists(new DataKey(UserProfile.type, GENERAL_INVENTORY_FRIEND_1));
-            dataManager.deleteIfExists(new DataKey(Inventory.type, GENERAL_INVENTORY_FRIEND_1));
-            dataManager.deleteIfExists(new DataKey(FriendsList.type, GENERAL_INVENTORY_FRIEND_1));
 
-            dataManager.deleteIfExists(new DataKey(UserProfile.type, FRIEND_WITH_AN_INVENTORY2));
-            dataManager.deleteIfExists(new DataKey(Inventory.type, FRIEND_WITH_AN_INVENTORY2));
-            dataManager.deleteIfExists(new DataKey(FriendsList.type, FRIEND_WITH_AN_INVENTORY2));
+        String users[] = {GENERAL_INVENTORY_FRIEND_1, FRIEND_WITH_AN_INVENTORY, FRIEND_WITH_AN_INVENTORY2};
 
-            dataManager.deleteIfExists(new DataKey(UserProfile.type, FRIEND_WITH_AN_INVENTORY));
-            dataManager.deleteIfExists(new DataKey(Inventory.type, FRIEND_WITH_AN_INVENTORY));
-            dataManager.deleteIfExists(new DataKey(FriendsList.type, FRIEND_WITH_AN_INVENTORY));
-        } catch (IOException e) {
-            e.printStackTrace();
+        for (String user: users){
+            configuration.setApplicationUserName(user);
+
+            try {
+                dataManager.deleteIfExists(new DataKey(UserProfile.type, configuration.getApplicationUserName()));
+                dataManager.deleteIfExists(new DataKey(Inventory.type, configuration.getApplicationUserName()));
+                dataManager.deleteIfExists(new DataKey(FriendsList.type, configuration.getApplicationUserName()));
+                dataManager.deleteIfExists(new DataKey(TradeList.type, configuration.getApplicationUserName()));
+            } catch (IOException e){
+                e.printStackTrace();
+            }
         }
+
+        configuration.clearApplicationUserName();
+        if (previousUser != null){
+            configuration.setApplicationUserName(previousUser);
+        }
+        previousUser = null;
     }
 
 
