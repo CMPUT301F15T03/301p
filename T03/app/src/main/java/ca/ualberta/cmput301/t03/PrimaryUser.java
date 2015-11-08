@@ -74,4 +74,13 @@ public class PrimaryUser {
         }
         return ourInstance;
     }
+
+
+    public static void clearInstance() {
+        setupCalled = false;
+        if (ourInstance != null){
+            ourInstance.clearObservers();
+            ourInstance = null;
+        }
+    }
 }

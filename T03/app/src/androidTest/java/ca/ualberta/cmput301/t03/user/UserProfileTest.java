@@ -20,6 +20,7 @@
 
 package ca.ualberta.cmput301.t03.user;
 
+import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -27,9 +28,8 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.LargeTest;
 import android.widget.TextView;
 
-import org.junit.AfterClass;
+import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -80,37 +80,30 @@ public class UserProfileTest {
 
 
     @Rule
-    public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
-            MainActivity.class);
+    public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<MainActivity>(
+            MainActivity.class, false, false);
 
     private MainActivity mActivity = null;
 
 
-    @BeforeClass
-    public static void setupTestUser() throws Exception {
-        PrimaryUserHelper.setup(InstrumentationRegistry.getTargetContext());
-    }
-
-    @AfterClass
-    public static void restoreOriginalUser() throws Exception {
-        PrimaryUserHelper.tearDown(InstrumentationRegistry.getTargetContext());
-    }
-
-
     @Before
     public void setActivity() throws Exception {
+        PrimaryUserHelper.setup(InstrumentationRegistry.getTargetContext());
         pause();
-        mActivity = mActivityRule.getActivity();
+        mActivity = mActivityRule.launchActivity(new Intent());
 
-        User u = PrimaryUser.getInstance();
-        UserProfile p = u.getProfile();
-        p.setCity(PrimaryUserHelper.CITY);
-        p.setEmail(PrimaryUserHelper.EMAIL);
-        p.setPhone(PrimaryUserHelper.PHONE);
         pause();
 
-        onView(withContentDescription("Open navigation drawer")).check(matches(isDisplayed())).perform(click());
-        onView(withText("My Profile")).perform(click());
+        onView(withContentDescription(R.string.navigation_drawer_open))
+                .check(matches(isDisplayed()))
+                .perform(click());
+        onView(withText("My Profile"))
+                .perform(click());
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        PrimaryUserHelper.tearDown(InstrumentationRegistry.getTargetContext());
     }
 
     /**

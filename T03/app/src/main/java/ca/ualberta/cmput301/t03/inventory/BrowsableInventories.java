@@ -172,4 +172,9 @@ public class BrowsableInventories implements Filterable<Item>, Observer, Observa
         observers.remove(observer);
     }
 
+    @Override
+    public void clearObservers() {
+        observers.clear();
+    }
+
 }

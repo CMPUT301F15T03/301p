@@ -133,6 +133,11 @@ public class FriendsList implements Observable, Filterable {
         observers.remove(observer);
     }
 
+    @Override
+    public void clearObservers() {
+        observers.clear();
+    }
+
     /**
      * {@inheritDoc}
      *

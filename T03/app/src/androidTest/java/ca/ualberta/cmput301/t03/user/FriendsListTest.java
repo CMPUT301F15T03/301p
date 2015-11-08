@@ -20,6 +20,7 @@
 
 package ca.ualberta.cmput301.t03.user;
 
+import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -78,37 +79,31 @@ public class FriendsListTest {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
-            MainActivity.class);
+            MainActivity.class, false, false);
 
     private MainActivity mActivity = null;
 
 
-    @BeforeClass
-    public static void setupTestUser() throws Exception {
-        PrimaryUserHelper.createUsers_NoFriendsAdded(InstrumentationRegistry.getTargetContext());
-    }
-
-    @AfterClass
-    public static void restoreOriginalUser() throws Exception {
-        PrimaryUserHelper.deleteUserWithFriend(InstrumentationRegistry.getTargetContext());
-    }
-
     @Before
     public void setActivity() throws Exception {
 
-        mActivity = mActivityRule.getActivity();
+        PrimaryUserHelper.createUsers_NoFriendsAdded(InstrumentationRegistry.getTargetContext());
 
+        mActivity = mActivityRule.launchActivity(new Intent());
         pause();
+        onView(withContentDescription(R.string.navigation_drawer_open))
+                .check(matches(isDisplayed()))
+                .perform(click());
         pause();
-        onView(withContentDescription("Open navigation drawer")).check(matches(isDisplayed())).perform(click());
-        pause();
-        onView(withText("Friends")).check(matches(isDisplayed())).perform(click());
+        onView(withText("Friends"))
+                .check(matches(isDisplayed()))
+                .perform(click());
         pause();
     }
 
     @After
     public void tearDown() throws Exception {
-        pause();
+        PrimaryUserHelper.deleteUserWithFriend(InstrumentationRegistry.getTargetContext());
     }
 
     /**

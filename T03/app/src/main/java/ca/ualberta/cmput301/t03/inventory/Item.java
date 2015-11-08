@@ -242,6 +242,11 @@ public class Item implements Observer, Observable {
         observers.remove(observer);
     }
 
+    @Override
+    public void clearObservers() {
+        observers.clear();
+    }
+
     /**
      * {@inheritDoc}
      *

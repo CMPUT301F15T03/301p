@@ -44,4 +44,11 @@ public interface Observable {
      * @param observer the Observer to remove
      */
     void removeObserver(Observer observer);
+
+    /**
+     * Remove all Observers from maintained collection of Observers. These Observers should no longer
+     * be notified of changes.
+     */
+    void clearObservers();
+
 }

@@ -150,5 +150,10 @@ public class Configuration implements Observable {
     public void removeObserver(Observer observer) {
         observers.remove(observer);
     }
+
+    @Override
+    public void clearObservers() {
+        observers.clear();
+    }
 }
 
