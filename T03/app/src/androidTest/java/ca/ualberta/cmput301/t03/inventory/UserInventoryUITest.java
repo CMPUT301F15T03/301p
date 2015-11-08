@@ -20,11 +20,13 @@
 
 package ca.ualberta.cmput301.t03.inventory;
 
+import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
 
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -33,6 +35,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ca.ualberta.cmput301.t03.MainActivity;
+import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.common.PrimaryUserHelper;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -41,6 +44,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static ca.ualberta.cmput301.t03.common.PauseForAnimation.pause;
 import static java.lang.Thread.sleep;
 
 @RunWith(AndroidJUnit4.class)
@@ -49,40 +53,34 @@ public class UserInventoryUITest {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
-            MainActivity.class);
+            MainActivity.class, false, false);
 
     private MainActivity mActivity = null;
 
-    /**
-     * Method cleanup template user and friends.
-     */
-
-    @BeforeClass
-    public static void setupTestUser() throws Exception {
-        PrimaryUserHelper.deleteAndUnloadUserWithFriendThatHasInventory(InstrumentationRegistry.getTargetContext());
-        PrimaryUserHelper.createAndLoadUserWithFriendThatHasInventory(InstrumentationRegistry.getTargetContext());
-    }
-
-    @AfterClass
-    public static void restoreOriginalUser() throws Exception {
-        PrimaryUserHelper.deleteAndUnloadUserWithFriendThatHasInventory(InstrumentationRegistry.getTargetContext());
-    }
-
     @Before
     public void setActivity() {
-        mActivity = mActivityRule.getActivity();
+        PrimaryUserHelper.createAndLoadUserWithFriendThatHasInventory(InstrumentationRegistry.getTargetContext());
+
+        mActivity = mActivityRule.launchActivity(new Intent());
         InstrumentationRegistry.getInstrumentation();
-        try {
-            sleep(4000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        pause();
 
         /**
          * Go to inventory fragment
          */
-        onView(withContentDescription("Open navigation drawer")).check(matches(isDisplayed())).perform(click());
-        onView(withText("Inventory")).check(matches(isDisplayed())).perform(click());
+        onView(withContentDescription(R.string.navigation_drawer_open))
+                .check(matches(isDisplayed()))
+                .perform(click());
+        pause();
+        onView(withText("Inventory"))
+                .check(matches(isDisplayed()))
+                .perform(click());
+        pause();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        PrimaryUserHelper.deleteAndUnloadUserWithFriendThatHasInventory(InstrumentationRegistry.getTargetContext());
     }
 
     /**
