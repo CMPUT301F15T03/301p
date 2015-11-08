@@ -144,6 +144,11 @@ public class TradeList implements Observable, Observer {
         this.observers.remove(observer);
     }
 
+    @Override
+    public void clearObservers() {
+        observers.clear();
+    }
+
     /**
      * {@inheritDoc}
      *

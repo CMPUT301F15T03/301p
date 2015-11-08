@@ -190,6 +190,11 @@ public class Inventory implements Filterable<Item>, Observable, Observer {
         observers.remove(observer);
     }
 
+    @Override
+    public void clearObservers() {
+        observers.clear();
+    }
+
     /**
      * {@inheritDoc}
      *

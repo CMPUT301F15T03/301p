@@ -367,6 +367,11 @@ public class Trade implements Observable {
     }
 
     @Override
+    public void clearObservers() {
+        observers.clear();
+    }
+
+    @Override
     public String toString() {
         return this.getTradeUUID().toString();
     }

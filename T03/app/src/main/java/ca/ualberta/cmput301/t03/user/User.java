@@ -107,6 +107,21 @@ public class User implements Observable, Observer, Comparable<User> {
     }
 
     /**
+     *
+     * FOR TESTING PURPOSES ONLY
+     *
+     * Change current application username, and fetch their stuff.
+     * @param username
+     */
+//    public void setUsername(String username) throws IOException {
+//        this.username = username;
+//        getProfile();
+//        getFriends();
+//        getInventory();
+//        getTradeList();
+//    }
+
+    /**
      * Gets the User's username. This will not hit the network.
      *
      * @return the User's username.
@@ -247,6 +262,11 @@ public class User implements Observable, Observer, Comparable<User> {
         observers.remove(observer);
     }
 
+    @Override
+    public void clearObservers() {
+        observers.clear();
+    }
+
     /**
      * When called by the fields that User is observing, a dump of the field's data will happen
      * using a DataManager.
@@ -285,8 +305,6 @@ public class User implements Observable, Observer, Comparable<User> {
             } catch (IOException e) {
                 throw new RuntimeException("Unable to write trade list changes.");
             }
-        } else if (o.getClass().equals(Configuration.class)) {
-            //noop
         } else {
             throw new RuntimeException("No rule found to update User using Observable: " + o.getClass());
         }
