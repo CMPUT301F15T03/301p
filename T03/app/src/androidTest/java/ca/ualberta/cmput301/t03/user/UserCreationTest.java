@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ca.ualberta.cmput301.t03;
+package ca.ualberta.cmput301.t03.user;
 
 import android.app.Instrumentation;
 import android.content.Context;
@@ -28,17 +28,16 @@ import android.widget.EditText;
 
 import java.io.IOException;
 
-import ca.ualberta.cmput301.t03.commontesting.PrimaryUserHelper;
+import ca.ualberta.cmput301.t03.MainActivity;
+import ca.ualberta.cmput301.t03.PrimaryUser;
+import ca.ualberta.cmput301.t03.R;
+import ca.ualberta.cmput301.t03.common.PrimaryUserHelper;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.datamanager.CachedDataManager;
 import ca.ualberta.cmput301.t03.datamanager.DataKey;
 import ca.ualberta.cmput301.t03.datamanager.DataManager;
 import ca.ualberta.cmput301.t03.datamanager.HttpDataManager;
 import ca.ualberta.cmput301.t03.inventory.Inventory;
-import ca.ualberta.cmput301.t03.user.FriendsList;
-import ca.ualberta.cmput301.t03.user.InitializeUserActivity;
-import ca.ualberta.cmput301.t03.user.User;
-import ca.ualberta.cmput301.t03.user.UserProfile;
 
 public class UserCreationTest extends ActivityInstrumentationTestCase2 {
 

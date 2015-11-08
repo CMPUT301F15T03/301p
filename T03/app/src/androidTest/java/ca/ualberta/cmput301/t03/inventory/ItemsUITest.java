@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ca.ualberta.cmput301.t03.uitesting;
+package ca.ualberta.cmput301.t03.inventory;
 
 import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
@@ -30,9 +30,8 @@ import java.util.UUID;
 import ca.ualberta.cmput301.t03.MainActivity;
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
-import ca.ualberta.cmput301.t03.commontesting.PrimaryUserHelper;
+import ca.ualberta.cmput301.t03.common.PrimaryUserHelper;
 import ca.ualberta.cmput301.t03.datamanager.HttpDataManager;
-import ca.ualberta.cmput301.t03.inventory.Item;
 import ca.ualberta.cmput301.t03.user.User;
 
 import static android.support.test.espresso.Espresso.onData;

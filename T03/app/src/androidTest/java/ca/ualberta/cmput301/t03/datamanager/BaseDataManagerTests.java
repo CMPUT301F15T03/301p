@@ -30,7 +30,7 @@ import java.io.IOException;
 
 import ca.ualberta.cmput301.t03.common.exceptions.ExceptionUtils;
 
-import static ca.ualberta.cmput301.t03.commontesting.ExceptionAsserter.assertThrowsException;
+import static ca.ualberta.cmput301.t03.common.ExceptionAsserter.assertThrowsException;
 
 /**
  * Created by rishi on 15-10-30.

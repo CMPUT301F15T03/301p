@@ -18,12 +18,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ca.ualberta.cmput301.t03;
+package ca.ualberta.cmput301.t03.configuration;
 
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.CompoundButton;
 
-import ca.ualberta.cmput301.t03.commontesting.PrimaryUserHelper;
+import ca.ualberta.cmput301.t03.common.PrimaryUserHelper;
 import ca.ualberta.cmput301.t03.configuration.ConfigurationActivity;
 
 public class AppSettingsTest extends ActivityInstrumentationTestCase2 {

@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ca.ualberta.cmput301.t03;
+package ca.ualberta.cmput301.t03.trading;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -29,7 +29,10 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.UUID;
 
-import ca.ualberta.cmput301.t03.commontesting.PrimaryUserHelper;
+import ca.ualberta.cmput301.t03.MainActivity;
+import ca.ualberta.cmput301.t03.PrimaryUser;
+import ca.ualberta.cmput301.t03.R;
+import ca.ualberta.cmput301.t03.common.PrimaryUserHelper;
 import ca.ualberta.cmput301.t03.inventory.Item;
 import ca.ualberta.cmput301.t03.trading.Trade;
 import ca.ualberta.cmput301.t03.trading.TradeStateAccepted;
@@ -47,7 +50,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static ca.ualberta.cmput301.t03.commontesting.PauseForAnimation.pause;
+import static ca.ualberta.cmput301.t03.common.PauseForAnimation.pause;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.hasToString;

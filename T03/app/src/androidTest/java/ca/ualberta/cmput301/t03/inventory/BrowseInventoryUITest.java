@@ -36,7 +36,7 @@ import org.junit.runner.RunWith;
 
 import ca.ualberta.cmput301.t03.MainActivity;
 import ca.ualberta.cmput301.t03.R;
-import ca.ualberta.cmput301.t03.commontesting.PrimaryUserHelper;
+import ca.ualberta.cmput301.t03.common.PrimaryUserHelper;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
@@ -49,7 +49,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static ca.ualberta.cmput301.t03.commontesting.PauseForAnimation.pause;
+import static ca.ualberta.cmput301.t03.common.PauseForAnimation.pause;
 import static java.lang.Thread.sleep;
 import static junit.framework.Assert.fail;
 import static org.hamcrest.Matchers.hasToString;
