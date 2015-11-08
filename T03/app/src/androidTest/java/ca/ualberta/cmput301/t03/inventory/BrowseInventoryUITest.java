@@ -20,6 +20,7 @@
 
 package ca.ualberta.cmput301.t03.inventory;
 
+import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.rule.ActivityTestRule;
@@ -27,6 +28,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
 
 import org.hamcrest.core.StringContains;
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -60,45 +62,35 @@ public class BrowseInventoryUITest {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
-            MainActivity.class);
+            MainActivity.class, false, false);
 
     private MainActivity mActivity = null;
 
-    /**
-     * Methods cleanup template user and friends.
-     */
-    @BeforeClass
-    public static void setupTestUser() throws Exception {
-        PrimaryUserHelper.deleteAndUnloadUserWithFriendThatHasInventory(InstrumentationRegistry.getTargetContext());
-        PrimaryUserHelper.createAndLoadUserWithFriendThatHasInventory(InstrumentationRegistry.getTargetContext());
-    }
-
-    @AfterClass
-    public static void restoreOriginalUser() throws Exception {
-        PrimaryUserHelper.deleteAndUnloadUserWithFriendThatHasInventory(InstrumentationRegistry.getTargetContext());
-    }
 
     @Before
     public void setActivity() {
+        PrimaryUserHelper.createAndLoadUserWithFriendThatHasInventory(InstrumentationRegistry.getTargetContext());
 
-        mActivity = mActivityRule.getActivity();
+        mActivity = mActivityRule.launchActivity(new Intent());
         InstrumentationRegistry.getInstrumentation();
-        try {
-            sleep(4000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        /**
-         * Methods create and cleanup template user and friends.
-         */
+        pause();
 
-        /**
+        /*
          * Go to browse fragment
          */
-        onView(withContentDescription("Open navigation drawer")).check(matches(isDisplayed())).perform(click());
+        onView(withContentDescription(R.string.navigation_drawer_open))
+                .check(matches(isDisplayed()))
+                .perform(click());
         pause();
-        onView(withText("Browse")).check(matches(isDisplayed())).perform(click());
+        onView(withText("Browse"))
+                .check(matches(isDisplayed()))
+                .perform(click());
         pause();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        PrimaryUserHelper.deleteAndUnloadUserWithFriendThatHasInventory(InstrumentationRegistry.getTargetContext());
     }
 
     /**
