@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ca.ualberta.cmput301.t03.commontesting;
+package ca.ualberta.cmput301.t03.common;
 
 public class PauseForAnimation {
 

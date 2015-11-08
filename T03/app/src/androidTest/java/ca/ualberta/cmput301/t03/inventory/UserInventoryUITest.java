@@ -33,7 +33,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ca.ualberta.cmput301.t03.MainActivity;
-import ca.ualberta.cmput301.t03.commontesting.PrimaryUserHelper;
+import ca.ualberta.cmput301.t03.common.PrimaryUserHelper;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;

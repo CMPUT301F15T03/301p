@@ -28,7 +28,7 @@ import java.util.HashMap;
 
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 
-import static ca.ualberta.cmput301.t03.commontesting.ExceptionAsserter.assertThrowsException;
+import static ca.ualberta.cmput301.t03.common.ExceptionAsserter.assertThrowsException;
 
 /**
  * Created by rishi on 15-10-31.

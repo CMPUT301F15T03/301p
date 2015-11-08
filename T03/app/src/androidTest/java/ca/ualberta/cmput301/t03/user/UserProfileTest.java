@@ -39,7 +39,7 @@ import java.io.IOException;
 import ca.ualberta.cmput301.t03.MainActivity;
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
-import ca.ualberta.cmput301.t03.commontesting.PrimaryUserHelper;
+import ca.ualberta.cmput301.t03.common.PrimaryUserHelper;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
@@ -52,7 +52,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static ca.ualberta.cmput301.t03.commontesting.PauseForAnimation.pause;
+import static ca.ualberta.cmput301.t03.common.PauseForAnimation.pause;
 import static junit.framework.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
