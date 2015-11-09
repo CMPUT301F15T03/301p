@@ -109,38 +109,4 @@ public class CachedDataManagerTests extends BaseDataManagerTests<CachedDataManag
         assertTrue(cachedDataManager.isOperational());
         assertFalse(cachedDataManager.keyExists(dataKey));
     }
-
-    private class InMemoryDataManager extends JsonDataManager {
-        private boolean isOperational = true;
-        private HashMap<String, Object> inMemoryDataRepository = new HashMap<>();
-
-        @Override
-        public boolean keyExists(DataKey key) throws IOException {
-            return inMemoryDataRepository.containsKey(key.toString());
-        }
-
-        @Override
-        public <T> T getData(DataKey key, Type typeOfT) throws IOException {
-            return (T) inMemoryDataRepository.get(key.toString());
-        }
-
-        @Override
-        public <T> void writeData(DataKey key, T obj, Type typeOfT) throws IOException {
-            inMemoryDataRepository.put(key.toString(), obj);
-        }
-
-        @Override
-        public boolean deleteIfExists(DataKey key) throws IOException {
-            return inMemoryDataRepository.remove(key.toString()) != null;
-        }
-
-        @Override
-        public boolean isOperational() {
-            return isOperational;
-        }
-
-        public void setIsOperational(boolean isOperational) {
-            this.isOperational = isOperational;
-        }
-    }
 }

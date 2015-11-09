@@ -44,7 +44,6 @@ public class CachedDataManager extends JsonDataManager {
 
     private final static String CACHE_DIRECTORY = "cache";
     private final JsonDataManager innerManager;
-    private final Context context;
     private final LocalDataManager cachingDataManager;
 
     /**
@@ -57,8 +56,8 @@ public class CachedDataManager extends JsonDataManager {
      *                                    the annotation @expose will be serialized/de-serialized.
      */
     public CachedDataManager(JsonDataManager innerManager, Context context, boolean useExplicitExposeAnnotation) {
+        Preconditions.checkNotNull(context, "context");
         this.innerManager = Preconditions.checkNotNull(innerManager, "innerManager");
-        this.context = Preconditions.checkNotNull(context, "context");
         this.cachingDataManager = new LocalDataManager(context, useExplicitExposeAnnotation);
     }
 
