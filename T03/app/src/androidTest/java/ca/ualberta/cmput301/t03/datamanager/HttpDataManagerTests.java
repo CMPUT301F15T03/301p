@@ -27,7 +27,7 @@ public class HttpDataManagerTests extends BaseDataManagerTests<HttpDataManager> 
 
     @Override
     protected HttpDataManager createNewDataManager() {
-        return new HttpDataManager(getContext());
+        return new HttpDataManager();
     }
 
     @Override

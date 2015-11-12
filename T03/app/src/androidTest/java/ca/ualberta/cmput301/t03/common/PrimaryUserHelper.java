@@ -327,7 +327,7 @@ public class PrimaryUserHelper {
 
     public static void deleteUserWithFriend(Context context) throws Exception {
 
-        DataManager dataManager = new CachedDataManager(new HttpDataManager(context, true), context, true);
+        DataManager dataManager = new CachedDataManager(new HttpDataManager(true), true);
         Configuration configuration = new Configuration(context);
 
         String users[] = {GENERAL_INVENTORY_FRIEND_1, FRIEND_WITH_AN_INVENTORY, FRIEND_WITH_AN_INVENTORY2};
@@ -352,7 +352,7 @@ public class PrimaryUserHelper {
 
 
     public static void tearDown(Context context) throws Exception {
-        DataManager dataManager = new CachedDataManager(new HttpDataManager(context, true), context, true);
+        DataManager dataManager = new CachedDataManager(new HttpDataManager(true), true);
         Configuration configuration = new Configuration(context);
         configuration.setApplicationUserName(USER_ID);
         dataManager.deleteIfExists(new DataKey(UserProfile.type, configuration.getApplicationUserName()));

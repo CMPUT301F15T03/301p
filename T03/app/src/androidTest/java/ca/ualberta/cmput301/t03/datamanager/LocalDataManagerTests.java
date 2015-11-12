@@ -27,7 +27,7 @@ public class LocalDataManagerTests extends BaseDataManagerTests<LocalDataManager
 
     @Override
     protected LocalDataManager createNewDataManager() {
-        return new LocalDataManager(getContext());
+        return new LocalDataManager();
     }
 
     @Override

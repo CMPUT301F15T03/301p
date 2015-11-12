@@ -36,7 +36,7 @@ import static ca.ualberta.cmput301.t03.common.ExceptionAsserter.assertThrowsExce
 public class CachedDataManagerTests extends BaseDataManagerTests<CachedDataManager> implements DataManagerApiTests {
     @Override
     protected CachedDataManager createNewDataManager() {
-        return new CachedDataManager(new HttpDataManager(getContext()), getContext());
+        return new CachedDataManager(new HttpDataManager());
     }
 
     @Override
@@ -67,7 +67,7 @@ public class CachedDataManagerTests extends BaseDataManagerTests<CachedDataManag
     public void testWriteThenGetDataWhenInnerDataManagerNotAvailable() throws IOException {
 
         InMemoryDataManager mockDataManager = new InMemoryDataManager();
-        CachedDataManager cachedDataManager = new CachedDataManager(mockDataManager, getContext());
+        CachedDataManager cachedDataManager = new CachedDataManager(mockDataManager);
 
         Type type = new TypeToken<TestDto>() {
         }.getType();
@@ -86,7 +86,7 @@ public class CachedDataManagerTests extends BaseDataManagerTests<CachedDataManag
 
     public void testWriteWhenInnerManagerIsNotAvailableThrowsException() throws IOException {
         InMemoryDataManager mockDataManager = new InMemoryDataManager();
-        final CachedDataManager cachedDataManager = new CachedDataManager(mockDataManager, getContext());
+        final CachedDataManager cachedDataManager = new CachedDataManager(mockDataManager);
 
         final Type type = new TypeToken<TestDto>() {
         }.getType();

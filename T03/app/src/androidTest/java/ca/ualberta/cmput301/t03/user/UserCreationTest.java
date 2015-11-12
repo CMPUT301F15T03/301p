@@ -55,7 +55,7 @@ public class UserCreationTest extends ActivityInstrumentationTestCase2 {
     public void tearDown() throws Exception {
 
         Context context = getInstrumentation().getTargetContext();
-        DataManager dataManager = new CachedDataManager(new HttpDataManager(context, true), context, true);
+        DataManager dataManager = new CachedDataManager(new HttpDataManager(true), true);
         Configuration configuration = new Configuration(context);
         configuration.setApplicationUserName("JUNIT_TEST_USER_DO_NOT_USE_THIS_NAME2");
         try {
@@ -80,7 +80,7 @@ public class UserCreationTest extends ActivityInstrumentationTestCase2 {
         Configuration configuration = new Configuration(getInstrumentation().getTargetContext());
 
         Context context = getInstrumentation().getTargetContext();
-        DataManager dataManager = new CachedDataManager(new HttpDataManager(context, true), context, true);
+        DataManager dataManager = new CachedDataManager(new HttpDataManager(true), true);
         configuration.setApplicationUserName("JUNIT_TEST_USER_DO_NOT_USE_THIS_NAME2");
         try {
             dataManager.deleteIfExists(new DataKey(UserProfile.type, configuration.getApplicationUserName()));

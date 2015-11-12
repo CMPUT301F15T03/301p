@@ -98,7 +98,7 @@ public class User implements Observable, Observer, Comparable<User> {
     public User(String username, Context context) {
         this.observers = new HashSet<>();
         this.context = context;
-        this.dataManager = new CachedDataManager(new HttpDataManager(context, true), context, true);
+        this.dataManager = new CachedDataManager(new HttpDataManager(true), true);
         this.username = username;
     }
 
