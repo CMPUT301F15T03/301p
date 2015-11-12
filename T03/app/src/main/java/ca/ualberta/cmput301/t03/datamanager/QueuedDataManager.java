@@ -34,7 +34,8 @@ public class QueuedDataManager extends CachedDataManager {
 
     @Override
     public <T> void writeData(final DataKey key, final T obj, final Type typeOfT) throws IOException {
-        WriteDataJob<T> job = new WriteDataJob<>(innerManager, key, obj, typeOfT,
+        WriteDataJob job = new WriteDataJob(key, obj, typeOfT,
+                innerManager.jsonFormatter.getUseExplicitExposeAnnotation(),
                 new DataManagerJob.OnRequestQueuedCallback() {
                     @Override
                     public void onRequestQueued() {
@@ -46,7 +47,7 @@ public class QueuedDataManager extends CachedDataManager {
 
     @Override
     public void deleteIfExists(final DataKey key) throws IOException {
-        DeleteDataJob job = new DeleteDataJob(innerManager, key,
+        DeleteDataJob job = new DeleteDataJob(key,
                 new DataManagerJob.OnRequestQueuedCallback() {
                 @Override
                 public void onRequestQueued() {
