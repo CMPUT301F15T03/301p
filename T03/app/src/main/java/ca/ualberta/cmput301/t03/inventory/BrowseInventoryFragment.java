@@ -202,17 +202,6 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
         super.onDestroy();
     }
 
-//    private void setupFab(View v) {
-//        addFilterBrowseFab = (FloatingActionButton) v.findViewById(R.id.addFilterBrowseFab);
-//        addFilterBrowseFab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-////                controller.addFilter();
-//                Toast.makeText(getActivity().getBaseContext(), "ADD FILTER", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
-
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

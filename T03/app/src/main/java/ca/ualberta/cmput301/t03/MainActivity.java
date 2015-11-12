@@ -296,6 +296,9 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void update(Observable observable) {
         try {
