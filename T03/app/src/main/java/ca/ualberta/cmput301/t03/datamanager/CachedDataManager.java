@@ -140,11 +140,13 @@ public class CachedDataManager extends JsonDataManager {
      */
     @Override
     public void deleteIfExists(DataKey key) throws IOException {
-        if (isOperational()) {
-            innerManager.deleteIfExists(key);
-            deleteFromCache(key);
+        if (!isOperational()) {
+            throw new ServiceNotAvailableException("Inner DataManager is not operational. Cannot perform the delete operation.");
         }
-        throw new ServiceNotAvailableException("Inner DataManager is not operational. Cannot perform the delete operation.");
+
+        innerManager.deleteIfExists(key);
+        deleteFromCache(key);
+
     }
 
     /**
