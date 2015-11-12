@@ -58,6 +58,11 @@ public class ViewProfileFragment extends Fragment implements Observer {
     private Button browseInventoryButton;
     private User mUserToView;
 
+    /**
+     * DO NOT CALL THIS CONSTRUCTOR DIRECTLY!
+     *
+     * Use newInstance instead.
+     */
     public ViewProfileFragment() {
         // Required empty public constructor
     }
@@ -80,6 +85,9 @@ public class ViewProfileFragment extends Fragment implements Observer {
         return fragment;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -87,7 +95,9 @@ public class ViewProfileFragment extends Fragment implements Observer {
             inflater.inflate(R.menu.fragment_view_profile, menu);
         }
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -145,6 +155,9 @@ public class ViewProfileFragment extends Fragment implements Observer {
         update(model);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         usernameView = (TextView) getView().findViewById(R.id.viewProfileUsername);
@@ -181,7 +194,9 @@ public class ViewProfileFragment extends Fragment implements Observer {
 
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -195,12 +210,18 @@ public class ViewProfileFragment extends Fragment implements Observer {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onDetach() {
         super.onDetach();
         model.removeObserver(this);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void update(Observable observable) {
 

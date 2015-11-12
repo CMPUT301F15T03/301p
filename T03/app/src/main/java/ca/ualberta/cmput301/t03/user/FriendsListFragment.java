@@ -69,10 +69,25 @@ public class FriendsListFragment extends Fragment implements Observer {
 
     private Activity mActivity;
 
+    /**
+     * DO NOT CALL THIS CONSTRUCTOR DIRECTLY
+     *
+     * instead, use newInstance.
+     */
     public FriendsListFragment() {
         // Required empty public constructor
     }
 
+    /**
+     * Intantiates a new instance of this fragment with the default arguments
+     * set.
+     *
+     * Usage: Within an activity, call this method to instantiate an instance of
+     * this fragment. Then, use the FragmentManager to insert the gragment
+     * at the appropriate place.
+     *
+     * @return a new instance of FriendsListFragment.
+     */
     public static FriendsListFragment newInstance() {
         FriendsListFragment fragment = new FriendsListFragment();
         Bundle args = new Bundle();
@@ -80,12 +95,18 @@ public class FriendsListFragment extends Fragment implements Observer {
         return fragment;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.fragment_friends_list, menu);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -207,6 +228,9 @@ public class FriendsListFragment extends Fragment implements Observer {
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -214,6 +238,9 @@ public class FriendsListFragment extends Fragment implements Observer {
         return inflater.inflate(R.layout.fragment_friends_list, container, false);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -264,6 +291,9 @@ public class FriendsListFragment extends Fragment implements Observer {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void update(Observable observable) {
 
