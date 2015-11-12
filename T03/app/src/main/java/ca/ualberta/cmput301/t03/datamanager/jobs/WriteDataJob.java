@@ -12,14 +12,10 @@ import ca.ualberta.cmput301.t03.datamanager.ElasticSearchHelper;
 public class WriteDataJob extends DataManagerJob {
 
     private final String json;
-    private final boolean useExplicitExposeAnnotation;
 
-    public WriteDataJob(DataKey dataKey,
-                        String json,
-                        boolean useExplicitExposeAnnotation) {
+    public WriteDataJob(DataKey dataKey, String json) {
         super(dataKey);
         this.json = Preconditions.checkNotNullOrWhitespace(json, "json");
-        this.useExplicitExposeAnnotation = useExplicitExposeAnnotation;
     }
 
     @Override
