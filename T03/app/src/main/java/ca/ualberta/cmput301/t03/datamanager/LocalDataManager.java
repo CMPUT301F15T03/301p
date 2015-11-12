@@ -143,6 +143,14 @@ public class LocalDataManager extends JsonDataManager {
         return true;
     }
 
+    /**
+     * Return false.
+     */
+    @Override
+    public boolean requiresNetwork() {
+        return false;
+    }
+
     // Source: http://stackoverflow.com/questions/2130932/how-to-create-directory-automatically-on-sd-card
     // Date: 30 Oct, 2015
     private File getTargetFile(DataKey key, boolean createTypeDirectoryIfNotExists) {

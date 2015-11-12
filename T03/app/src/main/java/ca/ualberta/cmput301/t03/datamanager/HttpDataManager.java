@@ -178,6 +178,14 @@ public class HttpDataManager extends JsonDataManager {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
+    /**
+     * Returns true.
+     */
+    @Override
+    public boolean requiresNetwork() {
+        return true;
+    }
+
     private String extractSourceFromElasticSearchHttpResponse(HttpResponse response) {
         String responseContents = new String(response.getContents());
         JsonParser jp = new JsonParser();

@@ -79,4 +79,10 @@ public interface DataManager {
      * operations might still work if false is returned.
      */
     boolean isOperational();
+
+    /**
+     * Tells if this DataManager requires network or not.
+     * @return True, if network is needed, else false.
+     */
+    boolean requiresNetwork();
 }

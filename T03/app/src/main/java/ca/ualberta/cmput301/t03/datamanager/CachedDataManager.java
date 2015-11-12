@@ -43,8 +43,8 @@ import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 public class CachedDataManager extends JsonDataManager {
 
     private final static String CACHE_DIRECTORY = "cache";
-    private final JsonDataManager innerManager;
-    private final LocalDataManager cachingDataManager;
+    protected final JsonDataManager innerManager;
+    protected final LocalDataManager cachingDataManager;
 
     /**
      * Creates an instance of the {@link CachedDataManager}.
@@ -158,6 +158,14 @@ public class CachedDataManager extends JsonDataManager {
     @Override
     public boolean isOperational() {
         return innerManager.isOperational();
+    }
+
+    /**
+     * Returns if the innerManager requires network or not.
+     */
+    @Override
+    public boolean requiresNetwork() {
+        return innerManager.requiresNetwork();
     }
 
     private DataKey convertToCacheKey(DataKey key) {
