@@ -29,6 +29,7 @@ import junit.framework.AssertionFailedError;
 import java.io.IOException;
 
 import ca.ualberta.cmput301.t03.common.exceptions.ExceptionUtils;
+import ca.ualberta.cmput301.t03.datamanager.mocks.TestDto;
 
 import static ca.ualberta.cmput301.t03.common.ExceptionAsserter.assertThrowsException;
 

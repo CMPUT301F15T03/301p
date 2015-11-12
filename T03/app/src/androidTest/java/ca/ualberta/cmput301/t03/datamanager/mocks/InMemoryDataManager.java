@@ -18,11 +18,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ca.ualberta.cmput301.t03.datamanager;
+package ca.ualberta.cmput301.t03.datamanager.mocks;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.HashMap;
+
+import ca.ualberta.cmput301.t03.datamanager.DataKey;
+import ca.ualberta.cmput301.t03.datamanager.JsonDataManager;
 
 /**
  * Created by rishi on 15-11-08.
