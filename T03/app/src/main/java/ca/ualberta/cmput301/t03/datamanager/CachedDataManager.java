@@ -49,24 +49,11 @@ public class CachedDataManager extends JsonDataManager {
      * Creates an instance of the {@link CachedDataManager}.
      *
      * @param innerManager The inner {@link JsonDataManager} to be used.
-     * @param useExplicitExposeAnnotationForCaching True, if the @expose annotations are to be explicitly used,
-     *                                    else false. If this is set to true, only the fields with
-     *                                    the annotation @expose will be serialized/de-serialized.
-     */
-    public CachedDataManager(JsonDataManager innerManager, boolean useExplicitExposeAnnotationForCaching) {
-        this.innerManager = Preconditions.checkNotNull(innerManager, "innerManager");
-        this.cachingDataManager = new LocalDataManager(useExplicitExposeAnnotationForCaching);
-    }
-
-    /**
-     * Creates an instance of the {@link CachedDataManager}. The manager will set the value of
-     * "useExplicitExposeAnnotation" to false.
-     *
-     * @param innerManager The inner {@link JsonDataManager} to be used.
      */
     public CachedDataManager(JsonDataManager innerManager) {
-        this(Preconditions.checkNotNull(innerManager, "innerManager"),
-                innerManager.jsonFormatter.getUseExplicitExposeAnnotation());
+        super(Preconditions.checkNotNull(innerManager, "innerManager").jsonFormatter.getUseExplicitExposeAnnotation());
+        this.innerManager = innerManager;
+        this.cachingDataManager = new LocalDataManager(innerManager.jsonFormatter.getUseExplicitExposeAnnotation());
     }
 
     /**

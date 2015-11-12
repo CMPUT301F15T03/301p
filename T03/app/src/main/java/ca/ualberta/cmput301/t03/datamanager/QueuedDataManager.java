@@ -19,15 +19,15 @@ public class QueuedDataManager extends CachedDataManager {
     private final JobManager jobManager;
 
     public QueuedDataManager(boolean useExplicitExposeAnnotation) {
-        this(new HttpDataManager(useExplicitExposeAnnotation), useExplicitExposeAnnotation);
+        this(new HttpDataManager(useExplicitExposeAnnotation));
     }
 
     public QueuedDataManager() {
         this(false);
     }
 
-    protected QueuedDataManager(HttpDataManager innerManager, boolean useExplicitExposeAnnotation) {
-        super(Preconditions.checkNotNull(innerManager, "innerManager"), useExplicitExposeAnnotation);
+    protected QueuedDataManager(HttpDataManager innerManager) {
+        super(Preconditions.checkNotNull(innerManager, "innerManager"));
         jobManager = TradeApp.getInstance().getJobManager();
     }
 

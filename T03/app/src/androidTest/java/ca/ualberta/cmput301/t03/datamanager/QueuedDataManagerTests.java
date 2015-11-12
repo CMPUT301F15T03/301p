@@ -46,7 +46,7 @@ public class QueuedDataManagerTests extends BaseDataManagerTests<QueuedDataManag
     public void testWriteThenGetDataWhenInnerDataManagerNotAvailable() throws IOException, InterruptedException {
 
         TestHttpDataManager mockDataManager = new TestHttpDataManager();
-        QueuedDataManager queuedDataManager = new QueuedDataManager(mockDataManager, false);
+        QueuedDataManager queuedDataManager = new QueuedDataManager(mockDataManager);
 
         Type type = new TypeToken<TestDto>() {
         }.getType();
