@@ -1,4 +1,4 @@
-package ca.ualberta.cmput301.t03.datamanager;
+package ca.ualberta.cmput301.t03.datamanager.elasticsearch;
 
 import android.content.res.Resources;
 import android.util.Log;

@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import ca.ualberta.cmput301.t03.common.Preconditions;
 import ca.ualberta.cmput301.t03.datamanager.DataKey;
-import ca.ualberta.cmput301.t03.datamanager.ElasticSearchHelper;
+import ca.ualberta.cmput301.t03.datamanager.elasticsearch.ElasticSearchHelper;
 
 /**
  * Created by rishi on 15-11-11.
