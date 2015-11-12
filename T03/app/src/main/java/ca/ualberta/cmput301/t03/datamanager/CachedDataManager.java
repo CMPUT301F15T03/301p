@@ -43,8 +43,8 @@ import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 public class CachedDataManager extends JsonDataManager {
 
     private final static String CACHE_DIRECTORY = "cache";
+    private final LocalDataManager cachingDataManager;
     protected final JsonDataManager innerManager;
-    protected final LocalDataManager cachingDataManager;
 
     /**
      * Creates an instance of the {@link CachedDataManager}.
@@ -124,7 +124,7 @@ public class CachedDataManager extends JsonDataManager {
     public <T> void writeData(DataKey key, T obj, Type typeOfT) throws IOException {
         if (isOperational()) {
             innerManager.writeData(key, obj, typeOfT);
-            cachingDataManager.writeData(convertToCacheKey(key), obj, typeOfT);
+            writeToCache(key, obj, typeOfT);
         } else {
             throw new ServiceNotAvailableException("Inner DataManager is not operational. Cannot perform the write operation.");
         }
@@ -142,7 +142,7 @@ public class CachedDataManager extends JsonDataManager {
     public boolean deleteIfExists(DataKey key) throws IOException {
         if (isOperational()) {
             boolean existed = innerManager.deleteIfExists(key);
-            cachingDataManager.deleteIfExists(convertToCacheKey(key));
+            deleteFromCache(key);
             return existed;
         }
         throw new ServiceNotAvailableException("Inner DataManager is not operational. Cannot perform the delete operation.");
@@ -166,6 +166,31 @@ public class CachedDataManager extends JsonDataManager {
     @Override
     public boolean requiresNetwork() {
         return innerManager.requiresNetwork();
+    }
+
+    /**
+     * Writes the object to the cache.
+     * @param key The {@link DataKey} for the object that was passed. This will be converted to an
+     *            appropriate caching key.
+     * @param obj The object to be cached.
+     * @param typeOfT The {@link Type} of the object.
+     * @param <T> The type of the object.
+     */
+    protected <T> void writeToCache(DataKey key, T obj, Type typeOfT) {
+        DataKey cacheKey = convertToCacheKey(key);
+        cachingDataManager.writeData(cacheKey, obj, typeOfT);
+    }
+
+    /**
+     * Deletes the object from the cache, if it exists.
+     * @param key The {@link DataKey} for the object that was passed. This will be converted to an
+     *            appropriate caching key.
+     * @return True, if the key was found in the cache and was deleted. False, if the key was not
+     *         found.
+     */
+    protected boolean deleteFromCache(DataKey key) {
+        DataKey cacheKey = convertToCacheKey(key);
+        return cachingDataManager.deleteIfExists(cacheKey);
     }
 
     private DataKey convertToCacheKey(DataKey key) {
