@@ -13,22 +13,17 @@ import ca.ualberta.cmput301.t03.datamanager.DataManager;
  * Created by rishi on 15-11-11.
  */
 public abstract class DataManagerJob extends Job {
-    private final static int DEFAULT_PRIORITY = 1000;
-    private final static String GROUP_ID = "datamanagerjob";
-
-    protected final DataManager dataManager;
-    protected final DataKey dataKey;
+    private final String type;
+    private final String id;
 
     private final OnRequestQueuedCallback onRequestQueuedCallback;
 
-    public DataManagerJob(DataManager dataManager, DataKey dataKey,
-                          OnRequestQueuedCallback onRequestQueuedCallback) {
+    public DataManagerJob(DataKey dataKey, OnRequestQueuedCallback onRequestQueuedCallback) {
 
-        super(dataManager.requiresNetwork() ?
-                new Params(DEFAULT_PRIORITY)/*.persist()*/.requireNetwork().groupBy(GROUP_ID)
-                : new Params(DEFAULT_PRIORITY)/*.persist()*/.groupBy(GROUP_ID));
-        this.dataManager = Preconditions.checkNotNull(dataManager, "dataManager");
-        this.dataKey = Preconditions.checkNotNull(dataKey, "dataKey");
+        super(new Params(1000)/*.persist()*/.requireNetwork().groupBy("datamanagerjob"));
+        Preconditions.checkNotNull(dataKey, "dataKey");
+        this.type = dataKey.getType();
+        this.id = dataKey.getId();
         this.onRequestQueuedCallback = onRequestQueuedCallback;
     }
 
@@ -42,6 +37,11 @@ public abstract class DataManagerJob extends Job {
     @Override
     protected void onCancel() {
         throw new NotImplementedException();
+    }
+
+    // Needed because only simple types can be serialized
+    protected DataKey getDataKey() {
+        return new DataKey(type, id);
     }
 
     @Override

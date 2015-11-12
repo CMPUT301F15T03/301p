@@ -5,25 +5,24 @@ import java.io.IOException;
 
 import ca.ualberta.cmput301.t03.datamanager.DataKey;
 import ca.ualberta.cmput301.t03.datamanager.DataManager;
+import ca.ualberta.cmput301.t03.datamanager.HttpDataManager;
 
 /**
  * Created by rishi on 15-11-11.
  */
 public class DeleteDataJob extends DataManagerJob {
 
-    public DeleteDataJob(DataManager dataManager,
-                         DataKey dataKey,
+    public DeleteDataJob(DataKey dataKey,
                          OnRequestQueuedCallback onRequestQueuedCallback) {
-        super(dataManager, dataKey, onRequestQueuedCallback);
+        super(dataKey, onRequestQueuedCallback);
     }
 
-    public DeleteDataJob(DataManager dataManager,
-                         DataKey dataKey) {
-        this(dataManager, dataKey, null);
+    public DeleteDataJob(DataKey dataKey) {
+        this(dataKey, null);
     }
 
     @Override
     public void onRun() throws IOException {
-        dataManager.deleteIfExists(dataKey);
+        new HttpDataManager().deleteIfExists(getDataKey());
     }
 }

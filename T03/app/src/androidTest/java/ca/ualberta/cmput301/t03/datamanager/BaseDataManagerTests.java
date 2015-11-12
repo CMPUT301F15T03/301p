@@ -99,6 +99,7 @@ public abstract class BaseDataManagerTests<T extends DataManager> extends Androi
             }.getType());
             assertEquals(testDto, receivedData);
             dataManager.deleteIfExists(dataKey);
+            Thread.sleep(requestDelay);
         } catch (IOException e) {
             throw new AssertionFailedError(e.getMessage() + "\n" + ExceptionUtils.getStackTrace(e));
         } catch (InterruptedException e) {
