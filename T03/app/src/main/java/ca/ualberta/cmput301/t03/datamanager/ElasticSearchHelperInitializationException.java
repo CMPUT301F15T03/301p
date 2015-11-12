@@ -21,24 +21,24 @@
 package ca.ualberta.cmput301.t03.datamanager;
 
 /**
- * An {@link RuntimeException} thrown when the {@link HttpDataManager} construction fails.
+ * An {@link RuntimeException} thrown when the {@link ElasticSearchHelper} construction fails.
  * Created by ross on 15-11-03.
  */
-public class HttpDataManagerInitializationException extends RuntimeException {
+public class ElasticSearchHelperInitializationException extends RuntimeException {
 
     /**
-     * Creates an instance of {@link HttpDataManagerInitializationException}.
+     * Creates an instance of {@link ElasticSearchHelperInitializationException}.
      */
-    public HttpDataManagerInitializationException() {
+    public ElasticSearchHelperInitializationException() {
         super();
     }
 
     /**
-     * Create an instance of {@link HttpDataManagerInitializationException}.
+     * Create an instance of {@link ElasticSearchHelperInitializationException}.
      *
      * @param message The detailed message describing the exception.
      */
-    public HttpDataManagerInitializationException(String message) {
+    public ElasticSearchHelperInitializationException(String message) {
         super(message);
     }
 }

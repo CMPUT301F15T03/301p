@@ -38,9 +38,9 @@ public class DataKeyNotFoundException extends Resources.NotFoundException {
     /**
      * Creates a new instance of {@link DataKeyNotFoundException}.
      *
-     * @param name The name of the {@link DataKey} not found.
+     * @param key The {@link DataKey} not found.
      */
-    public DataKeyNotFoundException(String name) {
-        super(name);
+    public DataKeyNotFoundException(DataKey key) {
+        super(key.toString());
     }
 }

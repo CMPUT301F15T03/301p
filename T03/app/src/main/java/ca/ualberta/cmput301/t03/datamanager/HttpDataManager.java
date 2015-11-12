@@ -21,34 +21,22 @@
 package ca.ualberta.cmput301.t03.datamanager;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
-
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.net.MalformedURLException;
 
-import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.TradeApp;
-import ca.ualberta.cmput301.t03.common.Preconditions;
-import ca.ualberta.cmput301.t03.common.exceptions.NotImplementedException;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
-import ca.ualberta.cmput301.t03.common.http.HttpClient;
-import ca.ualberta.cmput301.t03.common.http.HttpResponse;
-import ca.ualberta.cmput301.t03.common.http.HttpStatusCode;
 
 /**
  * A {@link JsonDataManager} that uses the ElasticSearch server as the storage media.
  * Created by rishi on 15-10-30.
  */
 public class HttpDataManager extends JsonDataManager {
-    private static final String LOG_TAG = "HTTPDataManager";
-
-    private final HttpClient client;
+    private final ElasticSearchHelper elasticSearchHelper;
 
     /**
      * Creates an instance of {@link HttpDataManager}.
@@ -59,13 +47,7 @@ public class HttpDataManager extends JsonDataManager {
      */
     public HttpDataManager(boolean useExplicitExposeAnnotation) {
         super(useExplicitExposeAnnotation);
-        String rootUrl = TradeApp.getInstance().getString(R.string.httpDataManagerRootUrl);
-        try {
-            client = new HttpClient(Preconditions.checkNotNullOrWhitespace(rootUrl, "rootUrl"));
-        } catch (MalformedURLException e) {
-            Log.e(LOG_TAG, e.getMessage());
-            throw new HttpDataManagerInitializationException(e.getMessage());
-        }
+        elasticSearchHelper = new ElasticSearchHelper();
     }
 
     /**
@@ -85,17 +67,7 @@ public class HttpDataManager extends JsonDataManager {
             throw new ServiceNotAvailableException("HttpDataManager is not operational. Cannot perform this operation.");
         }
 
-        HttpResponse response = client.makeGetRequest(key.toString());
-
-        if (response.getResponseCode() == HttpStatusCode.OK.getStatusCode()) {
-            return true;
-        }
-        if (response.getResponseCode() == HttpStatusCode.NOT_FOUND.getStatusCode()) {
-            return false;
-        }
-
-        throw new NotImplementedException(String.format("Dev note: Unexpected response '%d' from the GET Elastic Search endpoint.",
-                response.getResponseCode()));
+        return elasticSearchHelper.checkPathExists(key.toString());
     }
 
     /**
@@ -107,18 +79,12 @@ public class HttpDataManager extends JsonDataManager {
             throw new ServiceNotAvailableException("HttpDataManager is not operational. Cannot perform this operation.");
         }
 
-        HttpResponse response = client.makeGetRequest(key.toString());
-
-        if (response.getResponseCode() == HttpStatusCode.NOT_FOUND.getStatusCode()) {
-            throw new DataKeyNotFoundException(key.toString());
+        try {
+            return deserialize(elasticSearchHelper.getJson(key.toString()), typeOfT);
         }
-        if (response.getResponseCode() == HttpStatusCode.OK.getStatusCode()) {
-            String sourceJson = extractSourceFromElasticSearchHttpResponse(response);
-            return deserialize(sourceJson, typeOfT);
+        catch (Resources.NotFoundException e) {
+            throw new DataKeyNotFoundException(key);
         }
-
-        throw new NotImplementedException(String.format("Dev note: Unexpected response '%d' from the GET Elastic Search endpoint.",
-                response.getResponseCode()));
     }
 
     /**
@@ -130,14 +96,7 @@ public class HttpDataManager extends JsonDataManager {
             throw new ServiceNotAvailableException("HttpDataManager is not operational. Cannot perform this operation.");
         }
 
-        byte[] requestContents = serialize(obj, typeOfT).getBytes();
-        HttpResponse response = client.makePutRequest(key.toString(), requestContents);
-
-        if (response.getResponseCode() != HttpStatusCode.OK.getStatusCode() &&
-                response.getResponseCode() != HttpStatusCode.CREATED.getStatusCode()) {
-            throw new NotImplementedException(String.format("Dev note: Unexpected response '%d' from the PUT Elastic Search endpoint.",
-                    response.getResponseCode()));
-        }
+        elasticSearchHelper.writeJson(serialize(obj, typeOfT), key.toString());
     }
 
     /**
@@ -149,13 +108,7 @@ public class HttpDataManager extends JsonDataManager {
             throw new ServiceNotAvailableException("HttpDataManager is not operational. Cannot perform this operation.");
         }
 
-        HttpResponse response = client.makeDeleteRequest(key.toString());
-        int statusCode = response.getResponseCode();
-
-        if (statusCode != HttpStatusCode.OK.getStatusCode() && statusCode != HttpStatusCode.NOT_FOUND.getStatusCode()) {
-            throw new NotImplementedException(String.format("Dev note: Unexpected response '%d' from the DELETE Elastic Search endpoint.",
-                    response.getResponseCode()));
-        }
+        elasticSearchHelper.sendDeleteRequestAtPath(key.toString());
     }
 
     /**
@@ -177,13 +130,6 @@ public class HttpDataManager extends JsonDataManager {
     @Override
     public boolean requiresNetwork() {
         return true;
-    }
-
-    private String extractSourceFromElasticSearchHttpResponse(HttpResponse response) {
-        String responseContents = new String(response.getContents());
-        JsonParser jp = new JsonParser();
-        JsonElement responseContentsJSON = jp.parse(responseContents);
-        return responseContentsJSON.getAsJsonObject().getAsJsonObject("_source").toString();
     }
 }
 
