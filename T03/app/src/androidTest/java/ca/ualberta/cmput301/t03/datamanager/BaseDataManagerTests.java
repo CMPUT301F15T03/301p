@@ -50,17 +50,24 @@ public abstract class BaseDataManagerTests<T extends DataManager> extends Androi
         dataKey = new DataKey("testdto", "123");
     }
 
-    protected void keyExistsTest() {
+    protected void keyExistsTest(int requestDelay) {
         try {
             assertFalse(dataManager.keyExists(dataKey));
             dataManager.writeData(dataKey, testDto, new TypeToken<TestDto>() {
             }.getType());
+            Thread.sleep(requestDelay);
             assertTrue(dataManager.keyExists(dataKey));
             assertFalse(dataManager.keyExists(new DataKey("not", "exists")));
             dataManager.deleteIfExists(dataKey);
         } catch (IOException e) {
             throw new AssertionFailedError(e.getMessage() + "\n" + ExceptionUtils.getStackTrace(e));
+        } catch (InterruptedException e) {
+            throw new AssertionFailedError(e.getMessage() + "\n" + ExceptionUtils.getStackTrace(e));
         }
+    }
+
+    protected void keyExistsTest() {
+        keyExistsTest(0);
     }
 
     protected void getDataWhenKeyDoesNotExistThrowsExceptionTest() {
@@ -82,10 +89,11 @@ public abstract class BaseDataManagerTests<T extends DataManager> extends Androi
         }
     }
 
-    protected void writeDataTest() {
+    protected void writeDataTest(int requestDelay) {
         try {
             dataManager.writeData(dataKey, testDto, new TypeToken<TestDto>() {
             }.getType());
+            Thread.sleep(requestDelay);
             assertTrue(dataManager.keyExists(dataKey));
             TestDto receivedData = dataManager.getData(dataKey, new TypeToken<TestDto>() {
             }.getType());
@@ -93,20 +101,34 @@ public abstract class BaseDataManagerTests<T extends DataManager> extends Androi
             dataManager.deleteIfExists(dataKey);
         } catch (IOException e) {
             throw new AssertionFailedError(e.getMessage() + "\n" + ExceptionUtils.getStackTrace(e));
+        } catch (InterruptedException e) {
+            throw new AssertionFailedError(e.getMessage() + "\n" + ExceptionUtils.getStackTrace(e));
         }
     }
 
-    protected void deleteTest() {
+    protected void writeDataTest() {
+        writeDataTest(0);
+    }
+
+    protected void deleteTest(int requestDelay) {
         try {
             assertFalse(dataManager.keyExists(dataKey));
             dataManager.writeData(dataKey, testDto, new TypeToken<TestDto>() {
             }.getType());
+            Thread.sleep(requestDelay);
             assertTrue(dataManager.keyExists(dataKey));
             dataManager.deleteIfExists(dataKey);
+            Thread.sleep(requestDelay);
             assertFalse(dataManager.keyExists(dataKey));
         } catch (IOException e) {
             throw new AssertionFailedError(e.getMessage() + "\n" + ExceptionUtils.getStackTrace(e));
+        } catch (InterruptedException e) {
+            throw new AssertionFailedError(e.getMessage() + "\n" + ExceptionUtils.getStackTrace(e));
         }
+    }
+
+    protected void deleteTest() {
+        deleteTest(0);
     }
 
     protected void isOperationalTest() {
