@@ -34,8 +34,7 @@ public class QueuedDataManager extends CachedDataManager {
     @Override
     public <T> void writeData(final DataKey key, final T obj, final Type typeOfT) throws IOException {
         String json = serialize(obj, typeOfT);
-        WriteDataJob job = new WriteDataJob(key, json,
-                innerManager.jsonFormatter.getUseExplicitExposeAnnotation());
+        WriteDataJob job = new WriteDataJob(key, json);
         jobManager.addJobInBackground(job);
         writeToCache(key, obj, typeOfT);
     }
