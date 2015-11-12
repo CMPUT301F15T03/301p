@@ -52,6 +52,8 @@ public class UserProfile implements Observable {
     /**
      * Get the profile's city.
      *
+     * This should only be called by the view!
+     *
      * @return profile's city
      */
     public String getCity() {
@@ -60,6 +62,8 @@ public class UserProfile implements Observable {
 
     /**
      * Set the profile's city.
+     *
+     * This should only be called by the view!
      *
      * @param city new value for city
      */
@@ -70,6 +74,8 @@ public class UserProfile implements Observable {
     /**
      * Get the profile's email.
      *
+     * This should only be called by the view!
+     *
      * @return profile's email
      */
     public String getEmail() {
@@ -78,6 +84,8 @@ public class UserProfile implements Observable {
 
     /**
      * Set the profile's email.
+     *
+     * This should only be called by the controller!
      *
      * @param email new value for email
      */
@@ -88,6 +96,8 @@ public class UserProfile implements Observable {
     /**
      * Set the profile's phone number.
      *
+     * This should only be called by the controller!
+     *
      * @return profile's phone number.
      */
     public String getPhone() {
@@ -97,6 +107,8 @@ public class UserProfile implements Observable {
     /**
      * Set the profile's phone number.
      *
+     * This should only be called by the controller!
+     *
      * @param phone the new value for phone number
      */
     public void setPhone(String phone) {
@@ -105,6 +117,12 @@ public class UserProfile implements Observable {
 
     /**
      * Alias for notifyObservers to be called after any edits have been made to the object.
+     *
+     * This should only be called by the controller!
+     *
+     * WARNING: This call may hit the network, and should never be called from the
+     * UI thread!
+     *
      */
     public void commitChanges() {
         notifyObservers();
