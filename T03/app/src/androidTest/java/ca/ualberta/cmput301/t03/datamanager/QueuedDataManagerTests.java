@@ -5,11 +5,6 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 import java.lang.reflect.Type;
 
-import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
-import ca.ualberta.cmput301.t03.datamanager.queueddatamanager.QueuedDataManager;
-
-import static ca.ualberta.cmput301.t03.common.ExceptionAsserter.assertThrowsException;
-
 /**
  * Created by rishi on 15-11-11.
  */

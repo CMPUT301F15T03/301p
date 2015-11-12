@@ -1,4 +1,4 @@
-package ca.ualberta.cmput301.t03.datamanager.queueddatamanager;
+package ca.ualberta.cmput301.t03.datamanager;
 
 import android.content.Context;
 
@@ -9,9 +9,9 @@ import java.lang.reflect.Type;
 
 import ca.ualberta.cmput301.t03.TradeApp;
 import ca.ualberta.cmput301.t03.common.Preconditions;
-import ca.ualberta.cmput301.t03.datamanager.CachedDataManager;
-import ca.ualberta.cmput301.t03.datamanager.DataKey;
-import ca.ualberta.cmput301.t03.datamanager.JsonDataManager;
+import ca.ualberta.cmput301.t03.datamanager.jobs.DataManagerJob;
+import ca.ualberta.cmput301.t03.datamanager.jobs.DeleteDataJob;
+import ca.ualberta.cmput301.t03.datamanager.jobs.WriteDataJob;
 
 /**
  * Created by rishi on 15-11-11.
