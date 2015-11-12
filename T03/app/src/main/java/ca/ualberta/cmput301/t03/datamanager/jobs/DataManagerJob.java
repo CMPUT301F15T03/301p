@@ -1,10 +1,8 @@
-package ca.ualberta.cmput301.t03.datamanager.queueddatamanager;
+package ca.ualberta.cmput301.t03.datamanager.jobs;
 
 import com.path.android.jobqueue.Job;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.RetryConstraint;
-
-import java.lang.reflect.Type;
 
 import ca.ualberta.cmput301.t03.common.Preconditions;
 import ca.ualberta.cmput301.t03.common.exceptions.NotImplementedException;
@@ -27,7 +25,7 @@ public abstract class DataManagerJob extends Job {
                           OnRequestQueuedCallback onRequestQueuedCallback) {
 
         super(dataManager.requiresNetwork() ?
-                  new Params(DEFAULT_PRIORITY)/*.persist()*/.requireNetwork().groupBy(GROUP_ID)
+                new Params(DEFAULT_PRIORITY)/*.persist()*/.requireNetwork().groupBy(GROUP_ID)
                 : new Params(DEFAULT_PRIORITY)/*.persist()*/.groupBy(GROUP_ID));
         this.dataManager = Preconditions.checkNotNull(dataManager, "dataManager");
         this.dataKey = Preconditions.checkNotNull(dataKey, "dataKey");

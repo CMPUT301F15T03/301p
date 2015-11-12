@@ -1,4 +1,4 @@
-package ca.ualberta.cmput301.t03.datamanager.queueddatamanager;
+package ca.ualberta.cmput301.t03.datamanager.jobs;
 
 
 import java.io.IOException;
