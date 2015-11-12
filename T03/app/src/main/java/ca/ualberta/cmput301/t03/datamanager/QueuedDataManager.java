@@ -1,6 +1,5 @@
 package ca.ualberta.cmput301.t03.datamanager;
 
-import android.content.Context;
 
 import com.path.android.jobqueue.JobManager;
 
@@ -20,15 +19,16 @@ public class QueuedDataManager extends CachedDataManager {
 
     private final JobManager jobManager;
 
-    public QueuedDataManager(JsonDataManager innerManager, Context context, boolean useExplicitExposeAnnotation) {
-        super(innerManager, context, useExplicitExposeAnnotation);
-        Preconditions.checkNotNull(context, "context");
-        jobManager = TradeApp.getInstance().getJobManager();
+    public QueuedDataManager(boolean useExplicitExposeAnnotation) {
+        this(new HttpDataManager(useExplicitExposeAnnotation), useExplicitExposeAnnotation);
     }
 
-    public QueuedDataManager(JsonDataManager innerManager, Context context) {
-        super(innerManager, context);
-        Preconditions.checkNotNull(context, "context");
+    public QueuedDataManager() {
+        this(false);
+    }
+
+    protected QueuedDataManager(HttpDataManager innerManager, boolean useExplicitExposeAnnotation) {
+        super(Preconditions.checkNotNull(innerManager, "innerManager"), useExplicitExposeAnnotation);
         jobManager = TradeApp.getInstance().getJobManager();
     }
 

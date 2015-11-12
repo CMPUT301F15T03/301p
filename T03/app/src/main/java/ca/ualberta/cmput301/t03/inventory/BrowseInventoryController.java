@@ -49,7 +49,7 @@ public class BrowseInventoryController {
         this.context = context;
         this.browsableInventories = browsableInventories;
         this.configuration = new Configuration(context);
-        this.dataManager = new HttpDataManager(context);
+        this.dataManager = new HttpDataManager();
     }
 
     /**

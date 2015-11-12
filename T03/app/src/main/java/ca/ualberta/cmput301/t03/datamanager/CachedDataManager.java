@@ -20,7 +20,6 @@
 
 package ca.ualberta.cmput301.t03.datamanager;
 
-import android.content.Context;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -49,27 +48,25 @@ public class CachedDataManager extends JsonDataManager {
     /**
      * Creates an instance of the {@link CachedDataManager}.
      *
-     * @param innerManager                The inner {@link JsonDataManager} manager to be used.
-     * @param context                     The {@link Context} to be used for accessing the local filesystem for caching.
-     * @param useExplicitExposeAnnotation True, if the @expose annotations are to be explicitly used,
+     * @param innerManager The inner {@link JsonDataManager} to be used.
+     * @param useExplicitExposeAnnotationForCaching True, if the @expose annotations are to be explicitly used,
      *                                    else false. If this is set to true, only the fields with
      *                                    the annotation @expose will be serialized/de-serialized.
      */
-    public CachedDataManager(JsonDataManager innerManager, Context context, boolean useExplicitExposeAnnotation) {
-        Preconditions.checkNotNull(context, "context");
+    public CachedDataManager(JsonDataManager innerManager, boolean useExplicitExposeAnnotationForCaching) {
         this.innerManager = Preconditions.checkNotNull(innerManager, "innerManager");
-        this.cachingDataManager = new LocalDataManager(context, useExplicitExposeAnnotation);
+        this.cachingDataManager = new LocalDataManager(useExplicitExposeAnnotationForCaching);
     }
 
     /**
-     * Creates an instance of the {@link CachedDataManager}. The manager will set the "useExplicitExposeAnnotation"
-     * value to false.
+     * Creates an instance of the {@link CachedDataManager}. The manager will set the value of
+     * "useExplicitExposeAnnotation" to false.
      *
-     * @param innerManager The inner {@link JsonDataManager} manager to be used.
-     * @param context      The {@link Context} to be used for accessing the local filesystem for caching.
+     * @param innerManager The inner {@link JsonDataManager} to be used.
      */
-    public CachedDataManager(JsonDataManager innerManager, Context context) {
-        this(innerManager, context, innerManager.jsonFormatter.getUseExplicitExposeAnnotation());
+    public CachedDataManager(JsonDataManager innerManager) {
+        this(Preconditions.checkNotNull(innerManager, "innerManager"),
+                innerManager.jsonFormatter.getUseExplicitExposeAnnotation());
     }
 
     /**

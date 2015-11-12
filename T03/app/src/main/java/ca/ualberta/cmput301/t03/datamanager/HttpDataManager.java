@@ -33,6 +33,7 @@ import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 
 import ca.ualberta.cmput301.t03.R;
+import ca.ualberta.cmput301.t03.TradeApp;
 import ca.ualberta.cmput301.t03.common.Preconditions;
 import ca.ualberta.cmput301.t03.common.exceptions.NotImplementedException;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
@@ -48,20 +49,17 @@ public class HttpDataManager extends JsonDataManager {
     private static final String LOG_TAG = "HTTPDataManager";
 
     private final HttpClient client;
-    private final Context context;
 
     /**
      * Creates an instance of {@link HttpDataManager}.
      *
-     * @param context                     The context to be used for checking the network status of the phone.
      * @param useExplicitExposeAnnotation True, if the @expose annotations are to be explicitly used,
      *                                    else false. If this is set to true, only the fields with
      *                                    the annotation @expose will be serialized/de-serialized.
      */
-    public HttpDataManager(Context context, boolean useExplicitExposeAnnotation) {
+    public HttpDataManager(boolean useExplicitExposeAnnotation) {
         super(useExplicitExposeAnnotation);
-        this.context = Preconditions.checkNotNull(context, "context");
-        String rootUrl = context.getString(R.string.httpDataManagerRootUrl);
+        String rootUrl = TradeApp.getInstance().getString(R.string.httpDataManagerRootUrl);
         try {
             client = new HttpClient(Preconditions.checkNotNullOrWhitespace(rootUrl, "rootUrl"));
         } catch (MalformedURLException e) {
@@ -71,13 +69,11 @@ public class HttpDataManager extends JsonDataManager {
     }
 
     /**
-     * Creates an instance of the {@link HttpDataManager}. The "useExplicitExposeAnnotation"
-     * value is set to false.
-     *
-     * @param context The context to be used for checking the network status of the phone.
+     * Creates an instance of the {@link HttpDataManager}. The manager will set the value of
+     * "useExplicitExposeAnnotation" to false.
      */
-    public HttpDataManager(Context context) {
-        this(context, false);
+    public HttpDataManager() {
+        this(false);
     }
 
     /**
@@ -170,7 +166,7 @@ public class HttpDataManager extends JsonDataManager {
     @Override
     public boolean isOperational() {
         ConnectivityManager connectivityManager
-                = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                = (ConnectivityManager) TradeApp.getInstance().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }

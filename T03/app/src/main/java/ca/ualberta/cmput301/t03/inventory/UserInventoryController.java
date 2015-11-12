@@ -48,7 +48,7 @@ public class UserInventoryController {
         this.context = context;
 
         this.configuration = new Configuration(context);
-        this.dataManager = new HttpDataManager(context);
+        this.dataManager = new HttpDataManager();
     }
 
     /**

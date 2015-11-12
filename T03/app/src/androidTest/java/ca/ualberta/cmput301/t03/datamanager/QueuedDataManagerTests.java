@@ -14,7 +14,7 @@ public class QueuedDataManagerTests extends BaseDataManagerTests<QueuedDataManag
 
     @Override
     protected QueuedDataManager createNewDataManager() {
-        return new QueuedDataManager(new HttpDataManager(getContext()), getContext());
+        return new QueuedDataManager();
     }
 
     @Override
@@ -45,8 +45,8 @@ public class QueuedDataManagerTests extends BaseDataManagerTests<QueuedDataManag
 
     public void testWriteThenGetDataWhenInnerDataManagerNotAvailable() throws IOException, InterruptedException {
 
-        InMemoryDataManager mockDataManager = new InMemoryDataManager();
-        QueuedDataManager queuedDataManager = new QueuedDataManager(mockDataManager, getContext());
+        TestHttpDataManager mockDataManager = new TestHttpDataManager();
+        QueuedDataManager queuedDataManager = new QueuedDataManager(mockDataManager, false);
 
         Type type = new TypeToken<TestDto>() {
         }.getType();
@@ -54,6 +54,7 @@ public class QueuedDataManagerTests extends BaseDataManagerTests<QueuedDataManag
         assertFalse(queuedDataManager.keyExists(dataKey));
         queuedDataManager.writeData(dataKey, testDto, type);
         Thread.sleep(DELAY_MS);
+        assertTrue(mockDataManager.keyExists(dataKey));
         mockDataManager.setIsOperational(false);
         assertTrue(queuedDataManager.isOperational());
         assertTrue(queuedDataManager.keyExists(dataKey));
@@ -63,5 +64,18 @@ public class QueuedDataManagerTests extends BaseDataManagerTests<QueuedDataManag
         queuedDataManager.deleteIfExists(dataKey);
         Thread.sleep(DELAY_MS);
         assertFalse(queuedDataManager.keyExists(dataKey));
+    }
+
+    private class TestHttpDataManager extends HttpDataManager {
+        private boolean isOperational = true;
+
+        public void setIsOperational(boolean isOperational) {
+            this.isOperational = isOperational;
+        }
+
+        @Override
+        public boolean isOperational() {
+            return isOperational;
+        }
     }
 }
