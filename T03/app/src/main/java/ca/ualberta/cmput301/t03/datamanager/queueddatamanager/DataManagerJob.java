@@ -15,7 +15,7 @@ import ca.ualberta.cmput301.t03.datamanager.DataManager;
  * Created by rishi on 15-11-11.
  */
 public abstract class DataManagerJob extends Job {
-    private final static int DEFAULT_PRIORITY = 1;
+    private final static int DEFAULT_PRIORITY = 1000;
     private final static String GROUP_ID = "datamanagerjob";
 
     protected final DataManager dataManager;
@@ -27,8 +27,8 @@ public abstract class DataManagerJob extends Job {
                           OnRequestQueuedCallback onRequestQueuedCallback) {
 
         super(dataManager.requiresNetwork() ?
-                  new Params(DEFAULT_PRIORITY).persist().requireNetwork().groupBy(GROUP_ID)
-                : new Params(DEFAULT_PRIORITY).persist().groupBy(GROUP_ID));
+                  new Params(DEFAULT_PRIORITY)/*.persist()*/.requireNetwork().groupBy(GROUP_ID)
+                : new Params(DEFAULT_PRIORITY)/*.persist()*/.groupBy(GROUP_ID));
         this.dataManager = Preconditions.checkNotNull(dataManager, "dataManager");
         this.dataKey = Preconditions.checkNotNull(dataKey, "dataKey");
         this.onRequestQueuedCallback = onRequestQueuedCallback;
