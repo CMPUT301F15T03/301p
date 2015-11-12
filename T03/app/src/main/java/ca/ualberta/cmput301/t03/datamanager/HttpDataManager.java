@@ -45,7 +45,7 @@ import ca.ualberta.cmput301.t03.common.http.HttpStatusCode;
  * Created by rishi on 15-10-30.
  */
 public class HttpDataManager extends JsonDataManager {
-    private final String logTAG = "HTTPDataManager";
+    private static final String LOG_TAG = "HTTPDataManager";
 
     private final HttpClient client;
     private final Context context;
@@ -65,7 +65,7 @@ public class HttpDataManager extends JsonDataManager {
         try {
             client = new HttpClient(Preconditions.checkNotNullOrWhitespace(rootUrl, "rootUrl"));
         } catch (MalformedURLException e) {
-            Log.e(logTAG, e.getMessage());
+            Log.e(LOG_TAG, e.getMessage());
             throw new HttpDataManagerInitializationException(e.getMessage());
         }
     }
