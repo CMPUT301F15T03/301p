@@ -80,7 +80,7 @@ public class CachedDataManagerTests extends BaseDataManagerTests<CachedDataManag
         TestDto retrieved = cachedDataManager.getData(dataKey, type);
         assertEquals(testDto, retrieved);
         mockDataManager.setIsOperational(true);
-        assertTrue(cachedDataManager.deleteIfExists(dataKey));
+        cachedDataManager.deleteIfExists(dataKey);
         assertFalse(cachedDataManager.keyExists(dataKey));
     }
 

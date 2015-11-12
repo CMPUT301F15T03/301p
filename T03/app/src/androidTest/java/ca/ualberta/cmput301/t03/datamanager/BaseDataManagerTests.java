@@ -57,7 +57,7 @@ public abstract class BaseDataManagerTests<T extends DataManager> extends Androi
             }.getType());
             assertTrue(dataManager.keyExists(dataKey));
             assertFalse(dataManager.keyExists(new DataKey("not", "exists")));
-            assertTrue(dataManager.deleteIfExists(dataKey));
+            dataManager.deleteIfExists(dataKey);
         } catch (IOException e) {
             throw new AssertionFailedError(e.getMessage() + "\n" + ExceptionUtils.getStackTrace(e));
         }
@@ -90,7 +90,7 @@ public abstract class BaseDataManagerTests<T extends DataManager> extends Androi
             TestDto receivedData = dataManager.getData(dataKey, new TypeToken<TestDto>() {
             }.getType());
             assertEquals(testDto, receivedData);
-            assertTrue(dataManager.deleteIfExists(dataKey));
+            dataManager.deleteIfExists(dataKey);
         } catch (IOException e) {
             throw new AssertionFailedError(e.getMessage() + "\n" + ExceptionUtils.getStackTrace(e));
         }
@@ -99,11 +99,10 @@ public abstract class BaseDataManagerTests<T extends DataManager> extends Androi
     protected void deleteTest() {
         try {
             assertFalse(dataManager.keyExists(dataKey));
-            assertFalse(dataManager.deleteIfExists(dataKey));
             dataManager.writeData(dataKey, testDto, new TypeToken<TestDto>() {
             }.getType());
             assertTrue(dataManager.keyExists(dataKey));
-            assertTrue(dataManager.deleteIfExists(dataKey));
+            dataManager.deleteIfExists(dataKey);
             assertFalse(dataManager.keyExists(dataKey));
         } catch (IOException e) {
             throw new AssertionFailedError(e.getMessage() + "\n" + ExceptionUtils.getStackTrace(e));

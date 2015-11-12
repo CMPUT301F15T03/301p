@@ -48,13 +48,18 @@ public class InMemoryDataManager extends JsonDataManager {
     }
 
     @Override
-    public boolean deleteIfExists(DataKey key) throws IOException {
-        return inMemoryDataRepository.remove(key.toString()) != null;
+    public void deleteIfExists(DataKey key) throws IOException {
+        inMemoryDataRepository.remove(key.toString());
     }
 
     @Override
     public boolean isOperational() {
         return isOperational;
+    }
+
+    @Override
+    public boolean requiresNetwork() {
+        return false;
     }
 
     public void setIsOperational(boolean isOperational) {

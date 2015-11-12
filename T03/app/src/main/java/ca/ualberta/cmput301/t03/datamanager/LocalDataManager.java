@@ -123,14 +123,13 @@ public class LocalDataManager extends JsonDataManager {
      * {@inheritDoc}
      */
     @Override
-    public boolean deleteIfExists(DataKey key) {
+    public void deleteIfExists(DataKey key) {
         if (!keyExists(key)) {
-            return false;
+            return;
         }
 
         File targetFile = getTargetFile(key, false);
         targetFile.delete();
-        return true;
     }
 
     /**
