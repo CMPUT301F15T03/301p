@@ -84,28 +84,72 @@ public class UserProfileController {
         }
     };
 
+    /**
+     * Default constructor.
+     *
+     * Used to initialize an instance of the UserProfileController from a relevant View
+     * on an instance of the UserProfile model.
+     *
+     * @param userProfile the UserProfile model to control.
+     */
     UserProfileController(UserProfile userProfile) {
         mUserProfile = userProfile;
     }
 
+    /**
+     * DO NOT USE!
+     * @param name
+     */
+    @Deprecated
     public void setName(String name) {
         throw new UnknownFormatConversionException("you can't do that!");
     }
 
+    /**
+     * Call me from the View (or indirectly via TextWatcher)
+     * to set the UserProfile's phone number
+     *
+     * @param phone the new phone number to set.
+     */
     public void setPhone(String phone) {
         mUserProfile.setPhone(phone);
     }
 
+    /**
+     * Call me from the View (or indirectly via TextWatcher)
+     * to set the UserProfile's city.
+     *
+     * @param city the new city to set.
+     */
     public void setCity(String city) {
         mUserProfile.setCity(city);
     }
 
+    /**
+     * Call me from the View (or indirectly via TextWatcher)
+     * to set the UserProfile's email address.
+     *
+     * If the new email is invalid, the model will not be updated.
+     *
+     * @param email the new email to set.
+     */
     public void setEmail(String email) {
         if (!isEmailInValid(email)) {
             mUserProfile.setEmail(email);
         }
     }
 
+    /**
+     * WARNING: This will hit the network!
+     *
+     * Commits the current state of the model to the datamanager,
+     * ie the local cache and either the remote queue or the remote elasticsearch.
+     *
+     * This should be called by the view only when the user has finished entering
+     * input and navigates away from the editing screen.
+     * Otherwise, there would be too many network/datamanager calls.
+     *
+     */
     public void commitChanges() {
         mUserProfile.commitChanges();
     }
@@ -121,15 +165,32 @@ public class UserProfileController {
         return email.trim().isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
-
+    /**
+     * This should be called in the view, for the purpose of attaching
+     * the Controller's TextWatcher to the view's EditText widget.
+     *
+     * @return a TextWatcher that updates the city.
+     */
     public TextWatcher getCityWatcher() {
         return cityWatcher;
     }
 
+    /**
+     * This should be called in the view, for the purpose of attaching
+     * the Controller's TextWatcher to the view's EditText widget.
+     *
+     * @return a TextWatcher that updates the phone number.
+     */
     public TextWatcher getPhoneWatcher() {
         return phoneWatcher;
     }
 
+    /**
+     * This should be called in the view, for the purpose of attaching
+     * the Controller's TextWatcher to the view's EditText widget.
+     *
+     * @return a TextWatcher that updates the email.
+     */
     public TextWatcher getEmailWatcher() {
         return emailWatcher;
     }

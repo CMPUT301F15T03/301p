@@ -23,6 +23,7 @@ package ca.ualberta.cmput301.t03.inventory;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -52,7 +53,9 @@ public class EditItemView extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.content_edit_item_view);
+        setContentView(R.layout.activity_edit_item_view);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         final UUID itemUUID = UUID.fromString(getIntent().getStringExtra("ITEM_UUID"));
 
