@@ -19,7 +19,6 @@ public abstract class DataManagerJob extends Job {
     private final String id;
 
     public DataManagerJob(DataKey dataKey) {
-
         super(new Params(PRIORITY).persist().requireNetwork().groupBy(GROUP));
         Preconditions.checkNotNull(dataKey, "dataKey");
         this.type = dataKey.getType();
