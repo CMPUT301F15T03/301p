@@ -13,15 +13,13 @@ public class DeleteDataJob extends DataManagerJob {
 
     public DeleteDataJob(DataManager dataManager,
                          DataKey dataKey,
-                         OnRequestFailedCallback onRequestFailedCallback,
                          OnRequestQueuedCallback onRequestQueuedCallback) {
-        super(dataManager, dataKey, onRequestFailedCallback, onRequestQueuedCallback);
+        super(dataManager, dataKey, onRequestQueuedCallback);
     }
 
     public DeleteDataJob(DataManager dataManager,
-                         DataKey dataKey,
-                         OnRequestFailedCallback onRequestFailedCallback) {
-        this(dataManager, dataKey, onRequestFailedCallback, null);
+                         DataKey dataKey) {
+        this(dataManager, dataKey, null);
     }
 
     @Override

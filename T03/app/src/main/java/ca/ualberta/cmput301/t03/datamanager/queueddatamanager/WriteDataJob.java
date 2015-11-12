@@ -20,10 +20,8 @@ public class WriteDataJob<T> extends DataManagerJob {
                         DataKey dataKey,
                         T obj,
                         Type typeOfT,
-                        OnRequestFailedCallback onRequestFailedCallback,
                         OnRequestQueuedCallback onRequestQueuedCallback) {
-        super(dataManager, dataKey, onRequestFailedCallback,
-                onRequestQueuedCallback);
+        super(dataManager, dataKey, onRequestQueuedCallback);
         this.obj = Preconditions.checkNotNull(obj, "obj");
         this.type = Preconditions.checkNotNull(typeOfT, "typeOfT");
     }
@@ -31,9 +29,8 @@ public class WriteDataJob<T> extends DataManagerJob {
     public WriteDataJob(DataManager dataManager,
                         DataKey dataKey,
                         T obj,
-                        Type typeOfT,
-                        OnRequestFailedCallback onRequestFailedCallback) {
-        this(dataManager, dataKey, obj, typeOfT, onRequestFailedCallback, null);
+                        Type typeOfT) {
+        this(dataManager, dataKey, obj, typeOfT, null);
     }
 
     @Override

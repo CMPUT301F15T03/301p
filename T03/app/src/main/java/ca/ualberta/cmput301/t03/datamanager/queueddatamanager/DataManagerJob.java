@@ -7,6 +7,7 @@ import com.path.android.jobqueue.RetryConstraint;
 import java.lang.reflect.Type;
 
 import ca.ualberta.cmput301.t03.common.Preconditions;
+import ca.ualberta.cmput301.t03.common.exceptions.NotImplementedException;
 import ca.ualberta.cmput301.t03.datamanager.DataKey;
 import ca.ualberta.cmput301.t03.datamanager.DataManager;
 
@@ -21,10 +22,8 @@ public abstract class DataManagerJob extends Job {
     protected final DataKey dataKey;
 
     private final OnRequestQueuedCallback onRequestQueuedCallback;
-    private final OnRequestFailedCallback onRequestFailedCallback;
 
     public DataManagerJob(DataManager dataManager, DataKey dataKey,
-                          OnRequestFailedCallback onRequestFailedCallback,
                           OnRequestQueuedCallback onRequestQueuedCallback) {
 
         super(dataManager.requiresNetwork() ?
@@ -32,7 +31,6 @@ public abstract class DataManagerJob extends Job {
                 : new Params(DEFAULT_PRIORITY).persist().groupBy(GROUP_ID));
         this.dataManager = Preconditions.checkNotNull(dataManager, "dataManager");
         this.dataKey = Preconditions.checkNotNull(dataKey, "dataKey");
-        this.onRequestFailedCallback = Preconditions.checkNotNull(onRequestFailedCallback, "onRequestFailedCallback");
         this.onRequestQueuedCallback = onRequestQueuedCallback;
     }
 
@@ -45,9 +43,7 @@ public abstract class DataManagerJob extends Job {
 
     @Override
     protected void onCancel() {
-        if (onRequestFailedCallback != null) {
-            onRequestFailedCallback.onRequestFailed();
-        }
+        throw new NotImplementedException();
     }
 
     @Override
@@ -57,9 +53,5 @@ public abstract class DataManagerJob extends Job {
 
     public interface OnRequestQueuedCallback {
         void onRequestQueued();
-    }
-
-    public interface OnRequestFailedCallback {
-        void onRequestFailed();
     }
 }
