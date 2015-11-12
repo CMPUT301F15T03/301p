@@ -1,9 +1,19 @@
 package ca.ualberta.cmput301.t03.datamanager;
 
+import android.content.Context;
+
 import com.google.gson.reflect.TypeToken;
+import com.path.android.jobqueue.JobManager;
+import com.path.android.jobqueue.config.Configuration;
+import com.path.android.jobqueue.network.NetworkEventProvider;
+import com.path.android.jobqueue.network.NetworkUtil;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+
+import ca.ualberta.cmput301.t03.TradeApp;
+import ca.ualberta.cmput301.t03.datamanager.mocks.MockNetworkUtil;
+import ca.ualberta.cmput301.t03.datamanager.mocks.TestDto;
 
 /**
  * Created by rishi on 15-11-11.
@@ -14,7 +24,7 @@ public class QueuedDataManagerTests extends BaseDataManagerTests<QueuedDataManag
 
     @Override
     protected QueuedDataManager createNewDataManager() {
-        return new QueuedDataManager();
+        return new QueuedDataManager(TradeApp.getInstance().getJobManager());
     }
 
     @Override
@@ -45,8 +55,20 @@ public class QueuedDataManagerTests extends BaseDataManagerTests<QueuedDataManag
 
     public void testWriteThenGetDataWhenInnerDataManagerNotAvailable() throws IOException, InterruptedException {
 
-        TestHttpDataManager mockDataManager = new TestHttpDataManager();
-        QueuedDataManager queuedDataManager = new QueuedDataManager(mockDataManager);
+        // QDM doesn't change the getData and keyExists implementations of CachedDataManager
+        // Test to check that the write (when device is online) is not messing with these methods
+
+        MockNetworkUtil mockNetworkUtil = new MockNetworkUtil();
+
+        QueuedDataManager queuedDataManager = new QueuedDataManager(new JobManager(getContext(),
+                new Configuration.Builder(getContext())
+                        .minConsumerCount(1)
+                        .maxConsumerCount(3)
+                        .loadFactor(3)
+                        .consumerKeepAlive(120)
+                        .networkUtil(mockNetworkUtil)
+                        .build()),
+                new HttpDataManager(mockNetworkUtil));
 
         Type type = new TypeToken<TestDto>() {
         }.getType();
@@ -54,28 +76,18 @@ public class QueuedDataManagerTests extends BaseDataManagerTests<QueuedDataManag
         assertFalse(queuedDataManager.keyExists(dataKey));
         queuedDataManager.writeData(dataKey, testDto, type);
         Thread.sleep(DELAY_MS);
-        assertTrue(mockDataManager.keyExists(dataKey));
-        mockDataManager.setIsOperational(false);
+        assertTrue(queuedDataManager.innerManager.keyExists(dataKey));
+        assertTrue(queuedDataManager.keyExists(dataKey));
+        mockNetworkUtil.setNetworkState(false);
         assertTrue(queuedDataManager.isOperational());
+        assertFalse(queuedDataManager.innerManager.isOperational());
         assertTrue(queuedDataManager.keyExists(dataKey));
         TestDto retrieved = queuedDataManager.getData(dataKey, type);
         assertEquals(testDto, retrieved);
-        mockDataManager.setIsOperational(true);
+        mockNetworkUtil.setNetworkState(true);
         queuedDataManager.deleteIfExists(dataKey);
         Thread.sleep(DELAY_MS);
         assertFalse(queuedDataManager.keyExists(dataKey));
-    }
-
-    private class TestHttpDataManager extends HttpDataManager {
-        private boolean isOperational = true;
-
-        public void setIsOperational(boolean isOperational) {
-            this.isOperational = isOperational;
-        }
-
-        @Override
-        public boolean isOperational() {
-            return isOperational;
-        }
+        assertFalse(queuedDataManager.innerManager.keyExists(dataKey));
     }
 }

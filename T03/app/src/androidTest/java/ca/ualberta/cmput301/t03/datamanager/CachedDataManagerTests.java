@@ -75,6 +75,9 @@ public class CachedDataManagerTests extends BaseDataManagerTests<CachedDataManag
 
         assertFalse(cachedDataManager.keyExists(dataKey));
         cachedDataManager.writeData(dataKey, testDto, type);
+        assertTrue(cachedDataManager.innerManager.keyExists(dataKey));
+        assertTrue(cachedDataManager.keyExists(dataKey));
+
         mockDataManager.setIsOperational(false);
         assertFalse(cachedDataManager.isOperational());
         assertTrue(cachedDataManager.keyExists(dataKey));

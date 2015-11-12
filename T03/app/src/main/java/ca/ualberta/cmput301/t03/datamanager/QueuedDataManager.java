@@ -6,7 +6,6 @@ import com.path.android.jobqueue.JobManager;
 import java.io.IOException;
 import java.lang.reflect.Type;
 
-import ca.ualberta.cmput301.t03.TradeApp;
 import ca.ualberta.cmput301.t03.common.Preconditions;
 import ca.ualberta.cmput301.t03.datamanager.jobs.DeleteDataJob;
 import ca.ualberta.cmput301.t03.datamanager.jobs.WriteDataJob;
@@ -18,17 +17,17 @@ public class QueuedDataManager extends CachedDataManager {
 
     private final JobManager jobManager;
 
-    public QueuedDataManager(boolean useExplicitExposeAnnotation) {
-        this(new HttpDataManager(useExplicitExposeAnnotation));
+    public QueuedDataManager(JobManager jobManager, boolean useExplicitExposeAnnotation) {
+        this(jobManager, new HttpDataManager(useExplicitExposeAnnotation));
     }
 
-    public QueuedDataManager() {
-        this(false);
+    public QueuedDataManager(JobManager jobManager) {
+        this(jobManager, false);
     }
 
-    protected QueuedDataManager(HttpDataManager innerManager) {
+    protected QueuedDataManager(JobManager jobManager, HttpDataManager innerManager) {
         super(Preconditions.checkNotNull(innerManager, "innerManager"));
-        jobManager = TradeApp.getInstance().getJobManager();
+        this.jobManager = Preconditions.checkNotNull(jobManager, "jobManager");
     }
 
     @Override
