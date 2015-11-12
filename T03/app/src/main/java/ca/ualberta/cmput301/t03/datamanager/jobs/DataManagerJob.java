@@ -16,22 +16,22 @@ public abstract class DataManagerJob extends Job {
     private final String type;
     private final String id;
 
-    private final OnRequestQueuedCallback onRequestQueuedCallback;
+    //private final OnRequestQueuedCallback onRequestQueuedCallback;
 
-    public DataManagerJob(DataKey dataKey, OnRequestQueuedCallback onRequestQueuedCallback) {
+    public DataManagerJob(DataKey dataKey) {//}, OnRequestQueuedCallback onRequestQueuedCallback) {
 
-        super(new Params(1000)/*.persist()*/.requireNetwork().groupBy("datamanagerjob"));
+        super(new Params(1000).persist().requireNetwork().groupBy("datamanagerjob"));
         Preconditions.checkNotNull(dataKey, "dataKey");
         this.type = dataKey.getType();
         this.id = dataKey.getId();
-        this.onRequestQueuedCallback = onRequestQueuedCallback;
+        //this.onRequestQueuedCallback = onRequestQueuedCallback;
     }
 
     @Override
     public void onAdded() {
-        if (onRequestQueuedCallback != null) {
-            onRequestQueuedCallback.onRequestQueued();
-        }
+//        if (onRequestQueuedCallback != null) {
+//            onRequestQueuedCallback.onRequestQueued();
+//        }
     }
 
     @Override
@@ -40,8 +40,8 @@ public abstract class DataManagerJob extends Job {
     }
 
     // Needed because only simple types can be serialized
-    protected DataKey getDataKey() {
-        return new DataKey(type, id);
+    protected String getRequestSuffix() {
+        return new DataKey(type, id).toString();
     }
 
     @Override
@@ -49,7 +49,7 @@ public abstract class DataManagerJob extends Job {
         return RetryConstraint.CANCEL;
     }
 
-    public interface OnRequestQueuedCallback {
-        void onRequestQueued();
-    }
+//    public interface OnRequestQueuedCallback {
+//        void onRequestQueued();
+//    }
 }

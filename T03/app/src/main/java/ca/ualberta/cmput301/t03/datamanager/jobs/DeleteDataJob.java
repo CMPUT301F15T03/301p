@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import ca.ualberta.cmput301.t03.datamanager.DataKey;
 import ca.ualberta.cmput301.t03.datamanager.DataManager;
+import ca.ualberta.cmput301.t03.datamanager.ElasticSearchHelper;
 import ca.ualberta.cmput301.t03.datamanager.HttpDataManager;
 
 /**
@@ -12,17 +13,17 @@ import ca.ualberta.cmput301.t03.datamanager.HttpDataManager;
  */
 public class DeleteDataJob extends DataManagerJob {
 
-    public DeleteDataJob(DataKey dataKey,
-                         OnRequestQueuedCallback onRequestQueuedCallback) {
-        super(dataKey, onRequestQueuedCallback);
+    public DeleteDataJob(DataKey dataKey) {
+                         //OnRequestQueuedCallback onRequestQueuedCallback) {
+        super(dataKey);//, onRequestQueuedCallback);
     }
 
-    public DeleteDataJob(DataKey dataKey) {
-        this(dataKey, null);
-    }
+//    public DeleteDataJob(DataKey dataKey) {
+//        this(dataKey, null);
+//    }
 
     @Override
     public void onRun() throws IOException {
-        new HttpDataManager().deleteIfExists(getDataKey());
+        new ElasticSearchHelper().sendDeleteRequestAtPath(getRequestSuffix());
     }
 }
