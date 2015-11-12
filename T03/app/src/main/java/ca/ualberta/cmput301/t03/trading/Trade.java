@@ -88,7 +88,7 @@ public class Trade implements Observable {
     public Trade(UUID tradeUUID, Context context) {
         this.tradeUUID = tradeUUID;
         this.context = context;
-        this.dataManager = new CachedDataManager(new HttpDataManager(true), true);
+        this.dataManager = new CachedDataManager(new HttpDataManager(true));
         this.observers = new HashSet<>();
         this.load();
     }
@@ -117,7 +117,7 @@ public class Trade implements Observable {
         }
 
         this.context = context;
-        this.dataManager = new CachedDataManager(new HttpDataManager(true), true);
+        this.dataManager = new CachedDataManager(new HttpDataManager(true));
         this.observers = new HashSet<>();
 
         this.state = new TradeStateComposing();
