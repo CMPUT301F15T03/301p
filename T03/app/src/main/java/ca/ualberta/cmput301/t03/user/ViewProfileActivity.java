@@ -40,6 +40,9 @@ import ca.ualberta.cmput301.t03.R;
  */
 public class ViewProfileActivity extends AppCompatActivity {
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

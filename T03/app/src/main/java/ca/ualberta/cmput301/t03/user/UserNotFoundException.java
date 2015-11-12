@@ -20,12 +20,26 @@
 
 package ca.ualberta.cmput301.t03.user;
 
+/**
+ * Exception raised when a user is not found.
+ *
+ * Thrown in controller, caught in view.
+ */
 public class UserNotFoundException extends Exception {
 
+    /**
+     * Creates a UserNotFoundException without any message.
+     *
+     * It is preferable to use the String: constructor instead.
+     */
     public UserNotFoundException() {
         super();
     }
 
+    /**
+     * Creates a UserNotFoundException with a custom detail message.
+     * @param detailmessage More details about the exception
+     */
     public UserNotFoundException(String detailmessage) {
         super(detailmessage);
     }

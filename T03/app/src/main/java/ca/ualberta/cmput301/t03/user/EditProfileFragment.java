@@ -39,12 +39,11 @@ import ca.ualberta.cmput301.t03.R;
 
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link EditProfileFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link EditProfileFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * View-component to editing a User's profile.
+ *
+ * User can see and modify all their editable profile fields,
+ * and make changes to the profile.
+ *
  */
 public class EditProfileFragment extends Fragment implements Observer {
     private UserProfile model;
@@ -56,15 +55,27 @@ public class EditProfileFragment extends Fragment implements Observer {
     private EditText mCityField;
 
 
+    /**
+     * Use newInstance instead...
+     */
     public EditProfileFragment() {
         // Required empty public constructor
     }
 
+    /**
+     * Instantiates a new instance of the EditProfileFragment with
+     * default arguments.
+     *
+     * @return a new instance of EditProfileFragment
+     */
     public static EditProfileFragment newInstance() {
         EditProfileFragment fragment = new EditProfileFragment();
         return fragment;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +83,9 @@ public class EditProfileFragment extends Fragment implements Observer {
         user = PrimaryUser.getInstance();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -80,6 +94,14 @@ public class EditProfileFragment extends Fragment implements Observer {
 
     }
 
+    /**
+     * Callback after model data has been fetched.
+     *
+     * Populates the EditText fields with values from the model
+     * once the data has been fetched, and sets up an
+     * OnFocusChangeListener to update the model for new input.
+     *
+     */
     public void populateFields() {
         mNameField.setText(user.getUsername());
         mCityField.setText(model.getCity());
@@ -104,7 +126,9 @@ public class EditProfileFragment extends Fragment implements Observer {
         mEmailField.addTextChangedListener(controller.getEmailWatcher());
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -139,6 +163,9 @@ public class EditProfileFragment extends Fragment implements Observer {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -154,6 +181,9 @@ public class EditProfileFragment extends Fragment implements Observer {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void update(Observable observable) {
 

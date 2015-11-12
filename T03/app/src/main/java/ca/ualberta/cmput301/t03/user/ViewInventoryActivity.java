@@ -36,6 +36,9 @@ import ca.ualberta.cmput301.t03.inventory.UserInventoryFragment;
  */
 public class ViewInventoryActivity extends AppCompatActivity {
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

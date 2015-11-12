@@ -102,27 +102,25 @@ public class User implements Observable, Observer, Comparable<User> {
         this.username = username;
     }
 
+    /**
+     * Alternate constructor for a User.
+     *
+     * Should only be used on a freshly Unparceled user, in order to restore context.
+     *
+     * Use the default constructor in all other cases.
+     *
+     * @param user An unparceled User; will not be fully initialized.
+     * @param context The current application contest.
+     */
     public User(User user, Context context) {
         this(user.getUsername(), context);
     }
 
-    /**
-     *
-     * FOR TESTING PURPOSES ONLY
-     *
-     * Change current application username, and fetch their stuff.
-     * @param username
-     */
-//    public void setUsername(String username) throws IOException {
-//        this.username = username;
-//        getProfile();
-//        getFriends();
-//        getInventory();
-//        getTradeList();
-//    }
 
     /**
      * Gets the User's username. This will not hit the network.
+     *
+     * This should be called by the view to display the current username.
      *
      * @return the User's username.
      */
@@ -133,6 +131,10 @@ public class User implements Observable, Observer, Comparable<User> {
     /**
      * Get the User's FriendsList.
      * <p>
+     *
+     * This should be called by the view to display the friends list,
+     * and by the controller to get a reference to the friends list model.
+     *
      * WARNING: This might hit the network! It must be
      * run asynchronously.
      *
@@ -162,6 +164,10 @@ public class User implements Observable, Observer, Comparable<User> {
     /**
      * Get the User's UserProfile.
      * <p>
+     *
+     * This should be called by the view to display the profile,
+     * and by the controller to get a reference to the UserProfile model.
+     *
      * WARNING: This might hit the network! It must be run
      * asynchronously.
      *
@@ -185,6 +191,9 @@ public class User implements Observable, Observer, Comparable<User> {
     /**
      * Get the User's Inventory.
      * <p>
+     * This should be called by the view to display inventory,
+     * and by the controller to get a reference to the inventory model.
+     *
      * WARNING: This might hit the network! It must be run
      * asynchronously.
      *
@@ -211,6 +220,9 @@ public class User implements Observable, Observer, Comparable<User> {
     /**
      * Get TradeList of trades which the User is involved in.
      * <p>
+     * This should be called by hte view to display trades,
+     * and by the controller to get a reference to the trades model.
+     *
      * WARNING: This might hit the network! It must be run
      * asynchronously.
      *
@@ -268,7 +280,7 @@ public class User implements Observable, Observer, Comparable<User> {
     }
 
     /**
-     * When called by the fields that User is observing, a dump of the field's data will happen
+     * When called by the an Observable, a dump of the field's data will happen
      * using a DataManager.
      */
     @Override

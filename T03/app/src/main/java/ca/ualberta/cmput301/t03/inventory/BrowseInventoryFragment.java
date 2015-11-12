@@ -27,6 +27,8 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -86,16 +88,16 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
         super.onCreate(savedInstanceState);
         mActivity = getActivity();
 
-        Configuration c = new Configuration(getActivity().getApplicationContext());
         try {
             user = PrimaryUser.getInstance();
-            model = new BrowsableInventories();
+            model = new BrowsableInventories(); //FIXME this seems fishy
             controller = new BrowseInventoryController(getContext(), model);
         } catch (Exception e) {
             throw new RuntimeException();
         }
         listItems = new ArrayList<HashMap<String, String>>();
         allItems = new ArrayList<Item>();
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -114,12 +116,10 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 inspectItem(allItems.get(position));
-                Toast.makeText(mActivity.getBaseContext(), "Inspect Item", Toast.LENGTH_SHORT).show();
             }
         });
 
         setupListView();
-        setupFab(mView);
 
         return v;
     }
@@ -202,15 +202,11 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
         super.onDestroy();
     }
 
-    private void setupFab(View v) {
-        addFilterBrowseFab = (FloatingActionButton) v.findViewById(R.id.addFilterBrowseFab);
-        addFilterBrowseFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                controller.addFilter();
-                Toast.makeText(getActivity().getBaseContext(), "ADD FILTER", Toast.LENGTH_SHORT).show();
-            }
-        });
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_browse_inventory, menu);
     }
 
     @Override

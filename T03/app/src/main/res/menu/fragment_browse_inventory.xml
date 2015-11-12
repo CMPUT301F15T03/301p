@@ -2,10 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/search_for_friends_button"
+        android:id="@+id/search_inventory_button"
         android:icon="@drawable/ic_magnify"
         app:showAsAction="always"
         android:orderInCategory="10"
-        android:title="@string/friendSearch">
+        android:title="Search">
+    </item>
+    <item
+        android:id="@+id/filter_inventory_button"
+        android:icon="@drawable/ic_filter"
+        app:showAsAction="always"
+        android:orderInCategory="11"
+        android:title="Filter">
     </item>
 </menu>

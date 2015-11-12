@@ -58,6 +58,11 @@ public class ViewProfileFragment extends Fragment implements Observer {
     private Button browseInventoryButton;
     private User mUserToView;
 
+    /**
+     * DO NOT CALL THIS CONSTRUCTOR DIRECTLY!
+     *
+     * Use newInstance instead.
+     */
     public ViewProfileFragment() {
         // Required empty public constructor
     }
@@ -80,6 +85,9 @@ public class ViewProfileFragment extends Fragment implements Observer {
         return fragment;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -87,7 +95,9 @@ public class ViewProfileFragment extends Fragment implements Observer {
             inflater.inflate(R.menu.fragment_view_profile, menu);
         }
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,13 +123,27 @@ public class ViewProfileFragment extends Fragment implements Observer {
         return inflater.inflate(R.layout.fragment_view_profile, container, false);
     }
 
-
+    /**
+     * To be called when the "browse inventory" button is selected (from the view).
+     *
+     * Starts a new ViewInventoryActivity to browse mUserToView's inventory.
+     *
+     * @param v view from OnClickListener.onClick
+     */
     void onBrowseInventoryButtonSelected(View v) {
         Intent intent = new Intent(v.getContext(), ViewInventoryActivity.class);
         intent.putExtra("user", Parcels.wrap(mUserToView));
         startActivity(intent);
     }
 
+    /**
+     * Callback after the model is loaded. (from View)
+     *
+     * RUN ME on the UI Thread!
+     *
+     * Populates the view Text fields, as well as sets up the
+     * Browse Inventory button to view the correct user's inventory.
+     */
     void populateFields() {
         browseInventoryButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,6 +155,9 @@ public class ViewProfileFragment extends Fragment implements Observer {
         update(model);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         usernameView = (TextView) getView().findViewById(R.id.viewProfileUsername);
@@ -139,9 +166,9 @@ public class ViewProfileFragment extends Fragment implements Observer {
         cityView = (TextView) getView().findViewById(R.id.viewProfileCity);
         browseInventoryButton = (Button) getView().findViewById(R.id.inventoryButton);
 
-        AsyncTask t = new AsyncTask() {
+        AsyncTask<Void, Integer, UserProfile> t = new AsyncTask<Void, Integer, UserProfile>() {
             @Override
-            protected Object doInBackground(Object[] params) {
+            protected UserProfile doInBackground(Void[] params) {
                 //TODO is there a better way to do this?
                 if (!PrimaryUser.getInstance().equals(mUserToView)) {
                     mUserToView = new User(mUserToView.getUsername(), getContext());
@@ -152,23 +179,24 @@ public class ViewProfileFragment extends Fragment implements Observer {
                 try {
                     model = mUserToView.getProfile();
                 } catch (IOException e) {
+                    //TODO this is garbage.
                     e.printStackTrace();
                 }
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        populateFields();
-                    }
-                });
+                return model;
+            }
 
-                return null;
+            @Override
+            protected void onPostExecute(UserProfile userProfile) {
+                populateFields();
             }
         };
         t.execute();
 
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -182,12 +210,18 @@ public class ViewProfileFragment extends Fragment implements Observer {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onDetach() {
         super.onDetach();
         model.removeObserver(this);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void update(Observable observable) {
 
