@@ -20,16 +20,19 @@
 
 package ca.ualberta.cmput301.t03.datamanager;
 
-import android.content.Context;
 import android.content.res.Resources;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+
+import com.path.android.jobqueue.network.NetworkUtil;
+import com.path.android.jobqueue.network.NetworkUtilImpl;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
 
 import ca.ualberta.cmput301.t03.TradeApp;
+import ca.ualberta.cmput301.t03.common.Preconditions;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
+import ca.ualberta.cmput301.t03.datamanager.elasticsearch.ElasticSearchHelper;
+import ca.ualberta.cmput301.t03.datamanager.elasticsearch.ElasticSearchNetworkUtil;
 
 /**
  * A {@link JsonDataManager} that uses the ElasticSearch server as the storage media.
@@ -37,25 +40,50 @@ import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
  */
 public class HttpDataManager extends JsonDataManager {
     private final ElasticSearchHelper elasticSearchHelper;
+    private final NetworkUtil networkUtil;
 
     /**
      * Creates an instance of {@link HttpDataManager}.
      *
+     * @param networkUtil The {@link NetworkUtil} to be used for checking the network state.
      * @param useExplicitExposeAnnotation True, if the @expose annotations are to be explicitly used,
      *                                    else false. If this is set to true, only the fields with
      *                                    the annotation @expose will be serialized/de-serialized.
      */
-    public HttpDataManager(boolean useExplicitExposeAnnotation) {
+    public HttpDataManager(NetworkUtil networkUtil, boolean useExplicitExposeAnnotation) {
         super(useExplicitExposeAnnotation);
-        elasticSearchHelper = new ElasticSearchHelper();
+        this.networkUtil = Preconditions.checkNotNull(networkUtil, "networkUtil");
+        this.elasticSearchHelper = new ElasticSearchHelper();
     }
 
     /**
      * Creates an instance of the {@link HttpDataManager}. The manager will set the value of
      * "useExplicitExposeAnnotation" to false.
+     *
+     * @param networkUtil The {@link NetworkUtil} to be used for checking the network state.
+     */
+    public HttpDataManager(NetworkUtil networkUtil) {
+        this(networkUtil, false);
+    }
+
+    /**
+     * Creates an instance of the {@link HttpDataManager}. The manager will set the value of
+     * "useExplicitExposeAnnotation" to false, and will use {@link ElasticSearchNetworkUtil} as the
+     * {@link NetworkUtil}.
      */
     public HttpDataManager() {
-        this(false);
+        this(new ElasticSearchNetworkUtil());
+    }
+
+    /**
+     * Creates an instance of {@link HttpDataManager}. The manager will use {@link ElasticSearchNetworkUtil}
+     * as the {@link NetworkUtil}.
+     * @param useExplicitExposeAnnotation True, if the @expose annotations are to be explicitly used,
+     *                                    else false. If this is set to true, only the fields with
+     *                                    the annotation @expose will be serialized/de-serialized.
+     */
+    public HttpDataManager(boolean useExplicitExposeAnnotation) {
+        this(new ElasticSearchNetworkUtil(), useExplicitExposeAnnotation);
     }
 
     /**
@@ -118,10 +146,7 @@ public class HttpDataManager extends JsonDataManager {
      */
     @Override
     public boolean isOperational() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) TradeApp.getInstance().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+        return networkUtil.isConnected(TradeApp.getInstance());
     }
 
     /**
