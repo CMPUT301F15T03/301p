@@ -34,27 +34,30 @@ public class QueuedDataManager extends CachedDataManager {
 
     @Override
     public <T> void writeData(final DataKey key, final T obj, final Type typeOfT) throws IOException {
-        WriteDataJob job = new WriteDataJob(key, obj, typeOfT,
-                innerManager.jsonFormatter.getUseExplicitExposeAnnotation(),
-                new DataManagerJob.OnRequestQueuedCallback() {
-                    @Override
-                    public void onRequestQueued() {
-                        writeToCache(key, obj, typeOfT);
-                    }
-                });
+        String json = serialize(obj, typeOfT);
+        WriteDataJob job = new WriteDataJob(key, json,
+                innerManager.jsonFormatter.getUseExplicitExposeAnnotation());
+//                new DataManagerJob.OnRequestQueuedCallback() {
+//                    @Override
+//                    public void onRequestQueued() {
+//                        writeToCache(key, obj, typeOfT);
+//                    }
+//                });
         jobManager.addJobInBackground(job);
+        writeToCache(key, obj, typeOfT);
     }
 
     @Override
     public void deleteIfExists(final DataKey key) throws IOException {
-        DeleteDataJob job = new DeleteDataJob(key,
-                new DataManagerJob.OnRequestQueuedCallback() {
-                @Override
-                public void onRequestQueued() {
-                    deleteFromCache(key);
-                }
-            });
+        DeleteDataJob job = new DeleteDataJob(key);
+//                new DataManagerJob.OnRequestQueuedCallback() {
+//                @Override
+//                public void onRequestQueued() {
+//                    deleteFromCache(key);
+//                }
+//            });
         jobManager.addJobInBackground(job);
+        deleteFromCache(key);
     }
 
     @Override
