@@ -8,7 +8,6 @@ import java.lang.reflect.Type;
 
 import ca.ualberta.cmput301.t03.TradeApp;
 import ca.ualberta.cmput301.t03.common.Preconditions;
-import ca.ualberta.cmput301.t03.datamanager.jobs.DataManagerJob;
 import ca.ualberta.cmput301.t03.datamanager.jobs.DeleteDataJob;
 import ca.ualberta.cmput301.t03.datamanager.jobs.WriteDataJob;
 
@@ -37,12 +36,6 @@ public class QueuedDataManager extends CachedDataManager {
         String json = serialize(obj, typeOfT);
         WriteDataJob job = new WriteDataJob(key, json,
                 innerManager.jsonFormatter.getUseExplicitExposeAnnotation());
-//                new DataManagerJob.OnRequestQueuedCallback() {
-//                    @Override
-//                    public void onRequestQueued() {
-//                        writeToCache(key, obj, typeOfT);
-//                    }
-//                });
         jobManager.addJobInBackground(job);
         writeToCache(key, obj, typeOfT);
     }
@@ -50,12 +43,6 @@ public class QueuedDataManager extends CachedDataManager {
     @Override
     public void deleteIfExists(final DataKey key) throws IOException {
         DeleteDataJob job = new DeleteDataJob(key);
-//                new DataManagerJob.OnRequestQueuedCallback() {
-//                @Override
-//                public void onRequestQueued() {
-//                    deleteFromCache(key);
-//                }
-//            });
         jobManager.addJobInBackground(job);
         deleteFromCache(key);
     }

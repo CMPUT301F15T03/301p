@@ -14,13 +14,8 @@ import ca.ualberta.cmput301.t03.datamanager.HttpDataManager;
 public class DeleteDataJob extends DataManagerJob {
 
     public DeleteDataJob(DataKey dataKey) {
-                         //OnRequestQueuedCallback onRequestQueuedCallback) {
-        super(dataKey);//, onRequestQueuedCallback);
+        super(dataKey);
     }
-
-//    public DeleteDataJob(DataKey dataKey) {
-//        this(dataKey, null);
-//    }
 
     @Override
     public void onRun() throws IOException {
