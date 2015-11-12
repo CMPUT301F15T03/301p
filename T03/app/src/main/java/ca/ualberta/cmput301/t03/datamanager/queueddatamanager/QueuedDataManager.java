@@ -7,6 +7,7 @@ import com.path.android.jobqueue.JobManager;
 import java.io.IOException;
 import java.lang.reflect.Type;
 
+import ca.ualberta.cmput301.t03.TradeApp;
 import ca.ualberta.cmput301.t03.common.Preconditions;
 import ca.ualberta.cmput301.t03.datamanager.CachedDataManager;
 import ca.ualberta.cmput301.t03.datamanager.DataKey;
@@ -22,13 +23,13 @@ public class QueuedDataManager extends CachedDataManager {
     public QueuedDataManager(JsonDataManager innerManager, Context context, boolean useExplicitExposeAnnotation) {
         super(innerManager, context, useExplicitExposeAnnotation);
         Preconditions.checkNotNull(context, "context");
-        jobManager = new JobManager(context);
+        jobManager = TradeApp.getInstance().getJobManager();
     }
 
     public QueuedDataManager(JsonDataManager innerManager, Context context) {
         super(innerManager, context);
         Preconditions.checkNotNull(context, "context");
-        jobManager = new JobManager(context);
+        jobManager = TradeApp.getInstance().getJobManager();
     }
 
     @Override
