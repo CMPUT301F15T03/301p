@@ -23,11 +23,12 @@ public abstract class DataManagerJob extends Job {
     private final OnRequestQueuedCallback onRequestQueuedCallback;
     private final OnRequestFailedCallback onRequestFailedCallback;
 
-    public DataManagerJob(DataManager dataManager, DataKey dataKey, boolean requiresNetwork,
+    public DataManagerJob(DataManager dataManager, DataKey dataKey,
                           OnRequestFailedCallback onRequestFailedCallback,
                           OnRequestQueuedCallback onRequestQueuedCallback) {
 
-        super(requiresNetwork ? new Params(DEFAULT_PRIORITY).persist().requireNetwork().groupBy(GROUP_ID)
+        super(dataManager.requiresNetwork() ?
+                  new Params(DEFAULT_PRIORITY).persist().requireNetwork().groupBy(GROUP_ID)
                 : new Params(DEFAULT_PRIORITY).persist().groupBy(GROUP_ID));
         this.dataManager = Preconditions.checkNotNull(dataManager, "dataManager");
         this.dataKey = Preconditions.checkNotNull(dataKey, "dataKey");
