@@ -148,18 +148,15 @@ public class HttpDataManager extends JsonDataManager {
      * {@inheritDoc}
      */
     @Override
-    public boolean deleteIfExists(DataKey key) throws IOException {
+    public void deleteIfExists(DataKey key) throws IOException {
         if (!isOperational()) {
             throw new ServiceNotAvailableException("HttpDataManager is not operational. Cannot perform this operation.");
         }
 
         HttpResponse response = client.makeDeleteRequest(key.toString());
+        int statusCode = response.getResponseCode();
 
-        if (response.getResponseCode() == HttpStatusCode.OK.getStatusCode()) {
-            return true;
-        } else if (response.getResponseCode() == HttpStatusCode.NOT_FOUND.getStatusCode()) {
-            return false;
-        } else {
+        if (statusCode != HttpStatusCode.OK.getStatusCode() && statusCode != HttpStatusCode.NOT_FOUND.getStatusCode()) {
             throw new NotImplementedException(String.format("Dev note: Unexpected response '%d' from the DELETE Elastic Search endpoint.",
                     response.getResponseCode()));
         }

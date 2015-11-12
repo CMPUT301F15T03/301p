@@ -139,11 +139,10 @@ public class CachedDataManager extends JsonDataManager {
      * @throws IOException Thrown, if the communication to the storage media fails.
      */
     @Override
-    public boolean deleteIfExists(DataKey key) throws IOException {
+    public void deleteIfExists(DataKey key) throws IOException {
         if (isOperational()) {
-            boolean existed = innerManager.deleteIfExists(key);
+            innerManager.deleteIfExists(key);
             deleteFromCache(key);
-            return existed;
         }
         throw new ServiceNotAvailableException("Inner DataManager is not operational. Cannot perform the delete operation.");
     }
@@ -185,12 +184,10 @@ public class CachedDataManager extends JsonDataManager {
      * Deletes the object from the cache, if it exists.
      * @param key The {@link DataKey} for the object that was passed. This will be converted to an
      *            appropriate caching key.
-     * @return True, if the key was found in the cache and was deleted. False, if the key was not
-     *         found.
      */
-    protected boolean deleteFromCache(DataKey key) {
+    protected void deleteFromCache(DataKey key) {
         DataKey cacheKey = convertToCacheKey(key);
-        return cachingDataManager.deleteIfExists(cacheKey);
+        cachingDataManager.deleteIfExists(cacheKey);
     }
 
     private DataKey convertToCacheKey(DataKey key) {
