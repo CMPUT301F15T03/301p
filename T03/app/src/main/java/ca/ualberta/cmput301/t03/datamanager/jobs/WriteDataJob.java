@@ -17,18 +17,10 @@ public class WriteDataJob extends DataManagerJob {
     public WriteDataJob(DataKey dataKey,
                         String json,
                         boolean useExplicitExposeAnnotation) {
-                        //OnRequestQueuedCallback onRequestQueuedCallback) {
-        super(dataKey);//, onRequestQueuedCallback);
+        super(dataKey);
         this.json = Preconditions.checkNotNullOrWhitespace(json, "json");
         this.useExplicitExposeAnnotation = useExplicitExposeAnnotation;
     }
-
-//    public WriteDataJob(DataKey dataKey,
-//                        Objects obj,
-//                        Type typeOfT,
-//                        boolean useExplicitExposeAnnotation) {
-//        this(dataKey, obj, typeOfT, useExplicitExposeAnnotation, null);
-//    }
 
     @Override
     public void onRun() throws IOException {

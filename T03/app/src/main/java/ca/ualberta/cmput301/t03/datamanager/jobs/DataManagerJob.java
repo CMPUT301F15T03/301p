@@ -7,7 +7,6 @@ import com.path.android.jobqueue.RetryConstraint;
 import ca.ualberta.cmput301.t03.common.Preconditions;
 import ca.ualberta.cmput301.t03.common.exceptions.NotImplementedException;
 import ca.ualberta.cmput301.t03.datamanager.DataKey;
-import ca.ualberta.cmput301.t03.datamanager.DataManager;
 
 /**
  * Created by rishi on 15-11-11.
@@ -19,23 +18,16 @@ public abstract class DataManagerJob extends Job {
     private final String type;
     private final String id;
 
-    //private final OnRequestQueuedCallback onRequestQueuedCallback;
-
-    public DataManagerJob(DataKey dataKey) {//}, OnRequestQueuedCallback onRequestQueuedCallback) {
+    public DataManagerJob(DataKey dataKey) {
 
         super(new Params(PRIORITY).persist().requireNetwork().groupBy(GROUP));
         Preconditions.checkNotNull(dataKey, "dataKey");
         this.type = dataKey.getType();
         this.id = dataKey.getId();
-        //this.onRequestQueuedCallback = onRequestQueuedCallback;
     }
 
     @Override
-    public void onAdded() {
-//        if (onRequestQueuedCallback != null) {
-//            onRequestQueuedCallback.onRequestQueued();
-//        }
-    }
+    public void onAdded() { }
 
     @Override
     protected void onCancel() {
@@ -51,8 +43,4 @@ public abstract class DataManagerJob extends Job {
     protected RetryConstraint shouldReRunOnThrowable(Throwable throwable, int runCount, int maxRunCount) {
         return RetryConstraint.CANCEL;
     }
-
-//    public interface OnRequestQueuedCallback {
-//        void onRequestQueued();
-//    }
 }
