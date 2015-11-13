@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 
 import ca.ualberta.cmput301.t03.TradeApp;
+import ca.ualberta.cmput301.t03.common.exceptions.NotImplementedException;
 import ca.ualberta.cmput301.t03.datamanager.mocks.MockNetworkUtil;
 import ca.ualberta.cmput301.t03.datamanager.mocks.TestDto;
 
@@ -230,7 +231,7 @@ public class QueuedDataManagerTests extends BaseDataManagerTests<QueuedDataManag
 
         mockNetworkUtilForHttp.setNetworkState(true);
         mockNetworkUtilForQueue.setNetworkState(true);
-        Thread.sleep(DELAY_MS*10);
+        Thread.sleep(DELAY_MS * 10);
 
         assertTrue(testDataManagerWithMockNetworkUtil.keyExists(dataKey));
         TestDto retrieved = testDataManagerWithMockNetworkUtil.getData(dataKey, type);
@@ -242,4 +243,14 @@ public class QueuedDataManagerTests extends BaseDataManagerTests<QueuedDataManag
 
         assertFalse(testDataManagerWithMockNetworkUtil.keyExists(dataKey));
     }
+
+
+    public void testWriteWhenDeviceOfflinePersistsRequests() {
+        throw new NotImplementedException("To be implemented when we can kill the app and restart it.");
+    }
+
+    public void testDeleteWhenDeviceOfflinePersistsRequests() {
+        throw new NotImplementedException("To be implemented when we can kill the app and restart it.");
+    }
+
 }
