@@ -27,14 +27,24 @@ import ca.ualberta.cmput301.t03.datamanager.DataKey;
 import ca.ualberta.cmput301.t03.datamanager.elasticsearch.ElasticSearchHelper;
 
 /**
+ * A {@link DataManagerJob} for performing the delete request.
  * Created by rishi on 15-11-11.
  */
 public class DeleteDataJob extends DataManagerJob {
 
+    /**
+     * Creates an instance of {@link DeleteDataJob}/
+     * @param dataKey The {@link DataKey} pointing to the object to be deleted.
+     */
     public DeleteDataJob(DataKey dataKey) {
         super(dataKey);
     }
 
+    /**
+     * Calls the {@link ElasticSearchHelper#sendDeleteRequestAtPath(String)} operation using the
+     * {@link DataKey} passed during construction.
+     * @throws IOException Thrown if the network request fails.
+     */
     @Override
     public void onRun() throws IOException {
         new ElasticSearchHelper().sendDeleteRequestAtPath(getRequestSuffix());
