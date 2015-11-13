@@ -190,8 +190,57 @@ public class QueuedDataManagerTests extends BaseDataManagerTests<QueuedDataManag
         assertFalse(testDataManagerWithMockNetworkUtil.innerManager.keyExists(key2));
     }
 
-    public void testQueueAndRequestDispatchOrdersAreSame() {
+    public void testQueueAndRequestDispatchOrdersAreSame() throws IOException, InterruptedException {
+        Type type = new TypeToken<TestDto>() {}.getType();
+        MockNetworkUtil mockNetworkUtilForQueue = new MockNetworkUtil();
+        MockNetworkUtil mockNetworkUtilForHttp = new MockNetworkUtil();
 
+        QueuedDataManager testDataManagerWithMockNetworkUtil = new QueuedDataManager(new JobManager(getContext(),
+                new Configuration.Builder(getContext())
+                        .minConsumerCount(1)
+                        .maxConsumerCount(3)
+                        .loadFactor(3)
+                        .consumerKeepAlive(120)
+                        .networkUtil(mockNetworkUtilForQueue)
+                        .build()),
+                new HttpDataManager(mockNetworkUtilForHttp));
+
+        assertFalse(testDataManagerWithMockNetworkUtil.keyExists(dataKey));
+
+        mockNetworkUtilForQueue.setNetworkState(false);
+        mockNetworkUtilForHttp.setNetworkState(false);
+
+        testDataManagerWithMockNetworkUtil.writeData(dataKey, testDto, type);
+        testDataManagerWithMockNetworkUtil.deleteIfExists(dataKey);
+
+        mockNetworkUtilForHttp.setNetworkState(true);
+        mockNetworkUtilForQueue.setNetworkState(true);
+        Thread.sleep(DELAY_MS);
+
+        assertFalse(testDataManagerWithMockNetworkUtil.keyExists(dataKey));
+
+        mockNetworkUtilForQueue.setNetworkState(false);
+        mockNetworkUtilForHttp.setNetworkState(false);
+
+        // Queue up 10 requests with different DTOs
+        for (int i = 0; i < 10; ++i) {
+            testDto.setaNumber(testDto.getaNumber() + i);
+            testDataManagerWithMockNetworkUtil.writeData(dataKey, testDto, type);
+        }
+
+        mockNetworkUtilForHttp.setNetworkState(true);
+        mockNetworkUtilForQueue.setNetworkState(true);
+        Thread.sleep(DELAY_MS*10);
+
+        assertTrue(testDataManagerWithMockNetworkUtil.keyExists(dataKey));
+        TestDto retrieved = testDataManagerWithMockNetworkUtil.getData(dataKey, type);
+        // Retrieved == last state of DTO
+        assertEquals(testDto, retrieved);
+
+        testDataManagerWithMockNetworkUtil.deleteIfExists(dataKey);
+        Thread.sleep(DELAY_MS);
+
+        assertFalse(testDataManagerWithMockNetworkUtil.keyExists(dataKey));
     }
 
     public void testWriteWhenDeviceOfflinePersistsRequests() {
