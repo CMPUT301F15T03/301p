@@ -27,8 +27,10 @@ import com.path.android.jobqueue.RetryConstraint;
 import ca.ualberta.cmput301.t03.common.Preconditions;
 import ca.ualberta.cmput301.t03.common.exceptions.NotImplementedException;
 import ca.ualberta.cmput301.t03.datamanager.DataKey;
+import ca.ualberta.cmput301.t03.datamanager.DataManager;
 
 /**
+ * A {@link Job} for queuing {@link DataManager} requests.
  * Created by rishi on 15-11-11.
  */
 public abstract class DataManagerJob extends Job {
@@ -38,6 +40,10 @@ public abstract class DataManagerJob extends Job {
     private final String type;
     private final String id;
 
+    /**
+     * Creates an instance of {@link DataManagerJob}.
+     * @param dataKey The {@link DataKey} to be used for this operation.
+     */
     public DataManagerJob(DataKey dataKey) {
         super(new Params(PRIORITY).persist().requireNetwork().groupBy(GROUP));
         Preconditions.checkNotNull(dataKey, "dataKey");
@@ -45,19 +51,35 @@ public abstract class DataManagerJob extends Job {
         this.id = dataKey.getId();
     }
 
+    /**
+     * Called when the {@link DataManagerJob} is queued. Does nothing. Should be overridden for
+     * specific implementations.
+     */
     @Override
     public void onAdded() { }
 
+    /**
+     * Called if the {@link DataManagerJob} fails after all the {@link RetryConstraint} constraints.
+     * Not implemented yet.
+     */
     @Override
     protected void onCancel() {
         throw new NotImplementedException();
     }
 
-    // Needed because only simple types can be serialized
+    /**
+     * Gets the request suffix for thsi job. This approach is needed vs. storing a {@link DataKey},
+     * because only simple types can be serialized
+     * @return
+     */
     protected String getRequestSuffix() {
         return new DataKey(type, id).toString();
     }
 
+    /**
+     * Called if the job throws an exception. It cancels the job.
+     * @return {@link RetryConstraint#CANCEL}
+     */
     @Override
     protected RetryConstraint shouldReRunOnThrowable(Throwable throwable, int runCount, int maxRunCount) {
         return RetryConstraint.CANCEL;
