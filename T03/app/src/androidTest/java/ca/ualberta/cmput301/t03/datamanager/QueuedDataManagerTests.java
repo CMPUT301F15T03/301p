@@ -242,12 +242,4 @@ public class QueuedDataManagerTests extends BaseDataManagerTests<QueuedDataManag
 
         assertFalse(testDataManagerWithMockNetworkUtil.keyExists(dataKey));
     }
-
-    public void testWriteWhenDeviceOfflinePersistsRequests() {
-
-    }
-
-    public void testDeleteWhenDeviceOfflinePersistsRequests() {
-
-    }
 }
