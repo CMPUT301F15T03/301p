@@ -39,8 +39,9 @@ import ca.ualberta.cmput301.t03.datamanager.jobs.WriteDataJob;
  *    internet state is. The requests are persisted, so that they are still sent if the app restarts.
  * 2. All the operations will be sent in the exact same order as they were queued. This guarantees
  *    data integrity for operations that work on the same remote object.
- * 3. All the operations will be performed on a different thread. So these methods can be called on
- *    the UI thread safely, even though network is accessed.
+ * 3. All the write and delete operations will be performed on a different thread. So these methods
+ *    can be called on the UI thread safely, even though network is accessed.
+ *    
  * Created by rishi on 15-11-11.
  */
 public class QueuedDataManager extends CachedDataManager {
