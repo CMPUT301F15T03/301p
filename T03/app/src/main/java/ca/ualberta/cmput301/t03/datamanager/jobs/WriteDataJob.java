@@ -27,17 +27,30 @@ import ca.ualberta.cmput301.t03.datamanager.DataKey;
 import ca.ualberta.cmput301.t03.datamanager.elasticsearch.ElasticSearchHelper;
 
 /**
+ * A {@link DataManagerJob} for performing the write data request. Creates a new object, or replaces
+ * the existing one.
  * Created by rishi on 15-11-11.
  */
 public class WriteDataJob extends DataManagerJob {
 
     private final String json;
 
+    /**
+     * Creates an instance of {@link WriteDataJob}.
+     * @param dataKey The {@link DataKey} for the object. The new object will be created at the location
+     *                pointed by this key. Existing object will be replaced, if applicable.
+     * @param json The JSON string to be written.
+     */
     public WriteDataJob(DataKey dataKey, String json) {
         super(dataKey);
         this.json = Preconditions.checkNotNullOrWhitespace(json, "json");
     }
 
+    /**
+     * Calls the {@link ElasticSearchHelper#writeJson(String, String)} operation using the JSON
+     * and {@link DataKey} passed during construction.
+     * @throws IOException Thrown if the network request fails.
+     */
     @Override
     public void onRun() throws IOException {
         new ElasticSearchHelper().writeJson(json, getRequestSuffix());
