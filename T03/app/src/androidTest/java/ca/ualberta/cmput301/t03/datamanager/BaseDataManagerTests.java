@@ -60,6 +60,7 @@ public abstract class BaseDataManagerTests<T extends DataManager> extends Androi
             assertTrue(dataManager.keyExists(dataKey));
             assertFalse(dataManager.keyExists(new DataKey("not", "exists")));
             dataManager.deleteIfExists(dataKey);
+            Thread.sleep(requestDelay);
         } catch (IOException e) {
             throw new AssertionFailedError(e.getMessage() + "\n" + ExceptionUtils.getStackTrace(e));
         } catch (InterruptedException e) {
