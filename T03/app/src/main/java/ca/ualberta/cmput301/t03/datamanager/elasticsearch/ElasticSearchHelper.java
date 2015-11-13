@@ -26,7 +26,7 @@ public class ElasticSearchHelper {
     private final HttpClient client;
 
     public ElasticSearchHelper() {
-        String rootUrl = TradeApp.getInstance().getString(R.string.httpDataManagerRootUrl);
+        String rootUrl = TradeApp.getContext().getString(R.string.httpDataManagerRootUrl);
         try {
             client = new HttpClient(Preconditions.checkNotNullOrWhitespace(rootUrl, "rootUrl"));
         } catch (MalformedURLException e) {
