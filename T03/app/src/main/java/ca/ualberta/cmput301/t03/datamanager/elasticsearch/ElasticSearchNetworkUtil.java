@@ -17,7 +17,7 @@ public class ElasticSearchNetworkUtil implements NetworkUtil, NetworkEventProvid
     private final NetworkUtilImpl networkUtil;
 
     public ElasticSearchNetworkUtil() {
-        this.networkUtil = new NetworkUtilImpl(TradeApp.getInstance());
+        this.networkUtil = new NetworkUtilImpl(TradeApp.getContext());
     }
 
     @Override

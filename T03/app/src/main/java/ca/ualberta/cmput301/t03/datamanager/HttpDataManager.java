@@ -23,7 +23,6 @@ package ca.ualberta.cmput301.t03.datamanager;
 import android.content.res.Resources;
 
 import com.path.android.jobqueue.network.NetworkUtil;
-import com.path.android.jobqueue.network.NetworkUtilImpl;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -146,7 +145,7 @@ public class HttpDataManager extends JsonDataManager {
      */
     @Override
     public boolean isOperational() {
-        return networkUtil.isConnected(TradeApp.getInstance());
+        return networkUtil.isConnected(TradeApp.getContext());
     }
 
     /**
