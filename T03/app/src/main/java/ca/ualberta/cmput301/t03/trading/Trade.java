@@ -33,10 +33,9 @@ import java.util.UUID;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
-import ca.ualberta.cmput301.t03.datamanager.CachedDataManager;
+import ca.ualberta.cmput301.t03.TradeApp;
 import ca.ualberta.cmput301.t03.datamanager.DataKey;
 import ca.ualberta.cmput301.t03.datamanager.DataManager;
-import ca.ualberta.cmput301.t03.datamanager.HttpDataManager;
 import ca.ualberta.cmput301.t03.inventory.Item;
 import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeModificationException;
 import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeStateTransition;
@@ -88,7 +87,7 @@ public class Trade implements Observable {
     public Trade(UUID tradeUUID, Context context) {
         this.tradeUUID = tradeUUID;
         this.context = context;
-        this.dataManager = new CachedDataManager(new HttpDataManager(true));
+        this.dataManager = TradeApp.getInstance().createDataManager(true);
         this.observers = new HashSet<>();
         this.load();
     }
@@ -117,7 +116,7 @@ public class Trade implements Observable {
         }
 
         this.context = context;
-        this.dataManager = new CachedDataManager(new HttpDataManager(true));
+        this.dataManager = TradeApp.getInstance().createDataManager(true);
         this.observers = new HashSet<>();
 
         this.state = new TradeStateComposing();

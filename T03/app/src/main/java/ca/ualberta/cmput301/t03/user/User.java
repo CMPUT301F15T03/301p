@@ -34,6 +34,7 @@ import java.util.HashSet;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
+import ca.ualberta.cmput301.t03.TradeApp;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.datamanager.CachedDataManager;
 import ca.ualberta.cmput301.t03.datamanager.DataKey;
@@ -98,7 +99,9 @@ public class User implements Observable, Observer, Comparable<User> {
     public User(String username, Context context) {
         this.observers = new HashSet<>();
         this.context = context;
-        this.dataManager = new CachedDataManager(new HttpDataManager(true));
+        this.dataManager = TradeApp.getInstance().createDataManager(true);
+
+//                new CachedDataManager(new HttpDataManager(true));
         this.username = username;
     }
 
