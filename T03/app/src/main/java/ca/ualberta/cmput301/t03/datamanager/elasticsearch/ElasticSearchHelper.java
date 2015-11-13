@@ -1,3 +1,23 @@
+/*
+ * Copyright (C) 2015 Kyle O'Shaughnessy, Ross Anderson, Michelle Mabuyo, John Slevinsky, Udey Rishi, Quentin Lautischer
+ * Photography equipment trading application for CMPUT 301 at the University of Alberta.
+ *
+ * This file is part of {ApplicationName}
+ *
+ * {ApplicationName} is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package ca.ualberta.cmput301.t03.datamanager.elasticsearch;
 
 import android.content.res.Resources;
@@ -18,6 +38,7 @@ import ca.ualberta.cmput301.t03.common.http.HttpResponse;
 import ca.ualberta.cmput301.t03.common.http.HttpStatusCode;
 
 /**
+ * A set for helped APIs for interacting with Elastic Search server.
  * Created by rishi on 15-11-12.
  */
 public class ElasticSearchHelper {
@@ -25,8 +46,12 @@ public class ElasticSearchHelper {
 
     private final HttpClient client;
 
+    /**
+     * Creates an instance of {@link ElasticSearchHelper}. The root URL is retrieved from the
+     * {@link ca.ualberta.cmput301.t03.R.string#elasticSearchRootUrl}.
+     */
     public ElasticSearchHelper() {
-        String rootUrl = TradeApp.getContext().getString(R.string.httpDataManagerRootUrl);
+        String rootUrl = TradeApp.getContext().getString(R.string.elasticSearchRootUrl);
         try {
             client = new HttpClient(Preconditions.checkNotNullOrWhitespace(rootUrl, "rootUrl"));
         } catch (MalformedURLException e) {
@@ -35,6 +60,14 @@ public class ElasticSearchHelper {
         }
     }
 
+    /**
+     * Makes an HTTP GET request at the URL formed with the provided suffix, and returns the
+     * received JSON String if an HTTP OK is received. If HTTP NOT-FOUND is received,
+     * {@link android.content.res.Resources.NotFoundException} is thrown.
+     * @param suffix The suffix to be used for making the request.
+     * @return The retrieved JSON string if the HTTP OK is received.
+     * @throws IOException Thrown if the network communication fails.
+     */
     public String getJson(String suffix) throws IOException {
         HttpResponse response = client.makeGetRequest(suffix);
 
@@ -49,6 +82,13 @@ public class ElasticSearchHelper {
                 response.getResponseCode()));
     }
 
+    /**
+     * Makes an HTTP PUT request at the URL formed with the provided suffix, and checks for the
+     * response code to be a successful one.
+     * @param json The JSON string to be sent.
+     * @param suffix The suffix to be used for making the request.
+     * @throws IOException Thrown if the network communication fails.
+     */
     public void writeJson(String json, String suffix) throws IOException {
         byte[] requestContents = json.getBytes();
         HttpResponse response = client.makePutRequest(suffix, requestContents);
@@ -60,6 +100,13 @@ public class ElasticSearchHelper {
         }
     }
 
+    /**
+     * Makes an HTTP GET request at the path formed with provided suffix, and checks for the response
+     * to see if the path exists.
+     * @param suffix The suffix to be used for making the request.
+     * @return If the HTTP response is OK, returns true. If the response is NOT-FOUND, returns false.
+     * @throws IOException Thrown if the network communication fails.
+     */
     public boolean checkPathExists(String suffix) throws IOException {
         HttpResponse response = client.makeGetRequest(suffix);
 
@@ -74,6 +121,13 @@ public class ElasticSearchHelper {
                 response.getResponseCode()));
     }
 
+    /**
+     * Sends an HTTP DELETE request at the path formed with the provided suffix.
+     * @param suffix The suffix to be used for making the request.
+     * @return True, if the response is OK (i.e., path existed). False, if the response is NOT-FOUND
+     *         (i.e., path didn't exist).
+     * @throws IOException Thrown if the network communication fails.
+     */
     public boolean sendDeleteRequestAtPath(String suffix) throws IOException {
         HttpResponse response = client.makeDeleteRequest(suffix);
         int statusCode = response.getResponseCode();
