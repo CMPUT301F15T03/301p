@@ -18,40 +18,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ca.ualberta.cmput301.t03.datamanager;
+package ca.ualberta.cmput301.t03.datamanager.elasticsearch;
 
 /**
- * Created by rishi on 15-10-30.
+ * An {@link RuntimeException} thrown when the {@link ElasticSearchHelper} construction fails.
+ * Created by ross on 15-11-03.
  */
-public class LocalDataManagerTests extends BaseDataManagerTests<LocalDataManager> implements DataManagerApiTests {
+public class ElasticSearchHelperInitializationException extends RuntimeException {
 
-    @Override
-    protected LocalDataManager createNewDataManager() {
-        return new LocalDataManager();
+    /**
+     * Creates an instance of {@link ElasticSearchHelperInitializationException}.
+     */
+    public ElasticSearchHelperInitializationException() {
+        super();
     }
 
-    @Override
-    public void testKeyExists() {
-        super.keyExistsTest();
-    }
-
-    @Override
-    public void testGetDataWhenKeyDoesNotExistThrowsException() {
-        super.getDataWhenKeyDoesNotExistThrowsExceptionTest();
-    }
-
-    @Override
-    public void testWriteData() {
-        super.writeDataTest();
-    }
-
-    @Override
-    public void testDelete() {
-        super.deleteTest();
-    }
-
-    @Override
-    public void testIsOperational() {
-        super.isOperationalTest();
+    /**
+     * Create an instance of {@link ElasticSearchHelperInitializationException}.
+     *
+     * @param message The detailed message describing the exception.
+     */
+    public ElasticSearchHelperInitializationException(String message) {
+        super(message);
     }
 }

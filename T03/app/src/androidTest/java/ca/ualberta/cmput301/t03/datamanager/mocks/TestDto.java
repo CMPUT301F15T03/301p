@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ca.ualberta.cmput301.t03.datamanager;
+package ca.ualberta.cmput301.t03.datamanager.mocks;
 
 import com.google.gson.annotations.Expose;
 

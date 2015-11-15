@@ -18,27 +18,35 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ca.ualberta.cmput301.t03.datamanager;
+package ca.ualberta.cmput301.t03.datamanager.jobs;
+
+
+import java.io.IOException;
+
+import ca.ualberta.cmput301.t03.datamanager.DataKey;
+import ca.ualberta.cmput301.t03.datamanager.elasticsearch.ElasticSearchHelper;
 
 /**
- * An {@link RuntimeException} thrown when the {@link HttpDataManager} construction fails.
- * Created by ross on 15-11-03.
+ * A {@link DataManagerJob} for performing the delete request.
+ * Created by rishi on 15-11-11.
  */
-public class HttpDataManagerInitializationException extends RuntimeException {
+public class DeleteDataJob extends DataManagerJob {
 
     /**
-     * Creates an instance of {@link HttpDataManagerInitializationException}.
+     * Creates an instance of {@link DeleteDataJob}/
+     * @param dataKey The {@link DataKey} pointing to the object to be deleted.
      */
-    public HttpDataManagerInitializationException() {
-        super();
+    public DeleteDataJob(DataKey dataKey) {
+        super(dataKey);
     }
 
     /**
-     * Create an instance of {@link HttpDataManagerInitializationException}.
-     *
-     * @param message The detailed message describing the exception.
+     * Calls the {@link ElasticSearchHelper#sendDeleteRequestAtPath(String)} operation using the
+     * {@link DataKey} passed during construction.
+     * @throws IOException Thrown if the network request fails.
      */
-    public HttpDataManagerInitializationException(String message) {
-        super(message);
+    @Override
+    public void onRun() throws IOException {
+        new ElasticSearchHelper().sendDeleteRequestAtPath(getRequestSuffix());
     }
 }

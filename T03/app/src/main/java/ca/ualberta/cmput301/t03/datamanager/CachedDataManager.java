@@ -20,7 +20,6 @@
 
 package ca.ualberta.cmput301.t03.datamanager;
 
-import android.content.Context;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -43,34 +42,18 @@ import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 public class CachedDataManager extends JsonDataManager {
 
     private final static String CACHE_DIRECTORY = "cache";
-    private final JsonDataManager innerManager;
-    private final Context context;
     private final LocalDataManager cachingDataManager;
+    protected final JsonDataManager innerManager;
 
     /**
      * Creates an instance of the {@link CachedDataManager}.
      *
-     * @param innerManager                The inner {@link JsonDataManager} manager to be used.
-     * @param context                     The {@link Context} to be used for accessing the local filesystem for caching.
-     * @param useExplicitExposeAnnotation True, if the @expose annotations are to be explicitly used,
-     *                                    else false. If this is set to true, only the fields with
-     *                                    the annotation @expose will be serialized/de-serialized.
+     * @param innerManager The inner {@link JsonDataManager} to be used.
      */
-    public CachedDataManager(JsonDataManager innerManager, Context context, boolean useExplicitExposeAnnotation) {
-        this.innerManager = Preconditions.checkNotNull(innerManager, "innerManager");
-        this.context = Preconditions.checkNotNull(context, "context");
-        this.cachingDataManager = new LocalDataManager(context, useExplicitExposeAnnotation);
-    }
-
-    /**
-     * Creates an instance of the {@link CachedDataManager}. The manager will set the "useExplicitExposeAnnotation"
-     * value to false.
-     *
-     * @param innerManager The inner {@link JsonDataManager} manager to be used.
-     * @param context      The {@link Context} to be used for accessing the local filesystem for caching.
-     */
-    public CachedDataManager(JsonDataManager innerManager, Context context) {
-        this(innerManager, context, innerManager.jsonFormatter.getUseExplicitExposeAnnotation());
+    public CachedDataManager(JsonDataManager innerManager) {
+        super(Preconditions.checkNotNull(innerManager, "innerManager").jsonFormatter.getUseExplicitExposeAnnotation());
+        this.innerManager = innerManager;
+        this.cachingDataManager = new LocalDataManager(innerManager.jsonFormatter.getUseExplicitExposeAnnotation());
     }
 
     /**
@@ -125,7 +108,7 @@ public class CachedDataManager extends JsonDataManager {
     public <T> void writeData(DataKey key, T obj, Type typeOfT) throws IOException {
         if (isOperational()) {
             innerManager.writeData(key, obj, typeOfT);
-            cachingDataManager.writeData(convertToCacheKey(key), obj, typeOfT);
+            writeToCache(key, obj, typeOfT);
         } else {
             throw new ServiceNotAvailableException("Inner DataManager is not operational. Cannot perform the write operation.");
         }
@@ -140,13 +123,14 @@ public class CachedDataManager extends JsonDataManager {
      * @throws IOException Thrown, if the communication to the storage media fails.
      */
     @Override
-    public boolean deleteIfExists(DataKey key) throws IOException {
-        if (isOperational()) {
-            boolean existed = innerManager.deleteIfExists(key);
-            cachingDataManager.deleteIfExists(convertToCacheKey(key));
-            return existed;
+    public void deleteIfExists(DataKey key) throws IOException {
+        if (!isOperational()) {
+            throw new ServiceNotAvailableException("Inner DataManager is not operational. Cannot perform the delete operation.");
         }
-        throw new ServiceNotAvailableException("Inner DataManager is not operational. Cannot perform the delete operation.");
+
+        innerManager.deleteIfExists(key);
+        deleteFromCache(key);
+
     }
 
     /**
@@ -159,6 +143,37 @@ public class CachedDataManager extends JsonDataManager {
     @Override
     public boolean isOperational() {
         return innerManager.isOperational();
+    }
+
+    /**
+     * Returns if the innerManager requires network or not.
+     */
+    @Override
+    public boolean requiresNetwork() {
+        return innerManager.requiresNetwork();
+    }
+
+    /**
+     * Writes the object to the cache.
+     * @param key The {@link DataKey} for the object that was passed. This will be converted to an
+     *            appropriate caching key.
+     * @param obj The object to be cached.
+     * @param typeOfT The {@link Type} of the object.
+     * @param <T> The type of the object.
+     */
+    protected <T> void writeToCache(DataKey key, T obj, Type typeOfT) {
+        DataKey cacheKey = convertToCacheKey(key);
+        cachingDataManager.writeData(cacheKey, obj, typeOfT);
+    }
+
+    /**
+     * Deletes the object from the cache, if it exists.
+     * @param key The {@link DataKey} for the object that was passed. This will be converted to an
+     *            appropriate caching key.
+     */
+    protected void deleteFromCache(DataKey key) {
+        DataKey cacheKey = convertToCacheKey(key);
+        cachingDataManager.deleteIfExists(cacheKey);
     }
 
     private DataKey convertToCacheKey(DataKey key) {
