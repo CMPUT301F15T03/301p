@@ -20,8 +20,6 @@
 
 package ca.ualberta.cmput301.t03.datamanager;
 
-import android.content.Context;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -29,6 +27,7 @@ import java.io.PrintWriter;
 import java.lang.reflect.Type;
 import java.util.Scanner;
 
+import ca.ualberta.cmput301.t03.TradeApp;
 import ca.ualberta.cmput301.t03.common.Preconditions;
 import ca.ualberta.cmput301.t03.common.exceptions.NotImplementedException;
 
@@ -38,29 +37,23 @@ import ca.ualberta.cmput301.t03.common.exceptions.NotImplementedException;
  */
 public class LocalDataManager extends JsonDataManager {
 
-    private final Context context;
-
     /**
      * Creates an instance of the {@link LocalDataManager}.
      *
-     * @param context                     The {@link Context} to be used for accessing the filesystem.
      * @param useExplicitExposeAnnotation True, if the @expose annotations are to be explicitly used,
      *                                    else false. If this is set to true, only the fields with
      *                                    the annotation @expose will be serialized/de-serialized.
      */
-    public LocalDataManager(Context context, boolean useExplicitExposeAnnotation) {
+    public LocalDataManager(boolean useExplicitExposeAnnotation) {
         super(useExplicitExposeAnnotation);
-        this.context = Preconditions.checkNotNull(context, "context");
     }
 
     /**
-     * Creates an instance of the {@link LocalDataManager}. The "useExplicitExposeAnnotation"
-     * value is set to false.
-     *
-     * @param context The {@link Context} to be used for accessing the filesystem.
+     * Creates an instance of the {@link LocalDataManager}. The manager will set the value of
+     * "useExplicitExposeAnnotation" to false.
      */
-    public LocalDataManager(Context context) {
-        this(context, false);
+    public LocalDataManager() {
+        this(false);
     }
 
     /**
@@ -80,7 +73,7 @@ public class LocalDataManager extends JsonDataManager {
         Preconditions.checkNotNull(key, "key");
 
         if (!keyExists(key)) {
-            throw new DataKeyNotFoundException(key.toString());
+            throw new DataKeyNotFoundException(key);
         }
 
         File targetFile = getTargetFile(key, false);
@@ -123,14 +116,13 @@ public class LocalDataManager extends JsonDataManager {
      * {@inheritDoc}
      */
     @Override
-    public boolean deleteIfExists(DataKey key) {
+    public void deleteIfExists(DataKey key) {
         if (!keyExists(key)) {
-            return false;
+            return;
         }
 
         File targetFile = getTargetFile(key, false);
         targetFile.delete();
-        return true;
     }
 
     /**
@@ -143,10 +135,18 @@ public class LocalDataManager extends JsonDataManager {
         return true;
     }
 
+    /**
+     * Return false.
+     */
+    @Override
+    public boolean requiresNetwork() {
+        return false;
+    }
+
     // Source: http://stackoverflow.com/questions/2130932/how-to-create-directory-automatically-on-sd-card
     // Date: 30 Oct, 2015
     private File getTargetFile(DataKey key, boolean createTypeDirectoryIfNotExists) {
-        File appContextRootDirectory = context.getFilesDir();
+        File appContextRootDirectory = TradeApp.getContext().getFilesDir();
         File typeDirectory = new File(appContextRootDirectory, key.getType());
         if (createTypeDirectoryIfNotExists && !typeDirectory.exists()) {
             typeDirectory.mkdirs();

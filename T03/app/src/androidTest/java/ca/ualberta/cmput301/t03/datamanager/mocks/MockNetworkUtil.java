@@ -18,40 +18,40 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ca.ualberta.cmput301.t03.datamanager;
+package ca.ualberta.cmput301.t03.datamanager.mocks;
+
+import android.content.Context;
+
+import com.path.android.jobqueue.network.NetworkEventProvider;
+import com.path.android.jobqueue.network.NetworkUtil;
 
 /**
- * Created by rishi on 15-10-30.
+ * Created by rishi on 15-11-12.
  */
-public class LocalDataManagerTests extends BaseDataManagerTests<LocalDataManager> implements DataManagerApiTests {
+public class MockNetworkUtil implements NetworkUtil, NetworkEventProvider {
 
-    @Override
-    protected LocalDataManager createNewDataManager() {
-        return new LocalDataManager();
+    private Listener listener;
+    private boolean networkState;
+
+    public MockNetworkUtil() {
+        this.listener = null;
+        this.networkState = true;
+    }
+
+    public void setNetworkState(boolean networkState) {
+        this.networkState = networkState;
+        if (listener != null) {
+            listener.onNetworkChange(this.networkState);
+        }
     }
 
     @Override
-    public void testKeyExists() {
-        super.keyExistsTest();
+    public void setListener(Listener listener) {
+        this.listener = listener;
     }
 
     @Override
-    public void testGetDataWhenKeyDoesNotExistThrowsException() {
-        super.getDataWhenKeyDoesNotExistThrowsExceptionTest();
-    }
-
-    @Override
-    public void testWriteData() {
-        super.writeDataTest();
-    }
-
-    @Override
-    public void testDelete() {
-        super.deleteTest();
-    }
-
-    @Override
-    public void testIsOperational() {
-        super.isOperationalTest();
+    public boolean isConnected(Context context) {
+        return networkState;
     }
 }

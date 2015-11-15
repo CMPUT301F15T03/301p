@@ -29,6 +29,7 @@ import junit.framework.AssertionFailedError;
 import java.io.IOException;
 
 import ca.ualberta.cmput301.t03.common.exceptions.ExceptionUtils;
+import ca.ualberta.cmput301.t03.datamanager.mocks.TestDto;
 
 import static ca.ualberta.cmput301.t03.common.ExceptionAsserter.assertThrowsException;
 
@@ -50,17 +51,25 @@ public abstract class BaseDataManagerTests<T extends DataManager> extends Androi
         dataKey = new DataKey("testdto", "123");
     }
 
-    protected void keyExistsTest() {
+    protected void keyExistsTest(int requestDelay) {
         try {
             assertFalse(dataManager.keyExists(dataKey));
             dataManager.writeData(dataKey, testDto, new TypeToken<TestDto>() {
             }.getType());
+            Thread.sleep(requestDelay);
             assertTrue(dataManager.keyExists(dataKey));
             assertFalse(dataManager.keyExists(new DataKey("not", "exists")));
-            assertTrue(dataManager.deleteIfExists(dataKey));
+            dataManager.deleteIfExists(dataKey);
+            Thread.sleep(requestDelay);
         } catch (IOException e) {
             throw new AssertionFailedError(e.getMessage() + "\n" + ExceptionUtils.getStackTrace(e));
+        } catch (InterruptedException e) {
+            throw new AssertionFailedError(e.getMessage() + "\n" + ExceptionUtils.getStackTrace(e));
         }
+    }
+
+    protected void keyExistsTest() {
+        keyExistsTest(0);
     }
 
     protected void getDataWhenKeyDoesNotExistThrowsExceptionTest() {
@@ -82,32 +91,47 @@ public abstract class BaseDataManagerTests<T extends DataManager> extends Androi
         }
     }
 
-    protected void writeDataTest() {
+    protected void writeDataTest(int requestDelay) {
         try {
             dataManager.writeData(dataKey, testDto, new TypeToken<TestDto>() {
             }.getType());
+            Thread.sleep(requestDelay);
             assertTrue(dataManager.keyExists(dataKey));
             TestDto receivedData = dataManager.getData(dataKey, new TypeToken<TestDto>() {
             }.getType());
             assertEquals(testDto, receivedData);
-            assertTrue(dataManager.deleteIfExists(dataKey));
+            dataManager.deleteIfExists(dataKey);
+            Thread.sleep(requestDelay);
         } catch (IOException e) {
+            throw new AssertionFailedError(e.getMessage() + "\n" + ExceptionUtils.getStackTrace(e));
+        } catch (InterruptedException e) {
+            throw new AssertionFailedError(e.getMessage() + "\n" + ExceptionUtils.getStackTrace(e));
+        }
+    }
+
+    protected void writeDataTest() {
+        writeDataTest(0);
+    }
+
+    protected void deleteTest(int requestDelay) {
+        try {
+            assertFalse(dataManager.keyExists(dataKey));
+            dataManager.writeData(dataKey, testDto, new TypeToken<TestDto>() {
+            }.getType());
+            Thread.sleep(requestDelay);
+            assertTrue(dataManager.keyExists(dataKey));
+            dataManager.deleteIfExists(dataKey);
+            Thread.sleep(requestDelay);
+            assertFalse(dataManager.keyExists(dataKey));
+        } catch (IOException e) {
+            throw new AssertionFailedError(e.getMessage() + "\n" + ExceptionUtils.getStackTrace(e));
+        } catch (InterruptedException e) {
             throw new AssertionFailedError(e.getMessage() + "\n" + ExceptionUtils.getStackTrace(e));
         }
     }
 
     protected void deleteTest() {
-        try {
-            assertFalse(dataManager.keyExists(dataKey));
-            assertFalse(dataManager.deleteIfExists(dataKey));
-            dataManager.writeData(dataKey, testDto, new TypeToken<TestDto>() {
-            }.getType());
-            assertTrue(dataManager.keyExists(dataKey));
-            assertTrue(dataManager.deleteIfExists(dataKey));
-            assertFalse(dataManager.keyExists(dataKey));
-        } catch (IOException e) {
-            throw new AssertionFailedError(e.getMessage() + "\n" + ExceptionUtils.getStackTrace(e));
-        }
+        deleteTest(0);
     }
 
     protected void isOperationalTest() {

@@ -66,10 +66,9 @@ public interface DataManager {
      * Deletes the object pointed by the {@link DataKey} from the storage media, if it exists.
      *
      * @param key The {@link DataKey} for which the object has to be deleted.
-     * @return True, if the object was found and was deleted. False, if the object was not found.
      * @throws IOException Thrown, if the communication to the storage media fails.
      */
-    boolean deleteIfExists(DataKey key) throws IOException;
+    void deleteIfExists(DataKey key) throws IOException;
 
     /**
      * Checks if the storage media used by this {@link DataManager} implementation is currently
@@ -79,4 +78,10 @@ public interface DataManager {
      * operations might still work if false is returned.
      */
     boolean isOperational();
+
+    /**
+     * Tells if this DataManager requires network or not.
+     * @return True, if network is needed, else false.
+     */
+    boolean requiresNetwork();
 }

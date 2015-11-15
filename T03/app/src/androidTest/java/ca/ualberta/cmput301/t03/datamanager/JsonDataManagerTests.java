@@ -29,6 +29,7 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 
 import ca.ualberta.cmput301.t03.common.exceptions.NotImplementedException;
+import ca.ualberta.cmput301.t03.datamanager.mocks.TestDto;
 
 /**
  * Created by rishi on 15-10-29.
@@ -55,12 +56,17 @@ public class JsonDataManagerTests extends TestCase {
             }
 
             @Override
-            public boolean deleteIfExists(DataKey key) {
+            public void deleteIfExists(DataKey key) {
                 throw new NotImplementedException("Not applicable for abstract classes.");
             }
 
             @Override
             public boolean isOperational() {
+                throw new NotImplementedException("Not applicable for abstract classes.");
+            }
+
+            @Override
+            public boolean requiresNetwork() {
                 throw new NotImplementedException("Not applicable for abstract classes.");
             }
         };

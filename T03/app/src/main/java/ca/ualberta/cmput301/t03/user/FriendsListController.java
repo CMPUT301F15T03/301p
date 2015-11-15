@@ -43,7 +43,7 @@ public class FriendsListController {
     public FriendsListController(Context context, FriendsList friendsList) {
         mFriendsList = friendsList;
         mContext = context;
-        mDataManager = new HttpDataManager(context);
+        mDataManager = new HttpDataManager();
     }
 
     /**

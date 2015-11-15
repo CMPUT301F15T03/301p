@@ -20,6 +20,8 @@
 
 package ca.ualberta.cmput301.t03.datamanager;
 
+import ca.ualberta.cmput301.t03.datamanager.mocks.MockNetworkUtil;
+
 /**
  * Created by rishi on 15-10-30.
  */
@@ -27,7 +29,7 @@ public class HttpDataManagerTests extends BaseDataManagerTests<HttpDataManager> 
 
     @Override
     protected HttpDataManager createNewDataManager() {
-        return new HttpDataManager(getContext());
+        return new HttpDataManager();
     }
 
     @Override
@@ -53,5 +55,14 @@ public class HttpDataManagerTests extends BaseDataManagerTests<HttpDataManager> 
     @Override
     public void testIsOperational() {
         super.isOperationalTest();
+    }
+
+    public void testIsOperationalWhenNetworkOff() {
+        MockNetworkUtil mockNetworkUtil = new MockNetworkUtil();
+        HttpDataManager testDataManager = new HttpDataManager(mockNetworkUtil);
+        assertTrue(testDataManager.isOperational());
+
+        mockNetworkUtil.setNetworkState(false);
+        assertFalse(testDataManager.isOperational());
     }
 }

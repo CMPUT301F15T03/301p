@@ -20,64 +20,69 @@
 
 package ca.ualberta.cmput301.t03.datamanager;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.util.Log;
+import android.content.res.Resources;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
+import com.path.android.jobqueue.network.NetworkUtil;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.net.MalformedURLException;
 
-import ca.ualberta.cmput301.t03.R;
+import ca.ualberta.cmput301.t03.TradeApp;
 import ca.ualberta.cmput301.t03.common.Preconditions;
-import ca.ualberta.cmput301.t03.common.exceptions.NotImplementedException;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
-import ca.ualberta.cmput301.t03.common.http.HttpClient;
-import ca.ualberta.cmput301.t03.common.http.HttpResponse;
-import ca.ualberta.cmput301.t03.common.http.HttpStatusCode;
+import ca.ualberta.cmput301.t03.datamanager.elasticsearch.ElasticSearchHelper;
+import ca.ualberta.cmput301.t03.datamanager.elasticsearch.ElasticSearchNetworkUtil;
 
 /**
  * A {@link JsonDataManager} that uses the ElasticSearch server as the storage media.
  * Created by rishi on 15-10-30.
  */
 public class HttpDataManager extends JsonDataManager {
-    private final String logTAG = "HTTPDataManager";
-
-    private final HttpClient client;
-    private final Context context;
+    private final ElasticSearchHelper elasticSearchHelper;
+    private final NetworkUtil networkUtil;
 
     /**
      * Creates an instance of {@link HttpDataManager}.
      *
-     * @param context                     The context to be used for checking the network status of the phone.
+     * @param networkUtil The {@link NetworkUtil} to be used for checking the network state.
      * @param useExplicitExposeAnnotation True, if the @expose annotations are to be explicitly used,
      *                                    else false. If this is set to true, only the fields with
      *                                    the annotation @expose will be serialized/de-serialized.
      */
-    public HttpDataManager(Context context, boolean useExplicitExposeAnnotation) {
+    public HttpDataManager(NetworkUtil networkUtil, boolean useExplicitExposeAnnotation) {
         super(useExplicitExposeAnnotation);
-        this.context = Preconditions.checkNotNull(context, "context");
-        String rootUrl = context.getString(R.string.httpDataManagerRootUrl);
-        try {
-            client = new HttpClient(Preconditions.checkNotNullOrWhitespace(rootUrl, "rootUrl"));
-        } catch (MalformedURLException e) {
-            Log.e(logTAG, e.getMessage());
-            throw new HttpDataManagerInitializationException(e.getMessage());
-        }
+        this.networkUtil = Preconditions.checkNotNull(networkUtil, "networkUtil");
+        this.elasticSearchHelper = new ElasticSearchHelper();
     }
 
     /**
-     * Creates an instance of the {@link HttpDataManager}. The "useExplicitExposeAnnotation"
-     * value is set to false.
+     * Creates an instance of the {@link HttpDataManager}. The manager will set the value of
+     * "useExplicitExposeAnnotation" to false.
      *
-     * @param context The context to be used for checking the network status of the phone.
+     * @param networkUtil The {@link NetworkUtil} to be used for checking the network state.
      */
-    public HttpDataManager(Context context) {
-        this(context, false);
+    public HttpDataManager(NetworkUtil networkUtil) {
+        this(networkUtil, false);
+    }
+
+    /**
+     * Creates an instance of the {@link HttpDataManager}. The manager will set the value of
+     * "useExplicitExposeAnnotation" to false, and will use {@link ElasticSearchNetworkUtil} as the
+     * {@link NetworkUtil}.
+     */
+    public HttpDataManager() {
+        this(new ElasticSearchNetworkUtil());
+    }
+
+    /**
+     * Creates an instance of {@link HttpDataManager}. The manager will use {@link ElasticSearchNetworkUtil}
+     * as the {@link NetworkUtil}.
+     * @param useExplicitExposeAnnotation True, if the @expose annotations are to be explicitly used,
+     *                                    else false. If this is set to true, only the fields with
+     *                                    the annotation @expose will be serialized/de-serialized.
+     */
+    public HttpDataManager(boolean useExplicitExposeAnnotation) {
+        this(new ElasticSearchNetworkUtil(), useExplicitExposeAnnotation);
     }
 
     /**
@@ -89,17 +94,7 @@ public class HttpDataManager extends JsonDataManager {
             throw new ServiceNotAvailableException("HttpDataManager is not operational. Cannot perform this operation.");
         }
 
-        HttpResponse response = client.makeGetRequest(key.toString());
-
-        if (response.getResponseCode() == HttpStatusCode.OK.getStatusCode()) {
-            return true;
-        }
-        if (response.getResponseCode() == HttpStatusCode.NOT_FOUND.getStatusCode()) {
-            return false;
-        }
-
-        throw new NotImplementedException(String.format("Dev note: Unexpected response '%d' from the GET Elastic Search endpoint.",
-                response.getResponseCode()));
+        return elasticSearchHelper.checkPathExists(key.toString());
     }
 
     /**
@@ -111,18 +106,12 @@ public class HttpDataManager extends JsonDataManager {
             throw new ServiceNotAvailableException("HttpDataManager is not operational. Cannot perform this operation.");
         }
 
-        HttpResponse response = client.makeGetRequest(key.toString());
-
-        if (response.getResponseCode() == HttpStatusCode.NOT_FOUND.getStatusCode()) {
-            throw new DataKeyNotFoundException(key.toString());
+        try {
+            return deserialize(elasticSearchHelper.getJson(key.toString()), typeOfT);
         }
-        if (response.getResponseCode() == HttpStatusCode.OK.getStatusCode()) {
-            String sourceJson = extractSourceFromElasticSearchHttpResponse(response);
-            return deserialize(sourceJson, typeOfT);
+        catch (Resources.NotFoundException e) {
+            throw new DataKeyNotFoundException(key);
         }
-
-        throw new NotImplementedException(String.format("Dev note: Unexpected response '%d' from the GET Elastic Search endpoint.",
-                response.getResponseCode()));
     }
 
     /**
@@ -134,35 +123,19 @@ public class HttpDataManager extends JsonDataManager {
             throw new ServiceNotAvailableException("HttpDataManager is not operational. Cannot perform this operation.");
         }
 
-        byte[] requestContents = serialize(obj, typeOfT).getBytes();
-        HttpResponse response = client.makePutRequest(key.toString(), requestContents);
-
-        if (response.getResponseCode() != HttpStatusCode.OK.getStatusCode() &&
-                response.getResponseCode() != HttpStatusCode.CREATED.getStatusCode()) {
-            throw new NotImplementedException(String.format("Dev note: Unexpected response '%d' from the PUT Elastic Search endpoint.",
-                    response.getResponseCode()));
-        }
+        elasticSearchHelper.writeJson(serialize(obj, typeOfT), key.toString());
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean deleteIfExists(DataKey key) throws IOException {
+    public void deleteIfExists(DataKey key) throws IOException {
         if (!isOperational()) {
             throw new ServiceNotAvailableException("HttpDataManager is not operational. Cannot perform this operation.");
         }
 
-        HttpResponse response = client.makeDeleteRequest(key.toString());
-
-        if (response.getResponseCode() == HttpStatusCode.OK.getStatusCode()) {
-            return true;
-        } else if (response.getResponseCode() == HttpStatusCode.NOT_FOUND.getStatusCode()) {
-            return false;
-        } else {
-            throw new NotImplementedException(String.format("Dev note: Unexpected response '%d' from the DELETE Elastic Search endpoint.",
-                    response.getResponseCode()));
-        }
+        elasticSearchHelper.sendDeleteRequestAtPath(key.toString());
     }
 
     /**
@@ -172,17 +145,15 @@ public class HttpDataManager extends JsonDataManager {
      */
     @Override
     public boolean isOperational() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+        return networkUtil.isConnected(TradeApp.getContext());
     }
 
-    private String extractSourceFromElasticSearchHttpResponse(HttpResponse response) {
-        String responseContents = new String(response.getContents());
-        JsonParser jp = new JsonParser();
-        JsonElement responseContentsJSON = jp.parse(responseContents);
-        return responseContentsJSON.getAsJsonObject().getAsJsonObject("_source").toString();
+    /**
+     * Returns true.
+     */
+    @Override
+    public boolean requiresNetwork() {
+        return true;
     }
 }
 
