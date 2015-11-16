@@ -204,7 +204,7 @@ public class UserInventoryFragment extends Fragment implements Observer {
 
     /**
      * Creates ListView Adapter and Item onClickListeners
-     *
+     * This represents the users inventory.
      * @param v
      */
     public void createListView(View v) {
@@ -225,7 +225,7 @@ public class UserInventoryFragment extends Fragment implements Observer {
     }
 
     /**
-     * starts activity in which an Item Can be inspected
+     * Starts activity in which an Item Can be inspected
      *
      * @param item
      */

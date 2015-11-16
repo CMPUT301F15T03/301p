@@ -38,6 +38,8 @@ import ca.ualberta.cmput301.t03.user.User;
 /**
  * Model maintains a List of all of the user's friends and a list of all friends inventory items.
  * Will notify the observing user and any others registered as observers of any change.
+ *
+ * Used by browsable Views. Also available to anything requiring a list of all tradable items.
  */
 public class BrowsableInventories implements Filterable<Item>, Observer, Observable {
     private FriendsList friendList;
@@ -47,6 +49,10 @@ public class BrowsableInventories implements Filterable<Item>, Observer, Observa
     @Transient
     private HashSet<Observer> observers;
 
+    /**
+     * Contructs the model by fetching current users friends. Must be follow by getBrowsables()
+     * to further fetch the friends inventory items.
+     */
     public BrowsableInventories() {
         observers = new HashSet<>();
         list = new ArrayList<Item>();
@@ -70,7 +76,7 @@ public class BrowsableInventories implements Filterable<Item>, Observer, Observa
 
     /**
      * Returns thread that can be used to generate updated list of user's friends items async.
-     *
+     * Used to update the model in efforts of fetching all friends items.
      * @return
      */
     public Thread getBrowsables() {
@@ -92,7 +98,7 @@ public class BrowsableInventories implements Filterable<Item>, Observer, Observa
     }
 
     /**
-     * Return list of all user's freinds Items.
+     * Return list of all user's friends Items.
      *
      * @return list of all friends items
      */
