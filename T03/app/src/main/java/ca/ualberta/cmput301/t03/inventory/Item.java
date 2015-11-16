@@ -58,7 +58,15 @@ public class Item implements Observer, Observable {
     @Expose
     private UUID uuid;
 
-
+    /**
+     * Constructor for an item, where the required fields name and category are already known.
+     * UUID is randomly chosen.
+     * Mostly used for testing purposes.
+     * @param name String name for item
+     * @param category String category for item. This MUST be one of the pre-existing categories,
+     *                 avoid using this constructor for this reason, might lead to errors unless category
+     *                 is known beforehand.
+     */
     public Item(String name, String category) {
         uuid = UUID.randomUUID();
         setItemName(name);
@@ -66,6 +74,10 @@ public class Item implements Observer, Observable {
         observers = new HashSet<>();
     }
 
+    /**
+     * Default constructor for an item, where fields are all empty.
+     * UUID is randomly chosen.
+     */
     public Item() {
         uuid = UUID.randomUUID();
         observers = new HashSet<>();
@@ -74,7 +86,7 @@ public class Item implements Observer, Observable {
     /**
      * Get the item's name.
      *
-     * @return item name
+     * @return item name String
      */
     public String getItemName() {
         return itemName;
@@ -82,7 +94,7 @@ public class Item implements Observer, Observable {
 
     /**
      * Set the item's name.
-     *
+     * Used by AddItem and EditItem controllers.
      * @param itemName item's new name
      */
     public void setItemName(String itemName) {
@@ -100,7 +112,7 @@ public class Item implements Observer, Observable {
 
     /**
      * Set the item quantity.
-     *
+     * Used by AddItem and EditItem controllers.
      * @param itemQuantity new quantity
      */
     public void setItemQuantity(int itemQuantity) {
@@ -118,7 +130,7 @@ public class Item implements Observer, Observable {
 
     /**
      * Set the quality.
-     *
+     * Used by AddItem and EditItem controllers.
      * @param itemQuality quality
      */
     public void setItemQuality(String itemQuality) {
@@ -136,7 +148,7 @@ public class Item implements Observer, Observable {
 
     /**
      * Set the category.
-     *
+     * Used by AddItem and EditItem controllers.
      * @param itemCategory new category
      */
     public void setItemCategory(String itemCategory) {
@@ -145,7 +157,7 @@ public class Item implements Observer, Observable {
 
     /**
      * Check if item is private.
-     *
+     * Used by AddItem and EditItem controllers.
      * @return true == private, false otherwise
      */
     public boolean isItemIsPrivate() {
@@ -154,7 +166,7 @@ public class Item implements Observer, Observable {
 
     /**
      * Set private status.
-     *
+     * Used by AddItem and EditItem controllers.
      * @param itemIsPrivate new private status
      */
     public void setItemIsPrivate(boolean itemIsPrivate) {
@@ -172,7 +184,7 @@ public class Item implements Observer, Observable {
 
     /**
      * Set the description
-     *
+     * Used by AddItem and EditItem controllers.
      * @param itemDescription new description
      */
     public void setItemDescription(String itemDescription) {
@@ -181,7 +193,7 @@ public class Item implements Observer, Observable {
 
     /**
      * Get the UUID.
-     *
+     * Used when transitioning into AddItem and EditItem views.
      * @return uuid
      */
     public UUID getUuid() {
@@ -190,7 +202,8 @@ public class Item implements Observer, Observable {
 
     /**
      * Set the UUID.
-     *
+     * Not usually used, item's uuid is initialized on item creation.
+     * If used, ensure that uuid is indeed unique.
      * @param uuid new uuid
      */
     public void setUuid(UUID uuid) {
@@ -207,6 +220,7 @@ public class Item implements Observer, Observable {
 
     /**
      * Alias for notify observers, call this when a change has been made.
+     * Used by EditItem controllers.
      */
     public void commitChanges() {
         notifyObservers();
