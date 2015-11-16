@@ -45,6 +45,8 @@ public class Configuration implements Observable {
     private SharedPreferences.Editor editor;
 
     /**
+     * Create a new configuration model which shares a common data backend. Called by configuration
+     * activity, initialize user activity, and the main activity.
      * @param context Application context provided by the caller to allow for persistent storage
      */
     public Configuration(Context context) {

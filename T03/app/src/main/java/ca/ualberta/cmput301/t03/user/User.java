@@ -93,6 +93,9 @@ public class User implements Observable, Observer, Comparable<User> {
     /**
      * Default constructor for a User.
      *
+     * Sets up a datamanager that will handle backing up data to the local cache and Elastic Search.
+     * Is called by the PrimaryUser singleton.
+     *
      * @param username A string that uniquely identifies a User.
      * @param context  The current application context.
      */

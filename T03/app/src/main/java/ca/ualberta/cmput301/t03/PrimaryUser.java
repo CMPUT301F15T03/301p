@@ -36,12 +36,17 @@ public class PrimaryUser {
     private static Configuration config = null;
     private static Boolean setupCalled = false;
 
+    /**
+     * Hidden default constructor to enforce calling the static getInstance.
+     */
     private PrimaryUser() {
     }
 
     /**
      * Initializes the singleton with a context which it will user for both a User (dataManager)
      * and Configuration, calling setup prior to getInstance prevents a runtime exception.
+     *
+     * Called by the main activity to capture the initial startup of the application.
      *
      * @param context the application context
      */

@@ -60,7 +60,8 @@ public class MainActivity extends AppCompatActivity
 
     /**
      * called when the activity is requested, used to initialize most of the view elements and
-     * start the main application flow.
+     * start the main application flow. The applications main user is asserted and set after which
+     * the primary user is setup.
      *
      * @param savedInstanceState
      */
@@ -141,7 +142,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     /**
-     * Handler for opions menu item clicks, User primarily to enter the configuration view of the
+     * Handler for options menu item clicks, User primarily to enter the configuration view of the
      * application.
      *
      * @param item the menu item that was selected

@@ -43,6 +43,11 @@ public class FriendsList implements Observable, Filterable {
     private ArrayList<User> friends; // should this be a list or a set?
     private HashSet<Observer> observers;
 
+    /**
+     * Called by a User when the friendslist is requested. All updates to this friendslist are
+     * picked up via the observer pattern by the User that owns it, this is when changes are
+     * committed to persistent memory.
+     */
     public FriendsList() {
         friends = new ArrayList<>();
         observers = new HashSet<>();
@@ -67,7 +72,7 @@ public class FriendsList implements Observable, Filterable {
     }
 
     /**
-     * See if the friendslist has the user in it
+     * See if the friendslist has the user in it, called when adding a friend usually.
      *
      * @param user the user we are checking
      * @return true == contains, false == does not contain
@@ -77,7 +82,7 @@ public class FriendsList implements Observable, Filterable {
     }
 
     /**
-     * Add a friend to the friendslist
+     * Add a friend to the friendslist, called by the friendslist controller.
      *
      * @param user user to add
      */
@@ -97,7 +102,8 @@ public class FriendsList implements Observable, Filterable {
     }
 
     /**
-     * alias for notifyObservers, to be called after modifying the friendslist
+     * alias for notifyObservers, to be called after modifying the friendslist to have the User
+     * write changes to data caches.
      */
     public void commitChanges() {
         notifyObservers();
