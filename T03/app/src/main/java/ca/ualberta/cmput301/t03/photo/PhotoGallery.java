@@ -26,7 +26,7 @@ import java.util.Collection;
 import ca.ualberta.cmput301.t03.Observer;
 
 /**
- * Created by mmabuyo on 2015-10-29 .
+ * class PhotoGallery encapsulates a collection of {@link Photo}s
  */
 public class PhotoGallery {
     private Collection<Observer> observers;

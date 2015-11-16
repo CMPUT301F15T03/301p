@@ -34,12 +34,9 @@ import ca.ualberta.cmput301.t03.R;
 
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link PhotoGalleryFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link PhotoGalleryFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Fragment which provides an interface for a photo gallery.
+ *
+ * Used to display a {@link PhotoGallery} (ie, a collection of {@link Photo}s).
  */
 public class PhotoGalleryFragment extends Fragment implements Observer {
     // TODO: Rename parameter arguments, choose names that match
