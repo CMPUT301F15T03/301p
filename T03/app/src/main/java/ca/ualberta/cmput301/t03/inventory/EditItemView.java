@@ -38,6 +38,9 @@ import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.user.User;
 
+/**
+ * View which displays an interface to edit an {@link Item} in a {@link User}'s {@link Inventory}.
+ */
 public class EditItemView extends AppCompatActivity {
     private Item itemModel;
     private EditItemController controller;
@@ -50,6 +53,10 @@ public class EditItemView extends AppCompatActivity {
     private User user;
     private Activity activity = this;
 
+    /**
+     * {@inheritDoc}
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
