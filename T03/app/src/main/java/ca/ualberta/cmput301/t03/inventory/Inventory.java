@@ -49,7 +49,10 @@ public class Inventory implements Filterable<Item>, Observable, Observer {
     private HashSet<Observer> observers;
 
     /**
-     * Should be constructed by the systems singleton, and further managed by the data manager.
+     * Should be constructed by the systems singleton or a User itself via the getInventory method,
+     * and further managed by the data manager.
+     *
+     * Creates a new inventory that can be watched and added/removed to/from.
      */
     public Inventory() {
         observers = new HashSet<>();
