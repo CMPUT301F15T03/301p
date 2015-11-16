@@ -19,6 +19,7 @@
  */
 
 package ca.ualberta.cmput301.t03.inventory;
+import ca.ualberta.cmput301.t03.R;
 
 import android.app.Activity;
 import android.util.Log;
@@ -29,10 +30,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import ca.ualberta.cmput301.t03.R;
-
 /**
  * Controls adding an item to user's inventory.
+ * Has view AddItemView and the user's Inventory as its model.
  */
 public class AddItemController {
     Spinner categorySelect;
@@ -40,6 +40,15 @@ public class AddItemController {
     private View v;
     private Activity activity;
     private Inventory inventory;
+
+    /**
+     * Default constructor for AddItemController.
+     * Used to initialize an instance of the AddItemController from a relevant View
+     * on an instance of the Inventory model.
+     * @param v The AddItemView attached to this controller
+     * @param activity Used to close the AddItemView (activity) when item is successfully added to inventory
+     * @param inventory The model that will be updated once item is successfully added.
+     */
 
     public AddItemController(View v, Activity activity, Inventory inventory) {
         this.v = v;
@@ -67,7 +76,9 @@ public class AddItemController {
     }
 
     /**
-     * Controls adding item to inventory.
+     * On-click listener for the Add button.
+     * This function grabs values from the AddItem fields and stores them in a private item model.
+     * It successfully adds an item to inventory if the fields are valid, and closes the activity.
      */
     public void addItemToInventory() {
         // get fields
@@ -115,8 +126,10 @@ public class AddItemController {
 
     /**
      * Checks if item's fields are valid.
-     *
-     * @return if fields are valid
+     * Required fields include the item name and category. Only the length of the name (>0) is checked.
+     * The Spinner listener sets the item's category and that is also checked.
+     * More validity checks can be added.
+     * @return true if fields are valid; else false.
      */
     public boolean checkFieldsValid() {
         EditText itemNameText = (EditText) v.findViewById(R.id.itemName);
@@ -129,11 +142,7 @@ public class AddItemController {
         if (itemModel.getItemCategory().length() == 0) {
             return false;
         }
-
         return true;
     }
 
-    public void addItemToInventoryButtonClicked() {
-        addItemToInventory();
-    }
 }

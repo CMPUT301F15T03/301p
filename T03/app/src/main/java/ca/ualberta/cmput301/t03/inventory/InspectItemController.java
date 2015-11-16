@@ -31,7 +31,7 @@ import ca.ualberta.cmput301.t03.trading.TradeOfferComposeActivity;
 import ca.ualberta.cmput301.t03.user.User;
 
 /**
- * Created by mmabuyo on 2015-10-29.
+ * Controller for inspecting an item from another user's inventory.
  */
 public class InspectItemController {
     private Item itemModel;
@@ -40,6 +40,17 @@ public class InspectItemController {
     private Inventory inventory;
     private User owner;
 
+    /**
+     * Default constructor for InspectItemController.
+     * Used to initialize an instance of the InspectItemController from a relevant View
+     * on an instance of the Inventory model.
+     *
+     * @param v The EditItemView attached to this controller
+     * @param activity Used to switch to another activity (Trade)
+     * @param owner The user that owns the inventory the item belongs to.
+     * @param inventory The inventory model the item belongs to.
+     * @param item The item being inspected.
+     */
     public InspectItemController(View v, Activity activity, User owner, Inventory inventory, Item item) {
         this.v = v;
         this.activity = activity;
@@ -48,6 +59,11 @@ public class InspectItemController {
         itemModel = item;
     }
 
+    /**
+     * Onclick listener for Propose button.
+     * Starts a new TradeOfferComposeActivity and
+     * passes along the borrower, owner and item details to the new activity.
+     */
     public void proposeTradeButtonClicked() {
         Intent i = new Intent(activity.getBaseContext(), TradeOfferComposeActivity.class);
         i.putExtra("trade/compose/borrower", Parcels.wrap(PrimaryUser.getInstance()));
