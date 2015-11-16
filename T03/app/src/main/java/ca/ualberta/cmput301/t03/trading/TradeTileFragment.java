@@ -34,12 +34,7 @@ import ca.ualberta.cmput301.t03.R;
 
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link TradeTileFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link TradeTileFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * class TradeTileFragment is a Fragment which provides a summary tile-view to a trade.
  */
 public class TradeTileFragment extends Fragment implements Observer {
     // TODO: Rename parameter arguments, choose names that match
