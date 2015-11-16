@@ -52,7 +52,7 @@ import ca.ualberta.cmput301.t03.user.User;
  * In particular, {@link Trade#getTradeUUID()} will remain constant across modifications to these
  * fields and also across all time and space.
  * <p>
- * State is managed by the
+ * State is managed by the Trade's tradeState ({@link TradeState}) member.
  */
 public class Trade implements Observable {
     public final static String type = "Trade";
@@ -93,7 +93,9 @@ public class Trade implements Observable {
     }
 
     /**
-     * Creates a new Trade, gives it a unique identifier ({@link UUID}), and persists it.
+     * Creates a new Trade, gives it a unique identifier ({@link UUID}), and persists it to local
+     * and remote storage. This particular trade can be fetched later using the other Trade
+     * constructor.
      *
      * @param borrower       User offering to trade for the owner's single item
      * @param owner          Owner of the single item
@@ -129,9 +131,11 @@ public class Trade implements Observable {
      * and updates this Trade object with any new data.
      * <p>
      * Fields updated, if changed:
-     * - state
-     * - borrowersItems
-     * - comments
+     * <ul>
+     *     <li>state</li>
+     *     <li>borrowersItems</li>
+     *     <li>comments</li>
+     * </ul>
      */
     private void load() {
         DataKey key = new DataKey(Trade.type, this.getTradeUUID().toString());
@@ -174,6 +178,8 @@ public class Trade implements Observable {
 
     /**
      * @return True if this Trade is closed. Returns false otherwise.
+     *
+     * @see {@link TradeState#isClosed}
      */
     public Boolean isClosed() {
         return getState().isClosed();
@@ -181,6 +187,8 @@ public class Trade implements Observable {
 
     /**
      * @return True if this Trade is open. Returns false otherwise.
+     *
+     * @see {@link TradeState#isOpen}
      */
     public Boolean isOpen() {
         return getState().isOpen();
@@ -188,6 +196,8 @@ public class Trade implements Observable {
 
     /**
      * @return True if this Trade is editable. Returns false otherwise.
+     *
+     * @see {@link TradeState#isEditable}
      */
     public Boolean isEditable() {
         return getState().isEditable();
@@ -196,7 +206,7 @@ public class Trade implements Observable {
     /**
      * Gets the current state of this Trade
      *
-     * @return TradeState of this Trade
+     * @return {@link TradeState} of this Trade
      */
     public TradeState getState() {
         this.load();
@@ -247,6 +257,9 @@ public class Trade implements Observable {
     /**
      * Sets the {@link Item}s which the 'borrower' @{link User} is offering in this trade
      *
+     * To be used while composing the trade. Will throw an exception if the trade is not in an
+     * editable state.
+     *
      * @param newBorrowersItems List of {@link Item}s to offer
      * @throws IllegalTradeModificationException if this trade is no longer in an editable {@link TradeState}
      */
@@ -292,6 +305,8 @@ public class Trade implements Observable {
     /**
      * Sets the owner comments for this trade
      *
+     * To be used after accepting a trade.
+     *
      * @param comments The owner's comments
      */
     public void setComments(String comments) {
@@ -300,7 +315,7 @@ public class Trade implements Observable {
     }
 
     /**
-     * Offers this trade. Only a trade with {@link TradeStateComposing} can be offered.
+     * Offers this trade. Only a trade in state {@link TradeStateComposing} can be offered.
      *
      * @throws IllegalTradeStateTransition if this trade cannot be offered
      */
@@ -309,7 +324,7 @@ public class Trade implements Observable {
     }
 
     /**
-     * Cancels this trade. Only a trade with {@link TradeStateComposing} can be cancelled.
+     * Cancels this trade. Only a trade in state {@link TradeStateComposing} can be cancelled.
      *
      * @throws IllegalTradeStateTransition if this trade cannot be cancelled
      */
@@ -318,7 +333,7 @@ public class Trade implements Observable {
     }
 
     /**
-     * Accepts this trade. Only a trade with {@link TradeStateOffered} can be accepted.
+     * Accepts this trade. Only a trade in state {@link TradeStateOffered} can be accepted.
      *
      * @throws IllegalTradeStateTransition if this trade cannot be accepted
      */
@@ -327,7 +342,7 @@ public class Trade implements Observable {
     }
 
     /**
-     * Declines this trade. Only a trade with {@link TradeStateOffered} can be declined.
+     * Declines this trade. Only a trade in state {@link TradeStateOffered} can be declined.
      *
      * @throws IllegalTradeStateTransition if this trade cannot be declined
      */
