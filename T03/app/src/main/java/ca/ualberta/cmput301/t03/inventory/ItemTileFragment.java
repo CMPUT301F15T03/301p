@@ -30,6 +30,9 @@ import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.R;
 
+/**
+ * Fragment for displaying a single {@link Item}.
+ */
 public class ItemTileFragment extends Fragment implements Observer {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_NAME = "name";
