@@ -21,15 +21,24 @@
 package ca.ualberta.cmput301.t03.user;
 
 /**
- * Created by ross on 15-10-29.
+ * Controls searching for friends via a query
  */
 public class FriendsSearchController {
     private FriendsList friendsList;
 
+    /**
+     * Sets the query to search for friends by. Use to filter the global friends list by a query.
+     *
+     * @param query The username to query
+     */
     public void setQuery(String query) {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Clears the query to search for friends by. This resets the query to nil, ie there will
+     * be no filter on the search results.
+     */
     public void clearQuery() {
         throw new UnsupportedOperationException();
     }
