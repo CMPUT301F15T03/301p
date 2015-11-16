@@ -45,6 +45,12 @@ public class UserProfile implements Observable {
 
     private HashSet<Observer> observers;
 
+    /**
+     * Creates a new profile for a user and should be observed by a User.
+     *
+     * Called by User when getting an instance of a UserProfile. Should not be called independently
+     * as it wont be able to sync with any backend data service.
+     */
     public UserProfile() {
         observers = new HashSet<>();
     }

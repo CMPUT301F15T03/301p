@@ -41,7 +41,7 @@ public class InitializeUserController {
     private Context context;
 
     /**
-     * Constructor for InitializeUserController.
+     * Constructor for InitializeUserController. Called by the initialize user activity.
      *
      * @param context application context
      */
