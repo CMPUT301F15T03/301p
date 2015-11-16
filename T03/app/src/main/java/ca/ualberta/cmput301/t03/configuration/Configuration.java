@@ -63,7 +63,8 @@ public class Configuration implements Observable {
     }
 
     /**
-     * Check if download images is enabled for the application
+     * Check if download images is enabled for the application.
+     * This is used by the photo model to check determine if photos need to be downloaded.
      *
      * @return Boolean representing if download images setting is enabled or not (true == enabled)
      */
@@ -72,7 +73,8 @@ public class Configuration implements Observable {
     }
 
     /**
-     * Set the value of download images setting
+     * Set the value of download images setting.
+     * This is called by the configuration controller when changing settings.
      *
      * @param state true == enabled, false == disable
      */
@@ -104,7 +106,8 @@ public class Configuration implements Observable {
     }
 
     /**
-     * set the application's associated user id
+     * set the application's associated user id.
+     * called by the initialization activity.
      *
      * @param userName the user id you want to associate with the application
      */

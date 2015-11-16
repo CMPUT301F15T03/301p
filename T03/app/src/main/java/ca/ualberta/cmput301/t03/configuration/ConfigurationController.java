@@ -35,7 +35,8 @@ public class ConfigurationController {
     }
 
     /**
-     * Set the state of download images in the configuration
+     * Set the state of download images in the configuration model, this change will be reflected
+     * in all classes interested in configuration.
      *
      * @param state The state desired for downloadImages in the configuration
      */
