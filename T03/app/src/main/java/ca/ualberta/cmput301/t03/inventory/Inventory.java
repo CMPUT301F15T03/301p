@@ -48,6 +48,9 @@ public class Inventory implements Filterable<Item>, Observable, Observer {
     @Transient
     private HashSet<Observer> observers;
 
+    /**
+     * Should be constructed by systems singleton, and further managed by the data manager.
+     */
     public Inventory() {
         observers = new HashSet<>();
         items = new LinkedHashMap<>();
@@ -55,7 +58,7 @@ public class Inventory implements Filterable<Item>, Observable, Observer {
 
     /**
      * Get the hashmap of items.
-     *
+     * Used by anyone needing to grab the inventory. Examples: BrowsingFriends, Browsing Self.
      * @return the hashmap of items
      */
     public HashMap<UUID, Item> getItems() {
@@ -63,7 +66,7 @@ public class Inventory implements Filterable<Item>, Observable, Observer {
     }
 
     /**
-     * Set the items, used by GSON
+     * Set the items, used by GSON and the data manager when loading the inventory.
      *
      * @param items items to be set
      */
@@ -77,6 +80,7 @@ public class Inventory implements Filterable<Item>, Observable, Observer {
 
     /**
      * Get an Item.
+     * Examples usages: Inspecting an Item, drawing items to ListView in inventory obtaining item data in a trade.
      *
      * @param itemUUID the item's UUID
      * @return the item
@@ -87,6 +91,7 @@ public class Inventory implements Filterable<Item>, Observable, Observer {
 
     /**
      * Get an Item.
+     * Examples usages: Inspecting an Item, drawing items to ListView in inventory obtaining item data in a trade.
      *
      * @param itemUUID the item's string representation of the UUID
      * @return the item
@@ -96,8 +101,8 @@ public class Inventory implements Filterable<Item>, Observable, Observer {
     }
 
     /**
-     * add an item to inventory
-     *
+     * Add an item to inventory.
+     * Used during creation of items.
      * @param item item to add
      */
     public void addItem(Item item) {
@@ -108,7 +113,7 @@ public class Inventory implements Filterable<Item>, Observable, Observer {
 
     /**
      * remove an item from inventory
-     *
+     * User may delete items from inventory.
      * @param item item to remove
      */
     public void removeItem(Item item) {
