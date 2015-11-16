@@ -26,6 +26,7 @@ import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -35,7 +36,8 @@ import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.user.User;
 
 /**
- * Controls editing an item.
+ * Controls editing an existing item in the user's inventory.
+ * Has view EditItemView and the user's item as a model.
  */
 public class EditItemController {
     private Item itemModel;
@@ -45,7 +47,15 @@ public class EditItemController {
     private Spinner categorySelect;
     private User user;
 
-
+    /**
+     * Default constructor for EditItemController
+     * Used to initialize an instance of the EditItemController from a relevant View
+     * on an instance of the Inventory model.
+     * @param v The EditItemView attached to this controller
+     * @param activity Used to close the EditItemView (activity) when item is successfully saved to user's inventory.
+     * @param inventory The model of the user's inventory to be updated.
+     * @param item The item model to be updated.
+     */
     public EditItemController(View v, Activity activity, Inventory inventory, Item item) {
         this.v = v;
         this.activity = activity;
@@ -70,10 +80,12 @@ public class EditItemController {
     }
 
     /**
-     * Saves edited item to inventory. Should not create a new item.
+     * Onclick listener of Save button.
+     * Saves edited item to inventory by taking EditItemView fields and resaving them to item model.
+     * Should not create a new item.
      */
     public void saveItemToInventory() {
-        // get views and resave
+        // get fields and resave
         EditText itemNameText = (EditText) v.findViewById(R.id.itemName);
         String itemName = itemNameText.getText().toString();
 
@@ -90,6 +102,11 @@ public class EditItemController {
 
         EditText itemDescriptionText = (EditText) v.findViewById(R.id.itemDescription);
         String itemDescription = itemDescriptionText.getText().toString();
+
+        if (!checkFieldsValid()) {
+            Toast.makeText(activity, "Please fill in the required fields.", Toast.LENGTH_LONG).show();
+            return;
+        }
 
         itemModel.setItemName(itemName);
         itemModel.setItemQuantity(itemQuantity);
@@ -110,7 +127,8 @@ public class EditItemController {
     }
 
     /**
-     * Controls what happens when Edit button is clicked. Enables fields to be changed by the user.
+     * Onclick listener for Edit button.
+     * Enables previously uneditable fields to be edited by the user.
      */
     public void editItemButtonClicked() {
         // show save button, upload photos button, and hide edit button
@@ -130,9 +148,31 @@ public class EditItemController {
     }
 
     /**
-     * Deletes item from inventory.
+     * Checks if item's fields are valid.
+     * Required fields include the item name and category. Only the length of the name (>0) is checked.
+     * The Spinner listener sets the item's category and that is also checked.
+     * More validity checks can be added.
+     * @return true if fields are valid; else false.
+     */
+    public boolean checkFieldsValid() {
+        EditText itemNameText = (EditText) v.findViewById(R.id.itemName);
+        String itemName = itemNameText.getText().toString();
+
+        // the only things required are item name and category
+        if (itemName.length() == 0) {
+            return false;
+        }
+        if (itemModel.getItemCategory().length() == 0) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Onclick listener for Delete button.
+     * Deletes item from the user's inventory, with no warnings.
      *
-     * @param itemid
+     * @param itemid the UUID of the item to be deleted.
      */
     public void deleteItemButtonClicked(UUID itemid) {
         final UUID itemUUID = itemid;

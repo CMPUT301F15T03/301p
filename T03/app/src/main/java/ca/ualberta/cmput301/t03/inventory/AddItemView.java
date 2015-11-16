@@ -81,7 +81,7 @@ public class AddItemView extends AppCompatActivity {
         addToInventoryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                controller.addItemToInventoryButtonClicked();
+                controller.addItemToInventory();
             }
         });
     }
