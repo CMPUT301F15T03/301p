@@ -50,7 +50,7 @@ public class BrowsableInventories implements Filterable<Item>, Observer, Observa
     private HashSet<Observer> observers;
 
     /**
-     * Contructs the model by fetching current users friends. Must be follow by getBrowsables()
+     * Constructs the model by fetching current users friends. Must be follow by getBrowsables()
      * to further fetch the friends inventory items.
      */
     public BrowsableInventories() {

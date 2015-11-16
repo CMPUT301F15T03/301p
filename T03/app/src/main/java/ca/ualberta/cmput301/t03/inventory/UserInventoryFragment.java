@@ -82,6 +82,7 @@ public class UserInventoryFragment extends Fragment implements Observer {
         return fragment;
     }
 
+
     public static UserInventoryFragment newInstance() {
         return new UserInventoryFragment();
     }

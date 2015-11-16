@@ -49,7 +49,7 @@ public class Inventory implements Filterable<Item>, Observable, Observer {
     private HashSet<Observer> observers;
 
     /**
-     * Should be constructed by systems singleton, and further managed by the data manager.
+     * Should be constructed by the systems singleton, and further managed by the data manager.
      */
     public Inventory() {
         observers = new HashSet<>();
@@ -79,7 +79,7 @@ public class Inventory implements Filterable<Item>, Observable, Observer {
     }
 
     /**
-     * Get an Item.
+     * Get an Item from the inventory model.
      * Examples usages: Inspecting an Item, drawing items to ListView in inventory obtaining item data in a trade.
      *
      * @param itemUUID the item's UUID
@@ -90,7 +90,7 @@ public class Inventory implements Filterable<Item>, Observable, Observer {
     }
 
     /**
-     * Get an Item.
+     * Get an Item from the inventory model.
      * Examples usages: Inspecting an Item, drawing items to ListView in inventory obtaining item data in a trade.
      *
      * @param itemUUID the item's string representation of the UUID

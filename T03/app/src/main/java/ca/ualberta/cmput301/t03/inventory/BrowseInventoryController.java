@@ -29,7 +29,6 @@ import ca.ualberta.cmput301.t03.datamanager.HttpDataManager;
 
 /**
  * Controller for the BrowsableInventories model
- * <p>
  * Automatically commits changes when filters are added.
  */
 public class BrowseInventoryController {
