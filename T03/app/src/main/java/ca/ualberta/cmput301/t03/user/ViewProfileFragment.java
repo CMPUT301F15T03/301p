@@ -44,7 +44,7 @@ import ca.ualberta.cmput301.t03.R;
 
 
 /**
- *
+ * Fragment which provides an interface for viewing a {@link User}'s {@link UserProfile}.
  */
 public class ViewProfileFragment extends Fragment implements Observer {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

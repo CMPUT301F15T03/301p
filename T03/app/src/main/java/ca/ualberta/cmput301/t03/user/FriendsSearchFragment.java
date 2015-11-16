@@ -34,12 +34,7 @@ import ca.ualberta.cmput301.t03.R;
 
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link FriendsSearchFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link FriendsSearchFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Fragment which provides an interface for searching for friends in the global {@link User} database
  */
 public class FriendsSearchFragment extends Fragment implements Observer {
     // TODO: Rename parameter arguments, choose names that match
