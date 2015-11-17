@@ -4,6 +4,8 @@ ca.ualberta.cmput301.t03.common.exceptions
 ca.ualberta.cmput301.t03.common.http
 ca.ualberta.cmput301.t03.configuration
 ca.ualberta.cmput301.t03.datamanager
+ca.ualberta.cmput301.t03.datamanager.elasticsearch
+ca.ualberta.cmput301.t03.datamanager.jobs
 ca.ualberta.cmput301.t03.inventory
 ca.ualberta.cmput301.t03.photo
 ca.ualberta.cmput301.t03.trading
