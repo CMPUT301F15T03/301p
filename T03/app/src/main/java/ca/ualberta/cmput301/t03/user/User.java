@@ -76,6 +76,9 @@ public class User implements Observable, Observer, Comparable<User> {
      * Constructor that should only be used
      * for Parceling and Unparceling {@link Parcel}
      *
+     * ex.
+     *  User u = new User("john12345");
+     *
      * @param username The User's username.
      */
     @ParcelConstructor
@@ -96,6 +99,9 @@ public class User implements Observable, Observer, Comparable<User> {
      * Sets up a datamanager that will handle backing up data to the local cache and Elastic Search.
      * Is called by the PrimaryUser singleton.
      *
+     * ex.
+     *  User u = new User("john12345", getActivity().getApplicationContext());
+     *
      * @param username A string that uniquely identifies a User.
      * @param context  The current application context.
      */
@@ -103,8 +109,6 @@ public class User implements Observable, Observer, Comparable<User> {
         this.observers = new HashSet<>();
         this.context = context;
         this.dataManager = TradeApp.getInstance().createDataManager(true);
-
-//                new CachedDataManager(new HttpDataManager(true));
         this.username = username;
     }
 
@@ -114,6 +118,11 @@ public class User implements Observable, Observer, Comparable<User> {
      * Should only be used on a freshly Unparceled user, in order to restore context.
      *
      * Use the default constructor in all other cases.
+     *
+     * ex.
+     *  User u = Parcels.unwrap(getArguments().getParcelable(ARG_PARAM1));
+     *  User u2 = new User(u, getContext());
+     *
      *
      * @param user An unparceled User; will not be fully initialized.
      * @param context The current application contest.

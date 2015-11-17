@@ -69,7 +69,12 @@ public class UserProfile implements Observable {
     /**
      * Set the profile's city.
      *
-     * This should only be called by the view!
+     * This should only be called by the controller!
+     *
+     * ex.
+     *  UserProfile profile = PrimaryUser.getInstance().getProfile();
+     *  //In the controller code
+     *  profile.setCity("Portland");
      *
      * @param city new value for city
      */
@@ -80,7 +85,7 @@ public class UserProfile implements Observable {
     /**
      * Get the profile's email.
      *
-     * This should only be called by the view!
+     * This should be called by the view.
      *
      * @return profile's email
      */
@@ -93,6 +98,11 @@ public class UserProfile implements Observable {
      *
      * This should only be called by the controller!
      *
+     * ex.
+     *  UserProfile profile = PrimaryUser.getInstance().getProfile();
+     *  //In the controller code
+     *  profile.setEmail("steve@example.com");
+     *
      * @param email new value for email
      */
     public void setEmail(String email) {
@@ -100,9 +110,9 @@ public class UserProfile implements Observable {
     }
 
     /**
-     * Set the profile's phone number.
+     * Get the profile's phone number.
      *
-     * This should only be called by the controller!
+     * This should be called by the view.
      *
      * @return profile's phone number.
      */
@@ -114,6 +124,11 @@ public class UserProfile implements Observable {
      * Set the profile's phone number.
      *
      * This should only be called by the controller!
+     *
+     * ex.
+     *  UserProfile profile = PrimaryUser.getInstance().getProfile();
+     *  //In the controller code
+     *  profile.setPhone("780 123 1234");
      *
      * @param phone the new value for phone number
      */
