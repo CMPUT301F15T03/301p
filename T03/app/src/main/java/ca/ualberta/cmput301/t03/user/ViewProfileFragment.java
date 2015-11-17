@@ -71,15 +71,21 @@ public class ViewProfileFragment extends Fragment implements Observer {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
+     * ex.
+     *  User u = new User("john12345", getContext());
+     *  ViewProfileFragment v = ViewProfileFragment.newInstance(u);
+     *  getSupportFragmentManager()
+     *         .beginTransaction()
+     *         .add(R.id.my_content_view, v)
+     *         .commit()
+     *
      * @param user The User whose profile should be viewed.
      * @return A new instance of fragment ViewProfileFragment.
      */
     public static ViewProfileFragment newInstance(User user) {
         ViewProfileFragment fragment = new ViewProfileFragment();
         Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, username);
         args.putParcelable(ARG_PARAM1, Parcels.wrap(user));
-
 
         fragment.setArguments(args);
         return fragment;

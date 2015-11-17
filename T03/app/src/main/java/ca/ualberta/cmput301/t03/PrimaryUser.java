@@ -80,7 +80,12 @@ public class PrimaryUser {
         return ourInstance;
     }
 
-
+    /**
+     * Destroys the current user and detaches all observers.
+     *
+     * Generally, this should NOT be used in the app!
+     * It is only useful for testing purposes, when switching users.
+     */
     public static void clearInstance() {
         setupCalled = false;
         if (ourInstance != null){
