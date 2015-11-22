@@ -40,7 +40,8 @@ import ca.ualberta.cmput301.t03.photo.PhotoGallery;
 public class Item implements Observer, Observable {
 
     @Transient
-    private PhotoGallery photoList; // we will expose this later
+    @Expose
+    private PhotoGallery photoList;
     @Transient
     private Collection<Observer> observers;
     @Expose
@@ -72,6 +73,9 @@ public class Item implements Observer, Observable {
         setItemName(name);
         setItemCategory(category);
         observers = new HashSet<>();
+        photoList = new PhotoGallery();
+        photoList.addObserver(this);
+
     }
 
     /**
@@ -81,6 +85,8 @@ public class Item implements Observer, Observable {
     public Item() {
         uuid = UUID.randomUUID();
         observers = new HashSet<>();
+        photoList = new PhotoGallery();
+        photoList.addObserver(this);
     }
 
     /**
@@ -216,6 +222,7 @@ public class Item implements Observer, Observable {
 
     public void setPhotoList(PhotoGallery photoList) {
         this.photoList = photoList;
+        photoList.addObserver(this);
     }
 
     /**
