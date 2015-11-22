@@ -352,7 +352,7 @@ public class PhotosTest extends ActivityInstrumentationTestCase2<MainActivity> {
                     Photo photo = item.getPhotoList().getPhotos().get(0);
                     assertFalse(photo.isDownloaded());
 
-                    photo.downloadPhoto();
+                    photo.getPhoto();
                     assertTrue(photo.isDownloaded());
 
                     //settings.setAutoDownloadModeValue(originalValue);
