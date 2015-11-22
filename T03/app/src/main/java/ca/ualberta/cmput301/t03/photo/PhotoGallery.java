@@ -95,7 +95,9 @@ public class PhotoGallery implements Observable, Observer{
      * @param photo
      */
     public void removePhoto(Photo photo) {
-        throw new UnsupportedOperationException();
+        photos.remove(photo);
+        photo.deletePhoto();
+        notifyObservers();
     }
 
     /**
@@ -105,6 +107,14 @@ public class PhotoGallery implements Observable, Observer{
      */
     public void addPhoto(Photo photo) {
         photos.add(photo);
+        notifyObservers();
+    }
+
+    public void clear() {
+        for (Photo photo : photos) {
+            photo.deletePhoto();
+        }
+        photos.clear();
         notifyObservers();
     }
 

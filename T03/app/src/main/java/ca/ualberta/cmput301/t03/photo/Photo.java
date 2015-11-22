@@ -117,6 +117,15 @@ public class Photo implements Observable {
         }
     }
 
+    public void deletePhoto() {
+        try {
+            dataManager.deleteIfExists(new DataKey(Photo.type, photoUUID.toString()));
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void notifyObservers() {
         for (Observer observer : observers) {

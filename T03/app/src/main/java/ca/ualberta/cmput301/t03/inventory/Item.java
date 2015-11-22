@@ -225,6 +225,10 @@ public class Item implements Observer, Observable {
         photoList.addObserver(this);
     }
 
+    public void clearPhotoList() {
+        photoList.clear();
+    }
+
     /**
      * Alias for notify observers, call this when a change has been made.
      * Used by EditItem controllers.
