@@ -48,6 +48,7 @@ import java.util.UUID;
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.photo.ItemPhotoController;
+import ca.ualberta.cmput301.t03.photo.PhotoGalleryView;
 import ca.ualberta.cmput301.t03.user.User;
 
 /**
@@ -166,6 +167,19 @@ public class EditItemView extends AppCompatActivity {
                 onUploadPhotosButtonClicked();
             }
         });
+
+        Button viewImagesButton = (Button) findViewById(R.id.viewImagesbutton);
+        viewImagesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EditItemView.this, PhotoGalleryView.class);
+                intent.putExtra("USER", user.getUsername());
+                intent.putExtra("ITEM", itemModel.getUuid().toString());
+                startActivity(intent);
+            }
+        });
+
+
     }
 
     private void onUploadPhotosButtonClicked() {
