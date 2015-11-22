@@ -20,18 +20,27 @@
 
 package ca.ualberta.cmput301.t03.photo;
 
+import com.google.gson.annotations.Expose;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
+import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
 
 /**
  * class PhotoGallery encapsulates a collection of {@link Photo}s
  */
-public class PhotoGallery {
+public class PhotoGallery implements Observable, Observer{
     private Collection<Observer> observers;
     private Photo photoInFocus;
+    @Expose
     private ArrayList<Photo> photos;
+
+    public PhotoGallery() {
+        observers = new ArrayList<>();
+        photos = new ArrayList<>();
+    }
 
     /**
      * Gets photo that is in current full-view of the phone's screen.
@@ -67,6 +76,9 @@ public class PhotoGallery {
      */
     public void setPhotos(ArrayList<Photo> photos) {
         this.photos = photos;
+        for (Photo photo : photos) {
+            photo.addObserver(this);
+        }
     }
 
     public void load() {
@@ -92,8 +104,35 @@ public class PhotoGallery {
      * @param photo
      */
     public void addPhoto(Photo photo) {
-        throw new UnsupportedOperationException();
+        photos.add(photo);
+        notifyObservers();
     }
 
 
+    @Override
+    public void notifyObservers() {
+        for (Observer observer : observers) {
+            observer.update(this);
+        }
+    }
+
+    @Override
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void clearObservers() {
+        observers.clear();
+    }
+
+    @Override
+    public void update(Observable observable) {
+        notifyObservers();
+    }
 }
