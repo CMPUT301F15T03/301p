@@ -87,6 +87,19 @@ public class Photo implements Observable {
      *
      * For an ImageView, call setBitmap(Photo.getPhoto()); -- i think
      */
+    public void downloadPhoto() {
+        if (!isDownloaded) {
+            try {
+                base64Photo = dataManager.getData(new DataKey(Photo.type, photoUUID.toString()), Base64Wrapper.class);
+                isDownloaded = true;
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
     public Bitmap getPhoto() {
         if (!isDownloaded) {
             try {
