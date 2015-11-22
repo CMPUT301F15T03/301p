@@ -121,6 +121,7 @@ public class Inventory implements Filterable<Item>, Observable, Observer {
      */
     public void removeItem(Item item) {
         items.remove(item.getUuid());
+        item.clearPhotoList();
         item.removeObserver(this);
         notifyObservers();
     }
