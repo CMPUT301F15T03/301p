@@ -1,11 +1,14 @@
 package ca.ualberta.cmput301.t03.photo;
 
 import android.content.Context;
+import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+
+import ca.ualberta.cmput301.t03.R;
 
 /**
  * Modified from http://developer.android.com/guide/topics/ui/layout/gridview.html
@@ -37,8 +40,9 @@ public class ImageAdapter extends BaseAdapter {
         if (convertView == null) {
             // if it's not recycled, initialize some attributes
             imageView = new ImageView(context);
-            imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+            imageView.setLayoutParams(new GridView.LayoutParams(parent.getWidth()/2, parent.getWidth()/2));
+            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
             imageView.setPadding(8, 8, 8, 8);
         } else {
             imageView = (ImageView) convertView;
