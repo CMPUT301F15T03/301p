@@ -50,11 +50,11 @@ public class AddItemController {
      * @param inventory The model that will be updated once item is successfully added.
      */
 
-    public AddItemController(View v, Activity activity, Inventory inventory) {
+    public AddItemController(View v, Activity activity, Inventory inventory, Item item) {
         this.v = v;
         this.activity = activity;
         this.inventory = inventory;
-        itemModel = new Item();
+        this.itemModel = item;
 
         // Source, accessed Nov 3, 2015
         // http://developer.android.com/guide/topics/ui/controls/spinner.html#Populate

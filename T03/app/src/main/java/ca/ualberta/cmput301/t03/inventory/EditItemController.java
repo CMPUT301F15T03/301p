@@ -118,7 +118,6 @@ public class EditItemController {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-//                inventory.addItem(itemModel);
                 itemModel.commitChanges();
                 activity.finish();
             }
