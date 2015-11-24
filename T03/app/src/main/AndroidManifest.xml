@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ca.ualberta.cmput301.t03" >
+    package="ca.ualberta.cmput301.t03">
 
     <!-- To access Google+ APIs: -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -12,11 +12,11 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,7 +27,7 @@
             android:name=".configuration.ConfigurationActivity"
             android:label="@string/title_activity_configuration"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ca.ualberta.cmput301.t03.MainActivity" />
@@ -35,38 +35,32 @@
         <activity
             android:name=".user.InitializeUserActivity"
             android:label="@string/title_activity_initialize_user"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".inventory.AddItemView"
             android:label="@string/title_activity_add_item_view"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".inventory.EditItemView"
             android:label="@string/title_activity_edit_item_view"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".inventory.InspectItemView"
             android:label="@string/title_activity_inspect_item_view"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".trading.TradeOfferComposeActivity"
             android:label="@string/title_activity_trade_offer_compose"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".trading.TradeOfferReviewActivity"
             android:label="@string/title_activity_trade_offer_review"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".user.EditProfileActivity"
             android:label="@string/title_activity_edit_profile"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ca.ualberta.cmput301.t03.MainActivity" />
@@ -75,13 +69,13 @@
             android:name=".user.ViewProfileActivity"
             android:label="@string/title_activity_view_profile"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ca.ualberta.cmput301.t03.MainActivity" />
         </activity>
-        <activity android:name=".user.ViewInventoryActivity" >
-        </activity>
+        <activity android:name=".user.ViewInventoryActivity"></activity>
+        <activity android:name=".photo.PhotoGalleryView"></activity>
     </application>
 
 </manifest>
