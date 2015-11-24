@@ -21,7 +21,17 @@
 package ca.ualberta.cmput301.t03.inventory;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -31,22 +41,26 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
+import ca.ualberta.cmput301.t03.photo.ItemPhotoController;
+import ca.ualberta.cmput301.t03.photo.PhotoGalleryView;
 import ca.ualberta.cmput301.t03.user.User;
 
 /**
  * View which displays an interface to edit an {@link Item} in a {@link User}'s {@link Inventory}.
  */
 public class EditItemView extends AppCompatActivity {
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int SELECT_FILE = 2;
+
     private Item itemModel;
     private EditItemController controller;
-    private Button editItemButton;
-    private Button saveToInventoryButton;
-    private Button deleteItemButton;
+    private ItemPhotoController itemPhotoController;
 
     private Inventory inventoryModel;
 
@@ -77,6 +91,7 @@ public class EditItemView extends AppCompatActivity {
                     // get the actual item model clicked
                     itemModel = inventoryModel.getItems().get(itemUUID);
                     controller = new EditItemController(findViewById(R.id.edit_item_view), activity, inventoryModel, itemModel);
+                    itemPhotoController = new ItemPhotoController(itemModel);
 
                     // populate with fields
                     final EditText itemNameText = (EditText) findViewById(R.id.itemName);
@@ -119,7 +134,7 @@ public class EditItemView extends AppCompatActivity {
 
         /* BUTTON LISTENERS */
         // save to inventory listener
-        editItemButton = (Button) findViewById(R.id.editItem);
+        Button editItemButton = (Button) findViewById(R.id.editItem);
         editItemButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -128,7 +143,7 @@ public class EditItemView extends AppCompatActivity {
         });
 
         // save to inventory listener
-        saveToInventoryButton = (Button) findViewById(R.id.saveItem);
+        Button saveToInventoryButton = (Button) findViewById(R.id.saveItem);
         saveToInventoryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -137,13 +152,114 @@ public class EditItemView extends AppCompatActivity {
         });
 
         // delete from inventory listener
-        deleteItemButton = (Button) findViewById(R.id.deleteItem);
+        Button deleteItemButton = (Button) findViewById(R.id.deleteItem);
         deleteItemButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 controller.deleteItemButtonClicked(itemUUID);
             }
         });
+
+        Button uploadPhotosButton = (Button) findViewById(R.id.uploadPhotos);
+        uploadPhotosButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onUploadPhotosButtonClicked();
+            }
+        });
+
+        Button viewImagesButton = (Button) findViewById(R.id.viewImagesbutton);
+        viewImagesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EditItemView.this, PhotoGalleryView.class);
+                intent.putExtra("USER", user.getUsername());
+                intent.putExtra("ITEM", itemModel.getUuid().toString());
+                startActivity(intent);
+            }
+        });
+
+
+    }
+
+    private void onUploadPhotosButtonClicked() {
+        final CharSequence[] items = { "Take A Photo", "Choose Photo from Gallery" };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(EditItemView.this);
+        builder.setTitle("Attach Photo!");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                if (item == 0) {
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    File f = new File(android.os.Environment
+                            .getExternalStorageDirectory(), "temp.jpg");
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+                    startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+                } else if (item == 1) {
+                    Intent intent = new Intent(
+                            Intent.ACTION_PICK,
+                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    intent.setType("image/*");
+                    startActivityForResult(
+                            Intent.createChooser(intent, "Select File"),
+                            SELECT_FILE);
+                }
+            }
+        });
+        builder.show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Bitmap tempImage = null;
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_IMAGE_CAPTURE) {
+                File f = new File(Environment.getExternalStorageDirectory()
+                        .toString());
+                for (File temp : f.listFiles()) {
+                    if (temp.getName().equals("temp.jpg")) {
+                        f = temp;
+                        break;
+                    }
+                }
+                try {
+                    tempImage = BitmapFactory.decodeFile(f.getAbsolutePath(),
+                            new BitmapFactory.Options());
+                    f.delete();
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else if (requestCode == SELECT_FILE) {
+                Uri selectedImageUri = data.getData();
+
+                String tempPath = getPath(selectedImageUri, EditItemView.this);
+                tempImage = BitmapFactory.decodeFile(tempPath, new BitmapFactory.Options());
+            }
+        }
+        final Bitmap image = tempImage;
+        if (tempImage != null) {
+            AsyncTask worker = new AsyncTask() {
+                @Override
+                protected Object doInBackground(Object[] params) {
+                    itemPhotoController.addPhotoToItem(image);
+                    return null;
+                }
+            };
+            worker.execute();
+        }
+    }
+
+    public String getPath(Uri uri, Activity activity) {
+        String[] projection = { MediaStore.MediaColumns.DATA };
+        Cursor cursor = activity
+                .managedQuery(uri, projection, null, null, null);
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
     }
 
 

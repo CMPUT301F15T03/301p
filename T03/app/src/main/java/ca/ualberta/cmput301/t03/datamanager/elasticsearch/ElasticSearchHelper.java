@@ -92,11 +92,11 @@ public class ElasticSearchHelper {
     public void writeJson(String json, String suffix) throws IOException {
         byte[] requestContents = json.getBytes();
         HttpResponse response = client.makePutRequest(suffix, requestContents);
-
+        String requestResponse = new String(response.getContents());
         if (response.getResponseCode() != HttpStatusCode.OK.getStatusCode() &&
                 response.getResponseCode() != HttpStatusCode.CREATED.getStatusCode()) {
-            throw new NotImplementedException(String.format("Dev note: Unexpected response '%d' from the PUT Elastic Search endpoint.",
-                    response.getResponseCode()));
+            throw new NotImplementedException(String.format("Dev note: Unexpected response '%d' from the PUT Elastic Search endpoint.: %s",
+                    response.getResponseCode(), new String(response.getContents())));
         }
     }
 
