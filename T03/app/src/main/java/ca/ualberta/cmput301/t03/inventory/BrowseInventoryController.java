@@ -22,7 +22,7 @@ package ca.ualberta.cmput301.t03.inventory;
 
 import android.content.Context;
 
-import ca.ualberta.cmput301.t03.Filter;
+import ca.ualberta.cmput301.t03.filters.Filter;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.datamanager.DataManager;
 import ca.ualberta.cmput301.t03.datamanager.HttpDataManager;

@@ -196,6 +196,7 @@ public class UserInventoryFragment extends Fragment implements Observer {
             HashMap<String, String> hm = new HashMap<String, String>();
             hm.put("tileViewItemName", item.getItemName());
             hm.put("tileViewItemCategory", item.getItemCategory());
+            hm.put("tileViewItemImage", Integer.toString(R.drawable.photo_unavailable));
             tiles.add(hm);
             positionMap.put(i, item.getUuid());
             i++;
@@ -211,8 +212,8 @@ public class UserInventoryFragment extends Fragment implements Observer {
     public void createListView(View v) {
         listview = (ListView) v.findViewById(R.id.InventoryListView);
         List<HashMap<String, String>> tiles = buildTiles();
-        String[] from = {"tileViewItemName", "tileViewItemCategory"};
-        int[] to = {R.id.tileViewItemName, R.id.tileViewItemCategory};
+        String[] from = {"tileViewItemName", "tileViewItemCategory", "tileViewItemImage"};
+        int[] to = {R.id.tileViewItemName, R.id.tileViewItemCategory, R.id.tileViewItemImage};
         adapter = new SimpleAdapter(mActivity.getBaseContext(), tiles, R.layout.fragment_item_tile, from, to);
         listview.setAdapter(adapter);
 

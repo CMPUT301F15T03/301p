@@ -18,13 +18,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ca.ualberta.cmput301.t03;
+package ca.ualberta.cmput301.t03.filters;
+
+import com.android.internal.util.Predicate;
+
+import java.util.regex.Pattern;
+
+import ca.ualberta.cmput301.t03.inventory.Item;
 
 /**
  * Base class for Filter
  */
 public class Filter {
-    public Filter() {
-        throw new UnsupportedOperationException();
+
+    String subject;
+    String predicate;
+
+    public Filter(String subject, String predicate) {
+        this.subject = subject;
+        this.predicate = predicate;
     }
 }
