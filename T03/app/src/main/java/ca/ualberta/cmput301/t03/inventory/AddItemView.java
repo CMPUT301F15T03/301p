@@ -109,7 +109,7 @@ public class AddItemView extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 controller.addItemToInventory();
-            }
+                }
         });
 
         Button uploadPhotosButton = (Button) findViewById(R.id.uploadPhotos);

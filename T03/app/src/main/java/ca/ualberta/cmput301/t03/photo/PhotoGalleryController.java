@@ -24,10 +24,10 @@ package ca.ualberta.cmput301.t03.photo;
  * Controls the photo gallery for an item.
  */
 public class PhotoGalleryController {
-    private PhotoGallery photoGalleryModel;
+    private PhotoGallery model;
 
-    public PhotoGalleryController(PhotoGallery photoGalleryModel) {
-        this.photoGalleryModel = photoGalleryModel;
+    public PhotoGalleryController(PhotoGallery model) {
+        this.model = model;
     }
 
     /**
@@ -56,5 +56,9 @@ public class PhotoGalleryController {
      */
     public void swipeDown() {
         throw new UnsupportedOperationException();
+    }
+
+    public void removePhoto(Integer index) {
+        model.removePhoto(model.getPhotos().get(index));
     }
 }
