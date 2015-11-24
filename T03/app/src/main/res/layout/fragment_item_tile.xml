@@ -12,10 +12,10 @@
         android:layout_height="121dp"
         android:descendantFocusability="blocksDescendants">
 
-        <ImageButton
+        <ImageView
             android:layout_width="142dp"
             android:layout_height="match_parent"
-            android:id="@+id/tileViewImage"
+            android:id="@+id/tileViewItemImage"
             android:layout_row="0"
             android:layout_column="0"
             android:layout_rowSpan="4"

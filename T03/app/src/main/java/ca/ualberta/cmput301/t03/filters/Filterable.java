@@ -18,10 +18,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ca.ualberta.cmput301.t03;
+package ca.ualberta.cmput301.t03.filters;
 
 // TODO in the UML this interface has data members, which is not legal Java
 
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Filterable allows a collection of some data to have filters applied to it that will change
@@ -57,5 +60,5 @@ public interface Filterable<T> {
      *
      * @return
      */
-    T getFilteredItems();
+    List<T> getFilteredItems(ArrayList<T> list, List<FilterCriteria> filters);
 }

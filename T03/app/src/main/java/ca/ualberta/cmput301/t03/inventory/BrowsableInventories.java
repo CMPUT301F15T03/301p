@@ -25,9 +25,14 @@ import org.parceler.Transient;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
-import ca.ualberta.cmput301.t03.Filter;
-import ca.ualberta.cmput301.t03.Filterable;
+import ca.ualberta.cmput301.t03.filters.CollectionFilter;
+import ca.ualberta.cmput301.t03.filters.Filter;
+import ca.ualberta.cmput301.t03.filters.FilterCriteria;
+import ca.ualberta.cmput301.t03.filters.Filterable;
+import ca.ualberta.cmput301.t03.filters.item_criteria.*;
+
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.PrimaryUser;
@@ -103,7 +108,9 @@ public class BrowsableInventories implements Filterable<Item>, Observer, Observa
      * @return list of all friends items
      */
     public ArrayList<Item> getList() {
-        return this.list;
+        List<FilterCriteria> filters = new ArrayList<FilterCriteria>();
+        filters.add(new PrivateFilterCriteria());
+        return getFilteredItems(this.list, filters);
     }
 
     /**
@@ -134,8 +141,12 @@ public class BrowsableInventories implements Filterable<Item>, Observer, Observa
      * {@inheritDoc}
      */
     @Override
-    public Item getFilteredItems() {
-        throw new UnsupportedOperationException();
+    public ArrayList<Item> getFilteredItems(ArrayList<Item> list, List<FilterCriteria> filters) {
+        CollectionFilter<ArrayList> collectionFilter = new CollectionFilter<ArrayList>();
+        for(FilterCriteria filter: filters){
+            collectionFilter.addFilterCriteria(filter);
+        }
+        return collectionFilter.filterCopy(list);
     }
 
     /**

@@ -24,18 +24,21 @@ import com.google.gson.annotations.Expose;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
-import ca.ualberta.cmput301.t03.Filter;
-import ca.ualberta.cmput301.t03.Filterable;
+import ca.ualberta.cmput301.t03.filters.Filter;
+import ca.ualberta.cmput301.t03.filters.FilterCriteria;
+import ca.ualberta.cmput301.t03.filters.Filterable;
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
+import ca.ualberta.cmput301.t03.inventory.Item;
 
 /**
  * Friendslist maintains a list of Users that that a User has, Remote data access is handled by the
  * User which owns the friendslist. When a user receives an update from its friendslist, the data
  * is written to the local index and the remote index.
  */
-public class FriendsList implements Observable, Filterable {
+public class FriendsList implements Observable, Filterable<Item> {
 
     public final static String type = "FriendsList";
 
@@ -176,7 +179,7 @@ public class FriendsList implements Observable, Filterable {
      * {@inheritDoc}
      */
     @Override
-    public Object getFilteredItems() {
+    public ArrayList<Item> getFilteredItems(ArrayList<Item> list, List<FilterCriteria> filters) {
         throw new UnsupportedOperationException();
     }
 

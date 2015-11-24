@@ -25,15 +25,20 @@ import com.google.gson.annotations.Expose;
 import org.parceler.Parcel;
 import org.parceler.Transient;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.UUID;
 
-import ca.ualberta.cmput301.t03.Filter;
-import ca.ualberta.cmput301.t03.Filterable;
+import ca.ualberta.cmput301.t03.filters.CollectionFilter;
+import ca.ualberta.cmput301.t03.filters.Filter;
+import ca.ualberta.cmput301.t03.filters.FilterCriteria;
+import ca.ualberta.cmput301.t03.filters.Filterable;
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
+import ca.ualberta.cmput301.t03.filters.item_criteria.PrivateFilterCriteria;
 
 /**
  * Inventory maintains a collection of items and will notify the observing user of any changes.
@@ -48,6 +53,8 @@ public class Inventory implements Filterable<Item>, Observable, Observer {
     @Transient
     private HashSet<Observer> observers;
 
+    private ArrayList<FilterCriteria> filters;
+
     /**
      * Should be constructed by the systems singleton or a User itself via the getInventory method,
      * and further managed by the data manager.
@@ -57,6 +64,8 @@ public class Inventory implements Filterable<Item>, Observable, Observer {
     public Inventory() {
         observers = new HashSet<>();
         items = new LinkedHashMap<>();
+        filters = new ArrayList<FilterCriteria>();
+        filters.add(new PrivateFilterCriteria());
     }
 
     /**
@@ -65,7 +74,17 @@ public class Inventory implements Filterable<Item>, Observable, Observer {
      * @return the hashmap of items
      */
     public HashMap<UUID, Item> getItems() {
-        return items;
+        LinkedHashMap<UUID, Item> filteredItems = new LinkedHashMap<>();
+        ArrayList<Item> itemList = new ArrayList<Item>();
+        for (Item item: this.items.values()){
+            itemList.add(item);
+        }
+        ArrayList<Item> filteredList = getFilteredItems(itemList, this.filters);
+        for (Item item: filteredList){
+            filteredItems.put(item.getUuid(), item);
+        }
+
+        return filteredItems;
     }
 
     /**
@@ -164,8 +183,12 @@ public class Inventory implements Filterable<Item>, Observable, Observer {
      * {@inheritDoc}
      */
     @Override
-    public Item getFilteredItems() {
-        throw new UnsupportedOperationException();
+    public ArrayList<Item> getFilteredItems(ArrayList<Item> list, List<FilterCriteria> filters) {
+        CollectionFilter<ArrayList> collectionFilter = new CollectionFilter<ArrayList>();
+        for(FilterCriteria filter: filters){
+            collectionFilter.addFilterCriteria(filter);
+        }
+        return collectionFilter.filterCopy(list);
     }
 
     /**
