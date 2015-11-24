@@ -1,5 +1,10 @@
 package ca.ualberta.cmput301.t03.inventory;
 
+
+/**
+http://stackoverflow.com/questions/6327465/displaying-bitmap-image-in-imageview-by-simple-adapter
+ */
+
 import java.util.HashMap;
         import java.util.List;
         import java.util.Map;
