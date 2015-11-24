@@ -72,6 +72,7 @@ public class UserInventoryFragment extends Fragment implements Observer {
     private EnhancedSimpleAdapter adapter;
 
     private HashMap<Integer, UUID> positionMap;
+    List<HashMap<String, Object>> tiles;
 
     public UserInventoryFragment() {
         // Required empty public constructor
@@ -201,9 +202,11 @@ public class UserInventoryFragment extends Fragment implements Observer {
             hm.put("tileViewItemName", item.getItemName());
             hm.put("tileViewItemCategory", item.getItemCategory());
             if(item.getPhotoList().getPhotos().size() > 0){
-                hm.put("tileViewItemImage", item.getPhotoList().getPhotos().get(0));
+                hm.put("tileViewItemImage", (Bitmap) item.getPhotoList().getPhotos().get(0).getPhoto());
             }
-            hm.put("tileViewItemImage", ((BitmapDrawable) getResources().getDrawable(R.drawable.photo_unavailable)).getBitmap());
+            else {
+                hm.put("tileViewItemImage", ((BitmapDrawable) getResources().getDrawable(R.drawable.photo_unavailable)).getBitmap());
+            }
             tiles.add(hm);
             positionMap.put(i, item.getUuid());
             i++;
@@ -217,19 +220,48 @@ public class UserInventoryFragment extends Fragment implements Observer {
      * @param v
      */
     public void createListView(View v) {
-        listview = (ListView) v.findViewById(R.id.InventoryListView);
-        List<HashMap<String, Object>> tiles = buildTiles();
-        String[] from = {"tileViewItemName", "tileViewItemCategory", "tileViewItemImage"}; //
-        int[] to = {R.id.tileViewItemName, R.id.tileViewItemCategory, R.id.tileViewItemImage}; //
-        adapter = new EnhancedSimpleAdapter(mActivity.getBaseContext(), tiles, R.layout.fragment_item_tile, from, to);
-        listview.setAdapter(adapter);
-
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        final View view = v;
+        AsyncTask worker = new AsyncTask() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                inspectItem(model.getItems().get(positionMap.get(position)));
+            protected Object doInBackground(Object[] params) {
+                tiles = buildTiles();
+                return null;
             }
-        });
+
+            @Override
+            protected void onPostExecute(Object o) {
+                listview = (ListView) view.findViewById(R.id.InventoryListView);
+//                List<HashMap<String, Object>> tiles = buildTiles();
+                String[] from = {"tileViewItemName", "tileViewItemCategory", "tileViewItemImage"}; //
+                int[] to = {R.id.tileViewItemName, R.id.tileViewItemCategory, R.id.tileViewItemImage}; //
+                adapter = new EnhancedSimpleAdapter(mActivity.getBaseContext(), tiles, R.layout.fragment_item_tile, from, to);
+                listview.setAdapter(adapter);
+
+                listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        inspectItem(model.getItems().get(positionMap.get(position)));
+                    }
+                });
+
+                super.onPostExecute(o);
+            }
+        };
+        worker.execute();
+
+//        listview = (ListView) v.findViewById(R.id.InventoryListView);
+//        List<HashMap<String, Object>> tiles = buildTiles();
+//        String[] from = {"tileViewItemName", "tileViewItemCategory", "tileViewItemImage"}; //
+//        int[] to = {R.id.tileViewItemName, R.id.tileViewItemCategory, R.id.tileViewItemImage}; //
+//        adapter = new EnhancedSimpleAdapter(mActivity.getBaseContext(), tiles, R.layout.fragment_item_tile, from, to);
+//        listview.setAdapter(adapter);
+//
+//        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                inspectItem(model.getItems().get(positionMap.get(position)));
+//            }
+//        });
 
     }
 
