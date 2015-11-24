@@ -23,6 +23,9 @@ package ca.ualberta.cmput301.t03.inventory;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -32,7 +35,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
+
 
 import org.parceler.Parcels;
 
@@ -40,6 +43,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import ca.ualberta.cmput301.t03.Observable;
@@ -65,7 +69,7 @@ public class UserInventoryFragment extends Fragment implements Observer {
 
     private FloatingActionButton addItemFab;
     private ListView listview;
-    private SimpleAdapter adapter;
+    private EnhancedSimpleAdapter adapter;
 
     private HashMap<Integer, UUID> positionMap;
 
@@ -183,8 +187,8 @@ public class UserInventoryFragment extends Fragment implements Observer {
 
     }
 
-    private ArrayList<HashMap<String, String>> buildTiles() {
-        ArrayList<HashMap<String, String>> tiles = new ArrayList<>();
+    private ArrayList<HashMap<String, Object>> buildTiles() {
+        ArrayList<HashMap<String, Object>> tiles = new ArrayList<>();
 //        Item[] itemList = {new Item("test", "test"), new Item("test", "test"), new Item("test", "test"), new Item("test", "test"), new Item("test", "test") };
         //SHOULD BE REPLACED WITH ONCE LINKED
         //HashMap<UUID, Item> tempMap = model.getItems();
@@ -193,10 +197,13 @@ public class UserInventoryFragment extends Fragment implements Observer {
         int i = 0;
         positionMap.clear();
         for (Item item : model.getItems().values()) {
-            HashMap<String, String> hm = new HashMap<String, String>();
+            HashMap<String, Object> hm = new HashMap<String, Object>();
             hm.put("tileViewItemName", item.getItemName());
             hm.put("tileViewItemCategory", item.getItemCategory());
-            hm.put("tileViewItemImage", Integer.toString(R.drawable.photo_unavailable));
+            if(item.getPhotoList().getPhotos().size() > 0){
+                hm.put("tileViewItemImage", item.getPhotoList().getPhotos().get(0));
+            }
+            hm.put("tileViewItemImage", ((BitmapDrawable) getResources().getDrawable(R.drawable.photo_unavailable)).getBitmap());
             tiles.add(hm);
             positionMap.put(i, item.getUuid());
             i++;
@@ -211,10 +218,10 @@ public class UserInventoryFragment extends Fragment implements Observer {
      */
     public void createListView(View v) {
         listview = (ListView) v.findViewById(R.id.InventoryListView);
-        List<HashMap<String, String>> tiles = buildTiles();
-        String[] from = {"tileViewItemName", "tileViewItemCategory", "tileViewItemImage"};
-        int[] to = {R.id.tileViewItemName, R.id.tileViewItemCategory, R.id.tileViewItemImage};
-        adapter = new SimpleAdapter(mActivity.getBaseContext(), tiles, R.layout.fragment_item_tile, from, to);
+        List<HashMap<String, Object>> tiles = buildTiles();
+        String[] from = {"tileViewItemName", "tileViewItemCategory", "tileViewItemImage"}; //
+        int[] to = {R.id.tileViewItemName, R.id.tileViewItemCategory, R.id.tileViewItemImage}; //
+        adapter = new EnhancedSimpleAdapter(mActivity.getBaseContext(), tiles, R.layout.fragment_item_tile, from, to);
         listview.setAdapter(adapter);
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
