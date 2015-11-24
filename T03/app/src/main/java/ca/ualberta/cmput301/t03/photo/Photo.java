@@ -53,8 +53,8 @@ public class Photo implements Observable {
     private Collection<Observer> observers;
     private DataManager dataManager;
 
-
     private Base64Wrapper base64Photo;
+    private Bitmap bitmap;
     private boolean isDownloaded;
 
     public Photo() {
@@ -92,6 +92,8 @@ public class Photo implements Observable {
             try {
                 base64Photo = dataManager.getData(new DataKey(Photo.type, photoUUID.toString()), Base64Wrapper.class);
                 isDownloaded = true;
+                byte[] bytes = Base64.decode(base64Photo.getContents(), Base64.NO_WRAP);
+                bitmap =  BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
             }
             catch (IOException e) {
                 e.printStackTrace();
@@ -111,9 +113,11 @@ public class Photo implements Observable {
                 return null;
             }
         }
-
-        byte[] bytes = Base64.decode(base64Photo.getContents(), Base64.NO_WRAP);
-        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        if (bitmap == null) {
+            byte[] bytes = Base64.decode(base64Photo.getContents(), Base64.NO_WRAP);
+            bitmap =  BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        }
+        return bitmap;
     }
 
     public void setPhoto(Bitmap photo) {
