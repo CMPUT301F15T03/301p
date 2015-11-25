@@ -82,44 +82,43 @@ public class EditItemView extends AppCompatActivity {
 
         user = PrimaryUser.getInstance();
 
-        Thread worker = new Thread(new Runnable() {
+        AsyncTask worker2 = new AsyncTask() {
             @Override
-            public void run() {
+            protected Object doInBackground(Object[] params) {
                 try {
                     inventoryModel = user.getInventory();
-
                     // get the actual item model clicked
                     itemModel = inventoryModel.getItems().get(itemUUID);
                     controller = new EditItemController(findViewById(R.id.edit_item_view), activity, inventoryModel, itemModel);
                     itemPhotoController = new ItemPhotoController(itemModel);
-
-                    // populate with fields
-                    final EditText itemNameText = (EditText) findViewById(R.id.itemName);
-                    final EditText itemQuantityText = (EditText) findViewById(R.id.itemQuantity);
-                    final EditText itemQualityText = (EditText) findViewById(R.id.itemQuality);
-                    final Spinner itemCategoryText = (Spinner) findViewById(R.id.itemCategory);
-                    final CheckBox itemIsPrivateCheckBox = (CheckBox) findViewById(R.id.itemPrivateCheckBox);
-                    final EditText itemDescriptionText = (EditText) findViewById(R.id.itemDescription);
-
-                    // reference, accessed October 3, 2015
-                    // http://stackoverflow.com/questions/5161951/android-only-the-original-thread-that-created-a-view-hierarchy-can-touch-its-vi
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            itemNameText.setText(itemModel.getItemName());
-                            itemQuantityText.setText(String.valueOf(itemModel.getItemQuantity()));
-                            itemQualityText.setText(itemModel.getItemQuality());
-                            itemCategoryText.setSelection(((ArrayAdapter) itemCategoryText.getAdapter()).getPosition(itemModel.getItemCategory()));
-                            itemIsPrivateCheckBox.setChecked(itemModel.isItemIsPrivate());
-                            itemDescriptionText.setText(itemModel.getItemDescription());
-                        }
-                    });
-                } catch (IOException e) {
+                }
+                catch (IOException e) {
                     e.printStackTrace();
                 }
+                return null;
             }
-        });
-        worker.start();
+
+            @Override
+            protected void onPostExecute(Object o) {
+                // populate with fields
+                EditText itemNameText = (EditText) findViewById(R.id.itemName);
+                EditText itemQuantityText = (EditText) findViewById(R.id.itemQuantity);
+                EditText itemQualityText = (EditText) findViewById(R.id.itemQuality);
+                Spinner itemCategoryText = (Spinner) findViewById(R.id.itemCategory);
+                CheckBox itemIsPrivateCheckBox = (CheckBox) findViewById(R.id.itemPrivateCheckBox);
+                EditText itemDescriptionText = (EditText) findViewById(R.id.itemDescription);
+
+                // reference, accessed October 3, 2015
+                // http://stackoverflow.com/questions/5161951/android-only-the-original-thread-that-created-a-view-hierarchy-can-touch-its-vi
+                itemNameText.setText(itemModel.getItemName());
+                itemQuantityText.setText(String.valueOf(itemModel.getItemQuantity()));
+                itemQualityText.setText(itemModel.getItemQuality());
+                itemCategoryText.setSelection(((ArrayAdapter) itemCategoryText.getAdapter()).getPosition(itemModel.getItemCategory()));
+                itemIsPrivateCheckBox.setChecked(itemModel.isItemIsPrivate());
+                itemDescriptionText.setText(itemModel.getItemDescription());
+            }
+        };
+        worker2.execute();
 
         // set EditText views to be uneditable
         this.findViewById(R.id.itemName).setFocusable(false);

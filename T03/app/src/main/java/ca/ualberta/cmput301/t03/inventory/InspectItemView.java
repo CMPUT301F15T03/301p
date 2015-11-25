@@ -22,6 +22,8 @@ package ca.ualberta.cmput301.t03.inventory;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -29,8 +31,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import org.parceler.Parcels;
+
+import java.io.IOException;
 
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
@@ -67,45 +72,36 @@ public class InspectItemView extends AppCompatActivity {
         }
 
         itemModel = Parcels.unwrap(getIntent().getParcelableExtra("inventory/inspect/item"));
+        // populate with fields
+        EditText itemNameText = (EditText) findViewById(R.id.itemName);
+        EditText itemQuantityText = (EditText) findViewById(R.id.itemQuantity);
+        EditText itemQualityText = (EditText) findViewById(R.id.itemQuality);
+        EditText itemCategoryText = (EditText) findViewById(R.id.itemCategory);
+        CheckBox itemIsPrivateCheckBox = (CheckBox) findViewById(R.id.itemPrivateCheckBox);
+        EditText itemDescriptionText = (EditText) findViewById(R.id.itemDescription);
 
-        Thread worker = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                // populate with fields
-                final EditText itemNameText = (EditText) findViewById(R.id.itemName);
-                final EditText itemQuantityText = (EditText) findViewById(R.id.itemQuantity);
-                final EditText itemQualityText = (EditText) findViewById(R.id.itemQuality);
-                final EditText itemCategoryText = (EditText) findViewById(R.id.itemCategory);
-                final CheckBox itemIsPrivateCheckBox = (CheckBox) findViewById(R.id.itemPrivateCheckBox);
-                final EditText itemDescriptionText = (EditText) findViewById(R.id.itemDescription);
+        // reference, accessed October 3, 2015
+        // http://stackoverflow.com/questions/5161951/android-only-the-original-thread-that-created-a-view-hierarchy-can-touch-its-vi
+        itemNameText.setText(itemModel.getItemName());
+        itemNameText.setFocusable(false);
 
-                // reference, accessed October 3, 2015
-                // http://stackoverflow.com/questions/5161951/android-only-the-original-thread-that-created-a-view-hierarchy-can-touch-its-vi
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        itemNameText.setText(itemModel.getItemName());
-                        itemQuantityText.setText(String.valueOf(itemModel.getItemQuantity()));
-                        itemQualityText.setText(itemModel.getItemQuality());
-                        itemCategoryText.setText(itemModel.getItemCategory());
-                        itemIsPrivateCheckBox.setChecked(itemModel.isItemIsPrivate());
-                        itemDescriptionText.setText(itemModel.getItemDescription());
-                    }
-                });
+        itemQuantityText.setText(String.valueOf(itemModel.getItemQuantity()));
+        itemQuantityText.setFocusable(false);
 
-                controller = new InspectItemController(findViewById(R.id.edit_item_view), activity, user, inventoryModel, itemModel);
-            }
-        });
-        worker.start();
+        itemQualityText.setText(itemModel.getItemQuality());
+        itemQualityText.setFocusable(false);
 
-        // set EditText views to be uneditable
-        this.findViewById(R.id.itemName).setFocusable(false);
-        this.findViewById(R.id.itemQuality).setFocusable(false);
-        this.findViewById(R.id.itemQuantity).setFocusable(false);
-        this.findViewById(R.id.itemCategory).setFocusable(false);
-        this.findViewById(R.id.itemPrivateCheckBox).setFocusable(false);
-        this.findViewById(R.id.itemPrivateCheckBox).setEnabled(false);
-        this.findViewById(R.id.itemDescription).setFocusable(false);
+        itemCategoryText.setText(itemModel.getItemCategory());
+        itemCategoryText.setFocusable(false);
+
+        itemIsPrivateCheckBox.setChecked(itemModel.isItemIsPrivate());
+        itemIsPrivateCheckBox.setFocusable(false);
+        itemIsPrivateCheckBox.setEnabled(false);
+
+        itemDescriptionText.setText(itemModel.getItemDescription());
+        itemDescriptionText.setFocusable(false);
+
+        controller = new InspectItemController(findViewById(R.id.edit_item_view), activity, user, inventoryModel, itemModel);
 
         /* BUTTON LISTENERS */
         // save to inventory listener
@@ -127,6 +123,30 @@ public class InspectItemView extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        AsyncTask worker = new AsyncTask() {
+            public Bitmap image = null;
+            @Override
+            protected Object doInBackground(Object[] params) {
+                    try {
+                        if (user.getInventory().getItem(itemModel.getUuid()).getPhotoList().getPhotos().size() > 0) {
+                            image = user.getInventory().getItem(itemModel.getUuid()).getPhotoList().getPhotos().get(0).getPhoto();
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                return null;
+            }
+            @Override
+            protected void onPostExecute(Object o) {
+                if (image != null) {
+                    ImageView imageView = (ImageView) findViewById(R.id.itemMainPhoto);
+                    imageView.setImageBitmap(image);
+                }
+            }
+        };
+        worker.execute();
+
 
     }
 }
