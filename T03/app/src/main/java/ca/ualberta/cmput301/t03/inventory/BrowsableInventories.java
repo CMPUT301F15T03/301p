@@ -91,6 +91,9 @@ public class BrowsableInventories implements Filterable<Item>, Observer, Observa
                 try {
                     for (User friend : friendList.getFriends()) {
                         for (Item item : friend.getInventory().getItems().values()) {
+                            if (item.getPhotoList().getPhotos().size() > 0) {
+                                item.getPhotoList().getPhotos().get(0).downloadPhoto();
+                            }
                             list.add(item);
                         }
                     }

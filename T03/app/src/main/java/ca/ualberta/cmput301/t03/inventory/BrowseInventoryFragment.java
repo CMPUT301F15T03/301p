@@ -22,6 +22,8 @@ package ca.ualberta.cmput301.t03.inventory;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -60,8 +62,8 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
     View mView;
 
     ArrayList<Item> allItems;
-    ArrayList<HashMap<String, String>> listItems;
-    SimpleAdapter adapter;
+    ArrayList<HashMap<String, Object>> listItems;
+    EnhancedSimpleAdapter adapter;
 
     private BrowsableInventories model;
     private BrowseInventoryController controller;
@@ -95,8 +97,8 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
         } catch (Exception e) {
             throw new RuntimeException();
         }
-        listItems = new ArrayList<HashMap<String, String>>();
-        allItems = new ArrayList<Item>();
+        listItems = new ArrayList<>();
+        allItems = new ArrayList<>();
         setHasOptionsMenu(true);
     }
 
@@ -107,9 +109,9 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
         mView = v;
 
         ListView listview = (ListView) v.findViewById(R.id.BrowseListView);
-        String[] from = {"tileViewItemName", "tileViewItemCategory"};
-        int[] to = {R.id.tileViewItemName, R.id.tileViewItemCategory};
-        adapter = new SimpleAdapter(mActivity.getBaseContext(), listItems, R.layout.fragment_item_tile, from, to);
+        String[] from = {"tileViewItemName", "tileViewItemCategory", "tileViewItemImage"};
+        int[] to = {R.id.tileViewItemName, R.id.tileViewItemCategory, R.id.tileViewItemImage};
+        adapter = new EnhancedSimpleAdapter(mActivity.getBaseContext(), listItems, R.layout.fragment_item_tile, from, to);
         listview.setAdapter(adapter);
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -138,7 +140,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
                     @Override
                     public void run() {
                         allItems = model.getList();
-                        for (Item item : allItems) {
+                            for (Item item : model.getList()) {
                             addToListView(item);
                         }
                     }
@@ -155,9 +157,15 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
      * @param item
      */
     public void addToListView(Item item) {
-        HashMap<String, String> hm = new HashMap<String, String>();
+        HashMap<String, Object> hm = new HashMap<>();
         hm.put("tileViewItemName", item.getItemName());
         hm.put("tileViewItemCategory", item.getItemCategory());
+        if (item.getPhotoList().getPhotos().size() > 0 ) {
+            hm.put("tileViewItemImage", (Bitmap) item.getPhotoList().getPhotos().get(0).getPhoto());
+        }
+        else {
+            hm.put("tileViewItemImage", ((BitmapDrawable) getResources().getDrawable(R.drawable.photo_unavailable)).getBitmap());
+        }
         listItems.add(hm);
         adapter.notifyDataSetChanged();
     }
