@@ -25,7 +25,8 @@
 
             <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="127dp"
+                android:weightSum="1">
 
                 <ImageView
                     android:layout_width="171dp"
@@ -35,13 +36,24 @@
                     android:contentDescription=""
                     android:src="@drawable/photo_unavailable"/>
 
-                <Button
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.25"
-                    android:id="@+id/proposeTradeButton"
-                    android:text="Propose Trade"
-                    android:layout_gravity="right"/>
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/proposeTradeButton"
+                        android:text="Propose Trade" />
+
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="View Photos"
+                        android:id="@+id/viewImagesbutton"
+                        android:layout_gravity="center_horizontal" />
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -163,34 +175,6 @@
                     android:layout_weight="1"
                     android:inputType="textMultiLine"
                     android:id="@+id/itemDescription" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" >
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Photos" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" >
-
-                <Button
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Upload Photos"
-                    android:id="@+id/uploadPhotos"
-                    android:visibility="gone"/>
 
             </LinearLayout>
 
