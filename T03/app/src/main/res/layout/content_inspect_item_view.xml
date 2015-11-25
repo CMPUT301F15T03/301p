@@ -29,12 +29,13 @@
                 android:weightSum="1">
 
                 <ImageView
-                    android:layout_width="171dp"
-                    android:layout_height="117dp"
+                    android:layout_width="179dp"
+                    android:layout_height="match_parent"
                     android:id="@+id/itemMainPhoto"
                     android:layout_gravity="left|top"
                     android:contentDescription=""
-                    android:src="@drawable/photo_unavailable"/>
+                    android:src="@drawable/photo_unavailable"
+                    android:padding="6dp" />
 
                 <LinearLayout
                     android:orientation="vertical"
