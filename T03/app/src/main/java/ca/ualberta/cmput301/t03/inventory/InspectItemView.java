@@ -21,6 +21,7 @@
 package ca.ualberta.cmput301.t03.inventory;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -33,6 +34,7 @@ import org.parceler.Parcels;
 
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
+import ca.ualberta.cmput301.t03.photo.PhotoGalleryView;
 import ca.ualberta.cmput301.t03.user.User;
 
 /**
@@ -112,6 +114,17 @@ public class InspectItemView extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 controller.proposeTradeButtonClicked();
+            }
+        });
+
+        Button viewImagesButton = (Button) findViewById(R.id.viewImagesbutton);
+        viewImagesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(InspectItemView.this, PhotoGalleryView.class);
+                intent.putExtra("USER", user.getUsername());
+                intent.putExtra("ITEM", itemModel.getUuid().toString());
+                startActivity(intent);
             }
         });
 
