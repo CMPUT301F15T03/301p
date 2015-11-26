@@ -85,6 +85,8 @@ public class InitializeUserActivity extends AppCompatActivity {
     /**
      * Getter for userNameEditText view element.
      *
+     * Used in testing only
+     *
      * @return view element
      */
     public EditText getUserNameEditText() {
@@ -93,6 +95,8 @@ public class InitializeUserActivity extends AppCompatActivity {
 
     /**
      * Gett for emailEditText view element.
+     *
+     * Used in testing only
      *
      * @return view element
      */
@@ -103,6 +107,8 @@ public class InitializeUserActivity extends AppCompatActivity {
     /**
      * Getter for citEditText view element.
      *
+     * Used in testing only
+     *
      * @return view element
      */
     public EditText getCityEditText() {
@@ -112,6 +118,8 @@ public class InitializeUserActivity extends AppCompatActivity {
     /**
      * Getter for phoneNumberEditText view element.
      *
+     * Used in testing only
+     *
      * @return view element
      */
     public EditText getPhoneNumberEditText() {
@@ -120,6 +128,8 @@ public class InitializeUserActivity extends AppCompatActivity {
 
     /**
      * Getter for doneButton view element.
+     *
+     * Used in testing only
      *
      * @return view element
      */

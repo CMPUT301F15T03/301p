@@ -1,31 +1,61 @@
+/*
+ * Copyright (C) 2015 Kyle O'Shaughnessy, Ross Anderson, Michelle Mabuyo, John Slevinsky, Udey Rishi, Quentin Lautischer
+ * Photography equipment trading application for CMPUT 301 at the University of Alberta.
+ *
+ * This file is part of {ApplicationName}
+ *
+ * {ApplicationName} is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package ca.ualberta.cmput301.t03.photo;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
-import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import java.io.File;
 import java.io.IOException;
 
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
-import ca.ualberta.cmput301.t03.inventory.Item;
 import ca.ualberta.cmput301.t03.user.User;
 
+/**
+ * In this activity the user can view all photos attached to an item, this can be accessed from
+ * EditItemView and InspectItemView
+ * <p/>
+ * a USER and ITEM uuid are to be passed as extras into this activity
+ */
 public class PhotoGalleryView extends AppCompatActivity {
     PhotoGallery model;
     PhotoGalleryController controller;
     Boolean isPrimaryUser;
     ImageAdapter adapter;
 
+    /**
+     * The purpose of onCreate in this activity is to load the models that are referenced by Extras
+     * In this case they ar ethe user and the item which has photos. once the models are loaded
+     * the gridview is adapted to show the photo bitmaps.
+     * <p/>
+     * All operations of deleting photos are deferred to the controller
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,8 +71,7 @@ public class PhotoGalleryView extends AppCompatActivity {
                 if (user.equals(PrimaryUser.getInstance().getUsername())) {
                     tempUser = PrimaryUser.getInstance();
                     isPrimaryUser = true;
-                }
-                else {
+                } else {
                     tempUser = new User(user, PhotoGalleryView.this.getApplicationContext());
                 }
                 try {
@@ -81,6 +110,7 @@ public class PhotoGalleryView extends AppCompatActivity {
                                                 controller.removePhoto(position);
                                                 return null;
                                             }
+
                                             @Override
                                             protected void onPostExecute(Object o) {
                                                 adapter.notifyDataSetChanged();
