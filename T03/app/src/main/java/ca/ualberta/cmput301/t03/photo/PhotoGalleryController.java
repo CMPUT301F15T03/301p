@@ -22,40 +22,19 @@ package ca.ualberta.cmput301.t03.photo;
 
 /**
  * Controls the photo gallery for an item.
+ * Used by the PhotoGalleryView to handle edits to the model.
  */
 public class PhotoGalleryController {
     private PhotoGallery model;
 
+    /**
+     * Initializes the controller with the photoGallery model and creates an instance of a controller
+     * This controller is user by the photoGalleryView to handle any edit operations to the model
+     *
+     * @param model
+     */
     public PhotoGalleryController(PhotoGallery model) {
         this.model = model;
-    }
-
-    /**
-     * Shows user the next photo in the photo gallery in full view, if there is one.
-     */
-    public void swipeLeft() {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Shows user the previous photo in the photo gallery in full view, if there is one.
-     */
-    public void swipeRight() {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Brings up the menu if the user wants to download the photo.
-     */
-    public void longClick() {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Exits PhotoGallery view (no more full screen photo)
-     */
-    public void swipeDown() {
-        throw new UnsupportedOperationException();
     }
 
     public void removePhoto(Integer index) {

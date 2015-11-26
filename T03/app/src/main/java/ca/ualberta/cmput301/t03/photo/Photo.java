@@ -22,12 +22,9 @@ package ca.ualberta.cmput301.t03.photo;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.util.Base64;
-import android.widget.ImageView;
 
 import com.google.gson.annotations.Expose;
-import com.path.android.jobqueue.JobManager;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -40,16 +37,20 @@ import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.TradeApp;
 import ca.ualberta.cmput301.t03.datamanager.DataKey;
 import ca.ualberta.cmput301.t03.datamanager.DataManager;
-import ca.ualberta.cmput301.t03.datamanager.QueuedDataManager;
 
 /**
  * Object for the item's photo. Belongs to an item's PhotoGallery.
+ * <p/>
+ * This object is lazy in the sense that it will not fetch its photo resource unless told to
+ * by downloadPhoto() or getPhoto()
+ * <p/>
+ * When used in conjunction with the ItemPhotoController, images are capped at 64k bytes.
  */
 public class Photo implements Observable {
 
     public static final String type = "Photo";
     @Expose
-    private UUID photoUUID; // instead of a Uri location ie, on elastic search we would have ...to3/Photo/{UUID}
+    private UUID photoUUID;
     private Collection<Observer> observers;
     private DataManager dataManager;
 
@@ -74,7 +75,9 @@ public class Photo implements Observable {
     }
 
     /**
-     * Determines if the photo has been downloaded on the phone.
+     * Determines if the photo has been lazy downloaded yet.
+     * <p/>
+     * Called by views that are concerned with the manual download options.
      *
      * @return true if the photo has been downloaded, false if not
      */
@@ -83,8 +86,9 @@ public class Photo implements Observable {
     }
 
     /**
-     * Starts downloading the photo.
-     *
+     * Downloads the base65 photo info and creates a bitmap from the information
+     * both entities are then cached in the photo object for getting later
+     * <p/>
      * For an ImageView, call setBitmap(Photo.getPhoto()); -- i think
      */
     public void downloadPhoto() {
@@ -93,33 +97,34 @@ public class Photo implements Observable {
                 base64Photo = dataManager.getData(new DataKey(Photo.type, photoUUID.toString()), Base64Wrapper.class);
                 isDownloaded = true;
                 byte[] bytes = Base64.decode(base64Photo.getContents(), Base64.NO_WRAP);
-                bitmap =  BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-            }
-            catch (IOException e) {
+                bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
-
+    /**
+     * Get the rendered photo as a Bitmap, very useful for loading into views easily.
+     * <p/>
+     * If the photo has not been downloaded before a lazy load will be performed.
+     *
+     * @return bitmap rendered photo
+     */
     public Bitmap getPhoto() {
         if (!isDownloaded) {
-            try {
-                base64Photo = dataManager.getData(new DataKey(Photo.type, photoUUID.toString()), Base64Wrapper.class);
-                isDownloaded = true;
-            }
-            catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-        if (bitmap == null) {
-            byte[] bytes = Base64.decode(base64Photo.getContents(), Base64.NO_WRAP);
-            bitmap =  BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            downloadPhoto();
         }
         return bitmap;
     }
 
+    /**
+     * Provide a new bitmap to the image, this will become the new bitmap that is lazy loaded
+     * <p/>
+     * This setter will call the datamanager to make a persistent copy on the network and in cache
+     *
+     * @param photo
+     */
     public void setPhoto(Bitmap photo) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         photo.compress(Bitmap.CompressFormat.JPEG, 100, stream);
@@ -128,21 +133,29 @@ public class Photo implements Observable {
 
         try {
             dataManager.writeData(new DataKey(Photo.type, photoUUID.toString()), base64Photo, Base64Wrapper.class);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * This will call the datamanager to delete the datakey associated with the photo on both
+     * the network and in the local cache
+     * <p/>
+     * this is meant to be called before removing an item from inventory to prevent dirty caches
+     * that persist
+     */
     public void deletePhoto() {
         try {
             dataManager.deleteIfExists(new DataKey(Photo.type, photoUUID.toString()));
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void notifyObservers() {
         for (Observer observer : observers) {
@@ -150,34 +163,40 @@ public class Photo implements Observable {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param observer the Observer to add
+     */
     @Override
     public void addObserver(Observer observer) {
         observers.add(observer);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param observer the Observer to remove
+     */
     @Override
     public void removeObserver(Observer observer) {
         observers.remove(observer);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void clearObservers() {
         observers.clear();
     }
 
-    public UUID getPhotoUUID() {
-        return photoUUID;
-    }
-
-    public void setPhotoUUID(UUID photoUUID) {
-        this.photoUUID = photoUUID;
-    }
-
+    /**
+     * Get a copy of the Base64 encoded photo, this is useful when testing the image size
+     *
+     * @return base64 encoded photo
+     */
     public Base64Wrapper getBase64Photo() {
         return base64Photo;
-    }
-
-    public void setBase64Photo(Base64Wrapper base64Photo) {
-        this.base64Photo = base64Photo;
     }
 }

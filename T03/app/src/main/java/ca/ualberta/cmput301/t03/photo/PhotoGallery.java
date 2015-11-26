@@ -30,34 +30,18 @@ import ca.ualberta.cmput301.t03.Observer;
 
 /**
  * class PhotoGallery encapsulates a collection of {@link Photo}s
+ * <p/>
+ * This model is used often in the application in such place as EditItemView, AddItemView,
+ * InspectItemView, as well as the inventory browse fragments.
  */
-public class PhotoGallery implements Observable, Observer{
+public class PhotoGallery implements Observable, Observer {
     private Collection<Observer> observers;
-    private Photo photoInFocus;
     @Expose
     private ArrayList<Photo> photos;
 
     public PhotoGallery() {
         observers = new ArrayList<>();
         photos = new ArrayList<>();
-    }
-
-    /**
-     * Gets photo that is in current full-view of the phone's screen.
-     *
-     * @return
-     */
-    public Photo getPhotoInFocus() {
-        return photoInFocus;
-    }
-
-    /**
-     * Sets photo in focus to be current full-view of the phone's screen.
-     *
-     * @param photoInFocus
-     */
-    public void setPhotoInFocus(Photo photoInFocus) {
-        this.photoInFocus = photoInFocus;
     }
 
     /**
@@ -81,16 +65,11 @@ public class PhotoGallery implements Observable, Observer{
         }
     }
 
-    public void load() {
-        throw new UnsupportedOperationException();
-    }
-
-    public void save() {
-        throw new UnsupportedOperationException();
-    }
-
     /**
      * Removes the photo from the item's photo gallery.
+     * <p/>
+     * This should be called to ensure that all copies of the photos in local cache and on the
+     * network are removed
      *
      * @param photo
      */
@@ -101,7 +80,9 @@ public class PhotoGallery implements Observable, Observer{
     }
 
     /**
-     * Adds the photo to the item's photo gallery providing it meets the photo limit for an item.
+     * Adds the photo to the item's photo gallery.
+     * <p/>
+     * This should be called by the ItemPhotoController only.
      *
      * @param photo
      */
@@ -110,6 +91,11 @@ public class PhotoGallery implements Observable, Observer{
         notifyObservers();
     }
 
+    /**
+     * Remove all photos from the photoList and delete there data on the network and local cache
+     * <p/>
+     * Useful in test setups and teardowns.
+     */
     public void clear() {
         for (Photo photo : photos) {
             photo.deletePhoto();
@@ -118,7 +104,9 @@ public class PhotoGallery implements Observable, Observer{
         notifyObservers();
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void notifyObservers() {
         for (Observer observer : observers) {
@@ -126,21 +114,39 @@ public class PhotoGallery implements Observable, Observer{
         }
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param observer the Observer to add
+     */
     @Override
     public void addObserver(Observer observer) {
         observers.add(observer);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param observer the Observer to remove
+     */
     @Override
     public void removeObserver(Observer observer) {
         observers.remove(observer);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void clearObservers() {
         observers.clear();
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param observable reference to the Observable that triggered the update()
+     */
     @Override
     public void update(Observable observable) {
         notifyObservers();
