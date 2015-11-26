@@ -355,6 +355,10 @@ public class PrimaryUserHelper {
         DataManager dataManager = new CachedDataManager(new HttpDataManager(true));
         Configuration configuration = new Configuration(context);
         configuration.setApplicationUserName(USER_ID);
+        for (Item item : PrimaryUser.getInstance().getInventory().getItems().values()) {
+            item.clearPhotoList();
+        }
+
         dataManager.deleteIfExists(new DataKey(UserProfile.type, configuration.getApplicationUserName()));
         dataManager.deleteIfExists(new DataKey(Inventory.type, configuration.getApplicationUserName()));
         dataManager.deleteIfExists(new DataKey(FriendsList.type, configuration.getApplicationUserName()));
