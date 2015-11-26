@@ -37,6 +37,7 @@ import android.test.suitebuilder.annotation.LargeTest;
 import android.widget.TextView;
 
 import org.hamcrest.CoreMatchers;
+import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -76,20 +77,13 @@ import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class PhotoUITest {
-
-    public static final String TEST_EXAMPLE_COM = "test@example.com";
-    public static final String PHONE_1 = "780 123 4567";
-    public static final String CALGARY = "Calgary";
-    public static final String VANCOUVER = "Vancouver";
-    public static final String PHONE_2 = "7781234567";
-    public static final String TEST2_EXAMPLE_COM = "test2@example.com";
-    public static final String INVALID_EMAIL = "asdfadfadfsdd";
 
     public static final String ITEM_NAME = "Test Item";
     public static final String ITEM_QUALITY = "Good";
@@ -136,18 +130,78 @@ public class PhotoUITest {
     }
 
     /**
-     * UC02.04.01
+     * UC06.01.01 AttachPhotographsToItem
      */
     @Test
-    public void testViewPhotosInGallery() throws IOException {
-
+    public void testAttachPhotographsToItems() throws IOException {
         Inventory inventory = PrimaryUser.getInstance().getInventory();
         Item item = new Item();
         item.setItemCategory(ITEM_CATEGORY);
         item.setItemDescription(ITEM_DESCRIPTION);
         item.setItemIsPrivate(false);
         item.setItemName(ITEM_NAME);
-        item.setItemQuality("Good");
+        item.setItemQuality(ITEM_QUALITY);
+        item.setItemQuantity(1);
+
+        for (Item item1 : inventory.getItems().values()) {
+            inventory.removeItem(item1);
+        }
+        inventory.commitChanges();
+        inventory.addItem(item);
+        inventory.commitChanges();
+        ItemPhotoController controller = new ItemPhotoController(item);
+        controller.addPhotoToItem(BitmapFactory.decodeResource(mActivity.getResources(), R.drawable.photo_unavailable_test));
+        controller.addPhotoToItem(BitmapFactory.decodeResource(mActivity.getResources(), R.drawable.photo_unavailable_test));
+        controller.addPhotoToItem(BitmapFactory.decodeResource(mActivity.getResources(), R.drawable.photo_unavailable_test));
+
+
+        assertEquals(3, item.getPhotoList().getPhotos().size());
+    }
+
+    /**
+     * UC06.02.01 ViewItemPhotograph
+     */
+    @Test
+    public void testViewItemPhotographs() throws IOException {
+        Inventory inventory = PrimaryUser.getInstance().getInventory();
+        Item item = new Item();
+        item.setItemCategory(ITEM_CATEGORY);
+        item.setItemDescription(ITEM_DESCRIPTION);
+        item.setItemIsPrivate(false);
+        item.setItemName(ITEM_NAME);
+        item.setItemQuality(ITEM_QUALITY);
+        item.setItemQuantity(1);
+
+        for (Item item1 : inventory.getItems().values()) {
+            inventory.removeItem(item1);
+        }
+        inventory.commitChanges();
+
+        inventory.addItem(item);
+        inventory.commitChanges();
+        pause();
+        Photo photo = new Photo(BitmapFactory.decodeResource(mActivity.getResources(), R.drawable.photo_unavailable_test));
+        item.getPhotoList().addPhoto(photo);
+        pause();
+        onView(withText(ITEM_NAME)).check(matches(isDisplayed()));
+        onView(withText(ITEM_NAME)).perform(click());
+        pause();
+        onView(withId(R.id.viewImagesbutton)).perform(click());
+        onData(CoreMatchers.anything()).atPosition(0).check(matches(isDisplayed()));
+    }
+
+    /**
+     * UC06.03.01 DeleteAttachedPhotograph
+     */
+    @Test
+    public void testDeleteAttachedPhotographs() throws IOException {
+        Inventory inventory = PrimaryUser.getInstance().getInventory();
+        Item item = new Item();
+        item.setItemCategory(ITEM_CATEGORY);
+        item.setItemDescription(ITEM_DESCRIPTION);
+        item.setItemIsPrivate(false);
+        item.setItemName(ITEM_NAME);
+        item.setItemQuality(ITEM_QUALITY);
         item.setItemQuantity(1);
 
         for (Item item1 : inventory.getItems().values()) {
@@ -167,7 +221,32 @@ public class PhotoUITest {
         onView(withId(R.id.viewImagesbutton)).perform(click());
         onData(CoreMatchers.anything()).atPosition(0).check(matches(isDisplayed()));
         onData(CoreMatchers.anything()).atPosition(0).perform(click());
-
-
+        onView(withText("Delete")).perform(click());
+        pause();
+        assertEquals(0, item.getPhotoList().getPhotos().size());
     }
+
+    @Test
+    public void testPhotoIsUnder64k() throws IOException {
+        Inventory inventory = PrimaryUser.getInstance().getInventory();
+        Item item = new Item();
+        item.setItemCategory(ITEM_CATEGORY);
+        item.setItemDescription(ITEM_DESCRIPTION);
+        item.setItemIsPrivate(false);
+        item.setItemName(ITEM_NAME);
+        item.setItemQuality(ITEM_QUALITY);
+        item.setItemQuantity(1);
+
+        for (Item item1 : inventory.getItems().values()) {
+            inventory.removeItem(item1);
+        }
+        inventory.commitChanges();
+        inventory.addItem(item);
+        inventory.commitChanges();
+        ItemPhotoController controller = new ItemPhotoController(item);
+        controller.addPhotoToItem(BitmapFactory.decodeResource(mActivity.getResources(), R.drawable.photo_unavailable_test));
+
+        assertTrue(item.getPhotoList().getPhotos().get(0).getBase64Photo().getContents().length() < 65536);
+    }
+
 }
