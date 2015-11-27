@@ -23,6 +23,8 @@ package ca.ualberta.cmput301.t03.datamanager;
 import java.io.IOException;
 import java.lang.reflect.Type;
 
+import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
+
 /**
  * A base interface for a class acting as a data manager for arbitrary types of objects.
  * The implementations work with {@link DataKey} to uniquely map the objects to paths on whatever
@@ -37,7 +39,7 @@ public interface DataManager {
      * @return True, if the key exists, else false.
      * @throws IOException Thrown, if the communication to the storage media fails.
      */
-    boolean keyExists(DataKey key) throws IOException;
+    boolean keyExists(DataKey key) throws IOException, ServiceNotAvailableException;
 
     /**
      * Retrieves the data pointed to by the key from the storage media.
@@ -49,7 +51,7 @@ public interface DataManager {
      * @return The retrieved object.
      * @throws IOException Thrown, if the communication to the storage media fails.
      */
-    <T> T getData(DataKey key, Type typeOfT) throws IOException;
+    <T> T getData(DataKey key, Type typeOfT) throws IOException, ServiceNotAvailableException;
 
     /**
      * Write the object to the storage, or overwrites the existing one if one existed.
@@ -60,7 +62,7 @@ public interface DataManager {
      * @param <T>     The type of the object.
      * @throws IOException Thrown, if the communication to the storage media fails.
      */
-    <T> void writeData(DataKey key, T obj, Type typeOfT) throws IOException;
+    <T> void writeData(DataKey key, T obj, Type typeOfT) throws IOException, ServiceNotAvailableException;
 
     /**
      * Deletes the object pointed by the {@link DataKey} from the storage media, if it exists.
@@ -68,7 +70,7 @@ public interface DataManager {
      * @param key The {@link DataKey} for which the object has to be deleted.
      * @throws IOException Thrown, if the communication to the storage media fails.
      */
-    void deleteIfExists(DataKey key) throws IOException;
+    void deleteIfExists(DataKey key) throws IOException, ServiceNotAvailableException;
 
     /**
      * Checks if the storage media used by this {@link DataManager} implementation is currently
