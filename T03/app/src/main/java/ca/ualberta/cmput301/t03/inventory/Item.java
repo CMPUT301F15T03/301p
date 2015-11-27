@@ -90,6 +90,18 @@ public class Item implements Observer, Observable {
     }
 
     /**
+     * Constructs the clone of an item, based on an item.
+     *
+     * @param itemToClone the original item to clone.
+     */
+    public Item(Item itemToClone) {
+        this(itemToClone.getItemName(), itemToClone.getItemCategory());
+        setItemDescription(itemToClone.getItemDescription());
+        setItemQuality(itemToClone.getItemQuality());
+        setItemQuantity(itemToClone.getItemQuantity());
+    }
+
+    /**
      * Get the item's name.
      *
      * @return item name String

@@ -294,6 +294,7 @@ public class UserInventoryFragment extends Fragment implements Observer {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        model.clearObservers();
     }
 
     private void setupFab(View v) {

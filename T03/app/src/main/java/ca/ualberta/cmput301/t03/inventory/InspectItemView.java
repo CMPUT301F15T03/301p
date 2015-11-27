@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -50,6 +51,7 @@ public class InspectItemView extends AppCompatActivity {
     private Item itemModel;
     private InspectItemController controller;
     private Button proposeTradeButton;
+    private Button cloneItemButton;
 
     private Inventory inventoryModel;
 
@@ -113,6 +115,13 @@ public class InspectItemView extends AppCompatActivity {
                 controller.proposeTradeButtonClicked();
             }
         });
+        cloneItemButton = (Button) findViewById(R.id.cloneItemButton);
+        cloneItemButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onCloneItemButtonClicked(v);
+            }
+        });
 
         Button viewImagesButton = (Button) findViewById(R.id.viewImagesbutton);
         viewImagesButton.setOnClickListener(new View.OnClickListener() {
@@ -151,5 +160,42 @@ public class InspectItemView extends AppCompatActivity {
         worker.execute();
 
 
+    }
+
+
+    public void onCloneItemButtonClicked(View view){
+        final View view1 = view;
+
+        AsyncTask<Void, Void, Item> task = new AsyncTask<Void, Void, Item>() {
+            @Override
+            protected Item doInBackground(Void... params) {
+                Item newItem = null;
+                try {
+                    newItem = controller.cloneItem();
+                } catch (ServiceNotAvailableException e) {
+                    e.printStackTrace();
+                    return null;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+
+                return newItem;
+            }
+
+            @Override
+            protected void onPostExecute(Item item) {
+                if (item == null){
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Snackbar.make(view1, "Cloning item failed!", Snackbar.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        };
+
+        task.execute();
     }
 }
