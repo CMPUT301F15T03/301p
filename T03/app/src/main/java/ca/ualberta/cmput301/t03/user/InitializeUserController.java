@@ -60,7 +60,7 @@ public class InitializeUserController {
      * @throws IOException
      */
     public boolean isUserNameTaken(String username) throws IOException, ServiceNotAvailableException {
-        return dataManager.keyExists(new DataKey(UserProfile.type, username));
+        return dataManager.keyExists(new DataKey(UserProfile.type, username.toLowerCase()));
     }
 
     /**
@@ -85,7 +85,7 @@ public class InitializeUserController {
         configuration.setApplicationUserName(username);
 
         // create user
-        User localUser = new User(username, context);
+        User localUser = new User(username.toLowerCase(), context);
 
         // get userProfile -> sets up ES
         UserProfile localUserProfile = null;
