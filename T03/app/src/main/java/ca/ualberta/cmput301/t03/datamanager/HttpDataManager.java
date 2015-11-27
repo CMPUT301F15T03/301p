@@ -89,7 +89,7 @@ public class HttpDataManager extends JsonDataManager {
      * {@inheritDoc}
      */
     @Override
-    public boolean keyExists(DataKey key) throws IOException, ServiceNotAvailableException {
+    public boolean keyExists(DataKey key) throws IOException {
         if (!isOperational()) {
             throw new ServiceNotAvailableException("HttpDataManager is not operational. Cannot perform this operation.");
         }
@@ -101,7 +101,7 @@ public class HttpDataManager extends JsonDataManager {
      * {@inheritDoc}
      */
     @Override
-    public <T> T getData(DataKey key, Type typeOfT) throws IOException, ServiceNotAvailableException {
+    public <T> T getData(DataKey key, Type typeOfT) throws IOException {
         if (!isOperational()) {
             throw new ServiceNotAvailableException("HttpDataManager is not operational. Cannot perform this operation.");
         }
@@ -118,7 +118,7 @@ public class HttpDataManager extends JsonDataManager {
      * {@inheritDoc}
      */
     @Override
-    public <T> void writeData(DataKey key, T obj, Type typeOfT) throws IOException, ServiceNotAvailableException {
+    public <T> void writeData(DataKey key, T obj, Type typeOfT) throws IOException {
         if (!isOperational()) {
             throw new ServiceNotAvailableException("HttpDataManager is not operational. Cannot perform this operation.");
         }
@@ -130,7 +130,7 @@ public class HttpDataManager extends JsonDataManager {
      * {@inheritDoc}
      */
     @Override
-    public void deleteIfExists(DataKey key) throws IOException, ServiceNotAvailableException {
+    public void deleteIfExists(DataKey key) throws IOException {
         if (!isOperational()) {
             throw new ServiceNotAvailableException("HttpDataManager is not operational. Cannot perform this operation.");
         }

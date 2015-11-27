@@ -33,7 +33,6 @@ import ca.ualberta.cmput301.t03.MainActivity;
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.common.PrimaryUserHelper;
-import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.inventory.Item;
 import ca.ualberta.cmput301.t03.photo.Photo;
 import ca.ualberta.cmput301.t03.user.User;
@@ -93,8 +92,6 @@ public class PhotosTest extends ActivityInstrumentationTestCase2<MainActivity> {
             user.getInventory().setItems(new LinkedHashMap<UUID, Item>());
         } catch (IOException e) {
             assertTrue("IOException in testChangePublicStatus", false);
-        } catch (ServiceNotAvailableException e) {
-            assertTrue("ServiceNotAvailableException in testChangePublicStatus", false);
         }
 
         // initialize test item
@@ -116,8 +113,6 @@ public class PhotosTest extends ActivityInstrumentationTestCase2<MainActivity> {
             inventory_size[0] = user.getInventory().getItems().size();
         } catch (IOException e) {
             assertTrue("IOException in testEditAnItem", Boolean.FALSE);
-        } catch (ServiceNotAvailableException e) {
-            assertTrue("ServiceNotAvailableException in testEditAnItem", Boolean.FALSE);
         }
 
         // TODO precondition: elastic search does have a record of the item
@@ -142,8 +137,6 @@ public class PhotosTest extends ActivityInstrumentationTestCase2<MainActivity> {
             assertEquals(1, testItem.getPhotoList().getPhotos().size());
         } catch (IOException e) {
             assertTrue("IOException in testEditAnItem", Boolean.FALSE);
-        } catch (ServiceNotAvailableException e) {
-            assertTrue("ServiceNotAvailableException in testEditAnItem", Boolean.FALSE);
         }
 
 //        // create some photos
@@ -195,8 +188,6 @@ public class PhotosTest extends ActivityInstrumentationTestCase2<MainActivity> {
             user.getInventory().setItems(new LinkedHashMap<UUID, Item>());
         } catch (IOException e) {
             assertTrue("IOException in testChangePublicStatus", false);
-        } catch (ServiceNotAvailableException e) {
-            assertTrue("ServiceNotAvailableException in testChangePublicStatus", false);
         }
 
         // initialize test item
@@ -222,8 +213,6 @@ public class PhotosTest extends ActivityInstrumentationTestCase2<MainActivity> {
             inventory_size[0] = user.getInventory().getItems().size();
         } catch (IOException e) {
             assertTrue("IOException in testEditAnItem", Boolean.FALSE);
-        } catch (ServiceNotAvailableException e) {
-            assertTrue("ServiceNotAvailableException in testEditAnItem", Boolean.FALSE);
         }
 
         // TODO precondition: elastic search does have a record of the item
@@ -249,8 +238,6 @@ public class PhotosTest extends ActivityInstrumentationTestCase2<MainActivity> {
             user.getInventory().setItems(new LinkedHashMap<UUID, Item>());
         } catch (IOException e) {
             assertTrue("IOException in testChangePublicStatus", false);
-        } catch (ServiceNotAvailableException e) {
-            assertTrue("ServiceNotAvailableException in testChangePublicStatus", false);
         }
 
         // initialize test item
@@ -276,8 +263,6 @@ public class PhotosTest extends ActivityInstrumentationTestCase2<MainActivity> {
             inventory_size[0] = user.getInventory().getItems().size();
         } catch (IOException e) {
             assertTrue("IOException in testEditAnItem", Boolean.FALSE);
-        } catch (ServiceNotAvailableException e) {
-            assertTrue("ServiceNotAvailableException in testEditAnItem", Boolean.FALSE);
         }
 
         onView(withContentDescription("Open navigation drawer")).perform(click());
@@ -315,8 +300,6 @@ public class PhotosTest extends ActivityInstrumentationTestCase2<MainActivity> {
             user.getInventory().setItems(new LinkedHashMap<UUID, Item>());
         } catch (IOException e) {
             assertTrue("IOException in testChangePublicStatus", false);
-        } catch (ServiceNotAvailableException e) {
-            assertTrue("ServiceNotAvailableException in testChangePublicStatus", false);
         }
 
         // initialize test item
@@ -338,8 +321,6 @@ public class PhotosTest extends ActivityInstrumentationTestCase2<MainActivity> {
             inventory_size[0] = user.getInventory().getItems().size();
         } catch (IOException e) {
             assertTrue("IOException in testEditAnItem", Boolean.FALSE);
-        } catch (ServiceNotAvailableException e) {
-            assertTrue("ServiceNotAvailableException in testEditAnItem", Boolean.FALSE);
         }
 
 //		NetworkManager.setDeviceOnline();
@@ -350,8 +331,6 @@ public class PhotosTest extends ActivityInstrumentationTestCase2<MainActivity> {
             assertFalse(user.getInventory().getItems().containsKey(item.getUuid()));
         } catch (IOException e) {
             assertTrue("IOException in testEditAnItem", Boolean.FALSE);
-        } catch (ServiceNotAvailableException e) {
-            assertTrue("ServiceNotAvailableException in testEditAnItem", Boolean.FALSE);
         }
         // assertEquals(server.getUser("UserName").getItem("50mm Cannon Lens"), tempItem); // server has the item
     }
@@ -381,8 +360,6 @@ public class PhotosTest extends ActivityInstrumentationTestCase2<MainActivity> {
                 }
             }
         } catch (IOException e) {
-            assertFalse(true);
-        } catch (ServiceNotAvailableException e) {
             assertFalse(true);
         }
 

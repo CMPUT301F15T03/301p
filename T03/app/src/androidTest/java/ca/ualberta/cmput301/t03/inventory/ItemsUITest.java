@@ -31,7 +31,6 @@ import ca.ualberta.cmput301.t03.MainActivity;
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.common.PrimaryUserHelper;
-import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.datamanager.HttpDataManager;
 import ca.ualberta.cmput301.t03.user.User;
 
@@ -103,8 +102,6 @@ public class ItemsUITest extends ActivityInstrumentationTestCase2<MainActivity> 
             user.getInventory().setItems(new LinkedHashMap<UUID, Item>());
         } catch (IOException e) {
             assertTrue("IOException in testChangePublicStatus", false);
-        } catch (ServiceNotAvailableException e) {
-            assertTrue("ServiceNotAvailableException in testChangePublicStatus", false);
         }
 
         // initialize test item
@@ -123,8 +120,6 @@ public class ItemsUITest extends ActivityInstrumentationTestCase2<MainActivity> 
             inventory_size[0] = user.getInventory().getItems().size();
         } catch (IOException e) {
             assertTrue("IOException in testAddAnItem", Boolean.FALSE);
-        } catch (ServiceNotAvailableException e) {
-            assertTrue("ServiceNotAvailableException in testAddAnItem", Boolean.FALSE);
         }
 
         // TODO precondition: elastic search does not have a record of the item
@@ -157,8 +152,6 @@ public class ItemsUITest extends ActivityInstrumentationTestCase2<MainActivity> 
             assertEquals(inventory_size[0] + 1, user.getInventory().getItems().size());
         } catch (IOException e) {
             assertTrue("IOException in testAddAnItem", Boolean.FALSE);
-        } catch (ServiceNotAvailableException e) {
-            assertTrue("ServiceNotAvailableException in testAddAnItem", Boolean.FALSE);
         }
     }
 
@@ -171,8 +164,6 @@ public class ItemsUITest extends ActivityInstrumentationTestCase2<MainActivity> 
             user.getInventory().setItems(new LinkedHashMap<UUID, Item>());
         } catch (IOException e) {
             assertTrue("IOException in testChangePublicStatus", false);
-        } catch (ServiceNotAvailableException e) {
-            assertTrue("ServiceNotAvailableException in testChangePublicStatus", false);
         }
 
         // initialize test item
@@ -194,8 +185,6 @@ public class ItemsUITest extends ActivityInstrumentationTestCase2<MainActivity> 
             inventory_size[0] = user.getInventory().getItems().size();
         } catch (IOException e) {
             assertTrue("IOException in testEditAnItem", Boolean.FALSE);
-        } catch (ServiceNotAvailableException e) {
-            assertTrue("ServiceNotAvailableException in testEditAnItem", Boolean.FALSE);
         }
 
         // TODO precondition: elastic search does have a record of the item
@@ -230,8 +219,6 @@ public class ItemsUITest extends ActivityInstrumentationTestCase2<MainActivity> 
             assertEquals(NEW_ITEM_QUALITY, testItem.getItemQuality());
         } catch (IOException e) {
             assertTrue("IOException in testEditAnItem", Boolean.FALSE);
-        } catch (ServiceNotAvailableException e) {
-            assertTrue("ServiceNotAvailableException in testEditAnItem", Boolean.FALSE);
         }
 
     }
@@ -245,8 +232,6 @@ public class ItemsUITest extends ActivityInstrumentationTestCase2<MainActivity> 
             user.getInventory().setItems(new LinkedHashMap<UUID, Item>());
         } catch (IOException e) {
             assertTrue("IOException in testChangePublicStatus", false);
-        } catch (ServiceNotAvailableException e) {
-            assertTrue("ServiceNotAvailableException in testChangePublicStatus", Boolean.FALSE);
         }
 
         // initialize test item
@@ -268,8 +253,6 @@ public class ItemsUITest extends ActivityInstrumentationTestCase2<MainActivity> 
             inventory_size[0] = user.getInventory().getItems().size();
         } catch (IOException e) {
             assertTrue("IOException in testRemoveAnItem", Boolean.FALSE);
-        } catch (ServiceNotAvailableException e) {
-            assertTrue("ServiceNotAvailableException in testRemoveAnItem", Boolean.FALSE);
         }
 
         // TODO precondition: elastic search does have a record of the item
@@ -287,8 +270,6 @@ public class ItemsUITest extends ActivityInstrumentationTestCase2<MainActivity> 
             assertEquals(inventory_size[0] - 1, user.getInventory().getItems().size());
         } catch (IOException e) {
             assertTrue("IOException in testRemoveAnItem", Boolean.FALSE);
-        } catch (ServiceNotAvailableException e) {
-            assertTrue("ServiceNotAvailableException in testRemoveAnItem", Boolean.FALSE);
         }
 
         // TODO: assert view that there is nothing in inventory any more.
@@ -308,8 +289,6 @@ public class ItemsUITest extends ActivityInstrumentationTestCase2<MainActivity> 
             inventory_size[0] = user.getInventory().getItems().size();
         } catch (IOException e) {
             assertTrue("IOException in testViewOwnInventory", Boolean.FALSE);
-        } catch (ServiceNotAvailableException e) {
-            assertTrue("ServiceNotAvailableException in testViewOwnInventory", Boolean.FALSE);
         }
 
         // TODO: user should be able to see all their items
@@ -349,8 +328,6 @@ public class ItemsUITest extends ActivityInstrumentationTestCase2<MainActivity> 
 //                    inventory_size[0] = user.getInventory().getItems().size();
         } catch (IOException e) {
             assertTrue("IOException in testRemoveAnItem", Boolean.FALSE);
-        } catch (ServiceNotAvailableException e) {
-            assertTrue("ServiceNotAvailableException in testRemoveAnItem", Boolean.FALSE);
         }
 
 
@@ -375,8 +352,6 @@ public class ItemsUITest extends ActivityInstrumentationTestCase2<MainActivity> 
             user.getInventory().setItems(new LinkedHashMap<UUID, Item>());
         } catch (IOException e) {
             assertTrue("IOException in testChangePublicStatus", false);
-        } catch (ServiceNotAvailableException e) {
-            assertTrue("ServiceNotAvailableException in testChangePublicStatus", false);
         }
 
         // initialize test item
@@ -397,8 +372,6 @@ public class ItemsUITest extends ActivityInstrumentationTestCase2<MainActivity> 
             inventory_size[0] = user.getInventory().getItems().size();
         } catch (IOException e) {
             assertTrue("IOException in testChooseACategory", Boolean.FALSE);
-        } catch (ServiceNotAvailableException e) {
-            assertTrue("ServiceNotAvailableException in testChooseACategory", Boolean.FALSE);
         }
 
         // TODO precondition: elastic search does have a record of the item
@@ -427,8 +400,6 @@ public class ItemsUITest extends ActivityInstrumentationTestCase2<MainActivity> 
             assertEquals(NEW_ITEM_CATEGORY, testItem.getItemCategory());
         } catch (IOException e) {
             assertTrue("IOException in testChooseACategory", Boolean.FALSE);
-        } catch (ServiceNotAvailableException e) {
-            assertTrue("ServiceNotAvailableException in testChooseACategory", Boolean.FALSE);
         }
 
     }
@@ -443,8 +414,6 @@ public class ItemsUITest extends ActivityInstrumentationTestCase2<MainActivity> 
             user.getInventory().setItems(new LinkedHashMap<UUID, Item>());
         } catch (IOException e) {
             assertTrue("IOException in testChangePublicStatus", false);
-        } catch (ServiceNotAvailableException e) {
-            assertTrue("ServiceNotAvailableException in testChangePublicStatus", false);
         }
 
         // initialize test item
@@ -465,8 +434,6 @@ public class ItemsUITest extends ActivityInstrumentationTestCase2<MainActivity> 
 //                    inventory_size[0] = user.getInventory().getItems().size();
         } catch (IOException e) {
             assertTrue("IOException in testNavigateToItem", Boolean.FALSE);
-        } catch (ServiceNotAvailableException e) {
-            assertTrue("ServiceNotAvailableException in testNavigateToItem", Boolean.FALSE);
         }
 
 
@@ -492,8 +459,6 @@ public class ItemsUITest extends ActivityInstrumentationTestCase2<MainActivity> 
             user.getInventory().setItems(new LinkedHashMap<UUID, Item>());
         } catch (IOException e) {
             assertTrue("IOException in testChangePublicStatus", false);
-        } catch (ServiceNotAvailableException e) {
-            assertTrue("ServiceNotAvailableException in testChangePublicStatus", false);
         }
 
         // initialize test item
@@ -515,8 +480,6 @@ public class ItemsUITest extends ActivityInstrumentationTestCase2<MainActivity> 
             inventory_size[0] = user.getInventory().getItems().size();
         } catch (IOException e) {
             assertTrue("IOException in testChangePublicStatus", Boolean.FALSE);
-        } catch (ServiceNotAvailableException e) {
-            assertTrue("ServiceNotAvailableException in testChangePublicStatus", Boolean.FALSE);
         }
 
 
@@ -545,8 +508,6 @@ public class ItemsUITest extends ActivityInstrumentationTestCase2<MainActivity> 
             assertTrue(testItem.isItemIsPrivate());
         } catch (IOException e) {
             assertTrue("IOException in testChangePublicStatus", Boolean.FALSE);
-        } catch (ServiceNotAvailableException e) {
-            assertTrue("ServiceNotAvailableException in testChangePublicStatus", Boolean.FALSE);
         }
 
     }

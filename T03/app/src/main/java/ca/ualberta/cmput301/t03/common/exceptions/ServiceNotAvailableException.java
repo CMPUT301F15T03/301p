@@ -24,7 +24,7 @@ package ca.ualberta.cmput301.t03.common.exceptions;
  * A {@link RuntimeException} thrown when a service is not available.
  * Created by rishi on 15-11-01.
  */
-public class ServiceNotAvailableException extends Exception {
+public class ServiceNotAvailableException extends RuntimeException {
 
     /**
      * Creates an instance of {@link ServiceNotAvailableException}.

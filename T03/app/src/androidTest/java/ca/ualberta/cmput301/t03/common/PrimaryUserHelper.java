@@ -26,7 +26,6 @@ import android.support.test.InstrumentationRegistry;
 import java.io.IOException;
 
 import ca.ualberta.cmput301.t03.PrimaryUser;
-import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.datamanager.CachedDataManager;
 import ca.ualberta.cmput301.t03.datamanager.DataKey;
@@ -192,8 +191,6 @@ public class PrimaryUserHelper {
             userProfile.commitChanges();
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (ServiceNotAvailableException e) {
-            throw new RuntimeException("App is offline.", e);
         }
 
 
