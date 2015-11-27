@@ -164,8 +164,6 @@ public class InitializeUserActivity extends AppCompatActivity {
                     toastMessage(getString(R.string.problemWithNetworkToast));
                     return;
                 } catch (ServiceNotAvailableException e) {
-                    //todo this should not crash app, just friendlily tell the user
-                    //they are dumb
                     throw new RuntimeException("App is offline.", e);
                 }
 
