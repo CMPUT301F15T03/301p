@@ -34,6 +34,7 @@ import java.util.UUID;
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.TradeApp;
+import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.datamanager.DataKey;
 import ca.ualberta.cmput301.t03.datamanager.DataManager;
 import ca.ualberta.cmput301.t03.inventory.Item;
@@ -153,6 +154,8 @@ public class Trade implements Observable {
             }
         } catch (IOException e) {
             throw new RuntimeException("Failed to load trade with UUID " + this.getTradeUUID().toString());
+        } catch (ServiceNotAvailableException e) {
+            throw new RuntimeException("App is offline.", e);
         }
     }
 
@@ -165,6 +168,8 @@ public class Trade implements Observable {
             dataManager.writeData(key, this, Trade.class);
         } catch (IOException e) {
             throw new RuntimeException("Failed to save trade with UUID " + this.getTradeUUID().toString());
+        } catch (ServiceNotAvailableException e) {
+            throw new RuntimeException("App is offline.", e);
         }
     }
 

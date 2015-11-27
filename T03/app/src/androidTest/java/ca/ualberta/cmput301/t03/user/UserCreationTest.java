@@ -32,6 +32,7 @@ import ca.ualberta.cmput301.t03.MainActivity;
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.common.PrimaryUserHelper;
+import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.datamanager.CachedDataManager;
 import ca.ualberta.cmput301.t03.datamanager.DataKey;
@@ -75,7 +76,7 @@ public class UserCreationTest extends ActivityInstrumentationTestCase2 {
      * UC02.04.01
      * testCreateDuplicateProfile() now covered in here
      */
-    public void testCreateProfile() {
+    public void testCreateProfile() throws ServiceNotAvailableException {
 
         Configuration configuration = new Configuration(getInstrumentation().getTargetContext());
 
