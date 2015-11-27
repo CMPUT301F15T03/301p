@@ -35,7 +35,6 @@ import java.util.UUID;
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.TradeApp;
-import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.datamanager.DataKey;
 import ca.ualberta.cmput301.t03.datamanager.DataManager;
 
@@ -101,8 +100,6 @@ public class Photo implements Observable {
                 bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
             } catch (IOException e) {
                 e.printStackTrace();
-            } catch (ServiceNotAvailableException e) {
-                throw new RuntimeException("App is offline.", e);
             }
         }
     }
@@ -138,8 +135,6 @@ public class Photo implements Observable {
             dataManager.writeData(new DataKey(Photo.type, photoUUID.toString()), base64Photo, Base64Wrapper.class);
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (ServiceNotAvailableException e) {
-            throw new RuntimeException("App is offline.", e);
         }
     }
 
@@ -155,8 +150,6 @@ public class Photo implements Observable {
             dataManager.deleteIfExists(new DataKey(Photo.type, photoUUID.toString()));
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (ServiceNotAvailableException e) {
-            throw new RuntimeException("App is offline.", e);
         }
     }
 

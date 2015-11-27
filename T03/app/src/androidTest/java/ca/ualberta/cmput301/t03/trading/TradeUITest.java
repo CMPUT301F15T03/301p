@@ -33,7 +33,6 @@ import ca.ualberta.cmput301.t03.MainActivity;
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.common.PrimaryUserHelper;
-import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.inventory.Item;
 import ca.ualberta.cmput301.t03.trading.Trade;
 import ca.ualberta.cmput301.t03.trading.TradeStateAccepted;
@@ -110,7 +109,7 @@ public class TradeUITest
     /**
      * UC1.4.1 OfferTradeWithFriend
      */
-    public void testOfferTradeWithFriend() throws ServiceNotAvailableException {
+    public void testOfferTradeWithFriend() {
         /**
          * Create an owner with an item, and add them as a friend
          * The user can then offer to trade for the item
@@ -183,7 +182,7 @@ public class TradeUITest
     /**
      * UC1.4.2 OwnerIsNotifiedOfTradeOffer
      */
-    public void testOwnerIsNotifiedOfTradeOffer() throws ServiceNotAvailableException {
+    public void testOwnerIsNotifiedOfTradeOffer() {
         /**
          * Create a borrower with an item and who also has the user as a friend
          * Then, have the borrower offer a trade with the user
@@ -235,7 +234,7 @@ public class TradeUITest
     /**
      * UC1.4.3 OwnerAcceptsOrDeclinesTrade main flow
      */
-    public void testOwnerAcceptsTrade() throws ServiceNotAvailableException {
+    public void testOwnerAcceptsTrade() {
         /**
          * Create a borrower with an item and who also has the user as a friend
          * Then, have the borrower offer a trade with the user
@@ -290,7 +289,7 @@ public class TradeUITest
     /**
      * UC1.4.3 OwnerAcceptsOrDeclinesTrade alternate flow
      */
-    public void testOwnerDeclinesTrade() throws ServiceNotAvailableException {
+    public void testOwnerDeclinesTrade() {
         /**
          * Create a borrower with an item and who also has the user as a friend
          * Then, have the borrower offer a trade with the user
@@ -345,7 +344,7 @@ public class TradeUITest
     /**
      * UC1.4.4 OwnerOffersCounterTrade
      */
-    public void testOwnerDeclinesTradeAndOffersCounterTrade() throws ServiceNotAvailableException {
+    public void testOwnerDeclinesTradeAndOffersCounterTrade() {
         /**
          * Create a borrower with an item and who also has the user as a friend
          * Then, have the borrower offer a trade with the user
@@ -407,7 +406,7 @@ public class TradeUITest
     /**
      * UC1.4.5.1 BorrowerEditsTrade
      */
-    public void testBorrowerEditsTrade() throws ServiceNotAvailableException {
+    public void testBorrowerEditsTrade() {
         /**
          * Create an owner with an item, and add them as a friend
          * The user can then offer to trade for the item
@@ -475,7 +474,7 @@ public class TradeUITest
     /**
      * UC1.4.5.2 OwnerEditsCounterTrade
      */
-    public void testOwnerEditsCounterTrade() throws ServiceNotAvailableException {
+    public void testOwnerEditsCounterTrade() {
         /**
          * Create a borrower with an item and who also has the user as a friend
          * Then, have the borrower offer a trade with the user
@@ -543,7 +542,7 @@ public class TradeUITest
     /**
      * UC1.4.6.1 BorrowerDeletesTrade
      */
-    public void testBorrowerDeletesTrade() throws ServiceNotAvailableException {
+    public void testBorrowerDeletesTrade() {
         /**
          * Create an owner with an item, and add them as a friend
          * The user can then offer to trade for the item
@@ -603,7 +602,7 @@ public class TradeUITest
     /**
      * UC1.4.6.2 OwnerDeletesCounterTrade
      */
-    public void testOwnerDeletesCounterTrade() throws ServiceNotAvailableException {
+    public void testOwnerDeletesCounterTrade() {
         /**
          * Create a borrower with an item and who also has the user as a friend
          * Then, have the borrower offer a trade with the user

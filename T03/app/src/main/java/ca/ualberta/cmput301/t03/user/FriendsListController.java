@@ -24,7 +24,6 @@ import android.content.Context;
 
 import java.io.IOException;
 
-import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.datamanager.DataKey;
 import ca.ualberta.cmput301.t03.datamanager.DataManager;
 import ca.ualberta.cmput301.t03.datamanager.HttpDataManager;
@@ -57,11 +56,7 @@ public class FriendsListController {
      * @throws IOException
      */
     public boolean isUserNameTaken(String username) throws IOException {
-        try {
-            return mDataManager.keyExists(new DataKey(UserProfile.type, username));
-        } catch (ServiceNotAvailableException e) {
-            throw new RuntimeException("App is offline.", e);
-        }
+        return mDataManager.keyExists(new DataKey(UserProfile.type, username));
     }
 
     /**

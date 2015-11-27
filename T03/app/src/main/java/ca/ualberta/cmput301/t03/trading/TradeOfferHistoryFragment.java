@@ -38,7 +38,6 @@ import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
-import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 
 /**
  * View that shows the history of all past and pending trades for a user. Will observe the users
@@ -91,8 +90,6 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer {
 
                 } catch (IOException e) {
                     e.printStackTrace();
-                } catch (ServiceNotAvailableException e) {
-                    throw new RuntimeException("App is offline.", e);
                 }
                 return null;
             }

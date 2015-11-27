@@ -48,7 +48,6 @@ import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
-import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 
 
 /**
@@ -133,8 +132,6 @@ public class FriendsListFragment extends Fragment implements Observer {
 
                 } catch (IOException e) {
                     e.printStackTrace();
-                } catch (ServiceNotAvailableException e) {
-                    throw new RuntimeException("App is offline.", e);
                 }
                 return null;
             }

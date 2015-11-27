@@ -65,7 +65,7 @@ public class CachedDataManagerTests extends BaseDataManagerTests<CachedDataManag
         super.isOperationalTest();
     }
 
-    public void testWriteThenGetDataWhenInnerDataManagerNotAvailable() throws IOException, ServiceNotAvailableException {
+    public void testWriteThenGetDataWhenInnerDataManagerNotAvailable() throws IOException {
 
         InMemoryDataManager mockDataManager = new InMemoryDataManager();
         CachedDataManager cachedDataManager = new CachedDataManager(mockDataManager);
@@ -88,7 +88,7 @@ public class CachedDataManagerTests extends BaseDataManagerTests<CachedDataManag
         assertFalse(cachedDataManager.keyExists(dataKey));
     }
 
-    public void testWriteWhenInnerManagerIsNotAvailableThrowsException() throws IOException, ServiceNotAvailableException {
+    public void testWriteWhenInnerManagerIsNotAvailableThrowsException() throws IOException {
         InMemoryDataManager mockDataManager = new InMemoryDataManager();
         final CachedDataManager cachedDataManager = new CachedDataManager(mockDataManager);
 
@@ -104,8 +104,6 @@ public class CachedDataManagerTests extends BaseDataManagerTests<CachedDataManag
                 try {
                     cachedDataManager.writeData(dataKey, testDto, type); // throws
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
-                } catch (ServiceNotAvailableException e) {
                     throw new RuntimeException(e);
                 }
             }

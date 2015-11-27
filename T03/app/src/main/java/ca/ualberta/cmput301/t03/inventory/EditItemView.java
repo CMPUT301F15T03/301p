@@ -47,7 +47,6 @@ import java.util.UUID;
 
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
-import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.photo.ItemPhotoController;
 import ca.ualberta.cmput301.t03.photo.PhotoGalleryView;
 import ca.ualberta.cmput301.t03.user.User;
@@ -95,8 +94,6 @@ public class EditItemView extends AppCompatActivity {
                 }
                 catch (IOException e) {
                     e.printStackTrace();
-                } catch (ServiceNotAvailableException e) {
-                    throw new RuntimeException("App is offline.", e);
                 }
                 return null;
             }

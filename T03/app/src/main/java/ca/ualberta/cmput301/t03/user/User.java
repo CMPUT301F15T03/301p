@@ -29,14 +29,12 @@ import org.parceler.ParcelConstructor;
 import org.parceler.Transient;
 
 import java.io.IOException;
-import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.HashSet;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.TradeApp;
-import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.datamanager.CachedDataManager;
 import ca.ualberta.cmput301.t03.datamanager.DataKey;
@@ -158,7 +156,7 @@ public class User implements Observable, Observer, Comparable<User> {
      * @return FriendsList containing the User's Friends.
      * @throws IOException
      */
-    public FriendsList getFriends() throws IOException, ServiceNotAvailableException {
+    public FriendsList getFriends() throws IOException {
         if (friends == null) {
             DataKey key = new DataKey(FriendsList.type, username);
             if (!dataManager.keyExists(key)) {
@@ -191,7 +189,7 @@ public class User implements Observable, Observer, Comparable<User> {
      * @return UserProfile containing the User's profile information.
      * @throws IOException
      */
-    public UserProfile getProfile() throws IOException, ServiceNotAvailableException {
+    public UserProfile getProfile() throws IOException {
         if (profile == null) {
             DataKey key = new DataKey(UserProfile.type, username);
             if (!dataManager.keyExists(key)) {
@@ -217,7 +215,7 @@ public class User implements Observable, Observer, Comparable<User> {
      * @return Inventory populated with the User's items.
      * @throws IOException
      */
-    public Inventory getInventory() throws IOException, ServiceNotAvailableException {
+    public Inventory getInventory() throws IOException {
         if (inventory == null) {
             DataKey key = new DataKey(Inventory.type, username);
             if (!dataManager.keyExists(key)) {
@@ -246,7 +244,7 @@ public class User implements Observable, Observer, Comparable<User> {
      * @return TradeList: trades which the user is involved in
      * @throws IOException
      */
-    public TradeList getTradeList() throws IOException, ServiceNotAvailableException {
+    public TradeList getTradeList() throws IOException {
         DataKey key = new DataKey(TradeList.type, username);
         if (!dataManager.keyExists(key)) {
             tradeList = new TradeList();
@@ -303,44 +301,39 @@ public class User implements Observable, Observer, Comparable<User> {
     @Override
     public void update(Observable observable) {
         final Observable o = observable;
-        try {
-            if (o == friends) {
-                try {
-                    dataManager.writeData(new DataKey(FriendsList.type, username), friends, FriendsList.class);
-                } catch (IOException e) {
-                    throw new RuntimeException("Unable to write friendsList changes.");
-                }
-            } else if (o == inventory) {
-                try {
-                    dataManager.writeData(new DataKey(Inventory.type, username), inventory, Inventory.class);
-                } catch (IOException e) {
-                    throw new RuntimeException("Unable to write inventory changes.");
-                }
-            } else if (o == profile) {
-                try {
-                    dataManager.writeData(new DataKey(UserProfile.type, username), profile, UserProfile.class);
-                } catch (IOException e) {
-                    throw new RuntimeException("Unable to write profile changes.");
-                }
-            } else if (o == tradeList) {
-                try {
-                    /**
-                     * TODO solve tradeList update race condition:
-                     * - fetch tradeList again
-                     * - union the fetched tradeList and the local tradeList
-                     * - store the union as the local tradeList
-                     * - write the local tradeList
-                     */
-                    dataManager.writeData(new DataKey(TradeList.type, username), tradeList, TradeList.class);
-                } catch (IOException e) {
-                    throw new RuntimeException("Unable to write trade list changes.");
-                }
-            } else {
-                throw new RuntimeException("No rule found to update User using Observable: " + o.getClass());
+        if (o == friends) {
+            try {
+                dataManager.writeData(new DataKey(FriendsList.type, username), friends, FriendsList.class);
+            } catch (IOException e) {
+                throw new RuntimeException("Unable to write friendsList changes.");
             }
-        }
-        catch (ServiceNotAvailableException e) {
-            throw new RuntimeException("App is offline.", e);
+        } else if (o == inventory) {
+            try {
+                dataManager.writeData(new DataKey(Inventory.type, username), inventory, Inventory.class);
+            } catch (IOException e) {
+                throw new RuntimeException("Unable to write inventory changes.");
+            }
+        } else if (o == profile) {
+            try {
+                dataManager.writeData(new DataKey(UserProfile.type, username), profile, UserProfile.class);
+            } catch (IOException e) {
+                throw new RuntimeException("Unable to write profile changes.");
+            }
+        } else if (o == tradeList) {
+            try {
+                /**
+                 * TODO solve tradeList update race condition:
+                 * - fetch tradeList again
+                 * - union the fetched tradeList and the local tradeList
+                 * - store the union as the local tradeList
+                 * - write the local tradeList
+                 */
+                dataManager.writeData(new DataKey(TradeList.type, username), tradeList, TradeList.class);
+            } catch (IOException e) {
+                throw new RuntimeException("Unable to write trade list changes.");
+            }
+        } else {
+            throw new RuntimeException("No rule found to update User using Observable: " + o.getClass());
         }
     }
 
