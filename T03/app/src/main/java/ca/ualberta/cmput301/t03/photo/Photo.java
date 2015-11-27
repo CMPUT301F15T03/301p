@@ -112,9 +112,7 @@ public class Photo implements Observable {
      * @return bitmap rendered photo
      */
     public Bitmap getPhoto() {
-        if (!isDownloaded) {
-            downloadPhoto();
-        }
+        downloadPhoto();
         return bitmap;
     }
 
@@ -129,6 +127,8 @@ public class Photo implements Observable {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         photo.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         base64Photo.setContents(Base64.encodeToString(stream.toByteArray(), Base64.NO_WRAP));
+        byte[] bytes = Base64.decode(base64Photo.getContents(), Base64.NO_WRAP);
+        bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
         isDownloaded = true;
 
         try {
