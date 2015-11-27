@@ -20,9 +20,12 @@
 
 package ca.ualberta.cmput301.t03.datamanager;
 
+import org.apache.commons.io.FileUtils;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Type;
 import java.util.Scanner;
@@ -69,7 +72,7 @@ public class LocalDataManager extends JsonDataManager {
      * {@inheritDoc}
      */
     @Override
-    public <T> T getData(DataKey key, Type typeOfT) {
+    public <T> T getData(DataKey key, Type typeOfT) throws IOException {
         Preconditions.checkNotNull(key, "key");
 
         if (!keyExists(key)) {
@@ -78,15 +81,8 @@ public class LocalDataManager extends JsonDataManager {
 
         File targetFile = getTargetFile(key, false);
 
-        Scanner scanner;
-        try {
-            scanner = new Scanner(targetFile);
-        } catch (FileNotFoundException e) {
-            throw new NotImplementedException("Dev note: This exception shouldn't have been thrown, as the necessary dirs are created.", e);
-        }
+        String fileContents = FileUtils.readFileToString(targetFile);
 
-        String fileContents = scanner.useDelimiter("\\Z").next();
-        scanner.close();
         return deserialize(fileContents, typeOfT);
     }
 
