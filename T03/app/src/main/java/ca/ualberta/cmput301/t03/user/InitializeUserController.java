@@ -25,6 +25,7 @@ import android.util.Patterns;
 
 import java.io.IOException;
 
+import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.datamanager.DataKey;
 import ca.ualberta.cmput301.t03.datamanager.DataManager;
@@ -58,7 +59,7 @@ public class InitializeUserController {
      * @return true == taken, false == not taken
      * @throws IOException
      */
-    public boolean isUserNameTaken(String username) throws IOException {
+    public boolean isUserNameTaken(String username) throws IOException, ServiceNotAvailableException {
         return dataManager.keyExists(new DataKey(UserProfile.type, username));
     }
 
@@ -93,6 +94,8 @@ public class InitializeUserController {
         } catch (IOException e) {
             throw new RuntimeException("Issue getting user's profile.");
 
+        } catch (ServiceNotAvailableException e) {
+            throw new RuntimeException("App is offline.", e);
         }
 
         // set profile info from the view
@@ -109,6 +112,8 @@ public class InitializeUserController {
             localUserInventory = localUser.getInventory();
         } catch (IOException e) {
             throw new RuntimeException("Issue getting user's inventory.");
+        } catch (ServiceNotAvailableException e) {
+            throw new RuntimeException("App is offline.", e);
         }
 
         // get userFriendsList -> this sets up ES
@@ -117,6 +122,8 @@ public class InitializeUserController {
             localUserFriends = localUser.getFriends();
         } catch (IOException e) {
             throw new RuntimeException("Issue getting user's friendsList.");
+        } catch (ServiceNotAvailableException e) {
+            throw new RuntimeException("App is offline.", e);
         }
     }
 }

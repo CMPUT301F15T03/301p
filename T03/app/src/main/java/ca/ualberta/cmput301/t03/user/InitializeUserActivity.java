@@ -31,6 +31,7 @@ import android.widget.Toast;
 import java.io.IOException;
 
 import ca.ualberta.cmput301.t03.R;
+import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 
 /**
  * View component of the Initialize user workflow. To be entered if no user is found locally.
@@ -162,6 +163,10 @@ public class InitializeUserActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     toastMessage(getString(R.string.problemWithNetworkToast));
                     return;
+                } catch (ServiceNotAvailableException e) {
+                    //todo this should not crash app, just friendlily tell the user
+                    //they are dumb
+                    throw new RuntimeException("App is offline.", e);
                 }
 
                 if (cityEditText.getText().toString().isEmpty()) {

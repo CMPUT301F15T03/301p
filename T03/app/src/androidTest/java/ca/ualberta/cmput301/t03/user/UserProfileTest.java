@@ -40,6 +40,7 @@ import ca.ualberta.cmput301.t03.MainActivity;
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.common.PrimaryUserHelper;
+import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
@@ -110,7 +111,7 @@ public class UserProfileTest {
      * UC02.04.01
      */
     @Test
-    public void testViewUserProfile() throws IOException {
+    public void testViewUserProfile() throws IOException, ServiceNotAvailableException {
 
         User user = PrimaryUser.getInstance();
         UserProfile profile = PrimaryUser.getInstance().getProfile();
