@@ -38,6 +38,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import ca.ualberta.cmput301.t03.R;
+import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.inventory.Item;
 import ca.ualberta.cmput301.t03.user.User;
 
@@ -90,6 +91,8 @@ public class TradeOfferComposeActivity extends AppCompatActivity {
                     model.getOwner().getTradeList().addTrade(model);
                 } catch (IOException e) {
                     throw new RuntimeException("Primary User failed to get TradeList");
+                } catch (ServiceNotAvailableException e) {
+                    throw new RuntimeException("App is offline.", e);
                 }
                 controller = new TradeOfferComposeController(c, model);
                 return null;

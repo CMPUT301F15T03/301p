@@ -65,7 +65,7 @@ public class CachedDataManager extends JsonDataManager {
      * @throws IOException Thrown, if the communications fails with the storage media being used.
      */
     @Override
-    public boolean keyExists(DataKey key) throws IOException {
+    public boolean keyExists(DataKey key) throws IOException, ServiceNotAvailableException {
         if (innerManager.isOperational()) {
             return innerManager.keyExists(key);
         }
@@ -85,7 +85,7 @@ public class CachedDataManager extends JsonDataManager {
      * @throws IOException Thrown, if the communication to the storage media fails.
      */
     @Override
-    public <T> T getData(DataKey key, Type typeOfT) throws IOException, DataKeyNotFoundException, ClassCastException {
+    public <T> T getData(DataKey key, Type typeOfT) throws IOException, DataKeyNotFoundException, ClassCastException, ServiceNotAvailableException {
         if (innerManager.isOperational()) {
             T retrievedData = innerManager.getData(key, typeOfT);
             cachingDataManager.writeData(convertToCacheKey(key), retrievedData, typeOfT);
@@ -105,7 +105,7 @@ public class CachedDataManager extends JsonDataManager {
      * @throws IOException Thrown, if the communication to the storage media fails.
      */
     @Override
-    public <T> void writeData(DataKey key, T obj, Type typeOfT) throws IOException {
+    public <T> void writeData(DataKey key, T obj, Type typeOfT) throws IOException, ServiceNotAvailableException {
         if (isOperational()) {
             innerManager.writeData(key, obj, typeOfT);
             writeToCache(key, obj, typeOfT);
@@ -123,7 +123,7 @@ public class CachedDataManager extends JsonDataManager {
      * @throws IOException Thrown, if the communication to the storage media fails.
      */
     @Override
-    public void deleteIfExists(DataKey key) throws IOException {
+    public void deleteIfExists(DataKey key) throws IOException, ServiceNotAvailableException {
         if (!isOperational()) {
             throw new ServiceNotAvailableException("Inner DataManager is not operational. Cannot perform the delete operation.");
         }
