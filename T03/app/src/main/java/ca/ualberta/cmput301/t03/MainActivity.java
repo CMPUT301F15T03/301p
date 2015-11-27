@@ -38,6 +38,7 @@ import android.widget.TextView;
 
 import java.io.IOException;
 
+import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.configuration.ConfigurationActivity;
 import ca.ualberta.cmput301.t03.inventory.BrowseInventoryFragment;
@@ -274,6 +275,8 @@ public class MainActivity extends AppCompatActivity
                     emailTemp = PrimaryUser.getInstance().getProfile().getEmail();
                 } catch (IOException e) {
                     emailTemp = "";
+                } catch (ServiceNotAvailableException e) {
+                    throw new RuntimeException("App is offline.", e);
                 }
 
                 final String email = emailTemp;
@@ -288,6 +291,8 @@ public class MainActivity extends AppCompatActivity
                     PrimaryUser.getInstance().getProfile().addObserver(MainActivity.this);
                 } catch (IOException e) {
                     e.printStackTrace();
+                } catch (ServiceNotAvailableException e) {
+                    throw new RuntimeException("App is offline.", e);
                 }
                 return null;
             }
@@ -312,6 +317,8 @@ public class MainActivity extends AppCompatActivity
             });
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (ServiceNotAvailableException e) {
+            throw new RuntimeException("App is offline.", e);
         }
     }
 }
