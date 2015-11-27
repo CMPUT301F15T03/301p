@@ -24,6 +24,7 @@ import android.content.Context;
 
 import java.io.IOException;
 
+import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.user.User;
 
@@ -75,6 +76,8 @@ public class PrimaryUser {
                 ourInstance.getTradeList();
             } catch (IOException e) {
                 throw new RuntimeException("Issue grabbing User's fields");
+            } catch (ServiceNotAvailableException e) {
+                throw new RuntimeException("App is offline.", e);
             }
         }
         return ourInstance;

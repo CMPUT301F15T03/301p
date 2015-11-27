@@ -29,6 +29,7 @@ import junit.framework.AssertionFailedError;
 import java.io.IOException;
 
 import ca.ualberta.cmput301.t03.common.exceptions.ExceptionUtils;
+import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.datamanager.mocks.TestDto;
 
 import static ca.ualberta.cmput301.t03.common.ExceptionAsserter.assertThrowsException;
@@ -65,6 +66,8 @@ public abstract class BaseDataManagerTests<T extends DataManager> extends Androi
             throw new AssertionFailedError(e.getMessage() + "\n" + ExceptionUtils.getStackTrace(e));
         } catch (InterruptedException e) {
             throw new AssertionFailedError(e.getMessage() + "\n" + ExceptionUtils.getStackTrace(e));
+        } catch (ServiceNotAvailableException e) {
+            throw new AssertionFailedError(e.getMessage() + "\n" + ExceptionUtils.getStackTrace(e));
         }
     }
 
@@ -83,10 +86,14 @@ public abstract class BaseDataManagerTests<T extends DataManager> extends Androi
                         }.getType());
                     } catch (IOException e) {
                         throw new RuntimeException(e);
+                    } catch (ServiceNotAvailableException e) {
+                        throw new RuntimeException("App is offline.", e);
                     }
                 }
             }, DataKeyNotFoundException.class);
         } catch (IOException e) {
+            throw new AssertionFailedError(e.getMessage() + "\n" + ExceptionUtils.getStackTrace(e));
+        } catch (ServiceNotAvailableException e) {
             throw new AssertionFailedError(e.getMessage() + "\n" + ExceptionUtils.getStackTrace(e));
         }
     }
@@ -105,6 +112,8 @@ public abstract class BaseDataManagerTests<T extends DataManager> extends Androi
         } catch (IOException e) {
             throw new AssertionFailedError(e.getMessage() + "\n" + ExceptionUtils.getStackTrace(e));
         } catch (InterruptedException e) {
+            throw new AssertionFailedError(e.getMessage() + "\n" + ExceptionUtils.getStackTrace(e));
+        } catch (ServiceNotAvailableException e) {
             throw new AssertionFailedError(e.getMessage() + "\n" + ExceptionUtils.getStackTrace(e));
         }
     }
@@ -126,6 +135,8 @@ public abstract class BaseDataManagerTests<T extends DataManager> extends Androi
         } catch (IOException e) {
             throw new AssertionFailedError(e.getMessage() + "\n" + ExceptionUtils.getStackTrace(e));
         } catch (InterruptedException e) {
+            throw new AssertionFailedError(e.getMessage() + "\n" + ExceptionUtils.getStackTrace(e));
+        } catch (ServiceNotAvailableException e) {
             throw new AssertionFailedError(e.getMessage() + "\n" + ExceptionUtils.getStackTrace(e));
         }
     }

@@ -50,6 +50,7 @@ import ca.ualberta.cmput301.t03.MainActivity;
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.common.PrimaryUserHelper;
+import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.inventory.Inventory;
 import ca.ualberta.cmput301.t03.inventory.Item;
 import ca.ualberta.cmput301.t03.user.User;
@@ -133,7 +134,7 @@ public class PhotoUITest {
      * UC06.01.01 AttachPhotographsToItem
      */
     @Test
-    public void testAttachPhotographsToItems() throws IOException {
+    public void testAttachPhotographsToItems() throws IOException, ServiceNotAvailableException {
         Inventory inventory = PrimaryUser.getInstance().getInventory();
         Item item = new Item();
         item.setItemCategory(ITEM_CATEGORY);
@@ -162,7 +163,7 @@ public class PhotoUITest {
      * UC06.02.01 ViewItemPhotograph
      */
     @Test
-    public void testViewItemPhotographs() throws IOException {
+    public void testViewItemPhotographs() throws IOException, ServiceNotAvailableException {
         Inventory inventory = PrimaryUser.getInstance().getInventory();
         Item item = new Item();
         item.setItemCategory(ITEM_CATEGORY);
@@ -194,7 +195,7 @@ public class PhotoUITest {
      * UC06.03.01 DeleteAttachedPhotograph
      */
     @Test
-    public void testDeleteAttachedPhotographs() throws IOException {
+    public void testDeleteAttachedPhotographs() throws IOException, ServiceNotAvailableException {
         Inventory inventory = PrimaryUser.getInstance().getInventory();
         Item item = new Item();
         item.setItemCategory(ITEM_CATEGORY);
@@ -227,7 +228,7 @@ public class PhotoUITest {
     }
 
     @Test
-    public void testPhotoIsUnder64k() throws IOException {
+    public void testPhotoIsUnder64k() throws IOException, ServiceNotAvailableException {
         Inventory inventory = PrimaryUser.getInstance().getInventory();
         Item item = new Item();
         item.setItemCategory(ITEM_CATEGORY);

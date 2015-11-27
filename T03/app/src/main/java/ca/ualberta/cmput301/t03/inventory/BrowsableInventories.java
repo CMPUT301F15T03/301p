@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.filters.CollectionFilter;
 import ca.ualberta.cmput301.t03.filters.Filter;
 import ca.ualberta.cmput301.t03.filters.FilterCriteria;
@@ -69,6 +70,8 @@ public class BrowsableInventories implements Filterable<Item>, Observer, Observa
                     friendList = user.getFriends();
                 } catch (IOException e) {
                     throw new RuntimeException("Could not get user and associated friendList");
+                } catch (ServiceNotAvailableException e) {
+                    throw new RuntimeException("App is offline.", e);
                 }
             }
         });
@@ -99,6 +102,8 @@ public class BrowsableInventories implements Filterable<Item>, Observer, Observa
                     }
                 } catch (IOException e) {
                     throw new RuntimeException("Could not get user and associated friendList");
+                } catch (ServiceNotAvailableException e) {
+                    throw new RuntimeException("App is offline.", e);
                 }
             }
         });
