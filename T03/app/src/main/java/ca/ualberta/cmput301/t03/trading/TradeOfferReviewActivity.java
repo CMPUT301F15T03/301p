@@ -20,6 +20,7 @@
 
 package ca.ualberta.cmput301.t03.trading;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -53,6 +54,8 @@ import ca.ualberta.cmput301.t03.inventory.EnhancedSimpleAdapter;
  * On interaction, it delegates to a {@link TradeOfferReviewController}.
  */
 public class TradeOfferReviewActivity extends AppCompatActivity {
+
+    private Activity activity = this;
 
     private Trade model;
     private TradeOfferReviewController controller;
@@ -126,6 +129,8 @@ public class TradeOfferReviewActivity extends AppCompatActivity {
                 ownerItemTiles = tileBuilder.buildItemTiles(model.getOwnersItems(), ownerItemTilePositionMap);
                 borrowerItemTiles = tileBuilder.buildItemTiles(model.getBorrowersItems(), borrowerItemTilePositionMap);
 
+                controller = new TradeOfferReviewController(getBaseContext(), model);
+
                 currentUsername = PrimaryUser.getInstance().getUsername();
 
                 return getBaseContext();
@@ -142,13 +147,29 @@ public class TradeOfferReviewActivity extends AppCompatActivity {
                     tradeReviewAccept.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Snackbar.make(v, "trade accept unimplemented", Snackbar.LENGTH_SHORT).show();
+                            AsyncTask task = new AsyncTask() {
+                                @Override
+                                protected Object doInBackground(Object[] params) {
+                                    controller.acceptTrade();
+                                    return null;
+                                }
+                            };
+                            task.execute();
+                            activity.finish();
                         }
                     });
                     tradeReviewDecline.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Snackbar.make(v, "trade decline unimplemented", Snackbar.LENGTH_SHORT).show();
+                            AsyncTask task = new AsyncTask() {
+                                @Override
+                                protected Object doInBackground(Object[] params) {
+                                    controller.declineTrade();
+                                    return null;
+                                }
+                            };
+                            task.execute();
+                            activity.finish();
                         }
                     });
                     tradeReviewDeclineAndCounterOffer.setOnClickListener(new View.OnClickListener() {
