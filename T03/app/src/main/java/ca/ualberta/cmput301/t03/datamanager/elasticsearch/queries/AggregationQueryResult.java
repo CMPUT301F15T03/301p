@@ -68,5 +68,26 @@ public class AggregationQueryResult {
         public void setCount(int count) {
             this.count = count;
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (o == null) {
+                return false;
+            }
+
+            if (!(o instanceof Bucket)) {
+                return false;
+            }
+
+            Bucket rhs = (Bucket)o;
+
+            return this.count == rhs.count &&
+                    this.key.equals(rhs.key);
+        }
+
+        @Override
+        public int hashCode() {
+            return new Integer(count).hashCode() ^ key.hashCode();
+        }
     }
 }
