@@ -30,6 +30,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,7 +51,10 @@ import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
+import ca.ualberta.cmput301.t03.common.TileBuilder;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
+import ca.ualberta.cmput301.t03.configuration.Configuration;
+import ca.ualberta.cmput301.t03.photo.Photo;
 import ca.ualberta.cmput301.t03.user.User;
 
 
@@ -60,7 +64,7 @@ import ca.ualberta.cmput301.t03.user.User;
  * By clicking the listed Items here the user can inspect, edit and delete.
  * The User can add an item by pressing the FloatingActionButton.
  */
-public class UserInventoryFragment extends Fragment implements Observer {
+public class UserInventoryFragment extends Fragment implements Observer, SwipeRefreshLayout.OnRefreshListener {
     private static final String ARG_PARAM1 = "user";
     Activity mActivity;
     View mView;
@@ -74,6 +78,7 @@ public class UserInventoryFragment extends Fragment implements Observer {
 
     private HashMap<Integer, UUID> positionMap;
     List<HashMap<String, Object>> tiles;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     public UserInventoryFragment() {
         // Required empty public constructor
@@ -112,7 +117,14 @@ public class UserInventoryFragment extends Fragment implements Observer {
             if (PrimaryUser.getInstance().equals(user)) {
                 user = PrimaryUser.getInstance();
             } else {
-                user = new User(user.getUsername(), getActivity().getApplicationContext());
+//                user = new User(user.getUsername(), getActivity().getApplicationContext());
+                try {
+                    user = PrimaryUser.getInstance().getFriends().getFriend(user.getUsername());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ServiceNotAvailableException e) {
+                    throw new RuntimeException("OFFLINE CANT DO THIS I GUESS");
+                }
             }
         } else {
             user = PrimaryUser.getInstance();
@@ -150,12 +162,19 @@ public class UserInventoryFragment extends Fragment implements Observer {
 
     }
 
+    @Override
+    public void onResume() {
+
+        fragmentSetup(mView);
+        super.onResume();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.fragment_user_inventory, container, false);
         mView = v;
+        setupSwipeRefresh(v);
         return v;
     }
 
@@ -163,58 +182,12 @@ public class UserInventoryFragment extends Fragment implements Observer {
      * Starts activity used to create a new item
      */
     public void addItemButtonClicked() {
-//        throw new UnsupportedOperationException();
         Intent intent = new Intent(getContext(), AddItemView.class);
         startActivity(intent);
     }
 
     private void fragmentSetup(View v) {
         createListView(v);
-        model.addObserver(this);
-
-
-//        final Item itemModel = new Item();
-//        itemModel.setItemName("lala");
-//        itemModel.setItemQuantity(1);
-//        itemModel.setItemQuality("good");
-//        itemModel.setItemCategory("good");
-//        itemModel.setItemIsPrivate(true);
-//        itemModel.setItemDescription("lala");
-//
-//        Thread thread = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                model.addItem(itemModel);
-//            }
-//        });
-//        thread.start();
-
-    }
-
-    private ArrayList<HashMap<String, Object>> buildTiles() {
-        ArrayList<HashMap<String, Object>> tiles = new ArrayList<>();
-//        Item[] itemList = {new Item("test", "test"), new Item("test", "test"), new Item("test", "test"), new Item("test", "test"), new Item("test", "test") };
-        //SHOULD BE REPLACED WITH ONCE LINKED
-        //HashMap<UUID, Item> tempMap = model.getItems();
-        //Collection<Item> tempcollection = tempMap.values();
-        //ArrayList<Item> itemList = (ArrayList<Item>) model.getItems().values();
-        int i = 0;
-        positionMap.clear();
-        for (Item item : model.getItems().values()) {
-            HashMap<String, Object> hm = new HashMap<String, Object>();
-            hm.put("tileViewItemName", item.getItemName());
-            hm.put("tileViewItemCategory", item.getItemCategory());
-            if(item.getPhotoList().getPhotos().size() > 0){
-                hm.put("tileViewItemImage", (Bitmap) item.getPhotoList().getPhotos().get(0).getPhoto());
-            }
-            else {
-                hm.put("tileViewItemImage", ((BitmapDrawable) getResources().getDrawable(R.drawable.photo_unavailable)).getBitmap());
-            }
-            tiles.add(hm);
-            positionMap.put(i, item.getUuid());
-            i++;
-        }
-        return tiles;
     }
 
     /**
@@ -227,16 +200,16 @@ public class UserInventoryFragment extends Fragment implements Observer {
         AsyncTask worker = new AsyncTask() {
             @Override
             protected Object doInBackground(Object[] params) {
-                tiles = buildTiles();
+                TileBuilder tileBuilder = new TileBuilder(getResources());
+                tiles = tileBuilder.buildItemTiles(model.getItems().values(), positionMap);
                 return null;
             }
 
             @Override
             protected void onPostExecute(Object o) {
                 listview = (ListView) view.findViewById(R.id.InventoryListView);
-//                List<HashMap<String, Object>> tiles = buildTiles();
-                String[] from = {"tileViewItemName", "tileViewItemCategory", "tileViewItemImage"}; //
-                int[] to = {R.id.tileViewItemName, R.id.tileViewItemCategory, R.id.tileViewItemImage}; //
+                String[] from = {"tileViewItemName", "tileViewItemCategory", "tileViewItemImage"};
+                int[] to = {R.id.tileViewItemName, R.id.tileViewItemCategory, R.id.tileViewItemImage};
                 adapter = new EnhancedSimpleAdapter(mActivity.getBaseContext(), tiles, R.layout.fragment_item_tile, from, to);
                 listview.setAdapter(adapter);
 
@@ -278,13 +251,17 @@ public class UserInventoryFragment extends Fragment implements Observer {
         Intent intent = null;
         if (PrimaryUser.getInstance().equals(user)) {
             intent = new Intent(getContext(), EditItemView.class);
-            intent.putExtra("user", Parcels.wrap(user));
+            intent.putExtra("user", user.getUsername());
             intent.putExtra("ITEM_UUID", item.getUuid().toString());
 
         } else {
             intent = new Intent(getContext(), InspectItemView.class);
-            intent.putExtra("user", Parcels.wrap(user));
-            intent.putExtra("inventory/inspect/item", Parcels.wrap(item));
+//            intent.putExtra("user", Parcels.wrap(user));
+//            intent.putExtra("inventory/inspect/item", Parcels.wrap(item));
+
+            // new and improved way
+            intent.putExtra("user", user.getUsername());
+            intent.putExtra("ITEM_UUID", item.getUuid().toString());
         }
 
         startActivity(intent);
@@ -294,6 +271,7 @@ public class UserInventoryFragment extends Fragment implements Observer {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        model.removeObserver(this);
     }
 
     private void setupFab(View v) {
@@ -312,14 +290,40 @@ public class UserInventoryFragment extends Fragment implements Observer {
 
     @Override
     public void update(Observable observable) {
-        mActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                adapter.notifyDataSetChanged();
-                fragmentSetup(mView);
-            }
-        });
-//        throw new UnsupportedOperationException();
+//        mActivity.runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                fragmentSetup(mView);
+//                adapter.notifyDataSetChanged();
+//            }
+//        });
     }
 
+    public void setupSwipeRefresh(View v){
+        mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.userInventorySwipeLayout);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+    }
+
+    @Override
+    public void onRefresh() {
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    PrimaryUser.getInstance().refresh();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ServiceNotAvailableException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        };
+        task.execute();
+    }
 }

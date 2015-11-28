@@ -54,6 +54,14 @@ public class TradeStateCancelled implements TradeState {
 
     /**
      * {@inheritDoc}
+     */
+    @Override
+    public Boolean isPublic() {
+        return Boolean.FALSE;
+    }
+
+    /**
+     * {@inheritDoc}
      *
      * @param trade Trade to be offered.
      * @throws IllegalTradeStateTransition
@@ -94,6 +102,14 @@ public class TradeStateCancelled implements TradeState {
     @Override
     public void decline(Trade trade) throws IllegalTradeStateTransition {
         throw new IllegalTradeStateTransition("Cancelled trade cannot be declined");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getInterfaceString(Boolean currentUserIsOwner) {
+        return "CANCELLED-NOT-IN-INTERFACE";
     }
 
     @Override

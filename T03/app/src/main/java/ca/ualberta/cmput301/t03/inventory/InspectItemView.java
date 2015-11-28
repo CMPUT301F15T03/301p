@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -50,6 +51,7 @@ public class InspectItemView extends AppCompatActivity {
     private Item itemModel;
     private InspectItemController controller;
     private Button proposeTradeButton;
+    private Button cloneItemButton;
 
     private Inventory inventoryModel;
 
@@ -63,16 +65,62 @@ public class InspectItemView extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        User userFromIntent = Parcels.unwrap(getIntent().getParcelableExtra("user"));
+//        User userFromIntent = Parcels.unwrap(getIntent().getParcelableExtra("user"));
+        String username = getIntent().getStringExtra("user");
+        String itemUUID = getIntent().getStringExtra("ITEM_UUID");
 
 
-        if (userFromIntent == null || PrimaryUser.getInstance().equals(userFromIntent)) {
+        if (username == null || PrimaryUser.getInstance().getUsername().equals(username)) {
             user = PrimaryUser.getInstance();
         } else {
-            user = new User(userFromIntent, getApplicationContext());
+//            user = new User(userFromIntent, getApplicationContext());
+            try {
+                user = PrimaryUser.getInstance().getFriends().getFriend(username);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ServiceNotAvailableException e) {
+                throw new RuntimeException("OFFLINE CANT DO THIS I GUESS");
+            }
         }
 
-        itemModel = Parcels.unwrap(getIntent().getParcelableExtra("inventory/inspect/item"));
+//        itemModel = Parcels.unwrap(getIntent().getParcelableExtra("inventory/inspect/item"));
+        try {
+            itemModel = user.getInventory().getItem(itemUUID);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ServiceNotAvailableException e) {
+            throw new RuntimeException("OFFLINE CANT DO THIS I GUESS");
+        }
+
+        AsyncTask<String, Void, Item> task = new AsyncTask<String, Void, Item>() {
+            @Override
+            protected Item doInBackground(String... params) {
+                String im = params[0];
+
+                try {
+                    itemModel = user.getInventory().getItem(im);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ServiceNotAvailableException e) {
+                    e.printStackTrace();
+                }
+
+                return itemModel;
+            }
+
+            @Override
+            protected void onPostExecute(Item item) {
+                super.onPostExecute(item);
+                onModelFetched();
+            }
+        };
+
+        task.execute(itemUUID);
+
+    }
+
+
+    public void onModelFetched(){
         // populate with fields
         EditText itemNameText = (EditText) findViewById(R.id.itemName);
         EditText itemQuantityText = (EditText) findViewById(R.id.itemQuantity);
@@ -113,6 +161,13 @@ public class InspectItemView extends AppCompatActivity {
                 controller.proposeTradeButtonClicked();
             }
         });
+        cloneItemButton = (Button) findViewById(R.id.cloneItemButton);
+        cloneItemButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onCloneItemButtonClicked(v);
+            }
+        });
 
         Button viewImagesButton = (Button) findViewById(R.id.viewImagesbutton);
         viewImagesButton.setOnClickListener(new View.OnClickListener() {
@@ -129,15 +184,10 @@ public class InspectItemView extends AppCompatActivity {
             public Bitmap image = null;
             @Override
             protected Object doInBackground(Object[] params) {
-                    try {
-                        if (user.getInventory().getItem(itemModel.getUuid()).getPhotoList().getPhotos().size() > 0) {
-                            image = user.getInventory().getItem(itemModel.getUuid()).getPhotoList().getPhotos().get(0).getPhoto();
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (ServiceNotAvailableException e) {
-                        throw new RuntimeException("App is offline.", e);
-                    }
+
+                if (itemModel.getPhotoList().getPhotos().size() > 0) {
+                    image = itemModel.getPhotoList().getPhotos().get(0).getPhoto();
+                }
                 return null;
             }
             @Override
@@ -149,7 +199,41 @@ public class InspectItemView extends AppCompatActivity {
             }
         };
         worker.execute();
+    }
 
 
+    public void onCloneItemButtonClicked(final View view){
+        final View view1 = view;
+
+        AsyncTask<Void, Void, Item> task = new AsyncTask<Void, Void, Item>() {
+            @Override
+            protected Item doInBackground(Void... params) {
+                Item newItem = null;
+                try {
+                    newItem = controller.cloneItem();
+                } catch (ServiceNotAvailableException e) {
+                    e.printStackTrace();
+                    return null;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+
+                return newItem;
+            }
+
+            @Override
+            protected void onPostExecute(Item item) {
+                if (item == null){
+                    Snackbar.make(view1, "Cloning item failed!", Snackbar.LENGTH_SHORT).show();
+                } else {
+                    Snackbar.make(view1,
+                            String.format("Successfully cloned %s to your inventory",
+                                          item.getItemName()), Snackbar.LENGTH_SHORT).show();
+                }
+            }
+        };
+
+        task.execute();
     }
 }

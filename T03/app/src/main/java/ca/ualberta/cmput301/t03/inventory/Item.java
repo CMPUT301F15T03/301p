@@ -31,13 +31,14 @@ import java.util.UUID;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
+import ca.ualberta.cmput301.t03.photo.Photo;
 import ca.ualberta.cmput301.t03.photo.PhotoGallery;
 
 /**
  * Model for an Item, Is owned by an inventory which is owned by a user.
  */
 @Parcel
-public class Item implements Observer, Observable {
+public class Item implements Observer, Observable, Cloneable {
 
     @Transient
     @Expose
@@ -217,6 +218,8 @@ public class Item implements Observer, Observable {
     }
 
     public PhotoGallery getPhotoList() {
+        photoList.removeObserver(this);
+        photoList.addObserver(this);
         return photoList;
     }
 
@@ -283,5 +286,35 @@ public class Item implements Observer, Observable {
         // todo this likely has something to do with one of the photos changing
     }
 
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+//        Item item = (Item) super.clone();
 
+        Item item = new Item(getItemName(), getItemCategory());
+        item.setItemDescription(getItemDescription());
+        item.setItemQuantity(getItemQuantity());
+        item.setItemQuality(getItemQuality());
+
+        item.photoList = (PhotoGallery) getPhotoList().clone();
+
+        item.commitChanges();
+
+        return item;
+
+//        this(itemToClone.getItemName(), itemToClone.getItemCategory());
+//        setItemDescription(itemToClone.getItemDescription());
+//        setItemQuality(itemToClone.getItemQuality());
+//        setItemQuantity(itemToClone.getItemQuantity());
+//
+//        PhotoGallery gallery = itemToClone.getPhotoList();
+//        PhotoGallery myPhotoGallery = getPhotoList();
+//        for (Photo p: gallery.getPhotos()){
+//
+//
+//            myPhotoGallery.addPhoto(); Photo(p.getPhoto())
+//        }
+//
+//        getPhotoList().addPhoto();
+
+    }
 }

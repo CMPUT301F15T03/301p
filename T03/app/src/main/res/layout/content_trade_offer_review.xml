@@ -18,7 +18,7 @@
         android:layout_marginLeft="0dp"
         android:layout_alignParentTop="true"
         android:layout_marginTop="0dp"
-        android:id="@+id/linearLayout">
+        android:id="@+id/iwant">
 
         <TextView
             android:layout_width="wrap_content"
@@ -42,7 +42,7 @@
         layout="@layout/fragment_item_tile"
         android:layout_marginLeft="0dp"
         android:id="@+id/tradeComposeOwnerItem"
-        android:layout_below="@+id/linearLayout"
+        android:layout_below="@+id/iwant"
         android:layout_alignParentStart="true" />
 
     <TextView
