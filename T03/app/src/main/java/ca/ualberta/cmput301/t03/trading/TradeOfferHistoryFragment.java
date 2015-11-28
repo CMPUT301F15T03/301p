@@ -83,6 +83,8 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        tradeTilePositionMap = new HashMap<>();
+
         AsyncTask worker = new AsyncTask() {
             @Override
             protected Object doInBackground(Object[] params) {
