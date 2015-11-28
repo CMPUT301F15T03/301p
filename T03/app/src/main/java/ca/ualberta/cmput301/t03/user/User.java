@@ -381,4 +381,23 @@ public class User implements Observable, Observer, Comparable<User> {
     public int hashCode() {
         return super.hashCode();
     }
+
+    public void refresh() throws IOException, ServiceNotAvailableException {
+        if (friends != null) {
+            friends = null;
+            getFriends();
+        }
+        if (profile != null) {
+            profile = null;
+            getProfile();
+        }
+        if (inventory != null) {
+            inventory = null;
+            getInventory();
+        }
+        if (tradeList != null) {
+            tradeList = null;
+            getTradeList();
+        }
+    }
 }
