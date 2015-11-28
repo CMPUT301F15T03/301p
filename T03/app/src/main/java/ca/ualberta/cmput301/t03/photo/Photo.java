@@ -100,19 +100,21 @@ public class Photo implements Observable, Cloneable {
             Configuration config = new Configuration(TradeApp.getContext());
             if (!force && !config.isDownloadImagesEnabled()) {
                 bitmap = ((BitmapDrawable) TradeApp.getContext().getResources().getDrawable(R.drawable.photo_available_for_download)).getBitmap();
-                return;
             }
 
-            try {
-                base64Photo = dataManager.getData(new DataKey(Photo.type, photoUUID.toString()), Base64Wrapper.class);
-                isDownloaded = true;
-                byte[] bytes = Base64.decode(base64Photo.getContents(), Base64.NO_WRAP);
-                bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ServiceNotAvailableException e) {
-                throw new RuntimeException("App is offline.", e);
+            else {
+                try {
+                    base64Photo = dataManager.getData(new DataKey(Photo.type, photoUUID.toString()), Base64Wrapper.class);
+                    isDownloaded = true;
+                    byte[] bytes = Base64.decode(base64Photo.getContents(), Base64.NO_WRAP);
+                    bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ServiceNotAvailableException e) {
+                    throw new RuntimeException("App is offline.", e);
+                }
             }
+            notifyObservers();
         }
     }
 
@@ -160,6 +162,7 @@ public class Photo implements Observable, Cloneable {
         } catch (ServiceNotAvailableException e) {
             throw new RuntimeException("App is offline.", e);
         }
+        notifyObservers();
     }
 
     /**

@@ -152,6 +152,12 @@ public class UserInventoryFragment extends Fragment implements Observer {
 
     }
 
+    @Override
+    public void onResume() {
+
+        fragmentSetup(mView);
+        super.onResume();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -171,7 +177,6 @@ public class UserInventoryFragment extends Fragment implements Observer {
 
     private void fragmentSetup(View v) {
         createListView(v);
-        model.addObserver(this);
     }
 
     private ArrayList<HashMap<String, Object>> buildTiles() {
@@ -291,14 +296,13 @@ public class UserInventoryFragment extends Fragment implements Observer {
 
     @Override
     public void update(Observable observable) {
-        mActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                adapter.notifyDataSetChanged();
-                fragmentSetup(mView);
-            }
-        });
-//        throw new UnsupportedOperationException();
+//        mActivity.runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                fragmentSetup(mView);
+//                adapter.notifyDataSetChanged();
+//            }
+//        });
     }
 
 }

@@ -218,6 +218,8 @@ public class Item implements Observer, Observable, Cloneable {
     }
 
     public PhotoGallery getPhotoList() {
+        photoList.removeObserver(this);
+        photoList.addObserver(this);
         return photoList;
     }
 
