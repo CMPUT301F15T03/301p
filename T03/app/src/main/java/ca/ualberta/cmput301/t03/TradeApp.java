@@ -9,6 +9,9 @@ import com.path.android.jobqueue.config.Configuration;
 import ca.ualberta.cmput301.t03.datamanager.DataManager;
 import ca.ualberta.cmput301.t03.datamanager.HttpDataManager;
 import ca.ualberta.cmput301.t03.datamanager.QueuedDataManager;
+import ca.ualberta.cmput301.t03.datamanager.elasticsearch.queries.CachedQueryExecutor;
+import ca.ualberta.cmput301.t03.datamanager.elasticsearch.queries.HttpQueryExecutor;
+import ca.ualberta.cmput301.t03.datamanager.elasticsearch.queries.QueryExecutor;
 
 /**
  * Main {@link Application} class that loads when the app is loaded. Exposes static ways to
@@ -77,5 +80,9 @@ public class TradeApp extends Application {
      */
     public DataManager createDataManager(boolean useExplicitExposeAnnotation) {
         return new QueuedDataManager(getJobManager(), useExplicitExposeAnnotation);
+    }
+
+    public QueryExecutor createQueryExecutor() {
+        return new CachedQueryExecutor(new HttpQueryExecutor());
     }
 }
