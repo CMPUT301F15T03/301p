@@ -20,13 +20,22 @@
 
 package ca.ualberta.cmput301.t03.inventory;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.os.AsyncTask;
+import android.support.design.widget.Snackbar;
+import android.view.View;
+import android.widget.EditText;
+
 import org.parceler.Transient;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.filters.CollectionFilter;
 import ca.ualberta.cmput301.t03.filters.Filter;
@@ -39,6 +48,8 @@ import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.user.FriendsList;
 import ca.ualberta.cmput301.t03.user.User;
+import ca.ualberta.cmput301.t03.user.UserAlreadyAddedException;
+import ca.ualberta.cmput301.t03.user.UserNotFoundException;
 
 
 /**
@@ -54,7 +65,7 @@ public class BrowsableInventories implements Filterable<Item>, Observer, Observa
     private Thread constructorThread;
     @Transient
     private HashSet<Observer> observers;
-
+    private ArrayList<FilterCriteria> filters;
     /**
      * Constructs the model by fetching current users friends. Must be follow by getBrowsables()
      * to further fetch the friends inventory items.
@@ -62,6 +73,8 @@ public class BrowsableInventories implements Filterable<Item>, Observer, Observa
     public BrowsableInventories() {
         observers = new HashSet<>();
         list = new ArrayList<Item>();
+        filters = new ArrayList<FilterCriteria>();
+        filters.add(new PrivateFilterCriteria());
         constructorThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -201,5 +214,7 @@ public class BrowsableInventories implements Filterable<Item>, Observer, Observa
     public void clearObservers() {
         observers.clear();
     }
+
+    public ArrayList<FilterCriteria> getFilters() {return this.filters;}
 
 }

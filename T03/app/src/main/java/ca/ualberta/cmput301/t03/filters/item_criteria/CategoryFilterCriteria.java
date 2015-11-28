@@ -5,7 +5,10 @@ import ca.ualberta.cmput301.t03.inventory.Item;
 
 public class CategoryFilterCriteria implements FilterCriteria {
     private String category;
+    private String name;
     public boolean passes(Object o){
         return ((Item)o).getItemCategory().equals(category);
     }
+    public String getName() {return this.name;}
+
 }

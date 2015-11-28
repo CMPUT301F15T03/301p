@@ -21,6 +21,8 @@
 package ca.ualberta.cmput301.t03.inventory;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -31,11 +33,15 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import org.parceler.Parcels;
@@ -52,7 +58,10 @@ import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
+import ca.ualberta.cmput301.t03.filters.FilterCriteria;
+import ca.ualberta.cmput301.t03.user.EditProfileActivity;
 import ca.ualberta.cmput301.t03.user.User;
+import ca.ualberta.cmput301.t03.user.ViewProfileActivity;
 
 /**
  * Fragment that displays a ListView containing all Items from all friends.
@@ -223,5 +232,97 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
     @Override
     public void update(Observable observable) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()) {
+            case R.id.filter_inventory_button:
+                createAddFilterDialog().show();
+                return true;
+            case R.id.search_inventory_button:
+                createAddSearchDialog().show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private AlertDialog createAddFilterDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(  getContext());
+        final View dialogContent = View.inflate(getContext(), R.layout.content_add_filter_dialog, null);
+//        final EditText e = (EditText) dialogContent.findViewById(R.id.addFilterEditType);
+
+        builder.setView(dialogContent);
+        //itemCategoryText.setSelection(((ArrayAdapter) itemCategoryText.getAdapter()).getPosition(itemModel.getItemCategory()));
+        builder.setCancelable(false);
+        builder.setNegativeButton("Cancel", null);
+        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Spinner filter = (Spinner) dialogContent.findViewById(R.id.itemFilterCategory);
+            }
+        });
+        builder.setTitle("Add a Category Filter");
+        AlertDialog d = builder.create();
+        return d;
+    }
+
+    private AlertDialog createAddSearchDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(  getContext());
+        View dialogContent = View.inflate(getContext(), R.layout.content_add_search_dialog, null);
+        final EditText e = (EditText) dialogContent.findViewById(R.id.addSearchFilterText);
+
+        builder.setView(dialogContent); //todo replace with layout
+
+        builder.setCancelable(false);
+        builder.setNegativeButton("Cancel", null);
+        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                final String usr = e.getText().toString().trim();
+
+
+            }
+        });
+        builder.setTitle("Textual Filters");
+
+
+
+
+        ArrayList<String> filterNames = new ArrayList<String>();
+        for(FilterCriteria filter: model.getFilters()){
+            filterNames.add(filter.getName());
+        }
+        final CharSequence[] fNames = filterNames.toArray(new String[filterNames.size()]);
+        builder.setItems(fNames, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item){
+                String selectedText = fNames[item].toString();
+            }
+        });
+
+//        ListView listView = (ListView) getActivity().findViewById(R.id.existingSearchFilterListView);
+//        ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, filterNames);
+//        listView.setAdapter(listAdapter);
+//
+//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                //todo Remove Filter
+//            }
+//        });
+//
+//        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+//            @Override
+//            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+//                //todo Remove Filter?
+//                return true;
+//            }
+//        });
+
+
+
+        AlertDialog d = builder.create();
+        return d;
     }
 }
