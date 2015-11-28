@@ -49,8 +49,12 @@ import java.io.IOException;
 import ca.ualberta.cmput301.t03.MainActivity;
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
+import ca.ualberta.cmput301.t03.TradeApp;
 import ca.ualberta.cmput301.t03.common.PrimaryUserHelper;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
+import ca.ualberta.cmput301.t03.configuration.Configuration;
+import ca.ualberta.cmput301.t03.datamanager.DataKey;
+import ca.ualberta.cmput301.t03.datamanager.LocalDataManager;
 import ca.ualberta.cmput301.t03.inventory.Inventory;
 import ca.ualberta.cmput301.t03.inventory.Item;
 import ca.ualberta.cmput301.t03.user.User;
@@ -74,6 +78,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static ca.ualberta.cmput301.t03.common.PauseForAnimation.pause;
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -184,6 +189,17 @@ public class PhotoUITest {
         Photo photo = new Photo(BitmapFactory.decodeResource(mActivity.getResources(), R.drawable.photo_unavailable_test));
         item.getPhotoList().addPhoto(photo);
         pause();
+        onView(withContentDescription(R.string.navigation_drawer_open))
+                .check(matches(isDisplayed()))
+                .perform(click());
+        onView(withText("Browse"))
+                .perform(click());
+
+        onView(withContentDescription(R.string.navigation_drawer_open))
+                .check(matches(isDisplayed()))
+                .perform(click());
+        onView(withText("Inventory"))
+                .perform(click());
         onView(withText(ITEM_NAME)).check(matches(isDisplayed()));
         onView(withText(ITEM_NAME)).perform(click());
         pause();
@@ -216,6 +232,17 @@ public class PhotoUITest {
         Photo photo = new Photo(BitmapFactory.decodeResource(mActivity.getResources(), R.drawable.photo_unavailable_test));
         item.getPhotoList().addPhoto(photo);
         pause();
+        onView(withContentDescription(R.string.navigation_drawer_open))
+                .check(matches(isDisplayed()))
+                .perform(click());
+        onView(withText("Browse"))
+                .perform(click());
+
+        onView(withContentDescription(R.string.navigation_drawer_open))
+                .check(matches(isDisplayed()))
+                .perform(click());
+        onView(withText("Inventory"))
+                .perform(click());
         onView(withText(ITEM_NAME)).check(matches(isDisplayed()));
         onView(withText(ITEM_NAME)).perform(click());
         pause();
@@ -248,6 +275,63 @@ public class PhotoUITest {
         controller.addPhotoToItem(BitmapFactory.decodeResource(mActivity.getResources(), R.drawable.photo_unavailable_test));
 
         assertTrue(item.getPhotoList().getPhotos().get(0).getBase64Photo().getContents().length() < 65536);
+    }
+
+
+    @Test public void testManualDownloadItemPhotoWhenAutoDownloadDisabled() throws IOException, ServiceNotAvailableException {
+        Configuration config = new Configuration(TradeApp.getContext());
+        config.setDownloadImages(false);
+        Inventory inventory = PrimaryUser.getInstance().getInventory();
+        Item item = new Item();
+        item.setItemCategory(ITEM_CATEGORY);
+        item.setItemDescription(ITEM_DESCRIPTION);
+        item.setItemIsPrivate(false);
+        item.setItemName(ITEM_NAME);
+        item.setItemQuality(ITEM_QUALITY);
+        item.setItemQuantity(1);
+
+        for (Item item1 : inventory.getItems().values()) {
+            inventory.removeItem(item1);
+        }
+        inventory.commitChanges();
+        inventory.addItem(item);
+        inventory.commitChanges();
+        ItemPhotoController controller = new ItemPhotoController(item);
+        controller.addPhotoToItem(BitmapFactory.decodeResource(mActivity.getResources(), R.drawable.photo_unavailable_test));
+
+        pause();
+
+
+        LocalDataManager ldm = new LocalDataManager(false);
+        ldm.deleteIfExists(new DataKey(Photo.type, item.getPhotoList().getPhotos().get(0).getPhotoUUID().toString()));
+
+        assertTrue(true);
+
+        onView(withContentDescription(R.string.navigation_drawer_open))
+                .check(matches(isDisplayed()))
+                .perform(click());
+        onView(withText("Browse"))
+                .perform(click());
+
+        onView(withContentDescription(R.string.navigation_drawer_open))
+                .check(matches(isDisplayed()))
+                .perform(click());
+        onView(withText("Inventory"))
+                .perform(click());
+
+        assertFalse(item.getPhotoList().getPhotos().get(0).isDownloaded());
+
+        onView(withText(ITEM_NAME)).check(matches(isDisplayed()));
+        onView(withText(ITEM_NAME)).perform(click());
+        pause();
+        onView(withId(R.id.viewImagesbutton)).perform(click());
+        onData(CoreMatchers.anything()).atPosition(0).check(matches(isDisplayed()));
+        onData(CoreMatchers.anything()).atPosition(0).perform(click());
+        onView(withText("Download")).perform(click());
+        pause();
+        assertTrue(item.getPhotoList().getPhotos().get(0).isDownloaded());
+
+
     }
 
 }

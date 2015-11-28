@@ -20,6 +20,12 @@
 
 package ca.ualberta.cmput301.t03.trading;
 
+import android.util.Log;
+
+import java.io.IOException;
+
+import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
+import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeModificationException;
 import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeStateTransition;
 
 /**
@@ -54,6 +60,14 @@ public class TradeStateComposing implements TradeState {
 
     /**
      * {@inheritDoc}
+     */
+    @Override
+    public Boolean isPublic() {
+        return Boolean.FALSE;
+    }
+
+    /**
+     * {@inheritDoc}
      *
      * @param trade Trade to be offered.
      */
@@ -69,6 +83,16 @@ public class TradeStateComposing implements TradeState {
      */
     @Override
     public void cancel(Trade trade) {
+        try {
+            trade.getBorrower().getTradeList().remove(trade);
+            trade.getOwner().getTradeList().remove(trade);
+        } catch (IllegalTradeModificationException e) {
+            Log.e("trade", e.getMessage());
+        } catch (ServiceNotAvailableException e) {
+            // todo snackbar toast saying we're offline
+        } catch (IOException e) {
+            // todo handle this exception
+        }
         trade.setState(new TradeStateCancelled());
     }
 
@@ -92,6 +116,14 @@ public class TradeStateComposing implements TradeState {
     @Override
     public void decline(Trade trade) throws IllegalTradeStateTransition {
         throw new IllegalTradeStateTransition("Trade being composed cannot be declined");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getInterfaceString(Boolean currentUserIsOwner) {
+        return "COMPOSING-NOT-IN-INTERFACE";
     }
 
     @Override
