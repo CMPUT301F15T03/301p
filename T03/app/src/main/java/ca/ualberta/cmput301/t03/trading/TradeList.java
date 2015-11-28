@@ -158,4 +158,9 @@ public class TradeList implements Observable, Observer {
     public void update(Observable observable) {
         notifyObservers();
     }
+
+
+    public HashSet<Observer> getObservers() {
+        return (HashSet<Observer>) observers;
+    }
 }

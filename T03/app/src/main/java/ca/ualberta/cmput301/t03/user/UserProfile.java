@@ -179,4 +179,8 @@ public class UserProfile implements Observable {
     public void clearObservers() {
         observers.clear();
     }
+
+    public HashSet<Observer> getObservers() {
+        return observers;
+    }
 }

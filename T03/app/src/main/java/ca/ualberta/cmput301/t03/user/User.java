@@ -384,20 +384,36 @@ public class User implements Observable, Observer, Comparable<User> {
 
     public void refresh() throws IOException, ServiceNotAvailableException {
         if (friends != null) {
+            HashSet<Observer> backup = friends.getObservers();
             friends = null;
             getFriends();
+            for (Observer o : backup) {
+                friends.addObserver(o);
+            }
         }
         if (profile != null) {
+            HashSet<Observer> backup = profile.getObservers();
             profile = null;
             getProfile();
+            for (Observer o : backup) {
+                profile.addObserver(o);
+            }
         }
         if (inventory != null) {
+            HashSet<Observer> backup = inventory.getObservers();
             inventory = null;
             getInventory();
+            for (Observer o : backup) {
+                inventory.addObserver(o);
+            }
         }
         if (tradeList != null) {
+            HashSet<Observer> backup = tradeList.getObservers();
             tradeList = null;
             getTradeList();
+            for (Observer o : backup) {
+                tradeList.addObserver(o);
+            }
         }
     }
 }
