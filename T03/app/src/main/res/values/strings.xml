@@ -65,6 +65,6 @@
     <string name="problemWithNetworkToast">Error with network, try again later</string>
     <string name="noCityToast">Please provide a city</string>
     <string name="invalidEmailToast">Please provide a valid email address</string>
-    <string name="allowable_username_characters">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890</string>
+    <string name="allowable_username_characters">abcdefghijklmnopqrstuvwxyz1234567890</string>
 
 </resources>

@@ -23,6 +23,9 @@ package ca.ualberta.cmput301.t03.inventory;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -33,11 +36,14 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+
 import org.parceler.Parcels;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import ca.ualberta.cmput301.t03.Observable;
@@ -46,6 +52,8 @@ import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.common.TileBuilder;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
+import ca.ualberta.cmput301.t03.configuration.Configuration;
+import ca.ualberta.cmput301.t03.photo.Photo;
 import ca.ualberta.cmput301.t03.user.User;
 
 
@@ -107,7 +115,14 @@ public class UserInventoryFragment extends Fragment implements Observer {
             if (PrimaryUser.getInstance().equals(user)) {
                 user = PrimaryUser.getInstance();
             } else {
-                user = new User(user.getUsername(), getActivity().getApplicationContext());
+//                user = new User(user.getUsername(), getActivity().getApplicationContext());
+                try {
+                    user = PrimaryUser.getInstance().getFriends().getFriend(user.getUsername());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ServiceNotAvailableException e) {
+                    throw new RuntimeException("OFFLINE CANT DO THIS I GUESS");
+                }
             }
         } else {
             user = PrimaryUser.getInstance();
@@ -145,6 +160,12 @@ public class UserInventoryFragment extends Fragment implements Observer {
 
     }
 
+    @Override
+    public void onResume() {
+
+        fragmentSetup(mView);
+        super.onResume();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -158,32 +179,12 @@ public class UserInventoryFragment extends Fragment implements Observer {
      * Starts activity used to create a new item
      */
     public void addItemButtonClicked() {
-//        throw new UnsupportedOperationException();
         Intent intent = new Intent(getContext(), AddItemView.class);
         startActivity(intent);
     }
 
     private void fragmentSetup(View v) {
         createListView(v);
-        model.addObserver(this);
-
-
-//        final Item itemModel = new Item();
-//        itemModel.setItemName("lala");
-//        itemModel.setItemQuantity(1);
-//        itemModel.setItemQuality("good");
-//        itemModel.setItemCategory("good");
-//        itemModel.setItemIsPrivate(true);
-//        itemModel.setItemDescription("lala");
-//
-//        Thread thread = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                model.addItem(itemModel);
-//            }
-//        });
-//        thread.start();
-
     }
 
     /**
@@ -247,13 +248,17 @@ public class UserInventoryFragment extends Fragment implements Observer {
         Intent intent = null;
         if (PrimaryUser.getInstance().equals(user)) {
             intent = new Intent(getContext(), EditItemView.class);
-            intent.putExtra("user", Parcels.wrap(user));
+            intent.putExtra("user", user.getUsername());
             intent.putExtra("ITEM_UUID", item.getUuid().toString());
 
         } else {
             intent = new Intent(getContext(), InspectItemView.class);
-            intent.putExtra("user", Parcels.wrap(user));
-            intent.putExtra("inventory/inspect/item", Parcels.wrap(item));
+//            intent.putExtra("user", Parcels.wrap(user));
+//            intent.putExtra("inventory/inspect/item", Parcels.wrap(item));
+
+            // new and improved way
+            intent.putExtra("user", user.getUsername());
+            intent.putExtra("ITEM_UUID", item.getUuid().toString());
         }
 
         startActivity(intent);
@@ -282,13 +287,13 @@ public class UserInventoryFragment extends Fragment implements Observer {
 
     @Override
     public void update(Observable observable) {
-        mActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                adapter.notifyDataSetChanged();
-                fragmentSetup(mView);
-            }
-        });
+//        mActivity.runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                fragmentSetup(mView);
+//                adapter.notifyDataSetChanged();
+//            }
+//        });
     }
 
 }

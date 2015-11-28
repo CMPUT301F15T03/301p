@@ -52,6 +52,7 @@ import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
+import ca.ualberta.cmput301.t03.photo.Photo;
 import ca.ualberta.cmput301.t03.user.User;
 
 /**
@@ -104,6 +105,15 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+//        listItems.clear();
+//        allItems.clear();
+//        setupListView();
+
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_browse_inventory, container, false);
@@ -141,7 +151,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
                     @Override
                     public void run() {
                         allItems = model.getList();
-                            for (Item item : model.getList()) {
+                        for (Item item : allItems) {
                             addToListView(item);
                         }
                     }
@@ -181,11 +191,11 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
             @Override
             protected Intent doInBackground(Item[] items) {
                 Intent intent = new Intent(getContext(), InspectItemView.class);
-                intent.putExtra("inventory/inspect/item", Parcels.wrap(items[0]));
                 try {
                     for (User friend : PrimaryUser.getInstance().getFriends().getFriends()) {
                         if (friend.getInventory().getItems().containsKey(items[0].getUuid())) {
-                            intent.putExtra("user", Parcels.wrap(friend));
+                            intent.putExtra("user", friend.getUsername());
+                            intent.putExtra("ITEM_UUID", items[0].getUuid().toString());
                         }
                     }
                 } catch (IOException e) {

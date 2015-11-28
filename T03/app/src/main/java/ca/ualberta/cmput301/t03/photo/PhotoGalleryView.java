@@ -67,13 +67,20 @@ public class PhotoGalleryView extends AppCompatActivity {
         AsyncTask worker = new AsyncTask() {
             @Override
             protected Object doInBackground(Object[] params) {
-                User tempUser;
+                User tempUser = null;
                 isPrimaryUser = false;
                 if (user.equals(PrimaryUser.getInstance().getUsername())) {
                     tempUser = PrimaryUser.getInstance();
                     isPrimaryUser = true;
                 } else {
-                    tempUser = new User(user, PhotoGalleryView.this.getApplicationContext());
+                    try {
+                        tempUser = PrimaryUser.getInstance().getFriends().getFriend(user);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (ServiceNotAvailableException e) {
+                        throw new RuntimeException("OFFLINE CANT DO THIS I GUESS");
+                    }
+
                 }
                 try {
                     model = tempUser.getInventory().getItem(itemUUID).getPhotoList();
@@ -100,9 +107,9 @@ public class PhotoGalleryView extends AppCompatActivity {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                             // if configuration.isDownloadImagesEnabled() == false, add an option to download the photo perhaps?
-                            final CharSequence[] items = {"Delete", "Cancel"};
+                            final CharSequence[] items = {"Download", "Delete", "Cancel"};
                             AlertDialog.Builder builder = new AlertDialog.Builder(PhotoGalleryView.this);
-                            builder.setTitle("Delete Photo?");
+                            builder.setTitle("Modify Photo");
                             builder.setItems(items, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int item) {
@@ -110,7 +117,57 @@ public class PhotoGalleryView extends AppCompatActivity {
                                         AsyncTask worker = new AsyncTask() {
                                             @Override
                                             protected Object doInBackground(Object[] params) {
+                                                controller.downloadPhoto(position);
+                                                return null;
+                                            }
+
+                                            @Override
+                                            protected void onPostExecute(Object o) {
+                                                adapter.notifyDataSetChanged();
+                                            }
+                                        };
+                                        worker.execute();
+                                    }
+                                    else if (item == 1) {
+                                        AsyncTask worker = new AsyncTask() {
+                                            @Override
+                                            protected Object doInBackground(Object[] params) {
                                                 controller.removePhoto(position);
+                                                return null;
+                                            }
+
+                                            @Override
+                                            protected void onPostExecute(Object o) {
+                                                adapter.notifyDataSetChanged();
+                                            }
+                                        };
+                                        worker.execute();
+                                    } else if (item == 2) {
+                                        // close the alert dialog
+                                    }
+                                }
+                            });
+                            builder.show();
+                        }
+                    });
+                }
+
+                else {
+                    photoGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                            // if configuration.isDownloadImagesEnabled() == false, add an option to download the photo perhaps?
+                            final CharSequence[] items = {"Download", "Cancel"};
+                            AlertDialog.Builder builder = new AlertDialog.Builder(PhotoGalleryView.this);
+                            builder.setTitle("Modify Photo");
+                            builder.setItems(items, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int item) {
+                                    if (item == 0) {
+                                        AsyncTask worker = new AsyncTask() {
+                                            @Override
+                                            protected Object doInBackground(Object[] params) {
+                                                controller.downloadPhoto(position);
                                                 return null;
                                             }
 

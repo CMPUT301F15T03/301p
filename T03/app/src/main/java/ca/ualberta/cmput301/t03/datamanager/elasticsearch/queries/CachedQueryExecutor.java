@@ -54,6 +54,6 @@ public class CachedQueryExecutor implements QueryExecutor {
     }
 
     private DataKey getQueryDataKey(String suffix, Query query) {
-        return new DataKey(CachedDataManager.CACHE_DIRECTORY + "/" + suffix, query.getUniqueId());
+        return new DataKey(suffix, query.getUniqueId());
     }
 }
