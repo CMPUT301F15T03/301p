@@ -236,6 +236,8 @@ public class Photo implements Observable, Cloneable {
         Bitmap bitCopy= Bitmap.createBitmap(getPhoto());
         p.setPhoto(bitCopy);
         p.photoUUID = UUID.randomUUID();
+        p.clearObservers();
+
         return p;
     }
 }
