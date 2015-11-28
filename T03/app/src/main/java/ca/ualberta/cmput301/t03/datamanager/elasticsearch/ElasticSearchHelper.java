@@ -87,9 +87,10 @@ public class ElasticSearchHelper {
      * response code to be a successful one.
      * @param json The JSON string to be sent.
      * @param suffix The suffix to be used for making the request.
+     * @return The response to the request.
      * @throws IOException Thrown if the network communication fails.
      */
-    public void writeJson(String json, String suffix) throws IOException {
+    public String writeJson(String json, String suffix) throws IOException {
         byte[] requestContents = json.getBytes();
         HttpResponse response = client.makePutRequest(suffix, requestContents);
         String requestResponse = new String(response.getContents());
@@ -98,6 +99,8 @@ public class ElasticSearchHelper {
             throw new NotImplementedException(String.format("Dev note: Unexpected response '%d' from the PUT Elastic Search endpoint.: %s",
                     response.getResponseCode(), new String(response.getContents())));
         }
+
+        return requestResponse;
     }
 
     /**
