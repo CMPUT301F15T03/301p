@@ -1,6 +1,7 @@
 package ca.ualberta.cmput301.t03.datamanager.elasticsearch.queries;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 
 import ca.ualberta.cmput301.t03.common.Preconditions;
 import ca.ualberta.cmput301.t03.datamanager.CachedDataManager;
@@ -21,16 +22,16 @@ public class CachedQueryExecutor implements QueryExecutor {
     }
 
     @Override
-    public QueryResult executeQuery(String suffix, Query query) throws IOException {
-        QueryResult queryResult;
+    public <T> QueryResult<T> executeQuery(String suffix, Query query, Type typeOfQueryResult) throws IOException {
+        QueryResult<T> queryResult;
 
         try {
-            queryResult = innerExecutor.executeQuery(suffix, query);
+            queryResult = innerExecutor.executeQuery(suffix, query, typeOfQueryResult);
             writeToCache(suffix, query, queryResult);
         }
         catch (IOException e) {
             if (isQueryResultInCache(suffix, query)) {
-                queryResult = getResultFromCache(suffix, query);
+                queryResult = getResultFromCache(suffix, query, typeOfQueryResult);
             }
             else {
                 throw e;
@@ -44,8 +45,8 @@ public class CachedQueryExecutor implements QueryExecutor {
         cachingDataManager.writeData(getQueryDataKey(suffix, query), queryResult, QueryResult.class);
     }
 
-    private QueryResult getResultFromCache(String suffix, Query query) throws IOException {
-        return cachingDataManager.getData(getQueryDataKey(suffix, query), QueryResult.class);
+    private <T> QueryResult<T> getResultFromCache(String suffix, Query query, Type typeOfQueryResult) throws IOException {
+        return cachingDataManager.getData(getQueryDataKey(suffix, query), typeOfQueryResult);
     }
 
     private boolean isQueryResultInCache(String suffix, Query query) {

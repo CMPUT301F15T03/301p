@@ -40,7 +40,7 @@ public class FieldGroupedQuery implements Query {
     }
 
     private void buildAggregationQuery(final String groupingField, final Integer maxCount) {
-        aggregationQuery.put("group_by_" + groupingField.replace('.', '_'), new HashMap<String, Terms>() {
+        aggregationQuery.put(AGGREGATION_KEY, new HashMap<String, Terms>() {
             {
                 put("terms", new Terms(groupingField, maxCount));
             }
