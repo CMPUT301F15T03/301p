@@ -159,7 +159,6 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Snackbar.make(getView(), "inspect/review trade unimplemented", Snackbar.LENGTH_SHORT).show();
                 UUID tradeUUID = tradeTilePositionMap.get(position);
                 Intent intent = new Intent(getContext(), TradeOfferReviewActivity.class);
                 intent.putExtra("TRADE_UUID", tradeUUID);
