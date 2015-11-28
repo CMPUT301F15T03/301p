@@ -52,6 +52,7 @@ import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
+import ca.ualberta.cmput301.t03.photo.Photo;
 import ca.ualberta.cmput301.t03.user.User;
 
 /**
@@ -141,7 +142,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
                     @Override
                     public void run() {
                         allItems = model.getList();
-                            for (Item item : model.getList()) {
+                        for (Item item : model.getList()) {
                             addToListView(item);
                         }
                     }

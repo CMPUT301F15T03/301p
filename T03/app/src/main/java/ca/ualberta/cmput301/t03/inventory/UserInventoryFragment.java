@@ -51,6 +51,8 @@ import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
+import ca.ualberta.cmput301.t03.configuration.Configuration;
+import ca.ualberta.cmput301.t03.photo.Photo;
 import ca.ualberta.cmput301.t03.user.User;
 
 
@@ -74,6 +76,8 @@ public class UserInventoryFragment extends Fragment implements Observer {
 
     private HashMap<Integer, UUID> positionMap;
     List<HashMap<String, Object>> tiles;
+
+    Configuration config;
 
     public UserInventoryFragment() {
         // Required empty public constructor
@@ -105,9 +109,9 @@ public class UserInventoryFragment extends Fragment implements Observer {
 
         positionMap = new HashMap<>();
 
+        config = new Configuration(getContext());
 
         if (getArguments() != null) {
-//            String username = getArguments().getString(ARG_PARAM1);
             user = Parcels.unwrap(getArguments().getParcelable(ARG_PARAM1));
             if (PrimaryUser.getInstance().equals(user)) {
                 user = PrimaryUser.getInstance();
@@ -123,8 +127,6 @@ public class UserInventoryFragment extends Fragment implements Observer {
             @Override
             protected Object doInBackground(Object[] params) {
                 try {
-//                    user = PrimaryUser.getInstance();
-
                     model = user.getInventory();
                     controller = new UserInventoryController(getContext(), model);
 
@@ -163,7 +165,6 @@ public class UserInventoryFragment extends Fragment implements Observer {
      * Starts activity used to create a new item
      */
     public void addItemButtonClicked() {
-//        throw new UnsupportedOperationException();
         Intent intent = new Intent(getContext(), AddItemView.class);
         startActivity(intent);
     }
@@ -171,37 +172,14 @@ public class UserInventoryFragment extends Fragment implements Observer {
     private void fragmentSetup(View v) {
         createListView(v);
         model.addObserver(this);
-
-
-//        final Item itemModel = new Item();
-//        itemModel.setItemName("lala");
-//        itemModel.setItemQuantity(1);
-//        itemModel.setItemQuality("good");
-//        itemModel.setItemCategory("good");
-//        itemModel.setItemIsPrivate(true);
-//        itemModel.setItemDescription("lala");
-//
-//        Thread thread = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                model.addItem(itemModel);
-//            }
-//        });
-//        thread.start();
-
     }
 
     private ArrayList<HashMap<String, Object>> buildTiles() {
         ArrayList<HashMap<String, Object>> tiles = new ArrayList<>();
-//        Item[] itemList = {new Item("test", "test"), new Item("test", "test"), new Item("test", "test"), new Item("test", "test"), new Item("test", "test") };
-        //SHOULD BE REPLACED WITH ONCE LINKED
-        //HashMap<UUID, Item> tempMap = model.getItems();
-        //Collection<Item> tempcollection = tempMap.values();
-        //ArrayList<Item> itemList = (ArrayList<Item>) model.getItems().values();
         int i = 0;
         positionMap.clear();
         for (Item item : model.getItems().values()) {
-            HashMap<String, Object> hm = new HashMap<String, Object>();
+            HashMap<String, Object> hm = new HashMap<>();
             hm.put("tileViewItemName", item.getItemName());
             hm.put("tileViewItemCategory", item.getItemCategory());
             if(item.getPhotoList().getPhotos().size() > 0){

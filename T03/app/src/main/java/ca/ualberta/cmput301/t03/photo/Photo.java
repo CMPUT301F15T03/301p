@@ -22,6 +22,7 @@ package ca.ualberta.cmput301.t03.photo;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.util.Base64;
 
 import com.google.gson.annotations.Expose;
@@ -34,8 +35,10 @@ import java.util.UUID;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
+import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.TradeApp;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
+import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.datamanager.DataKey;
 import ca.ualberta.cmput301.t03.datamanager.DataManager;
 
@@ -92,8 +95,14 @@ public class Photo implements Observable {
      * <p/>
      * For an ImageView, call setBitmap(Photo.getPhoto()); -- i think
      */
-    public void downloadPhoto() {
+    public void downloadPhoto(Boolean force) {
         if (!isDownloaded) {
+            Configuration config = new Configuration(TradeApp.getContext());
+            if (!force && !config.isDownloadImagesEnabled()) {
+                bitmap = ((BitmapDrawable) TradeApp.getContext().getResources().getDrawable(R.drawable.photo_available_for_download)).getBitmap();
+                return;
+            }
+
             try {
                 base64Photo = dataManager.getData(new DataKey(Photo.type, photoUUID.toString()), Base64Wrapper.class);
                 isDownloaded = true;
@@ -105,6 +114,16 @@ public class Photo implements Observable {
                 throw new RuntimeException("App is offline.", e);
             }
         }
+    }
+
+    /**
+     * Downloads the base65 photo info and creates a bitmap from the information
+     * both entities are then cached in the photo object for getting later
+     * <p/>
+     * For an ImageView, call setBitmap(Photo.getPhoto()); -- i think
+     */
+    public void downloadPhoto() {
+        downloadPhoto(false);
     }
 
     /**
