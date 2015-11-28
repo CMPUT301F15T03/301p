@@ -384,11 +384,8 @@ public class User implements Observable, Observer, Comparable<User> {
 
     public void refresh() throws IOException, ServiceNotAvailableException {
         if (friends != null) {
-            HashSet<Observer> backup = friends.getObservers();
-            friends = null;
-            getFriends();
-            for (Observer o : backup) {
-                friends.addObserver(o);
+            for (User friend : friends.getFriends()) {
+                friend.refresh();
             }
         }
         if (profile != null) {
