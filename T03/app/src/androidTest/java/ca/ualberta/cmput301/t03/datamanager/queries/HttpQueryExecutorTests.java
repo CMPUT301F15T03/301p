@@ -41,7 +41,7 @@ public class HttpQueryExecutorTests extends TestCase {
         for (AggregationQueryResult.Bucket bucket : buckets) {
             assertTrue(bucket.getCount() > 0);
             assertNotNull(bucket.getKey());
-            assertNotSame("", bucket.getKey());
+            assertFalse(bucket.getKey().trim().isEmpty());
         }
 
     }
