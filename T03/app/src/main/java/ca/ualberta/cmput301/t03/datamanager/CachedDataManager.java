@@ -41,7 +41,7 @@ import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
  */
 public class CachedDataManager extends JsonDataManager {
 
-    private final static String CACHE_DIRECTORY = "cache";
+    public final static String CACHE_DIRECTORY = "cache";
     private final LocalDataManager cachingDataManager;
     protected final JsonDataManager innerManager;
 

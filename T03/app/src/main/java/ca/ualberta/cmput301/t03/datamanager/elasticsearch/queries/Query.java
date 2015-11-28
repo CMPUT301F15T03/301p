@@ -5,4 +5,5 @@ package ca.ualberta.cmput301.t03.datamanager.elasticsearch.queries;
  */
 public interface Query {
     String formQuery();
+    String getUniqueId();
 }

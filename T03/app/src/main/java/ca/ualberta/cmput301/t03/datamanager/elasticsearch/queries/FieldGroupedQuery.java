@@ -63,6 +63,11 @@ public class FieldGroupedQuery implements Query {
     }
 
     @Override
+    public String getUniqueId() {
+        return String.format("%d", hashCode());
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (o == null) {
             return false;
