@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Source: http://stackoverflow.com/questions/5183968/how-to-add-rows-dynamically-into-table-layout-->
+<!--Accessed: 28 Nov 2015-->
+<TableRow  xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView
+        android:id="@+id/attrib_name"
+        android:textStyle="bold"/>
+    <TextView
+        android:id="@+id/attrib_value"
+        android:gravity="right"
+        android:textStyle="normal"/>
+</TableRow>
