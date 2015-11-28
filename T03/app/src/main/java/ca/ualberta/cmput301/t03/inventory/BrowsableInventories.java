@@ -24,8 +24,11 @@ import org.parceler.Transient;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.filters.CollectionFilter;
@@ -47,7 +50,7 @@ import ca.ualberta.cmput301.t03.user.User;
  *
  * Used by browsable Views. Also available to anything requiring a list of all tradable items.
  */
-public class BrowsableInventories implements Filterable<Item>, Observer, Observable {
+public class BrowsableInventories implements Filterable<Item>, Observer, Observable, ItemsAdaptable {
     private FriendsList friendList;
     private ArrayList<Item> list;
 
@@ -202,4 +205,13 @@ public class BrowsableInventories implements Filterable<Item>, Observer, Observa
         observers.clear();
     }
 
+
+    @Override
+    public List<Item> getAdaptableItems() {
+//        getBrowsables().run();
+
+        ArrayList<Item> items = getList();
+        Collections.sort(items);
+        return items;
+    }
 }

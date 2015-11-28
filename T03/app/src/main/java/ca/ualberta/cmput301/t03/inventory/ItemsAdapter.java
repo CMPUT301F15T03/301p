@@ -11,6 +11,7 @@ import android.widget.TextView;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
@@ -32,23 +33,20 @@ import ca.ualberta.cmput301.t03.user.User;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-public class InventoryAdapter extends ArrayAdapter<Item> implements Observer {
+public class ItemsAdapter<T extends ItemsAdaptable> extends ArrayAdapter<Item> {
 
-    private Inventory mInventory;
+    private T mInventory;
     private Context mContext;
 
-    public ArrayList<Item> getItems(){
-        ArrayList<Item> items = new ArrayList<>();
-        for (Item i: mInventory.getItems().values()){
-            items.add(i);
-        }
-        return items;
+    public List<Item> getItems(){
+        return mInventory.getAdaptableItems();
     }
 
-    public InventoryAdapter(Context context, Inventory inventory) {
+    public ItemsAdapter(Context context, T inventory) {
         super(context, 0);
         mInventory = inventory;
         mContext = context;
+
 
         addAll(getItems());
     }
@@ -85,7 +83,15 @@ public class InventoryAdapter extends ArrayAdapter<Item> implements Observer {
     }
 
     @Override
-    public void update(Observable observable) {
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+    }
+
+
+    public void notifyUpdated(T model) {
+
+        mInventory = model;
+        clear();
         addAll(getItems());
     }
 }
