@@ -56,12 +56,10 @@ public class FriendsListController {
      * @return true if user exists on server, false otherwise
      * @throws IOException
      */
-    public boolean isUserNameTaken(String username) throws IOException {
-        try {
-            return mDataManager.keyExists(new DataKey(UserProfile.type, username));
-        } catch (ServiceNotAvailableException e) {
-            throw new RuntimeException("App is offline.", e);
-        }
+    public boolean isUserNameTaken(String username) throws IOException, ServiceNotAvailableException {
+
+        return mDataManager.keyExists(new DataKey(UserProfile.type, username));
+
     }
 
     /**
@@ -74,7 +72,7 @@ public class FriendsListController {
      * @throws IOException
      * @throws UserAlreadyAddedException
      */
-    public void addFriend(User friend) throws UserNotFoundException, IOException, UserAlreadyAddedException {
+    public void addFriend(User friend) throws UserNotFoundException, IOException, UserAlreadyAddedException, ServiceNotAvailableException {
         // Check if friend is already added...
 
         if (mFriendsList.containsFriend(friend)) {
@@ -104,7 +102,7 @@ public class FriendsListController {
      * @throws UserNotFoundException
      * @throws UserAlreadyAddedException
      */
-    public void addFriend(String friend) throws IOException, UserNotFoundException, UserAlreadyAddedException {
+    public void addFriend(String friend) throws IOException, UserNotFoundException, UserAlreadyAddedException, ServiceNotAvailableException {
         addFriend(new User(friend, mContext));
     }
 
