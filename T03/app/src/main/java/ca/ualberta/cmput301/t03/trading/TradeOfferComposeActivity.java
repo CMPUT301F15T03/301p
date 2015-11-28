@@ -21,7 +21,9 @@
 package ca.ualberta.cmput301.t03.trading;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -31,8 +33,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.parceler.Parcels;
 
@@ -45,6 +49,8 @@ import java.util.UUID;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.common.TileBuilder;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
+import ca.ualberta.cmput301.t03.filters.FilterCriteria;
+import ca.ualberta.cmput301.t03.filters.item_criteria.StringQueryFilterCriteria;
 import ca.ualberta.cmput301.t03.inventory.EnhancedSimpleAdapter;
 import ca.ualberta.cmput301.t03.inventory.Item;
 import ca.ualberta.cmput301.t03.user.User;
@@ -148,6 +154,7 @@ public class TradeOfferComposeActivity extends AppCompatActivity {
                             @Override
                             public void onClick(View v) {
                                 Snackbar.make(v, "add item to trade offer unimplemented", Snackbar.LENGTH_SHORT).show();
+                                createAddTradeItemDialog().show();
                             }
                         });
 
@@ -219,5 +226,37 @@ public class TradeOfferComposeActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private AlertDialog createAddTradeItemDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View dialogContent = View.inflate(this, R.layout.content_add_search_dialog, null);
+
+        //builder.setView(dialogContent); //todo replace with layout
+        builder.setTitle("Add Trade Item");
+        builder.setCancelable(false);
+        builder.setNegativeButton("Cancel", null);
+        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //todo
+            }
+        });
+
+
+        ArrayList<String> inventoryItems = new ArrayList<String>();
+        for (Item item : model.getBorrowersItems()) {
+            inventoryItems.add(item.getItemName());
+        }
+        final CharSequence[] tradableItems = inventoryItems.toArray(new String[inventoryItems.size()]);
+        builder.setItems(tradableItems, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                String selectedText = tradableItems[item].toString();
+                //todo Add Item to Trade
+            }
+        });
+
+        AlertDialog d = builder.create();
+        return d;
     }
 }
