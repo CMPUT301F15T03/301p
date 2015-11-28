@@ -160,10 +160,8 @@ public class PhotoGallery implements Observable, Observer, Cloneable {
 
     @Override
     public Object clone() throws CloneNotSupportedException {
-        PhotoGallery newGallery = (PhotoGallery) super.clone();
-        newGallery.clearObservers(); //fixme
-
-        newGallery.photos = new ArrayList<>();
+//        PhotoGallery newGallery = (PhotoGallery) super.clone();
+        PhotoGallery newGallery = new PhotoGallery();
 
         for (Photo p: getPhotos()){
             newGallery.addPhoto((Photo) p.clone());

@@ -288,11 +288,14 @@ public class Item implements Observer, Observable, Cloneable {
 
     @Override
     public Object clone() throws CloneNotSupportedException {
-        Item item = (Item) super.clone();
-        item.clearObservers();
+//        Item item = (Item) super.clone();
+
+        Item item = new Item(getItemName(), getItemCategory());
+        item.setItemDescription(getItemDescription());
+        item.setItemQuantity(getItemQuantity());
+        item.setItemQuality(getItemQuality());
 
         item.photoList = (PhotoGallery) getPhotoList().clone();
-        item.setUuid(UUID.randomUUID());
 
         item.commitChanges();
 

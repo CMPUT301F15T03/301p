@@ -231,12 +231,10 @@ public class Photo implements Observable, Cloneable {
 
     @Override
     public Object clone() throws CloneNotSupportedException {
-        Photo p = (Photo) super.clone();
-
+//        Photo p = (Photo) super.clone();
+//        p.clearObservers();
         Bitmap bitCopy= Bitmap.createBitmap(getPhoto());
-        p.setPhoto(bitCopy);
-        p.photoUUID = UUID.randomUUID();
-        p.clearObservers();
+        Photo p = new Photo(bitCopy);
 
         return p;
     }
