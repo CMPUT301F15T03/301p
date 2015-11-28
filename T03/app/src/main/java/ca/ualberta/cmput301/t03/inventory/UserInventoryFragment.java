@@ -50,6 +50,7 @@ import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
+import ca.ualberta.cmput301.t03.common.TileBuilder;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.photo.Photo;
@@ -76,8 +77,6 @@ public class UserInventoryFragment extends Fragment implements Observer {
 
     private HashMap<Integer, UUID> positionMap;
     List<HashMap<String, Object>> tiles;
-
-    Configuration config;
 
     public UserInventoryFragment() {
         // Required empty public constructor
@@ -109,9 +108,9 @@ public class UserInventoryFragment extends Fragment implements Observer {
 
         positionMap = new HashMap<>();
 
-        config = new Configuration(getContext());
 
         if (getArguments() != null) {
+//            String username = getArguments().getString(ARG_PARAM1);
             user = Parcels.unwrap(getArguments().getParcelable(ARG_PARAM1));
             if (PrimaryUser.getInstance().equals(user)) {
                 user = PrimaryUser.getInstance();
@@ -127,6 +126,8 @@ public class UserInventoryFragment extends Fragment implements Observer {
             @Override
             protected Object doInBackground(Object[] params) {
                 try {
+//                    user = PrimaryUser.getInstance();
+
                     model = user.getInventory();
                     controller = new UserInventoryController(getContext(), model);
 
@@ -179,27 +180,6 @@ public class UserInventoryFragment extends Fragment implements Observer {
         createListView(v);
     }
 
-    private ArrayList<HashMap<String, Object>> buildTiles() {
-        ArrayList<HashMap<String, Object>> tiles = new ArrayList<>();
-        int i = 0;
-        positionMap.clear();
-        for (Item item : model.getItems().values()) {
-            HashMap<String, Object> hm = new HashMap<>();
-            hm.put("tileViewItemName", item.getItemName());
-            hm.put("tileViewItemCategory", item.getItemCategory());
-            if(item.getPhotoList().getPhotos().size() > 0){
-                hm.put("tileViewItemImage", (Bitmap) item.getPhotoList().getPhotos().get(0).getPhoto());
-            }
-            else {
-                hm.put("tileViewItemImage", ((BitmapDrawable) getResources().getDrawable(R.drawable.photo_unavailable)).getBitmap());
-            }
-            tiles.add(hm);
-            positionMap.put(i, item.getUuid());
-            i++;
-        }
-        return tiles;
-    }
-
     /**
      * Creates ListView Adapter and Item onClickListeners
      * This represents the users inventory.
@@ -210,16 +190,16 @@ public class UserInventoryFragment extends Fragment implements Observer {
         AsyncTask worker = new AsyncTask() {
             @Override
             protected Object doInBackground(Object[] params) {
-                tiles = buildTiles();
+                TileBuilder tileBuilder = new TileBuilder(getResources());
+                tiles = tileBuilder.buildItemTiles(model.getItems().values(), positionMap);
                 return null;
             }
 
             @Override
             protected void onPostExecute(Object o) {
                 listview = (ListView) view.findViewById(R.id.InventoryListView);
-//                List<HashMap<String, Object>> tiles = buildTiles();
-                String[] from = {"tileViewItemName", "tileViewItemCategory", "tileViewItemImage"}; //
-                int[] to = {R.id.tileViewItemName, R.id.tileViewItemCategory, R.id.tileViewItemImage}; //
+                String[] from = {"tileViewItemName", "tileViewItemCategory", "tileViewItemImage"};
+                int[] to = {R.id.tileViewItemName, R.id.tileViewItemCategory, R.id.tileViewItemImage};
                 adapter = new EnhancedSimpleAdapter(mActivity.getBaseContext(), tiles, R.layout.fragment_item_tile, from, to);
                 listview.setAdapter(adapter);
 

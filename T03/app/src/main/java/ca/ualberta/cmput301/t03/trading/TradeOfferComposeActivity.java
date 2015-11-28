@@ -30,15 +30,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import org.parceler.Parcels;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
 
 import ca.ualberta.cmput301.t03.R;
+import ca.ualberta.cmput301.t03.common.TileBuilder;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
+import ca.ualberta.cmput301.t03.inventory.EnhancedSimpleAdapter;
 import ca.ualberta.cmput301.t03.inventory.Item;
 import ca.ualberta.cmput301.t03.user.User;
 
@@ -58,6 +64,17 @@ public class TradeOfferComposeActivity extends AppCompatActivity {
     private Button cancelButton;
     private Button addItemButton;
 
+    private ListView ownerItemListView;
+    private EnhancedSimpleAdapter ownerItemAdapter;
+    private List<HashMap<String, Object>> ownerItemTiles;
+    private HashMap<Integer, UUID> ownerItemTilePositionMap;
+
+    private ListView borrowerItemListView;
+    private EnhancedSimpleAdapter borrowerItemAdapter;
+    private List<HashMap<String, Object>> borrowerItemTiles;
+    private HashMap<Integer, UUID> borrowerItemTilePositionMap;
+
+
     /**
      * Sets up the view with all components, the model, and the controller
      *
@@ -74,6 +91,12 @@ public class TradeOfferComposeActivity extends AppCompatActivity {
         offerButton = (Button) findViewById(R.id.tradeComposeOffer);
         cancelButton = (Button) findViewById(R.id.tradeComposeCancel);
         addItemButton = (Button) findViewById(R.id.tradeComposeAddItem);
+
+        ownerItemListView = (ListView) findViewById(R.id.tradeComposeOwnerItem);
+        borrowerItemListView = (ListView) findViewById(R.id.tradeComposeBorrowerItems);
+
+        ownerItemTilePositionMap = new HashMap<>();
+        borrowerItemTilePositionMap = new HashMap<>();
 
         AsyncTask worker = new AsyncTask() {
             @Override
@@ -95,15 +118,30 @@ public class TradeOfferComposeActivity extends AppCompatActivity {
                     throw new RuntimeException("App is offline.", e);
                 }
                 controller = new TradeOfferComposeController(c, model);
-                return null;
+
+                TileBuilder tileBuilder = new TileBuilder(getResources());
+                ownerItemTiles = tileBuilder.buildItemTiles(model.getOwnersItems(), ownerItemTilePositionMap);
+                borrowerItemTiles = tileBuilder.buildItemTiles(model.getBorrowersItems(), borrowerItemTilePositionMap);
+
+                return c;
             }
 
             @Override
             protected void onPostExecute(Object o) {
                 super.onPostExecute(o);
+                final Context c = (Context) o;
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        String[] from = {"tileViewItemName", "tileViewItemCategory", "tileViewItemImage"};
+                        int[] to = {R.id.tileViewItemName, R.id.tileViewItemCategory, R.id.tileViewItemImage};
+
+                        ownerItemAdapter = new EnhancedSimpleAdapter(c, ownerItemTiles, R.layout.fragment_item_tile, from, to);
+                        ownerItemListView.setAdapter(ownerItemAdapter);
+
+                        borrowerItemAdapter = new EnhancedSimpleAdapter(c, borrowerItemTiles, R.layout.fragment_item_tile, from, to);
+                        borrowerItemListView.setAdapter(borrowerItemAdapter);
+
                         ownerUsername.setText(model.getOwner().getUsername());
                         offerButton.setOnClickListener(new View.OnClickListener() {
                             @Override

@@ -21,6 +21,7 @@
 package ca.ualberta.cmput301.t03.trading;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -33,12 +34,17 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
+import ca.ualberta.cmput301.t03.common.TileBuilder;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
+import ca.ualberta.cmput301.t03.inventory.EnhancedSimpleAdapter;
 
 /**
  * View that shows the history of all past and pending trades for a user. Will observe the users
@@ -49,7 +55,9 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer {
     private TradeList model;
 
     private ListView listView;
-    private ArrayAdapter<Trade> adapter;
+    private EnhancedSimpleAdapter adapter;
+    private List<HashMap<String, Object>> tradeTiles;
+    private HashMap<Integer, UUID> tradeTilePositionMap;
 
     public TradeOfferHistoryFragment() {
         // Required empty public constructor
@@ -80,15 +88,8 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer {
             protected Object doInBackground(Object[] params) {
                 try {
                     model = PrimaryUser.getInstance().getTradeList();
-
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            setupListView();
-                            observeModel();
-                        }
-                    });
-
+                    TileBuilder tileBuilder = new TileBuilder(getResources());
+                    tradeTiles = tileBuilder.buildTradeTiles(model, tradeTilePositionMap);
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (ServiceNotAvailableException e) {
@@ -100,6 +101,13 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer {
             @Override
             protected void onPostExecute(Object o) {
                 super.onPostExecute(o);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                    setupListView(getContext());
+                    observeModel();
+                    }
+                });
             }
         };
         worker.execute();
@@ -108,16 +116,27 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer {
     /**
      * Sets up adapters for view elements representing trades
      */
-    private void setupListView() {
+    private void setupListView(Context context) {
         listView = (ListView) getActivity().findViewById(R.id.tradeHistoryListView);
 
-        adapter = new ArrayAdapter<Trade>(getContext(), android.R.layout.simple_list_item_1, model.getTradesAsList());
+        String[] from = {"tradeTileMainItemCategory",
+                "tradeTileMainItemImage",
+                "tradeTileMainItemName",
+                "tradeTileOtherUser",
+                "tradeTileTradeState"};
+        int[] to = {R.id.tradeTileMainItemCategory,
+                R.id.tradeTileMainItemImage,
+                R.id.tradeTileMainItemName,
+                R.id.tradeTileOtherUser,
+                R.id.tradeTileTradeState};
+
+        adapter = new EnhancedSimpleAdapter(context, tradeTiles, R.layout.fragment_trade_tile, from, to);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Snackbar.make(getView(), "review trade unimplemented", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(getView(), "inspect/review trade unimplemented", Snackbar.LENGTH_SHORT).show();
             }
         });
     }
