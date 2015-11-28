@@ -9,8 +9,22 @@ import ca.ualberta.cmput301.t03.inventory.Item;
 public class StringQueryFilterCriteria implements FilterCriteria {
     private String name;
     private String term;
-    public boolean passes(Object o){
-        return ((Item)o).getItemName().equals(term);
+    private String type;
+    public StringQueryFilterCriteria(String term){
+        this.term = term;
+        this.name = term;
+        this.type = "textual";
     }
     public String getName() {return this.name;}
+    public String getType() {return this.type;}
+    public boolean passes(Object o){
+        if ( ((Item)o).getItemName().contains(term) ){
+            return true;
+        }
+        if ( ((Item)o).getItemDescription().contains(term) ){
+            return true;
+        }
+        return false;
+    }
+
 }

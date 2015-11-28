@@ -129,25 +129,27 @@ public class BrowsableInventories implements Filterable<Item>, Observer, Observa
      * @return list of all friends items
      */
     public ArrayList<Item> getList() {
-        List<FilterCriteria> filters = new ArrayList<FilterCriteria>();
-        filters.add(new PrivateFilterCriteria());
-        return getFilteredItems(this.list, filters);
+        return getFilteredItems(this.list, this.getFilters());
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void addFilter(Filter filter) {
-        throw new UnsupportedOperationException();
+    public void addFilter(FilterCriteria filter) {
+        this.filters.add(filter);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void removeFilter(Filter filter) {
-        throw new UnsupportedOperationException();
+    public void removeFilter(String filterName) {
+        for (FilterCriteria filter: filters){
+            if (filter.getName().equals(filterName)){
+                filters.remove(filter);
+            }
+        }
     }
 
     /**
@@ -155,7 +157,8 @@ public class BrowsableInventories implements Filterable<Item>, Observer, Observa
      */
     @Override
     public void clearFilters() {
-        throw new UnsupportedOperationException();
+        this.filters = new ArrayList<FilterCriteria>();
+        filters.add(new PrivateFilterCriteria());
     }
 
     /**

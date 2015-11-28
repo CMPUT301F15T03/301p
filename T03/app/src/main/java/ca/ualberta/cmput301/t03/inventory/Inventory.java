@@ -158,7 +158,7 @@ public class Inventory implements Filterable<Item>, Observable, Observer {
      * @param filter the filter you wish to apply
      */
     @Override
-    public void addFilter(Filter filter) {
+    public void addFilter(FilterCriteria filter) {
         throw new UnsupportedOperationException();
     }
 
@@ -168,7 +168,7 @@ public class Inventory implements Filterable<Item>, Observable, Observer {
      * @param filter the filter you wish to remove
      */
     @Override
-    public void removeFilter(Filter filter) {
+    public void removeFilter(String filterName) {
         throw new UnsupportedOperationException();
     }
 
