@@ -44,6 +44,7 @@ public class FriendsList implements Observable, Filterable<Item> {
 
     @Expose
     private ArrayList<User> friends; // should this be a list or a set?
+
     private HashSet<Observer> observers;
 
     /**
@@ -200,5 +201,9 @@ public class FriendsList implements Observable, Filterable<Item> {
      */
     public int size() {
         return friends.size();
+    }
+
+    public HashSet<Observer> getObservers() {
+        return observers;
     }
 }
