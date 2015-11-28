@@ -119,7 +119,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer, Swipe
         ListView listview = (ListView) v.findViewById(R.id.BrowseListView);
         String[] from = {"tileViewItemName", "tileViewItemCategory", "tileViewItemImage"};
         int[] to = {R.id.tileViewItemName, R.id.tileViewItemCategory, R.id.tileViewItemImage};
-        adapter = new ItemsAdapter(mActivity.getBaseContext(), model);
+        adapter = new ItemsAdapter<>(mActivity.getBaseContext(), model);
         listview.setAdapter(adapter);
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -235,7 +235,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer, Swipe
 
     @Override
     public void update(Observable observable) {
-        adapter.notifyUpdated(model);
+        onRefresh();
     }
 
     @Override
@@ -245,6 +245,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer, Swipe
             protected Void doInBackground(Void... params) {
                 try {
                     PrimaryUser.getInstance().refresh();
+                    //fixme browseableinventories actually needs to refresh
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (ServiceNotAvailableException e) {
