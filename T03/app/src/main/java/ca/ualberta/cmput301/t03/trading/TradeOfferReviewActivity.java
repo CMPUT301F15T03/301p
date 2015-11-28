@@ -133,53 +133,48 @@ public class TradeOfferReviewActivity extends AppCompatActivity {
 
             @Override
             protected void onPostExecute(final Context c) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Boolean currentUserOwnsMainItem = model.getOwner().getUsername().equals(currentUsername);
-                        if (currentUserOwnsMainItem) {
-                            tradeDirectionFromTo.setText("from");
-                            tradeReviewOtherUser.setText(model.getBorrower().getUsername());
-                            tradeOffererYouTheyWant.setText("They");
-                            tradeOffererYouTheyOffer.setText("They");
-                            tradeReviewAccept.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Snackbar.make(v, "trade accept unimplemented", Snackbar.LENGTH_SHORT).show();
-                                }
-                            });
-                            tradeReviewDecline.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Snackbar.make(v, "trade decline unimplemented", Snackbar.LENGTH_SHORT).show();
-                                }
-                            });
-                            tradeReviewDeclineAndCounterOffer.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Snackbar.make(v, "trade decline&counter-offer unimplemented", Snackbar.LENGTH_SHORT).show();
-                                }
-                            });
-                        } else {
-                            tradeDirectionFromTo.setText("to");
-                            tradeReviewOtherUser.setText(model.getOwner().getUsername());
-                            tradeOffererYouTheyWant.setText("You");
-                            tradeOffererYouTheyOffer.setText("You");
-                            tradeReviewAccept.setVisibility(View.GONE);
-                            tradeReviewDecline.setVisibility(View.GONE);
-                            tradeReviewDeclineAndCounterOffer.setVisibility(View.GONE);
+                Boolean currentUserOwnsMainItem = model.getOwner().getUsername().equals(currentUsername);
+                if (currentUserOwnsMainItem) {
+                    tradeDirectionFromTo.setText("from");
+                    tradeReviewOtherUser.setText(model.getBorrower().getUsername());
+                    tradeOffererYouTheyWant.setText("They");
+                    tradeOffererYouTheyOffer.setText("They");
+                    tradeReviewAccept.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Snackbar.make(v, "trade accept unimplemented", Snackbar.LENGTH_SHORT).show();
                         }
+                    });
+                    tradeReviewDecline.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Snackbar.make(v, "trade decline unimplemented", Snackbar.LENGTH_SHORT).show();
+                        }
+                    });
+                    tradeReviewDeclineAndCounterOffer.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Snackbar.make(v, "trade decline&counter-offer unimplemented", Snackbar.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    tradeDirectionFromTo.setText("to");
+                    tradeReviewOtherUser.setText(model.getOwner().getUsername());
+                    tradeOffererYouTheyWant.setText("You");
+                    tradeOffererYouTheyOffer.setText("You");
+                    tradeReviewAccept.setVisibility(View.GONE);
+                    tradeReviewDecline.setVisibility(View.GONE);
+                    tradeReviewDeclineAndCounterOffer.setVisibility(View.GONE);
+                }
 
-                        String[] from = {"tileViewItemName", "tileViewItemCategory", "tileViewItemImage"};
-                        int[] to = {R.id.tileViewItemName, R.id.tileViewItemCategory, R.id.tileViewItemImage};
+                String[] from = {"tileViewItemName", "tileViewItemCategory", "tileViewItemImage"};
+                int[] to = {R.id.tileViewItemName, R.id.tileViewItemCategory, R.id.tileViewItemImage};
 
-                        ownerItemAdapter = new EnhancedSimpleAdapter(c, ownerItemTiles, R.layout.fragment_item_tile, from, to);
-                        ownerItemListView.setAdapter(ownerItemAdapter);
+                ownerItemAdapter = new EnhancedSimpleAdapter(c, ownerItemTiles, R.layout.fragment_item_tile, from, to);
+                ownerItemListView.setAdapter(ownerItemAdapter);
 
-                        borrowerItemAdapter = new EnhancedSimpleAdapter(c, borrowerItemTiles, R.layout.fragment_item_tile, from, to);
-                        borrowerItemListView.setAdapter(borrowerItemAdapter);
-                    }
-                });
+                borrowerItemAdapter = new EnhancedSimpleAdapter(c, borrowerItemTiles, R.layout.fragment_item_tile, from, to);
+                borrowerItemListView.setAdapter(borrowerItemAdapter);
             }
         };
 
