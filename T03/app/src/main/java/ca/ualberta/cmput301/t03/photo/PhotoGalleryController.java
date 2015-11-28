@@ -40,4 +40,8 @@ public class PhotoGalleryController {
     public void removePhoto(Integer index) {
         model.removePhoto(model.getPhotos().get(index));
     }
+
+    public void downloadPhoto(Integer index) {
+        model.getPhotos().get(index).downloadPhoto(true);
+    }
 }
