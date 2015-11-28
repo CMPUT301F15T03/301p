@@ -46,10 +46,10 @@ public class PrimaryUserHelper {
     public static final String CITY = "Edmonton";
     public static final String EMAIL = "TESTUSER@gualberta.ca";
     public static final String PHONE = "5555550123";
-    public static final String USER_ID = "JUNITDUDE";
-    public static final String FRIEND_WITH_AN_INVENTORY = "FRIENDWITHANINVENTORY";
-    public static final String FRIEND_WITH_AN_INVENTORY2 = "FRIENDWITHANINVENTORY2";
-    public static final String GENERAL_INVENTORY_FRIEND_1 = "GENERALINVENTORYFRIEND1";
+    public static final String USER_ID = "junitdude";
+    public static final String FRIEND_WITH_AN_INVENTORY = "friendwithaninventory";
+    public static final String FRIEND_WITH_AN_INVENTORY2 = "friendwithaninventory2";
+    public static final String GENERAL_INVENTORY_FRIEND_1 = "generalinventoryfriend1";
     public static final String TEST_ITEM_1_F_2 = "testItem1f2";
     public static final String TEST_QUALITY = "testQuality";
     private static String previousUser;
