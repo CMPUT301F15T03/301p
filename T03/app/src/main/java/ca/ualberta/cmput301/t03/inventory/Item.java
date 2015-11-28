@@ -39,7 +39,7 @@ import ca.ualberta.cmput301.t03.photo.PhotoGallery;
  * Model for an Item, Is owned by an inventory which is owned by a user.
  */
 @Parcel
-public class Item implements Observer, Observable, Cloneable, Tileable {
+public class Item implements Observer, Observable, Cloneable, Comparable<Item> {
 
     @Transient
     @Expose
@@ -320,7 +320,7 @@ public class Item implements Observer, Observable, Cloneable, Tileable {
     }
 
     @Override
-    public Map<String, ?> makeTile() {
-        return null;
+    public int compareTo(Item another) {
+        return getItemName().compareTo(another.getItemName());
     }
 }
