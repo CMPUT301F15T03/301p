@@ -22,31 +22,31 @@ public class CachedQueryExecutor implements QueryExecutor {
     }
 
     @Override
-    public <T> QueryResult<T> executeQuery(String suffix, Query query, Type typeOfQueryResult) throws IOException {
-        QueryResult<T> queryResult;
+    public AggregationQueryResult executeQuery(String suffix, Query query) throws IOException {
+        AggregationQueryResult aggregationQueryResult;
 
         try {
-            queryResult = innerExecutor.executeQuery(suffix, query, typeOfQueryResult);
-            writeToCache(suffix, query, queryResult);
+            aggregationQueryResult = innerExecutor.executeQuery(suffix, query);
+            writeToCache(suffix, query, aggregationQueryResult);
         }
         catch (IOException e) {
             if (isQueryResultInCache(suffix, query)) {
-                queryResult = getResultFromCache(suffix, query, typeOfQueryResult);
+                aggregationQueryResult = getResultFromCache(suffix, query);
             }
             else {
                 throw e;
             }
         }
 
-        return queryResult;
+        return aggregationQueryResult;
     }
 
-    private void writeToCache(String suffix, Query query, QueryResult queryResult) {
-        cachingDataManager.writeData(getQueryDataKey(suffix, query), queryResult, QueryResult.class);
+    private void writeToCache(String suffix, Query query, AggregationQueryResult aggregationQueryResult) {
+        cachingDataManager.writeData(getQueryDataKey(suffix, query), aggregationQueryResult, AggregationQueryResult.class);
     }
 
-    private <T> QueryResult<T> getResultFromCache(String suffix, Query query, Type typeOfQueryResult) throws IOException {
-        return cachingDataManager.getData(getQueryDataKey(suffix, query), typeOfQueryResult);
+    private AggregationQueryResult getResultFromCache(String suffix, Query query) throws IOException {
+        return cachingDataManager.getData(getQueryDataKey(suffix, query), AggregationQueryResult.class);
     }
 
     private boolean isQueryResultInCache(String suffix, Query query) {

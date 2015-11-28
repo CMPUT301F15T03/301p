@@ -15,13 +15,11 @@ public class HttpQueryExecutor implements QueryExecutor {
     private final ElasticSearchHelper elasticSearchHelper = new ElasticSearchHelper();
 
     @Override
-    public <T> QueryResult<T> executeQuery(String suffix, Query query, Type typeOfQueryResult) throws IOException {
+    public AggregationQueryResult executeQuery(String suffix, Query query) throws IOException {
         Preconditions.checkNotNull(query, "query");
         Preconditions.checkNotNullOrWhitespace(suffix, "suffix");
 
         String resultJson =  elasticSearchHelper.writeJson(query.formQuery(), suffix);
-
-
-        return new JsonFormatter(false, true).getGson().fromJson(resultJson, typeOfQueryResult);
+        return new JsonFormatter(false, true).getGson().fromJson(resultJson, AggregationQueryResult.class);
     }
 }
