@@ -103,19 +103,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer, Swipe
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivity = getActivity();
-
-//        try {
-//            PrimaryUser.getInstance().refresh();
-//            model = new BrowsableInventories(); //FIXME this seems fishy
-//            controller = new BrowseInventoryController(getContext(), model);
-//            model.addObserver(this);
-//
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//        listItems = new ArrayList<>();
-//        allItems = new ArrayList<>();
-//        setHasOptionsMenu(true);
+        setHasOptionsMenu(true);
 
         AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
             @Override
