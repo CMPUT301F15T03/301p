@@ -3,16 +3,11 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/browseListSwipeLayout">
-        <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/top_traders_grid"
-            android:stretchColumns="1">
-        </TableLayout>
-    </android.support.v4.widget.SwipeRefreshLayout>
+        android:id="@+id/top_traders_grid"
+        android:stretchColumns="1">
+    </TableLayout>
 
 </LinearLayout>
