@@ -35,6 +35,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 
@@ -74,7 +75,7 @@ public class UserInventoryFragment extends Fragment implements Observer, SwipeRe
 
     private FloatingActionButton addItemFab;
     private ListView listview;
-    private EnhancedSimpleAdapter adapter;
+    private InventoryAdapter adapter;
 
     private HashMap<Integer, UUID> positionMap;
     List<HashMap<String, Object>> tiles;
@@ -210,8 +211,13 @@ public class UserInventoryFragment extends Fragment implements Observer, SwipeRe
                 listview = (ListView) view.findViewById(R.id.InventoryListView);
                 String[] from = {"tileViewItemName", "tileViewItemCategory", "tileViewItemImage"};
                 int[] to = {R.id.tileViewItemName, R.id.tileViewItemCategory, R.id.tileViewItemImage};
-                adapter = new EnhancedSimpleAdapter(mActivity.getBaseContext(), tiles, R.layout.fragment_item_tile, from, to);
+//                adapter = new EnhancedSimpleAdapter(mActivity.getBaseContext(), tiles, R.layout.fragment_item_tile, from, to);
+
+                adapter = new InventoryAdapter(getContext(), model);
+
                 listview.setAdapter(adapter);
+
+                adapter.add(new Item("pizza", "cat"));
 
                 listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -311,6 +317,9 @@ public class UserInventoryFragment extends Fragment implements Observer, SwipeRe
             protected Void doInBackground(Void... params) {
                 try {
                     PrimaryUser.getInstance().refresh();
+                    model = user.getInventory();
+
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (ServiceNotAvailableException e) {
@@ -321,6 +330,8 @@ public class UserInventoryFragment extends Fragment implements Observer, SwipeRe
 
             @Override
             protected void onPostExecute(Void aVoid) {
+
+                adapter.notifyDataSetChanged();
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         };
