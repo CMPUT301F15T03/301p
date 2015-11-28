@@ -47,12 +47,12 @@ public class WriteDataJob extends DataManagerJob {
     }
 
     /**
-     * Calls the {@link ElasticSearchHelper#writeJson(String, String)} operation using the JSON
+     * Calls the {@link ElasticSearchHelper#putJson(String, String)} operation using the JSON
      * and {@link DataKey} passed during construction.
      * @throws IOException Thrown if the network request fails.
      */
     @Override
     public void onRun() throws IOException {
-        new ElasticSearchHelper().writeJson(json, getRequestSuffix());
+        new ElasticSearchHelper().putJson(json, getRequestSuffix());
     }
 }

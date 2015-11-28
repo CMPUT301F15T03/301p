@@ -44,6 +44,7 @@ public class FriendsList implements Observable, Filterable<Item> {
 
     @Expose
     private ArrayList<User> friends; // should this be a list or a set?
+
     private HashSet<Observer> observers;
 
     /**
@@ -102,6 +103,18 @@ public class FriendsList implements Observable, Filterable<Item> {
     public void removeFriend(User user) {
         friends.remove(user);
         notifyObservers();
+    }
+
+    public User getFriend(String userName) {
+        User user = null;
+        for (User tempUser : friends) {
+            if (tempUser.getUsername().toLowerCase().equals(userName.toLowerCase())) {
+                // return
+                user = tempUser;
+                break;
+            }
+        }
+        return user;
     }
 
     /**
@@ -188,5 +201,9 @@ public class FriendsList implements Observable, Filterable<Item> {
      */
     public int size() {
         return friends.size();
+    }
+
+    public HashSet<Observer> getObservers() {
+        return observers;
     }
 }

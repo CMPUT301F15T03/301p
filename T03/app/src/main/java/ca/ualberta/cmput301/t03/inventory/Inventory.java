@@ -238,4 +238,8 @@ public class Inventory implements Filterable<Item>, Observable, Observer {
         notifyObservers();
     }
 
+    public HashSet<Observer> getObservers() {
+        return observers;
+    }
+
 }

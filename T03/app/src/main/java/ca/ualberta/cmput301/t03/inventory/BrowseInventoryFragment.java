@@ -30,6 +30,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -62,14 +63,16 @@ import ca.ualberta.cmput301.t03.filters.FilterCriteria;
 import ca.ualberta.cmput301.t03.filters.item_criteria.CategoryFilterCriteria;
 import ca.ualberta.cmput301.t03.filters.item_criteria.StringQueryFilterCriteria;
 import ca.ualberta.cmput301.t03.user.EditProfileActivity;
+import ca.ualberta.cmput301.t03.photo.Photo;
 import ca.ualberta.cmput301.t03.user.User;
 import ca.ualberta.cmput301.t03.user.ViewProfileActivity;
+
 
 /**
  * Fragment that displays a ListView containing all Items from all friends.
  * This can (later) be filtered by friends, category, and Texttual Query.
  */
-public class BrowseInventoryFragment extends Fragment implements Observer {
+public class BrowseInventoryFragment extends Fragment implements Observer, SwipeRefreshLayout.OnRefreshListener {
     Activity mActivity;
     View mView;
 
@@ -82,6 +85,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
 
     private FloatingActionButton addFilterBrowseFab;
     private User user;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     public BrowseInventoryFragment() {
         // Required empty public constructor
@@ -115,6 +119,15 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+//        listItems.clear();
+//        allItems.clear();
+//        setupListView();
+
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_browse_inventory, container, false);
@@ -134,10 +147,16 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
         });
 
         setupListView();
+        setupSwipeRefresh(v);
 
         return v;
     }
 
+
+    private void setupSwipeRefresh(View v){
+        mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.browseListSwipeLayout);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+    }
 
     private void setupListView() {
         Thread tGetBrowsables = model.getBrowsables();
@@ -152,7 +171,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
                     @Override
                     public void run() {
                         allItems = model.getList();
-                            for (Item item : model.getList()) {
+                        for (Item item : allItems) {
                             addToListView(item);
                         }
                     }
@@ -192,11 +211,11 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
             @Override
             protected Intent doInBackground(Item[] items) {
                 Intent intent = new Intent(getContext(), InspectItemView.class);
-                intent.putExtra("inventory/inspect/item", Parcels.wrap(items[0]));
                 try {
                     for (User friend : PrimaryUser.getInstance().getFriends().getFriends()) {
                         if (friend.getInventory().getItems().containsKey(items[0].getUuid())) {
-                            intent.putExtra("user", Parcels.wrap(friend));
+                            intent.putExtra("user", friend.getUsername());
+                            intent.putExtra("ITEM_UUID", items[0].getUuid().toString());
                         }
                     }
                 } catch (IOException e) {
@@ -279,7 +298,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
     }
 
     private AlertDialog createAddSearchDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(  getContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         View dialogContent = View.inflate(getContext(), R.layout.content_add_search_dialog, null);
         final EditText e = (EditText) dialogContent.findViewById(R.id.addSearchFilterText);
 
@@ -292,26 +311,48 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
             public void onClick(DialogInterface dialog, int which) {
                 final String usr = e.getText().toString().trim();
                 model.addFilter(new StringQueryFilterCriteria(usr));
-                Toast.makeText(getContext(), "Textual Filter: '"+usr+"' Added", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Textual Filter: '" + usr + "' Added", Toast.LENGTH_SHORT).show();
             }
         });
         builder.setTitle("Textual Filters");
 
 
         ArrayList<String> filterNames = new ArrayList<String>();
-        for(FilterCriteria filter: model.getFilters()){
+        for (FilterCriteria filter : model.getFilters()) {
             filterNames.add(filter.getName());
         }
         final CharSequence[] fNames = filterNames.toArray(new String[filterNames.size()]);
         builder.setItems(fNames, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item){
+            public void onClick(DialogInterface dialog, int item) {
                 String selectedText = fNames[item].toString();
                 model.removeFilter(selectedText);
-                Toast.makeText(getContext(), "Textual Filter: '"+selectedText+"' Removed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Textual Filter: '" + selectedText + "' Removed", Toast.LENGTH_SHORT).show();
             }
         });
 
         AlertDialog d = builder.create();
         return d;
+    }
+
+    public void onRefresh() {
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    PrimaryUser.getInstance().refresh();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ServiceNotAvailableException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        };
+        task.execute();
     }
 }

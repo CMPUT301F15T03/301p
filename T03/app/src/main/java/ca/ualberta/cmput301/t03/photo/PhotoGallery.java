@@ -34,7 +34,8 @@ import ca.ualberta.cmput301.t03.Observer;
  * This model is used often in the application in such place as EditItemView, AddItemView,
  * InspectItemView, as well as the inventory browse fragments.
  */
-public class PhotoGallery implements Observable, Observer {
+public class PhotoGallery implements Observable, Observer, Cloneable {
+
     private Collection<Observer> observers;
     @Expose
     private ArrayList<Photo> photos;
@@ -50,6 +51,10 @@ public class PhotoGallery implements Observable, Observer {
      * @return Array list of item's photos.
      */
     public ArrayList<Photo> getPhotos() {
+        for (Photo photo : photos) {
+            photo.removeObserver(this);
+            photo.addObserver(this);
+        }
         return photos;
     }
 
@@ -88,6 +93,7 @@ public class PhotoGallery implements Observable, Observer {
      */
     public void addPhoto(Photo photo) {
         photos.add(photo);
+        photo.addObserver(this);
         notifyObservers();
     }
 
@@ -150,5 +156,16 @@ public class PhotoGallery implements Observable, Observer {
     @Override
     public void update(Observable observable) {
         notifyObservers();
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+//        PhotoGallery newGallery = (PhotoGallery) super.clone();
+        PhotoGallery newGallery = new PhotoGallery();
+
+        for (Photo p: getPhotos()){
+            newGallery.addPhoto((Photo) p.clone());
+        }
+        return newGallery;
     }
 }

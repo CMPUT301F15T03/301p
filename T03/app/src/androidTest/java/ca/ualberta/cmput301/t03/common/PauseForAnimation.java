@@ -25,10 +25,10 @@ public class PauseForAnimation {
     private static Integer TIME_TO_WAIT = 500; // 5 seconds
 
     public static void pause() {
-        customPause(TIME_TO_WAIT);
+        pause(TIME_TO_WAIT);
     }
 
-    public static void customPause(Integer time) {
+    public static void pause(Integer time) {
         try {
             Thread.sleep(time);
         } catch (InterruptedException e) {

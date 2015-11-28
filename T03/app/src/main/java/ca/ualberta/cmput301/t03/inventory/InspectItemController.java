@@ -26,7 +26,10 @@ import android.view.View;
 
 import org.parceler.Parcels;
 
+import java.io.IOException;
+
 import ca.ualberta.cmput301.t03.PrimaryUser;
+import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.trading.TradeOfferComposeActivity;
 import ca.ualberta.cmput301.t03.user.User;
 
@@ -66,9 +69,37 @@ public class InspectItemController {
      */
     public void proposeTradeButtonClicked() {
         Intent i = new Intent(activity.getBaseContext(), TradeOfferComposeActivity.class);
+        // TODO ditch Parcel, pass the borrower username, owner username, and item uuid as strings
         i.putExtra("trade/compose/borrower", Parcels.wrap(PrimaryUser.getInstance()));
         i.putExtra("trade/compose/owner", Parcels.wrap(owner));
         i.putExtra("trade/compose/item", Parcels.wrap(itemModel));
         activity.startActivity(i);
     }
+
+    /**
+     * Listens for an item click.
+     *
+     * Called by the "clone item" view widget.
+     *
+     * Results in a full copy of the item being added
+     * to the User's Inventory. As well, the photos will
+     * be cloned
+     */
+    public Item cloneItem() throws IOException, ServiceNotAvailableException {
+
+        Item newItem = null;
+        try {
+            newItem = (Item) itemModel.clone();
+
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+            return null;
+        }
+        Inventory inv = PrimaryUser.getInstance().getInventory();
+        inv.addItem(newItem);
+        inv.commitChanges();
+
+        return newItem;
+    }
+
 }

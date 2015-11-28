@@ -85,7 +85,7 @@ public class FriendsListTest {
     @Before
     public void setActivity() throws Exception {
 
-        PrimaryUserHelper.createUsers_NoFriendsAdded(InstrumentationRegistry.getTargetContext());
+        PrimaryUserHelper.createUsers_WithFriendsAdded(InstrumentationRegistry.getTargetContext());
 
         mActivity = mActivityRule.launchActivity(new Intent());
         pause();

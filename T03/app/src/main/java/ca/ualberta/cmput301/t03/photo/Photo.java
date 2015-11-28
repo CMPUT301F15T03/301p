@@ -22,6 +22,7 @@ package ca.ualberta.cmput301.t03.photo;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.util.Base64;
 
 import com.google.gson.annotations.Expose;
@@ -34,10 +35,14 @@ import java.util.UUID;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
+import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.TradeApp;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
+import ca.ualberta.cmput301.t03.configuration.Configuration;
+import ca.ualberta.cmput301.t03.datamanager.CachedDataManager;
 import ca.ualberta.cmput301.t03.datamanager.DataKey;
 import ca.ualberta.cmput301.t03.datamanager.DataManager;
+import ca.ualberta.cmput301.t03.datamanager.LocalDataManager;
 
 /**
  * Object for the item's photo. Belongs to an item's PhotoGallery.
@@ -47,29 +52,30 @@ import ca.ualberta.cmput301.t03.datamanager.DataManager;
  * <p/>
  * When used in conjunction with the ItemPhotoController, images are capped at 64k bytes.
  */
-public class Photo implements Observable {
+public class Photo implements Observable, Cloneable {
 
     public static final String type = "Photo";
+
     @Expose
     private UUID photoUUID;
     private Collection<Observer> observers;
     private DataManager dataManager;
+    private LocalDataManager localDataManager;
 
     private Base64Wrapper base64Photo;
     private Bitmap bitmap;
-    private boolean isDownloaded;
 
     public Photo() {
-        isDownloaded = false;
         observers = new ArrayList<>();
         dataManager = TradeApp.getInstance().createDataManager(false);
+        localDataManager = new LocalDataManager(false);
         base64Photo = new Base64Wrapper();
     }
 
     public Photo(Bitmap photo) {
-        isDownloaded = false;
         observers = new ArrayList<>();
         dataManager = TradeApp.getInstance().createDataManager(false);
+        localDataManager = new LocalDataManager(false);
         photoUUID = UUID.randomUUID();
         base64Photo = new Base64Wrapper();
         setPhoto(photo);
@@ -83,7 +89,47 @@ public class Photo implements Observable {
      * @return true if the photo has been downloaded, false if not
      */
     public boolean isDownloaded() {
-        return this.isDownloaded;
+        return localDataManager.keyExists((new DataKey(Photo.type, photoUUID.toString())));
+    }
+
+    /**
+     * Downloads the base65 photo info and creates a bitmap from the information
+     * both entities are then cached in the photo object for getting later
+     * <p/>
+     * For an ImageView, call setBitmap(Photo.getPhoto()); -- i think
+     */
+    public void downloadPhoto(Boolean force) {
+        if (!isDownloaded()) {
+            Configuration config = new Configuration(TradeApp.getContext());
+            if (!force && !config.isDownloadImagesEnabled()) {
+                bitmap = ((BitmapDrawable) TradeApp.getContext().getResources().getDrawable(R.drawable.photo_available_for_download)).getBitmap();
+            }
+
+            else {
+                try {
+                    base64Photo = dataManager.getData(new DataKey(Photo.type, photoUUID.toString()), Base64Wrapper.class);
+                    byte[] bytes = Base64.decode(base64Photo.getContents(), Base64.NO_WRAP);
+                    bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ServiceNotAvailableException e) {
+                    throw new RuntimeException("App is offline.", e);
+                }
+            }
+            notifyObservers();
+        }
+
+        else {
+            try {
+                base64Photo = localDataManager.getData(
+                        new DataKey(Photo.type, photoUUID.toString()),
+                        Base64Wrapper.class);
+                byte[] bytes = Base64.decode(base64Photo.getContents(), Base64.NO_WRAP);
+                bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -93,18 +139,7 @@ public class Photo implements Observable {
      * For an ImageView, call setBitmap(Photo.getPhoto()); -- i think
      */
     public void downloadPhoto() {
-        if (!isDownloaded) {
-            try {
-                base64Photo = dataManager.getData(new DataKey(Photo.type, photoUUID.toString()), Base64Wrapper.class);
-                isDownloaded = true;
-                byte[] bytes = Base64.decode(base64Photo.getContents(), Base64.NO_WRAP);
-                bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ServiceNotAvailableException e) {
-                throw new RuntimeException("App is offline.", e);
-            }
-        }
+        downloadPhoto(false);
     }
 
     /**
@@ -132,7 +167,6 @@ public class Photo implements Observable {
         base64Photo.setContents(Base64.encodeToString(stream.toByteArray(), Base64.NO_WRAP));
         byte[] bytes = Base64.decode(base64Photo.getContents(), Base64.NO_WRAP);
         bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-        isDownloaded = true;
 
         try {
             dataManager.writeData(new DataKey(Photo.type, photoUUID.toString()), base64Photo, Base64Wrapper.class);
@@ -141,6 +175,7 @@ public class Photo implements Observable {
         } catch (ServiceNotAvailableException e) {
             throw new RuntimeException("App is offline.", e);
         }
+        notifyObservers();
     }
 
     /**
@@ -205,5 +240,19 @@ public class Photo implements Observable {
      */
     public Base64Wrapper getBase64Photo() {
         return base64Photo;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+//        Photo p = (Photo) super.clone();
+//        p.clearObservers();
+        Bitmap bitCopy= Bitmap.createBitmap(getPhoto());
+        Photo p = new Photo(bitCopy);
+
+        return p;
+    }
+
+    public UUID getPhotoUUID() {
+        return photoUUID;
     }
 }
