@@ -75,6 +75,37 @@ public class InspectItemView extends AppCompatActivity {
         }
 
         itemModel = Parcels.unwrap(getIntent().getParcelableExtra("inventory/inspect/item"));
+
+
+        AsyncTask<Item, Void, Item> task = new AsyncTask<Item, Void, Item>() {
+            @Override
+            protected Item doInBackground(Item... params) {
+                Item im = params[0];
+
+                try {
+                    itemModel = user.getInventory().getItem(im.getUuid());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ServiceNotAvailableException e) {
+                    e.printStackTrace();
+                }
+
+                return im;
+            }
+
+            @Override
+            protected void onPostExecute(Item item) {
+                super.onPostExecute(item);
+                onModelFetched();
+            }
+        };
+
+        task.execute(itemModel);
+
+    }
+
+
+    public void onModelFetched(){
         // populate with fields
         EditText itemNameText = (EditText) findViewById(R.id.itemName);
         EditText itemQuantityText = (EditText) findViewById(R.id.itemQuantity);
@@ -138,15 +169,10 @@ public class InspectItemView extends AppCompatActivity {
             public Bitmap image = null;
             @Override
             protected Object doInBackground(Object[] params) {
-                    try {
-                        if (user.getInventory().getItem(itemModel.getUuid()).getPhotoList().getPhotos().size() > 0) {
-                            image = user.getInventory().getItem(itemModel.getUuid()).getPhotoList().getPhotos().get(0).getPhoto();
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (ServiceNotAvailableException e) {
-                        throw new RuntimeException("App is offline.", e);
-                    }
+
+                if (itemModel.getPhotoList().getPhotos().size() > 0) {
+                    image = itemModel.getPhotoList().getPhotos().get(0).getPhoto();
+                }
                 return null;
             }
             @Override
@@ -158,8 +184,6 @@ public class InspectItemView extends AppCompatActivity {
             }
         };
         worker.execute();
-
-
     }
 
 

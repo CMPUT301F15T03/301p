@@ -86,7 +86,14 @@ public class InspectItemController {
      */
     public Item cloneItem() throws IOException, ServiceNotAvailableException {
 
-        Item newItem = new Item(itemModel);
+        Item newItem = null;
+        try {
+            newItem = (Item) itemModel.clone();
+            newItem.clearObservers();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+            return null;
+        }
         Inventory inv = PrimaryUser.getInstance().getInventory();
         inv.addItem(newItem);
 
