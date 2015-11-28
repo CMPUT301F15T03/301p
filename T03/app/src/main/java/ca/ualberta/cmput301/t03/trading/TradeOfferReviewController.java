@@ -23,6 +23,7 @@ package ca.ualberta.cmput301.t03.trading;
 import android.content.Context;
 import android.util.Log;
 
+import ca.ualberta.cmput301.t03.common.exceptions.NotImplementedException;
 import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeStateTransition;
 
 /**
@@ -55,7 +56,7 @@ public class TradeOfferReviewController {
         try {
             model.accept();
         } catch (IllegalTradeStateTransition illegalTradeStateTransition) {
-            Log.e(logTAG, illegalTradeStateTransition.getMessage());
+            throw new RuntimeException(illegalTradeStateTransition.getMessage());
         }
     }
 
@@ -70,7 +71,7 @@ public class TradeOfferReviewController {
         try {
             model.decline();
         } catch (IllegalTradeStateTransition illegalTradeStateTransition) {
-            Log.e(logTAG, illegalTradeStateTransition.getMessage());
+            throw new RuntimeException(illegalTradeStateTransition.getMessage());
         }
     }
 
@@ -85,12 +86,13 @@ public class TradeOfferReviewController {
         try {
             model.decline();
         } catch (IllegalTradeStateTransition illegalTradeStateTransition) {
-            Log.e(logTAG, illegalTradeStateTransition.getMessage());
+            throw new RuntimeException(illegalTradeStateTransition.getMessage());
         }
         /**
          * TODO perform required tasks for counter offer
          * - create a new trade
          * - send to compose trade view
          */
+        throw new NotImplementedException();
     }
 }
