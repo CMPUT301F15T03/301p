@@ -27,10 +27,14 @@ import android.graphics.drawable.BitmapDrawable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.inventory.Item;
+import ca.ualberta.cmput301.t03.photo.Photo;
+import ca.ualberta.cmput301.t03.trading.Trade;
+import ca.ualberta.cmput301.t03.trading.TradeList;
 
 public class TileBuilder {
     private Resources resources;
@@ -39,7 +43,7 @@ public class TileBuilder {
         this.resources = resources;
     }
 
-    public ArrayList<HashMap<String, Object>> buildItemTiles(Collection<Item> items, HashMap<Integer, UUID> positionMap) {
+    public List<HashMap<String, Object>> buildItemTiles(Collection<Item> items, HashMap<Integer, UUID> positionMap) {
         ArrayList<HashMap<String, Object>> tiles = new ArrayList<>();
 
         int i = 0;
@@ -56,6 +60,33 @@ public class TileBuilder {
             tiles.add(hm);
             positionMap.put(i, item.getUuid());
             i++;
+        }
+
+        return tiles;
+    }
+
+    public List<HashMap<String, Object>> buildTradeTiles(TradeList trades, HashMap<Integer, UUID> tradeTilePositionMap) {
+        ArrayList<HashMap<String, Object>> tiles = new ArrayList<>();
+
+        int i = 0;
+        tradeTilePositionMap.clear();
+        for (Trade trade : trades.getTradesAsList()) {
+            Item mainItem = trade.getOwnersItems().get(0);
+            List<Photo> mainItemPhotos = mainItem.getPhotoList().getPhotos();
+
+            HashMap<String, Object> hm = new HashMap<String, Object>();
+            hm.put("tradeTileMainItemCategory", mainItem.getItemCategory());
+            if (mainItemPhotos.size() > 0) {
+                hm.put("tradeTileMainItemImage", (Bitmap) mainItemPhotos.get(0).getPhoto());
+            } else {
+                hm.put("tradeTileMainItemImage", ((BitmapDrawable) resources.getDrawable(R.drawable.photo_unavailable)).getBitmap());
+            }
+            hm.put("tradeTileMainItemName", mainItem.getItemName());
+            hm.put("tradeTileOtherUser", trade.getBorrower().getUsername());
+            hm.put("tradeTileTradeState", trade.getBorrower().getUsername());
+
+            tiles.add(hm);
+            tradeTilePositionMap.put(i, trade.getTradeUUID());
         }
 
         return tiles;
