@@ -1,7 +1,6 @@
 package ca.ualberta.cmput301.t03.datamanager.elasticsearch.queries;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 
 import ca.ualberta.cmput301.t03.common.Preconditions;
 import ca.ualberta.cmput301.t03.datamanager.JsonFormatter;
@@ -19,7 +18,7 @@ public class HttpQueryExecutor implements QueryExecutor {
         Preconditions.checkNotNull(query, "query");
         Preconditions.checkNotNullOrWhitespace(suffix, "suffix");
 
-        String resultJson =  elasticSearchHelper.writeJson(query.formQuery(), suffix);
+        String resultJson =  elasticSearchHelper.postJson(query.formQuery(), suffix);
         return new JsonFormatter(false, true).getGson().fromJson(resultJson, AggregationQueryResult.class);
     }
 }

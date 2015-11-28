@@ -1,6 +1,7 @@
 package ca.ualberta.cmput301.t03.datamanager.elasticsearch.queries;
 
 import com.google.gson.Gson;
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import org.apache.commons.lang3.StringUtils;
@@ -16,10 +17,14 @@ import ca.ualberta.cmput301.t03.datamanager.JsonFormatter;
  */
 public class FieldGroupedQuery implements Query {
 
+    @Expose
     @SerializedName("query")
     private final HashMap<String, HashMap<String, String>> filteringQuery;
+
+    @Expose
     @SerializedName("aggs")
     private final HashMap<String, HashMap<String, Terms>> aggregationQuery;
+
     private final String queryIdentifier;
 
     public FieldGroupedQuery(final String filterField,
@@ -61,7 +66,7 @@ public class FieldGroupedQuery implements Query {
 
     @Override
     public String formQuery() {
-        Gson gson = new JsonFormatter(false, true).getGson();
+        Gson gson = new JsonFormatter(true, true).getGson();
         return gson.toJson(this);
     }
 
@@ -93,7 +98,10 @@ public class FieldGroupedQuery implements Query {
     }
 
     private class Terms {
+        @Expose
         private String field;
+
+        @Expose
         private Integer size;
 
         public Terms(String field, Integer size) {
