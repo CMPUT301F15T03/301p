@@ -8,7 +8,9 @@ import ca.ualberta.cmput301.t03.inventory.Item;
  */
 public class StringQueryFilterCriteria implements FilterCriteria {
     private String name;
+    private String term;
     public boolean passes(Object o){
-        return ((Item)o).getItemName().equals(name);
+        return ((Item)o).getItemName().equals(term);
     }
+    public String getName() {return this.name;}
 }
