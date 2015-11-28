@@ -115,6 +115,7 @@ public class TradeOfferComposeActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     throw new RuntimeException("Primary User failed to get TradeList");
                 } catch (ServiceNotAvailableException e) {
+                    // todo make a snackbar toast instead of runtime exception
                     throw new RuntimeException("App is offline.", e);
                 }
                 controller = new TradeOfferComposeController(c, model);

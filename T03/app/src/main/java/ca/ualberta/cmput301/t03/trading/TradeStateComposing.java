@@ -94,6 +94,14 @@ public class TradeStateComposing implements TradeState {
         throw new IllegalTradeStateTransition("Trade being composed cannot be declined");
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getInterfaceString(Boolean currentUserIsOwner) {
+        return "COMPOSING-NOT-IN-INTERFACE";
+    }
+
     @Override
     public String toString() {
         return stateString;

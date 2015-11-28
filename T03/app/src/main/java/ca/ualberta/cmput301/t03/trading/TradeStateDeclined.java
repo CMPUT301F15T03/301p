@@ -96,6 +96,18 @@ public class TradeStateDeclined implements TradeState {
         throw new IllegalTradeStateTransition("Declined trade cannot be declined");
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getInterfaceString(Boolean currentUserIsOwner) {
+        if (currentUserIsOwner) {
+            return "Declined, not traded to";
+        } else {
+            return "Declined, not received from";
+        }
+    }
+
     @Override
     public String toString() {
         return stateString;

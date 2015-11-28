@@ -96,6 +96,14 @@ public class TradeStateCancelled implements TradeState {
         throw new IllegalTradeStateTransition("Cancelled trade cannot be declined");
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getInterfaceString(Boolean currentUserIsOwner) {
+        return "CANCELLED-NOT-IN-INTERFACE";
+    }
+
     @Override
     public String toString() {
         return stateString;

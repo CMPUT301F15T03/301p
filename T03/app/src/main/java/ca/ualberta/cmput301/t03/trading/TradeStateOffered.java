@@ -107,6 +107,18 @@ public class TradeStateOffered implements TradeState {
         throw new NotImplementedException();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getInterfaceString(Boolean currentUserIsOwner) {
+        if (currentUserIsOwner) {
+            return "Trade offered by";
+        } else {
+            return "Trade request sent to";
+        }
+    }
+
     @Override
     public String toString() {
         return stateString;
