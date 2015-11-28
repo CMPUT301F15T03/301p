@@ -45,7 +45,7 @@ import ca.ualberta.cmput301.t03.filters.item_criteria.PrivateFilterCriteria;
  * Represents the main model for the userinventory workflow and the browse inventories workflow.
  */
 @Parcel
-public class Inventory implements Filterable<Item>, Observable, Observer {
+public class Inventory implements Filterable<Item>, Observable, Observer, TileContainer {
     public final static String type = "Inventory";
     @Expose
     private LinkedHashMap<UUID, Item> items;
@@ -242,4 +242,12 @@ public class Inventory implements Filterable<Item>, Observable, Observer {
         return observers;
     }
 
+    @Override
+    public List<Tileable> getTiles() {
+        List<Tileable> tileables = new ArrayList<>();
+        for (Tileable t: items.values()){
+            tileables.add(t);
+        }
+        return tileables;
+    }
 }
