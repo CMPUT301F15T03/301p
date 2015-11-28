@@ -65,17 +65,32 @@ public class InspectItemView extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        User userFromIntent = Parcels.unwrap(getIntent().getParcelableExtra("user"));
+//        User userFromIntent = Parcels.unwrap(getIntent().getParcelableExtra("user"));
+        String username = getIntent().getStringExtra("user");
+        String itemUUID = getIntent().getStringExtra("ITEM_UUID");
 
 
-        if (userFromIntent == null || PrimaryUser.getInstance().equals(userFromIntent)) {
+        if (username == null || PrimaryUser.getInstance().getUsername().equals(username)) {
             user = PrimaryUser.getInstance();
         } else {
-            user = new User(userFromIntent, getApplicationContext());
+//            user = new User(userFromIntent, getApplicationContext());
+            try {
+                user = PrimaryUser.getInstance().getFriends().getFriend(username);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ServiceNotAvailableException e) {
+                throw new RuntimeException("OFFLINE CANT DO THIS I GUESS");
+            }
         }
 
-        itemModel = Parcels.unwrap(getIntent().getParcelableExtra("inventory/inspect/item"));
-
+//        itemModel = Parcels.unwrap(getIntent().getParcelableExtra("inventory/inspect/item"));
+        try {
+            itemModel = user.getInventory().getItem(itemUUID);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ServiceNotAvailableException e) {
+            throw new RuntimeException("OFFLINE CANT DO THIS I GUESS");
+        }
 
         AsyncTask<Item, Void, Item> task = new AsyncTask<Item, Void, Item>() {
             @Override

@@ -67,13 +67,20 @@ public class PhotoGalleryView extends AppCompatActivity {
         AsyncTask worker = new AsyncTask() {
             @Override
             protected Object doInBackground(Object[] params) {
-                User tempUser;
+                User tempUser = null;
                 isPrimaryUser = false;
                 if (user.equals(PrimaryUser.getInstance().getUsername())) {
                     tempUser = PrimaryUser.getInstance();
                     isPrimaryUser = true;
                 } else {
-                    tempUser = new User(user, PhotoGalleryView.this.getApplicationContext());
+                    try {
+                        tempUser = PrimaryUser.getInstance().getFriends().getFriend(user);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (ServiceNotAvailableException e) {
+                        throw new RuntimeException("OFFLINE CANT DO THIS I GUESS");
+                    }
+
                 }
                 try {
                     model = tempUser.getInventory().getItem(itemUUID).getPhotoList();
