@@ -90,13 +90,14 @@ public class InspectItemController {
         Item newItem = null;
         try {
             newItem = (Item) itemModel.clone();
-            newItem.clearObservers();
+
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
             return null;
         }
         Inventory inv = PrimaryUser.getInstance().getInventory();
         inv.addItem(newItem);
+        inv.commitChanges();
 
         return newItem;
     }
