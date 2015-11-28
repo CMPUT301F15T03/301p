@@ -50,7 +50,7 @@ import ca.ualberta.cmput301.t03.datamanager.DataManager;
  * <p/>
  * When used in conjunction with the ItemPhotoController, images are capped at 64k bytes.
  */
-public class Photo implements Observable {
+public class Photo implements Observable, Cloneable {
 
     public static final String type = "Photo";
     @Expose
@@ -224,5 +224,15 @@ public class Photo implements Observable {
      */
     public Base64Wrapper getBase64Photo() {
         return base64Photo;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        Photo p = (Photo) super.clone();
+
+        Bitmap bitCopy= Bitmap.createBitmap(getPhoto());
+        p.setPhoto(bitCopy);
+        p.photoUUID = UUID.randomUUID();
+        return p;
     }
 }

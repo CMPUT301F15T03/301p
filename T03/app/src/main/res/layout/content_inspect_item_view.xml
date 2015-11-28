@@ -25,7 +25,7 @@
 
             <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="127dp"
+                android:layout_height="147dp"
                 android:weightSum="1">
 
                 <ImageView
@@ -54,6 +54,12 @@
                         android:text="View Photos"
                         android:id="@+id/viewImagesbutton"
                         android:layout_gravity="center_horizontal" />
+
+                    <Button
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Clone Item"
+                        android:id="@+id/cloneItemButton" />
                 </LinearLayout>
 
             </LinearLayout>
