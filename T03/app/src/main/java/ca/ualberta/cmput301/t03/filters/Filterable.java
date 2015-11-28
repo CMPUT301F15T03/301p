@@ -61,4 +61,6 @@ public interface Filterable<T> {
      * @return
      */
     List<T> getFilteredItems(ArrayList<T> list, List<FilterCriteria> filters);
+
+    public List<FilterCriteria> getFilters();
 }

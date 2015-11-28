@@ -234,6 +234,24 @@ public class User implements Observable, Observer, Comparable<User> {
         return inventory;
     }
 
+
+    public BrowsableInventories getBrowseableInventories() throws IOException, ServiceNotAvailableException {
+
+        BrowsableInventories newInventory = new BrowsableInventories();
+        FriendsList list = getFriends();
+        for (User f: list){
+            for (Item i: f.getInventory()){
+                newInventory.addItem(i);
+                try{
+                    i.getPhotoList().getPhotos().get(0).getPhoto(); //cache first photo!
+                } catch(IndexOutOfBoundsException e){
+                    // no problemo.
+                }
+            }
+        }
+        return newInventory;
+    }
+
     /**
      * Get TradeList of trades which the User is involved in.
      * <p>
