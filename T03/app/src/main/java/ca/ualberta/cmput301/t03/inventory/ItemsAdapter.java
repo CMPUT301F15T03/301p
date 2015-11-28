@@ -1,6 +1,8 @@
 package ca.ualberta.cmput301.t03.inventory;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,12 +12,14 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.R;
+import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.user.User;
 
 /**
@@ -39,7 +43,13 @@ public class ItemsAdapter<T extends ItemsAdaptable> extends ArrayAdapter<Item> {
     private Context mContext;
 
     public List<Item> getItems(){
-        return mInventory.getAdaptableItems();
+        try {
+            return mInventory.getAdaptableItems();
+        } catch (IOException e) {
+            return new ArrayList<>();
+        } catch (ServiceNotAvailableException e) {
+            return new ArrayList<>(); //fixme this does not belong
+        }
     }
 
     public ItemsAdapter(Context context, T inventory) {
@@ -75,7 +85,8 @@ public class ItemsAdapter<T extends ItemsAdaptable> extends ArrayAdapter<Item> {
         itemName.setText(item.getItemName());
         try {
             image.setImageBitmap(item.getPhotoList().getPhotos().get(0).getPhoto());
-        } catch (Exception e){
+        } catch (IndexOutOfBoundsException e){
+            image.setImageBitmap(((BitmapDrawable) getContext().getResources().getDrawable(R.drawable.photo_unavailable)).getBitmap());
             e.printStackTrace(); //fixme do da rigt things
         }
         // Return the completed view to render on screen

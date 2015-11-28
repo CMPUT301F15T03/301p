@@ -187,13 +187,6 @@ public class UserInventoryFragment extends Fragment implements Observer, SwipeRe
      */
     public void createListView(View v) {
         final View view = v;
-//
-//        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
-//            @Override
-//            protected Void doInBackground(Void... params) {
-//                getP
-//            }
-//        }
 
         listview = (ListView) v.findViewById(R.id.InventoryListView);
         adapter = new ItemsAdapter<>(getContext(), model);
@@ -206,43 +199,6 @@ public class UserInventoryFragment extends Fragment implements Observer, SwipeRe
                 inspectItem((Item) listview.getItemAtPosition(position));
             }
         });
-
-
-//        AsyncTask worker = new AsyncTask() {
-//            @Override
-//            protected Object doInBackground(Object[] params) {
-//                TileBuilder tileBuilder = new TileBuilder(getResources());
-//                tiles = tileBuilder.buildItemTiles(model.getItems().values(), positionMap);
-//                return null;
-//            }
-
-//            @Override
-//            protected void onPostExecute(Object o) {
-//                listview = (ListView) view.findViewById(R.id.InventoryListView);
-//                String[] from = {"tileViewItemName", "tileViewItemCategory", "tileViewItemImage"};
-//                int[] to = {R.id.tileViewItemName, R.id.tileViewItemCategory, R.id.tileViewItemImage};
-////                adapter = new EnhancedSimpleAdapter(mActivity.getBaseContext(), tiles, R.layout.fragment_item_tile, from, to);
-//
-//
-//                super.onPostExecute(o);
-//            }
-//        };
-//        worker.execute();
-
-//        listview = (ListView) v.findViewById(R.id.InventoryListView);
-//        List<HashMap<String, Object>> tiles = buildTiles();
-//        String[] from = {"tileViewItemName", "tileViewItemCategory", "tileViewItemImage"}; //
-//        int[] to = {R.id.tileViewItemName, R.id.tileViewItemCategory, R.id.tileViewItemImage}; //
-//        adapter = new EnhancedSimpleAdapter(mActivity.getBaseContext(), tiles, R.layout.fragment_item_tile, from, to);
-//        listview.setAdapter(adapter);
-//
-//        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                inspectItem(model.getItems().get(positionMap.get(position)));
-//            }
-//        });
-
     }
 
     /**
@@ -294,16 +250,7 @@ public class UserInventoryFragment extends Fragment implements Observer, SwipeRe
 
     @Override
     public void update(Observable observable) {
-
-//        adapter.notifyUpdated();
         onRefresh();
-//        mActivity.runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                fragmentSetup(mView);
-//                adapter.notifyDataSetChanged();
-//            }
-//        });
     }
 
     public void setupSwipeRefresh(View v){

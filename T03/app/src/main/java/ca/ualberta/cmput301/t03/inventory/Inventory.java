@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.UUID;
@@ -46,7 +47,7 @@ import ca.ualberta.cmput301.t03.filters.item_criteria.PrivateFilterCriteria;
  * Represents the main model for the userinventory workflow and the browse inventories workflow.
  */
 @Parcel
-public class Inventory implements Filterable<Item>, Observable, Observer, ItemsAdaptable {
+public class Inventory implements Filterable<Item>, Observable, Observer, ItemsAdaptable, Iterable<Item> {
     public final static String type = "Inventory";
     @Expose
     private LinkedHashMap<UUID, Item> items;
@@ -193,6 +194,11 @@ public class Inventory implements Filterable<Item>, Observable, Observer, ItemsA
         return collectionFilter.filterCopy(list);
     }
 
+    @Override
+    public List<FilterCriteria> getFilters() {
+        return filters;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -251,5 +257,10 @@ public class Inventory implements Filterable<Item>, Observable, Observer, ItemsA
         }
         Collections.sort(i);
         return i;
+    }
+
+    @Override
+    public Iterator<Item> iterator() {
+        return items.values().iterator();
     }
 }

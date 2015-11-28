@@ -77,14 +77,13 @@ public class BrowseInventoryFragment extends Fragment implements Observer, Swipe
 
     ArrayList<Item> allItems;
     ArrayList<HashMap<String, Object>> listItems;
-    ItemsAdapter adapter;
+    ItemsAdapter<Inventory> adapter;
 
-    private BrowsableInventories model;
+    private Inventory model;
     private BrowseInventoryController controller;
 
-    private FloatingActionButton addFilterBrowseFab;
-    private User user;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private ListView mListview;
 
     public BrowseInventoryFragment() {
         // Required empty public constructor
@@ -105,18 +104,53 @@ public class BrowseInventoryFragment extends Fragment implements Observer, Swipe
         super.onCreate(savedInstanceState);
         mActivity = getActivity();
 
-        try {
-            user = PrimaryUser.getInstance();
-            model = new BrowsableInventories(); //FIXME this seems fishy
-            controller = new BrowseInventoryController(getContext(), model);
-            model.addObserver(this);
+//        try {
+//            PrimaryUser.getInstance().refresh();
+//            model = new BrowsableInventories(); //FIXME this seems fishy
+//            controller = new BrowseInventoryController(getContext(), model);
+//            model.addObserver(this);
+//
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//        listItems = new ArrayList<>();
+//        allItems = new ArrayList<>();
+//        setHasOptionsMenu(true);
 
-        } catch (Exception e) {
-            throw new RuntimeException();
-        }
-        listItems = new ArrayList<>();
-        allItems = new ArrayList<>();
-        setHasOptionsMenu(true);
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    model = PrimaryUser.getInstance().getBrowseableInventories();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ServiceNotAvailableException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                setupListView();
+            }
+        };
+        task.execute();
+
+    }
+
+    private void setupListView() {
+        adapter = new ItemsAdapter<>(mActivity.getBaseContext(), model);
+        mListview.setAdapter(adapter);
+
+        mListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                inspectItem((Item) parent.getItemAtPosition(position));
+            }
+        });
+        setupSwipeRefresh(getView());
+
     }
 
     @Override
@@ -132,21 +166,9 @@ public class BrowseInventoryFragment extends Fragment implements Observer, Swipe
         View v = inflater.inflate(R.layout.fragment_browse_inventory, container, false);
         mView = v;
 
-        ListView listview = (ListView) v.findViewById(R.id.BrowseListView);
-        String[] from = {"tileViewItemName", "tileViewItemCategory", "tileViewItemImage"};
-        int[] to = {R.id.tileViewItemName, R.id.tileViewItemCategory, R.id.tileViewItemImage};
-        adapter = new ItemsAdapter<>(mActivity.getBaseContext(), model);
-        listview.setAdapter(adapter);
+        mListview = (ListView) v.findViewById(R.id.BrowseListView);
 
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                inspectItem(allItems.get(position));
-            }
-        });
 
-        setupListView();
-        setupSwipeRefresh(v);
 
         return v;
     }
@@ -157,47 +179,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer, Swipe
         mSwipeRefreshLayout.setOnRefreshListener(this);
     }
 
-    private void setupListView() {
-        Thread tGetBrowsables = model.getBrowsables();
-        ExecutorService pool = Executors.newSingleThreadExecutor();
-        pool.submit(model.getConstructorThread());
-        pool.submit(tGetBrowsables);
 
-        Thread tAddToListView = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        allItems = model.getList();
-                        for (Item item : allItems) {
-                            addToListView(item);
-                        }
-                    }
-                });
-            }
-        });
-        pool.submit(tAddToListView);
-        pool.shutdown();
-    }
-
-    /**
-     * Used to add Items to the ListView.
-     *
-     * @param item
-     */
-    public void addToListView(Item item) {
-        HashMap<String, Object> hm = new HashMap<>();
-        hm.put("tileViewItemName", item.getItemName());
-        hm.put("tileViewItemCategory", item.getItemCategory());
-        if (item.getPhotoList().getPhotos().size() > 0 ) {
-            hm.put("tileViewItemImage", (Bitmap) item.getPhotoList().getPhotos().get(0).getPhoto());
-        }
-        else {
-            hm.put("tileViewItemImage", ((BitmapDrawable) getResources().getDrawable(R.drawable.photo_unavailable)).getBitmap());
-        }
-        listItems.add(hm);
-    }
 
     /**
      * Starts intent for inspecting item
@@ -339,6 +321,9 @@ public class BrowseInventoryFragment extends Fragment implements Observer, Swipe
             protected Void doInBackground(Void... params) {
                 try {
                     PrimaryUser.getInstance().refresh();
+                    model = PrimaryUser.getInstance().getBrowseableInventories();
+
+
                     //fixme browseableinventories actually needs to refresh
                 } catch (IOException e) {
                     e.printStackTrace();
