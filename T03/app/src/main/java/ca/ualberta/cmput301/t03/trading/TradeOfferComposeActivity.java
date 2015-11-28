@@ -22,11 +22,8 @@ package ca.ualberta.cmput301.t03.trading;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -45,6 +42,7 @@ import java.util.List;
 import java.util.UUID;
 
 import ca.ualberta.cmput301.t03.R;
+import ca.ualberta.cmput301.t03.common.TileBuilder;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.inventory.EnhancedSimpleAdapter;
 import ca.ualberta.cmput301.t03.inventory.Item;
@@ -121,8 +119,9 @@ public class TradeOfferComposeActivity extends AppCompatActivity {
                 }
                 controller = new TradeOfferComposeController(c, model);
 
-                ownerItemTiles = buildItemTiles(model.getOwnersItems(), ownerItemTilePositionMap);
-                borrowerItemTiles = buildItemTiles(model.getBorrowersItems(), borrowerItemTilePositionMap);
+                TileBuilder tileBuilder = new TileBuilder(getResources());
+                ownerItemTiles = tileBuilder.buildItemTiles(model.getOwnersItems(), ownerItemTilePositionMap);
+                borrowerItemTiles = tileBuilder.buildItemTiles(model.getBorrowersItems(), borrowerItemTilePositionMap);
 
                 return c;
             }
@@ -177,28 +176,6 @@ public class TradeOfferComposeActivity extends AppCompatActivity {
             }
         };
         worker.execute(getBaseContext());
-    }
-
-    private ArrayList<HashMap<String, Object>> buildItemTiles(List<Item> items, HashMap<Integer, UUID> positionMap) {
-        ArrayList<HashMap<String, Object>> tiles = new ArrayList<>();
-
-        int i = 0;
-        positionMap.clear();
-        for (Item item : items) {
-            HashMap<String, Object> hm = new HashMap<String, Object>();
-            hm.put("tileViewItemName", item.getItemName());
-            hm.put("tileViewItemCategory", item.getItemCategory());
-            if(item.getPhotoList().getPhotos().size() > 0){
-                hm.put("tileViewItemImage", (Bitmap) item.getPhotoList().getPhotos().get(0).getPhoto());
-            } else {
-                hm.put("tileViewItemImage", ((BitmapDrawable) getResources().getDrawable(R.drawable.photo_unavailable)).getBitmap());
-            }
-            tiles.add(hm);
-            positionMap.put(i, item.getUuid());
-            i++;
-        }
-
-        return tiles;
     }
 
     /**
