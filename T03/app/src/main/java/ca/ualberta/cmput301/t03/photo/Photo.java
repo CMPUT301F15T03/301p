@@ -91,12 +91,7 @@ public class Photo implements Observable, Cloneable {
      * @return true if the photo has been downloaded, false if not
      */
     public boolean isDownloaded() {
-        DataKey key = new DataKey(Photo.type, photoUUID.toString());
-        Boolean there = localDataManager.keyExists(key );
-        return there;
-
-
-//        return this.isDownloaded;
+        return localDataManager.keyExists((new DataKey(Photo.type, photoUUID.toString())));
     }
 
     /**
@@ -106,7 +101,6 @@ public class Photo implements Observable, Cloneable {
      * For an ImageView, call setBitmap(Photo.getPhoto()); -- i think
      */
     public void downloadPhoto(Boolean force) {
-//        if (!isDownloaded) {
         if (!isDownloaded()) {
             Configuration config = new Configuration(TradeApp.getContext());
             if (!force && !config.isDownloadImagesEnabled()) {
@@ -139,8 +133,6 @@ public class Photo implements Observable, Cloneable {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-//            notifyObservers();
         }
     }
 
