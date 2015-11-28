@@ -104,6 +104,18 @@ public class FriendsList implements Observable, Filterable<Item> {
         notifyObservers();
     }
 
+    public User getFriend(String userName) {
+        User user = null;
+        for (User tempUser : friends) {
+            if (tempUser.getUsername().toLowerCase().equals(userName.toLowerCase())) {
+                // return
+                user = tempUser;
+                break;
+            }
+        }
+        return user;
+    }
+
     /**
      * alias for notifyObservers, to be called after modifying the friendslist to have the User
      * write changes to data caches.
