@@ -218,6 +218,8 @@ public class FriendsListFragment extends Fragment implements Observer {
                             Snackbar.make(getView(), String.format("User %s does not exist", usr), Snackbar.LENGTH_SHORT).show();
                         } catch (UserAlreadyAddedException e1) {
                             Snackbar.make(getView(), String.format("User %s is already added!", usr), Snackbar.LENGTH_SHORT).show();
+                        } catch (ServiceNotAvailableException e1) {
+                            Snackbar.make(getView(), "You must be online to add friends!", Snackbar.LENGTH_SHORT).show();
                         }
                         return null;
                     }
