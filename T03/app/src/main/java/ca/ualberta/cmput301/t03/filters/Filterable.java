@@ -39,7 +39,7 @@ public interface Filterable<T> {
      *
      * @param filter the filter you wish to apply
      */
-    void addFilter(Filter filter);
+    void addFilter(FilterCriteria filter);
 
     /**
      * Remove a filter from the data, this may or may not modify what is returned by
@@ -47,7 +47,7 @@ public interface Filterable<T> {
      *
      * @param filter the filter you wish to remove
      */
-    void removeFilter(Filter filter);
+    void removeFilter(String filterName);
 
     /**
      * Remove all filters from the data, this may or may not modify what is returned by
@@ -61,4 +61,6 @@ public interface Filterable<T> {
      * @return
      */
     List<T> getFilteredItems(ArrayList<T> list, List<FilterCriteria> filters);
+
+    public List<FilterCriteria> getFilters();
 }
