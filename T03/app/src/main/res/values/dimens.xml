@@ -9,4 +9,5 @@
     <dimen name="padding_trade_tile_text_left">5dp</dimen>
     <dimen name="trade_tile_image_width">100dp</dimen>
     <dimen name="trade_offer_padding_between_user_and_other_word">10dp</dimen>
+    <dimen name="top_trader_padding">10dp</dimen>
 </resources>
