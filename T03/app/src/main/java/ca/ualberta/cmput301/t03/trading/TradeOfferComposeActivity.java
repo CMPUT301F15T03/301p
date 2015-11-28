@@ -24,6 +24,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -142,6 +143,13 @@ public class TradeOfferComposeActivity extends AppCompatActivity {
 
                         borrowerItemAdapter = new EnhancedSimpleAdapter(c, borrowerItemTiles, R.layout.fragment_item_tile, from, to);
                         borrowerItemListView.setAdapter(borrowerItemAdapter);
+
+                        addItemButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Snackbar.make(v, "add item to trade offer unimplemented", Snackbar.LENGTH_SHORT).show();
+                            }
+                        });
 
                         ownerUsername.setText(model.getOwner().getUsername());
                         offerButton.setOnClickListener(new View.OnClickListener() {
