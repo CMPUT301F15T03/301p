@@ -20,16 +20,19 @@ public class FieldGroupedQuery implements Query {
     private final HashMap<String, HashMap<String, String>> filteringQuery;
     @SerializedName("aggs")
     private final HashMap<String, HashMap<String, Terms>> aggregationQuery;
+    private final String queryIdentifier;
 
     public FieldGroupedQuery(final String filterField,
                              final Collection<String> possibleFilterFieldValues,
                              final String groupingField,
-                             final Integer maxCount) {
+                             final Integer maxCount,
+                             final String queryIdentifier) {
 
         Preconditions.checkNotNullOrWhitespace(filterField, "filterField");
         Preconditions.checkNotNullOrWhitespace(groupingField, "groupingField");
         Preconditions.checkNotNullOrEmpty(possibleFilterFieldValues, "possibleFilterFieldValues");
 
+        this.queryIdentifier = Preconditions.checkNotNullOrWhitespace(queryIdentifier, "queryIdentifier");
         this.filteringQuery = new HashMap<>();
         this.aggregationQuery = new HashMap<>();
 
@@ -64,7 +67,7 @@ public class FieldGroupedQuery implements Query {
 
     @Override
     public String getUniqueId() {
-        return String.format("%d", hashCode());
+        return queryIdentifier;
     }
 
     @Override
@@ -80,7 +83,13 @@ public class FieldGroupedQuery implements Query {
         FieldGroupedQuery rhs = (FieldGroupedQuery)o;
 
         return this.filteringQuery.equals(rhs.filteringQuery) &&
-                this.aggregationQuery.equals(rhs.aggregationQuery);
+                this.aggregationQuery.equals(rhs.aggregationQuery) &&
+                this.queryIdentifier.equals(rhs.queryIdentifier);
+    }
+
+    @Override
+    public int hashCode() {
+        return this.aggregationQuery.hashCode() ^ this.filteringQuery.hashCode() ^ this.queryIdentifier.hashCode();
     }
 
     private class Terms {
