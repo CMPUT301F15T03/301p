@@ -30,6 +30,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,7 +64,7 @@ import ca.ualberta.cmput301.t03.user.User;
  * By clicking the listed Items here the user can inspect, edit and delete.
  * The User can add an item by pressing the FloatingActionButton.
  */
-public class UserInventoryFragment extends Fragment implements Observer {
+public class UserInventoryFragment extends Fragment implements Observer, SwipeRefreshLayout.OnRefreshListener {
     private static final String ARG_PARAM1 = "user";
     Activity mActivity;
     View mView;
@@ -77,6 +78,7 @@ public class UserInventoryFragment extends Fragment implements Observer {
 
     private HashMap<Integer, UUID> positionMap;
     List<HashMap<String, Object>> tiles;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     public UserInventoryFragment() {
         // Required empty public constructor
@@ -172,6 +174,7 @@ public class UserInventoryFragment extends Fragment implements Observer {
                              Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.fragment_user_inventory, container, false);
         mView = v;
+        setupSwipeRefresh(v);
         return v;
     }
 
@@ -296,4 +299,31 @@ public class UserInventoryFragment extends Fragment implements Observer {
 //        });
     }
 
+    public void setupSwipeRefresh(View v){
+        mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.userInventorySwipeLayout);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+    }
+
+    @Override
+    public void onRefresh() {
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    PrimaryUser.getInstance().refresh();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ServiceNotAvailableException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        };
+        task.execute();
+    }
 }

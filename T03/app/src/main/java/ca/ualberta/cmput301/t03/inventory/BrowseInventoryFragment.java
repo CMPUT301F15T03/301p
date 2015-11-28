@@ -28,6 +28,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -55,11 +56,12 @@ import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.photo.Photo;
 import ca.ualberta.cmput301.t03.user.User;
 
+
 /**
  * Fragment that displays a ListView containing all Items from all friends.
  * This can (later) be filtered by friends, category, and Texttual Query.
  */
-public class BrowseInventoryFragment extends Fragment implements Observer {
+public class BrowseInventoryFragment extends Fragment implements Observer, SwipeRefreshLayout.OnRefreshListener {
     Activity mActivity;
     View mView;
 
@@ -72,6 +74,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
 
     private FloatingActionButton addFilterBrowseFab;
     private User user;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     public BrowseInventoryFragment() {
         // Required empty public constructor
@@ -133,10 +136,16 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
         });
 
         setupListView();
+        setupSwipeRefresh(v);
 
         return v;
     }
 
+
+    private void setupSwipeRefresh(View v){
+        mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.browseListSwipeLayout);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+    }
 
     private void setupListView() {
         Thread tGetBrowsables = model.getBrowsables();
@@ -233,5 +242,28 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
     @Override
     public void update(Observable observable) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void onRefresh() {
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    PrimaryUser.getInstance().refresh();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ServiceNotAvailableException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        };
+        task.execute();
     }
 }

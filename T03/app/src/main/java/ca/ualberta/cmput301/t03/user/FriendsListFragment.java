@@ -29,6 +29,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -58,7 +59,7 @@ import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
  * The User can also add Friends here, by
  * pressing the FloatingActionButton.
  */
-public class FriendsListFragment extends Fragment implements Observer {
+public class FriendsListFragment extends Fragment implements Observer, SwipeRefreshLayout.OnRefreshListener {
     private FriendsList mModel;
     private FriendsListController mController;
     private RecyclerView mRecyclerView;
@@ -69,6 +70,7 @@ public class FriendsListFragment extends Fragment implements Observer {
     private ArrayAdapter<User> mAdapter;
 
     private Activity mActivity;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     /**
      * DO NOT CALL THIS CONSTRUCTOR DIRECTLY
@@ -153,6 +155,7 @@ public class FriendsListFragment extends Fragment implements Observer {
         setupFab();
         setupListView();
         mModel.addObserver(this);
+
 
     }
 
@@ -259,6 +262,9 @@ public class FriendsListFragment extends Fragment implements Observer {
      */
     private void setupListView() {
         mListView = (ListView) getActivity().findViewById(R.id.friendsListListView);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) getActivity().findViewById(R.id.friendsListSwipeLayout);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+
         mAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, mModel.getFriends());
         mListView.setAdapter(mAdapter);
 
@@ -309,5 +315,28 @@ public class FriendsListFragment extends Fragment implements Observer {
                 mAdapter.notifyDataSetChanged();
             }
         });
+    }
+
+    @Override
+    public void onRefresh() {
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    PrimaryUser.getInstance().refresh();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ServiceNotAvailableException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        };
+        task.execute();
     }
 }
