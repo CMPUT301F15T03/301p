@@ -14,7 +14,7 @@ import ca.ualberta.cmput301.t03.datamanager.elasticsearch.queries.QueryExecutor;
  * Created by rishi on 15-11-28.
  */
 public class TopTradersProvider {
-    private static final String queryID = "top_traders_query";
+    protected static final String queryID = "top_traders_query";
 
     private final QueryExecutor queryExecutor;
 
