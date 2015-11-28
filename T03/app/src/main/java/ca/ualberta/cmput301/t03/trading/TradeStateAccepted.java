@@ -96,6 +96,18 @@ public class TradeStateAccepted implements TradeState {
         throw new IllegalTradeStateTransition("Accepted trade cannot be declined");
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getInterfaceString(Boolean currentUserIsOwner) {
+        if (currentUserIsOwner) {
+            return "Traded to";
+        } else {
+            return "Received from";
+        }
+    }
+
     @Override
     public String toString() {
         return stateString;

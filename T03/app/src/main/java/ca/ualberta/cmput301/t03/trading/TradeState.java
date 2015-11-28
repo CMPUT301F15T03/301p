@@ -101,5 +101,27 @@ public interface TradeState {
      * @throws IllegalTradeStateTransition if the trade is in an illegal state and cannot be declined.
      */
     void decline(Trade trade) throws IllegalTradeStateTransition;
+
+    /**
+     * Returns a string for the interface.
+     *
+     * It will be displayed in combination with a username in the context of the original item
+     * which the borrower proposed the trade for.
+     *
+     * It must be a past-tense verb phrase.
+     *
+     * The first word must be capitalized.
+     *
+     * The subject of the verb is the original item which the borrower proposed the trade for.
+     *
+     * The receiver of the verb is the username. The passed parameter indicates whether the current
+     * user owns the item or not. Implementers must return a different string depending on whether
+     * the current user is the owner or not.
+     *
+     * The full interface string will be constructed as "[interfaceString] [username]".
+     *
+     * @param currentUserIsOwner
+     */
+    String getInterfaceString(Boolean currentUserIsOwner);
 }
 
