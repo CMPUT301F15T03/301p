@@ -26,6 +26,7 @@ import org.parceler.Parcel;
 import org.parceler.Transient;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -45,7 +46,7 @@ import ca.ualberta.cmput301.t03.filters.item_criteria.PrivateFilterCriteria;
  * Represents the main model for the userinventory workflow and the browse inventories workflow.
  */
 @Parcel
-public class Inventory implements Filterable<Item>, Observable, Observer {
+public class Inventory implements Filterable<Item>, Observable, Observer, ItemsAdaptable {
     public final static String type = "Inventory";
     @Expose
     private LinkedHashMap<UUID, Item> items;
@@ -242,4 +243,13 @@ public class Inventory implements Filterable<Item>, Observable, Observer {
         return observers;
     }
 
+    @Override
+    public List<Item> getAdaptableItems() {
+        ArrayList<Item> i = new ArrayList<>();
+        for (Item item: getItems().values()){
+            i.add(item);
+        }
+        Collections.sort(i);
+        return i;
+    }
 }
