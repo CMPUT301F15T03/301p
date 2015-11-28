@@ -59,6 +59,16 @@ public interface TradeState {
     Boolean isEditable();
 
     /**
+     * Returns whether the TradeState is Public
+     *
+     * A public trade is one which which has at least been offered. That is, a public trade
+     * is one which should be viewable by other users.
+     *
+     * @return True if the trade is Public. Returns false otherwise.
+     */
+    Boolean isPublic();
+
+    /**
      * Offer a trade.
      * <p>
      * A trade can only be offered if it is currently being composed, that is,

@@ -55,6 +55,14 @@ public class TradeStateOffered implements TradeState {
 
     /**
      * {@inheritDoc}
+     */
+    @Override
+    public Boolean isPublic() {
+        return Boolean.TRUE;
+    }
+
+    /**
+     * {@inheritDoc}
      *
      * @param trade Trade to be offered.
      * @throws IllegalTradeStateTransition

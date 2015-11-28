@@ -26,6 +26,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +46,7 @@ import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.common.TileBuilder;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.inventory.EnhancedSimpleAdapter;
+import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeModificationException;
 
 /**
  * View that shows the history of all past and pending trades for a user. Will observe the users
@@ -90,6 +92,16 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer {
             protected Object doInBackground(Object[] params) {
                 try {
                     model = PrimaryUser.getInstance().getTradeList();
+                    for (Trade trade : model.getTradesAsList()) {
+                        if (!trade.isPublic()) {
+                            try {
+                                model.remove(trade);
+                            } catch (IllegalTradeModificationException e) {
+                                Log.e("trade", "Non-public trades cannot be removed from trade lists");
+                            }
+                        }
+                    }
+                    model.commitChanges();
                     TileBuilder tileBuilder = new TileBuilder(getResources());
                     tradeTiles = tileBuilder.buildTradeTiles(model, tradeTilePositionMap);
                 } catch (IOException e) {

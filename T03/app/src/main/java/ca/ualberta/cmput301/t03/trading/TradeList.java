@@ -32,6 +32,7 @@ import java.util.UUID;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
+import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeModificationException;
 
 /**
  * TradeList represents a collection of trades a user is currently involved in. This is the model
@@ -76,6 +77,19 @@ public class TradeList implements Observable, Observer {
     public void clear() {
         this.trades = new LinkedHashMap<>();
         this.commitChanges();
+    }
+
+    /**
+     * Remove a trade from the list of trades.
+     * Only to be used on non-Public trades
+     *
+     * {@see {@link TradeState#isPublic}}
+     */
+    public void remove(Trade trade) throws IllegalTradeModificationException {
+        if (trade.getState().isPublic()) {
+            throw new IllegalTradeModificationException("Cannot remove Trade from TradeList if it is already public");
+        }
+        this.trades.remove(trade.getTradeUUID());
     }
 
     /**
