@@ -88,6 +88,13 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer {
         tradeTilePositionMap = new HashMap<>();
 
         AsyncTask worker = new AsyncTask() {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                // TODO show loading indicator
+            }
+
             @Override
             protected Object doInBackground(Object[] params) {
                 try {
@@ -118,8 +125,9 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                    setupListView(getContext());
-                    observeModel();
+                        // todo hide loading indicator
+                        setupListView(getContext());
+                        observeModel();
                     }
                 });
             }
