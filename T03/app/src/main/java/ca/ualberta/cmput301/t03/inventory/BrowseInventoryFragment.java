@@ -59,6 +59,8 @@ import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.filters.FilterCriteria;
+import ca.ualberta.cmput301.t03.filters.item_criteria.CategoryFilterCriteria;
+import ca.ualberta.cmput301.t03.filters.item_criteria.StringQueryFilterCriteria;
 import ca.ualberta.cmput301.t03.user.EditProfileActivity;
 import ca.ualberta.cmput301.t03.user.User;
 import ca.ualberta.cmput301.t03.user.ViewProfileActivity;
@@ -260,7 +262,15 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
         builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Spinner filter = (Spinner) dialogContent.findViewById(R.id.itemFilterCategory);
+                for(FilterCriteria filter: model.getFilters()){
+                    if(filter.getType().equals("category")){
+                        model.removeFilter(filter.getName());
+                    }
+                }
+                Spinner spinner = (Spinner) dialogContent.findViewById(R.id.itemFilterCategory);
+                String categoryType = spinner.getSelectedItem().toString();
+                model.addFilter(new CategoryFilterCriteria(categoryType));
+                Toast.makeText(getContext(), "Category Filter: '"+categoryType+"'", Toast.LENGTH_SHORT).show();
             }
         });
         builder.setTitle("Add a Category Filter");
@@ -281,13 +291,11 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 final String usr = e.getText().toString().trim();
-
-
+                model.addFilter(new StringQueryFilterCriteria(usr));
+                Toast.makeText(getContext(), "Textual Filter: '"+usr+"' Added", Toast.LENGTH_SHORT).show();
             }
         });
         builder.setTitle("Textual Filters");
-
-
 
 
         ArrayList<String> filterNames = new ArrayList<String>();
@@ -298,29 +306,10 @@ public class BrowseInventoryFragment extends Fragment implements Observer {
         builder.setItems(fNames, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item){
                 String selectedText = fNames[item].toString();
+                model.removeFilter(selectedText);
+                Toast.makeText(getContext(), "Textual Filter: '"+selectedText+"' Removed", Toast.LENGTH_SHORT).show();
             }
         });
-
-//        ListView listView = (ListView) getActivity().findViewById(R.id.existingSearchFilterListView);
-//        ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, filterNames);
-//        listView.setAdapter(listAdapter);
-//
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                //todo Remove Filter
-//            }
-//        });
-//
-//        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-//            @Override
-//            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-//                //todo Remove Filter?
-//                return true;
-//            }
-//        });
-
-
 
         AlertDialog d = builder.create();
         return d;

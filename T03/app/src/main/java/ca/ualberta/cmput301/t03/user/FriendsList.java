@@ -153,7 +153,7 @@ public class FriendsList implements Observable, Filterable<Item> {
      * @param filter the filter you wish to apply
      */
     @Override
-    public void addFilter(Filter filter) {
+    public void addFilter(FilterCriteria filter) {
         throw new UnsupportedOperationException();
     }
 
@@ -163,7 +163,7 @@ public class FriendsList implements Observable, Filterable<Item> {
      * @param filter the filter you wish to remove
      */
     @Override
-    public void removeFilter(Filter filter) {
+    public void removeFilter(String filterName) {
         throw new UnsupportedOperationException();
     }
 
