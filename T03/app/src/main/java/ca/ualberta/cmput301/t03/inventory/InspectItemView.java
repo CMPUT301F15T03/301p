@@ -187,7 +187,7 @@ public class InspectItemView extends AppCompatActivity {
     }
 
 
-    public void onCloneItemButtonClicked(View view){
+    public void onCloneItemButtonClicked(final View view){
         final View view1 = view;
 
         AsyncTask<Void, Void, Item> task = new AsyncTask<Void, Void, Item>() {
@@ -210,12 +210,11 @@ public class InspectItemView extends AppCompatActivity {
             @Override
             protected void onPostExecute(Item item) {
                 if (item == null){
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Snackbar.make(view1, "Cloning item failed!", Snackbar.LENGTH_SHORT).show();
-                        }
-                    });
+                    Snackbar.make(view1, "Cloning item failed!", Snackbar.LENGTH_SHORT).show();
+                } else {
+                    Snackbar.make(view1,
+                            String.format("Successfully cloned %s to your inventory",
+                                          item.getItemName()), Snackbar.LENGTH_SHORT).show();
                 }
             }
         };
