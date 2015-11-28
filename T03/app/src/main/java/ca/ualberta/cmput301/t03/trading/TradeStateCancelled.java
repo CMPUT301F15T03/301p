@@ -54,6 +54,14 @@ public class TradeStateCancelled implements TradeState {
 
     /**
      * {@inheritDoc}
+     */
+    @Override
+    public Boolean isPublic() {
+        return Boolean.FALSE;
+    }
+
+    /**
+     * {@inheritDoc}
      *
      * @param trade Trade to be offered.
      * @throws IllegalTradeStateTransition

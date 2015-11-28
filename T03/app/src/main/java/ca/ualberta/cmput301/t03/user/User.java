@@ -237,7 +237,7 @@ public class User implements Observable, Observer, Comparable<User> {
     /**
      * Get TradeList of trades which the User is involved in.
      * <p>
-     * This should be called by hte view to display trades,
+     * This should be called by the view to display trades,
      * and by the controller to get a reference to the trades model.
      *
      * WARNING: This might hit the network! It must be run
