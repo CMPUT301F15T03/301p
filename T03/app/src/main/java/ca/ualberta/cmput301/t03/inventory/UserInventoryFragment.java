@@ -193,11 +193,7 @@ public class UserInventoryFragment extends Fragment implements Observer {
 
     private ArrayList<HashMap<String, Object>> buildTiles() {
         ArrayList<HashMap<String, Object>> tiles = new ArrayList<>();
-//        Item[] itemList = {new Item("test", "test"), new Item("test", "test"), new Item("test", "test"), new Item("test", "test"), new Item("test", "test") };
-        //SHOULD BE REPLACED WITH ONCE LINKED
-        //HashMap<UUID, Item> tempMap = model.getItems();
-        //Collection<Item> tempcollection = tempMap.values();
-        //ArrayList<Item> itemList = (ArrayList<Item>) model.getItems().values();
+
         int i = 0;
         positionMap.clear();
         for (Item item : model.getItems().values()) {
@@ -214,6 +210,7 @@ public class UserInventoryFragment extends Fragment implements Observer {
             positionMap.put(i, item.getUuid());
             i++;
         }
+
         return tiles;
     }
 
@@ -234,9 +231,8 @@ public class UserInventoryFragment extends Fragment implements Observer {
             @Override
             protected void onPostExecute(Object o) {
                 listview = (ListView) view.findViewById(R.id.InventoryListView);
-//                List<HashMap<String, Object>> tiles = buildTiles();
-                String[] from = {"tileViewItemName", "tileViewItemCategory", "tileViewItemImage"}; //
-                int[] to = {R.id.tileViewItemName, R.id.tileViewItemCategory, R.id.tileViewItemImage}; //
+                String[] from = {"tileViewItemName", "tileViewItemCategory", "tileViewItemImage"};
+                int[] to = {R.id.tileViewItemName, R.id.tileViewItemCategory, R.id.tileViewItemImage};
                 adapter = new EnhancedSimpleAdapter(mActivity.getBaseContext(), tiles, R.layout.fragment_item_tile, from, to);
                 listview.setAdapter(adapter);
 

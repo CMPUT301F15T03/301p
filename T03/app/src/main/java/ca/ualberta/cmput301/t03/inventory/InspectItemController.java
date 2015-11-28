@@ -69,6 +69,7 @@ public class InspectItemController {
      */
     public void proposeTradeButtonClicked() {
         Intent i = new Intent(activity.getBaseContext(), TradeOfferComposeActivity.class);
+        // TODO ditch Parcel, pass the borrower username, owner username, and item uuid as strings
         i.putExtra("trade/compose/borrower", Parcels.wrap(PrimaryUser.getInstance()));
         i.putExtra("trade/compose/owner", Parcels.wrap(owner));
         i.putExtra("trade/compose/item", Parcels.wrap(itemModel));
