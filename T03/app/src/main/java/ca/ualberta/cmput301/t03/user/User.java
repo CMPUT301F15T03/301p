@@ -336,7 +336,7 @@ public class User implements Observable, Observer, Comparable<User> {
                     throw new RuntimeException("Unable to write trade list changes.");
                 }
             } else {
-                throw new RuntimeException("No rule found to update User using Observable: " + o.getClass());
+//                throw new RuntimeException("No rule found to update User using Observable: " + o.getClass());
             }
         }
         catch (ServiceNotAvailableException e) {

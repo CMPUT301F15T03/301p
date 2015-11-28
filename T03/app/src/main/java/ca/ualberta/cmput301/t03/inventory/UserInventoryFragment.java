@@ -115,7 +115,14 @@ public class UserInventoryFragment extends Fragment implements Observer {
             if (PrimaryUser.getInstance().equals(user)) {
                 user = PrimaryUser.getInstance();
             } else {
-                user = new User(user.getUsername(), getActivity().getApplicationContext());
+//                user = new User(user.getUsername(), getActivity().getApplicationContext());
+                try {
+                    user = PrimaryUser.getInstance().getFriends().getFriend(user.getUsername());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ServiceNotAvailableException e) {
+                    throw new RuntimeException("OFFLINE CANT DO THIS I GUESS");
+                }
             }
         } else {
             user = PrimaryUser.getInstance();
@@ -241,13 +248,17 @@ public class UserInventoryFragment extends Fragment implements Observer {
         Intent intent = null;
         if (PrimaryUser.getInstance().equals(user)) {
             intent = new Intent(getContext(), EditItemView.class);
-            intent.putExtra("user", Parcels.wrap(user));
+            intent.putExtra("user", user.getUsername());
             intent.putExtra("ITEM_UUID", item.getUuid().toString());
 
         } else {
             intent = new Intent(getContext(), InspectItemView.class);
-            intent.putExtra("user", Parcels.wrap(user));
-            intent.putExtra("inventory/inspect/item", Parcels.wrap(item));
+//            intent.putExtra("user", Parcels.wrap(user));
+//            intent.putExtra("inventory/inspect/item", Parcels.wrap(item));
+
+            // new and improved way
+            intent.putExtra("user", user.getUsername());
+            intent.putExtra("ITEM_UUID", item.getUuid().toString());
         }
 
         startActivity(intent);
