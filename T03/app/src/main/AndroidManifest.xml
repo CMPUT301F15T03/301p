@@ -74,8 +74,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ca.ualberta.cmput301.t03.MainActivity" />
         </activity>
-        <activity android:name=".user.ViewInventoryActivity"></activity>
-        <activity android:name=".photo.PhotoGalleryView"></activity>
+        <activity
+            android:name=".user.ViewInventoryActivity"
+            android:label="@string/title_activity_view_inventory">
+        </activity>
+        <activity
+            android:name=".photo.PhotoGalleryView"
+            android:label="@string/title_activity_photo_gallery_view">
+        </activity>
     </application>
 
 </manifest>
