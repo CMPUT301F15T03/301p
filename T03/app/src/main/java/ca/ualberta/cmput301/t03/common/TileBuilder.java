@@ -92,6 +92,7 @@ public class TileBuilder {
 
             tiles.add(hm);
             tradeTilePositionMap.put(i, trade.getTradeUUID());
+            i++;
         }
 
         return tiles;

@@ -23,9 +23,6 @@ package ca.ualberta.cmput301.t03.inventory;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -41,10 +38,8 @@ import android.widget.ListView;
 import org.parceler.Parcels;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 import ca.ualberta.cmput301.t03.Observable;
@@ -53,8 +48,6 @@ import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.common.TileBuilder;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
-import ca.ualberta.cmput301.t03.configuration.Configuration;
-import ca.ualberta.cmput301.t03.photo.Photo;
 import ca.ualberta.cmput301.t03.user.User;
 
 
@@ -74,7 +67,7 @@ public class UserInventoryFragment extends Fragment implements Observer, SwipeRe
 
     private FloatingActionButton addItemFab;
     private ListView listview;
-    private EnhancedSimpleAdapter adapter;
+    private ItemsAdapter<Inventory> adapter;
 
     private HashMap<Integer, UUID> positionMap;
     List<HashMap<String, Object>> tiles;
@@ -131,24 +124,14 @@ public class UserInventoryFragment extends Fragment implements Observer, SwipeRe
         }
 
 
-        AsyncTask task = new AsyncTask() {
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
             @Override
-            protected Object doInBackground(Object[] params) {
+            protected Void doInBackground(Void[] params) {
                 try {
 //                    user = PrimaryUser.getInstance();
 
                     model = user.getInventory();
                     controller = new UserInventoryController(getContext(), model);
-
-
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            fragmentSetup(getView());
-                            setupFab(getView());
-                        }
-                    });
-
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -156,6 +139,13 @@ public class UserInventoryFragment extends Fragment implements Observer, SwipeRe
                     throw new RuntimeException("App is offline.", e);
                 }
                 return null;
+
+            }
+
+            @Override
+            protected void onPostExecute(Void o) {
+                fragmentSetup(getView());
+                setupFab(getView());
             }
         };
         task.execute();
@@ -165,7 +155,7 @@ public class UserInventoryFragment extends Fragment implements Observer, SwipeRe
     @Override
     public void onResume() {
 
-        fragmentSetup(mView);
+        onRefresh();
         super.onResume();
     }
 
@@ -197,48 +187,18 @@ public class UserInventoryFragment extends Fragment implements Observer, SwipeRe
      */
     public void createListView(View v) {
         final View view = v;
-        AsyncTask worker = new AsyncTask() {
+
+        listview = (ListView) v.findViewById(R.id.InventoryListView);
+        adapter = new ItemsAdapter<>(getContext(), model);
+        listview.setAdapter(adapter);
+
+
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            protected Object doInBackground(Object[] params) {
-                TileBuilder tileBuilder = new TileBuilder(getResources());
-                tiles = tileBuilder.buildItemTiles(model.getItems().values(), positionMap);
-                return null;
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                inspectItem((Item) listview.getItemAtPosition(position));
             }
-
-            @Override
-            protected void onPostExecute(Object o) {
-                listview = (ListView) view.findViewById(R.id.InventoryListView);
-                String[] from = {"tileViewItemName", "tileViewItemCategory", "tileViewItemImage"};
-                int[] to = {R.id.tileViewItemName, R.id.tileViewItemCategory, R.id.tileViewItemImage};
-                adapter = new EnhancedSimpleAdapter(mActivity.getBaseContext(), tiles, R.layout.fragment_item_tile, from, to);
-                listview.setAdapter(adapter);
-
-                listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        inspectItem(model.getItems().get(positionMap.get(position)));
-                    }
-                });
-
-                super.onPostExecute(o);
-            }
-        };
-        worker.execute();
-
-//        listview = (ListView) v.findViewById(R.id.InventoryListView);
-//        List<HashMap<String, Object>> tiles = buildTiles();
-//        String[] from = {"tileViewItemName", "tileViewItemCategory", "tileViewItemImage"}; //
-//        int[] to = {R.id.tileViewItemName, R.id.tileViewItemCategory, R.id.tileViewItemImage}; //
-//        adapter = new EnhancedSimpleAdapter(mActivity.getBaseContext(), tiles, R.layout.fragment_item_tile, from, to);
-//        listview.setAdapter(adapter);
-//
-//        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                inspectItem(model.getItems().get(positionMap.get(position)));
-//            }
-//        });
-
+        });
     }
 
     /**
@@ -271,7 +231,9 @@ public class UserInventoryFragment extends Fragment implements Observer, SwipeRe
     @Override
     public void onDestroy() {
         super.onDestroy();
-        model.removeObserver(this);
+        if (model != null) {
+            model.removeObserver(this);
+        }
     }
 
     private void setupFab(View v) {
@@ -290,13 +252,7 @@ public class UserInventoryFragment extends Fragment implements Observer, SwipeRe
 
     @Override
     public void update(Observable observable) {
-//        mActivity.runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                fragmentSetup(mView);
-//                adapter.notifyDataSetChanged();
-//            }
-//        });
+        onRefresh();
     }
 
     public void setupSwipeRefresh(View v){
@@ -311,6 +267,9 @@ public class UserInventoryFragment extends Fragment implements Observer, SwipeRe
             protected Void doInBackground(Void... params) {
                 try {
                     PrimaryUser.getInstance().refresh();
+                    model = user.getInventory();
+
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (ServiceNotAvailableException e) {
@@ -321,6 +280,8 @@ public class UserInventoryFragment extends Fragment implements Observer, SwipeRe
 
             @Override
             protected void onPostExecute(Void aVoid) {
+
+                adapter.notifyUpdated(model);
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         };
