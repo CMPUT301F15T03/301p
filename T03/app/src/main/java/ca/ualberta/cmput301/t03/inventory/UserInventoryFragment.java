@@ -23,9 +23,6 @@ package ca.ualberta.cmput301.t03.inventory;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -36,20 +33,18 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-
 import org.parceler.Parcels;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
+import ca.ualberta.cmput301.t03.common.TileBuilder;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.user.User;
 
@@ -191,29 +186,6 @@ public class UserInventoryFragment extends Fragment implements Observer {
 
     }
 
-    private ArrayList<HashMap<String, Object>> buildTiles() {
-        ArrayList<HashMap<String, Object>> tiles = new ArrayList<>();
-
-        int i = 0;
-        positionMap.clear();
-        for (Item item : model.getItems().values()) {
-            HashMap<String, Object> hm = new HashMap<String, Object>();
-            hm.put("tileViewItemName", item.getItemName());
-            hm.put("tileViewItemCategory", item.getItemCategory());
-            if(item.getPhotoList().getPhotos().size() > 0){
-                hm.put("tileViewItemImage", (Bitmap) item.getPhotoList().getPhotos().get(0).getPhoto());
-            }
-            else {
-                hm.put("tileViewItemImage", ((BitmapDrawable) getResources().getDrawable(R.drawable.photo_unavailable)).getBitmap());
-            }
-            tiles.add(hm);
-            positionMap.put(i, item.getUuid());
-            i++;
-        }
-
-        return tiles;
-    }
-
     /**
      * Creates ListView Adapter and Item onClickListeners
      * This represents the users inventory.
@@ -224,7 +196,8 @@ public class UserInventoryFragment extends Fragment implements Observer {
         AsyncTask worker = new AsyncTask() {
             @Override
             protected Object doInBackground(Object[] params) {
-                tiles = buildTiles();
+                TileBuilder tileBuilder = new TileBuilder(getResources());
+                tiles = tileBuilder.buildItemTiles(model.getItems().values(), positionMap);
                 return null;
             }
 
@@ -316,7 +289,6 @@ public class UserInventoryFragment extends Fragment implements Observer {
                 fragmentSetup(mView);
             }
         });
-//        throw new UnsupportedOperationException();
     }
 
 }
