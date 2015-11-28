@@ -22,8 +22,6 @@ package ca.ualberta.cmput301.t03.photo;
 
 import com.google.gson.annotations.Expose;
 
-import org.parceler.Parcel;
-
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -39,6 +37,7 @@ import ca.ualberta.cmput301.t03.Observer;
 public class PhotoGallery implements Observable, Observer, Cloneable {
 
     private Collection<Observer> observers;
+    @Expose
     private ArrayList<Photo> photos;
 
     public PhotoGallery() {
@@ -157,7 +156,9 @@ public class PhotoGallery implements Observable, Observer, Cloneable {
     @Override
     public Object clone() throws CloneNotSupportedException {
         PhotoGallery newGallery = (PhotoGallery) super.clone();
-        newGallery.clearObservers();
+        newGallery.clearObservers(); //fixme
+
+        newGallery.photos = new ArrayList<>();
 
         for (Photo p: getPhotos()){
             newGallery.addPhoto((Photo) p.clone());
