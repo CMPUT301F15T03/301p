@@ -55,6 +55,14 @@ public class TradeStateOffered implements TradeState {
 
     /**
      * {@inheritDoc}
+     */
+    @Override
+    public Boolean isPublic() {
+        return Boolean.TRUE;
+    }
+
+    /**
+     * {@inheritDoc}
      *
      * @param trade Trade to be offered.
      * @throws IllegalTradeStateTransition
@@ -105,6 +113,18 @@ public class TradeStateOffered implements TradeState {
          * - notify observers
          */
         throw new NotImplementedException();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getInterfaceString(Boolean currentUserIsOwner) {
+        if (currentUserIsOwner) {
+            return "Trade offered by";
+        } else {
+            return "Trade request sent to";
+        }
     }
 
     @Override

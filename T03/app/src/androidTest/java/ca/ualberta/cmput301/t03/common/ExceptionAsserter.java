@@ -36,14 +36,21 @@ public class ExceptionAsserter {
      *
      * @param runnable              The runnable to be tested.
      * @param expectedExceptionType The {@link Class} for the expected exception.
+     * @param checkInnerException   If the inner exception (the {@link Throwable#getCause()} should
+     *                              be checked for exception type match recursively.
      * @param <TException>          The generic type for the expected exception.
      */
     public static <TException extends Exception> void assertThrowsException(Runnable runnable,
-                                                                            Class<TException> expectedExceptionType) {
+                                                                            Class<TException> expectedExceptionType,
+                                                                            boolean checkInnerException) {
         try {
             runnable.run();
         } catch (Exception exception) {
             if (expectedExceptionType.isInstance(exception)) {
+                return;
+            }
+
+            if (checkInnerException && checkInnerException(exception, expectedExceptionType)) {
                 return;
             }
             throw new AssertionFailedError(
@@ -55,5 +62,33 @@ public class ExceptionAsserter {
 
         throw new AssertionFailedError(String.format("Expected exception of type '%s', but none thrown.",
                 expectedExceptionType.getName()));
+    }
+
+    /**
+     * Asserts that a {@link Runnable} throws an expected exception. Asserts true if an exception of
+     * the provided class, or a child class is thrown. This overloaded version sets the "checkInnerException"
+     * value to false (see {@link ExceptionAsserter#assertThrowsException(Runnable, Class, boolean)}.
+     *
+     * @param runnable              The runnable to be tested.
+     * @param expectedExceptionType The {@link Class} for the expected exception.
+     * @param <TException>          The generic type for the expected exception.
+     */
+    public static <TException extends Exception> void assertThrowsException(Runnable runnable,
+                                                                            Class<TException> expectedExceptionType) {
+        assertThrowsException(runnable, expectedExceptionType, false);
+    }
+
+    private static <TException extends Exception> boolean checkInnerException(Throwable exception, Class<TException> expectedExceptionType) {
+        Throwable cause = exception.getCause();
+        if (cause == null) {
+            return false;
+        }
+
+        if (expectedExceptionType.isInstance(cause)) {
+            return true;
+        }
+        else {
+            return checkInnerException(cause, expectedExceptionType);
+        }
     }
 }

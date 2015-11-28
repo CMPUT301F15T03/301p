@@ -1,6 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="@dimen/trade_tile_image_width" tools:context="ca.ualberta.cmput301.t03.trading.TradeTileFragment">
+    android:layout_height="@dimen/trade_tile_image_width" tools:context="ca.ualberta.cmput301.t03.trading.TradeTileFragment"
+    android:descendantFocusability="blocksDescendants">
 
     <ImageButton
         android:layout_width="@dimen/trade_tile_image_width"
