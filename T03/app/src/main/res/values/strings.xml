@@ -20,6 +20,7 @@
     <string name="tradeTitle">Trades</string>
     <string name="friendsTitle">Friends</string>
     <string name="editProfileTitle">My Profile</string>
+    <string name="topTradersTitle">Top Traders</string>
 
     <!--Configuration strings-->
     <string name="configurationOfflineMode">Offline Mode</string>
