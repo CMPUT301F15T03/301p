@@ -65,17 +65,32 @@ public class InspectItemView extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        User userFromIntent = Parcels.unwrap(getIntent().getParcelableExtra("user"));
+//        User userFromIntent = Parcels.unwrap(getIntent().getParcelableExtra("user"));
+        String username = getIntent().getStringExtra("user");
+        String itemUUID = getIntent().getStringExtra("ITEM_UUID");
 
 
-        if (userFromIntent == null || PrimaryUser.getInstance().equals(userFromIntent)) {
+        if (username == null || PrimaryUser.getInstance().getUsername().equals(username)) {
             user = PrimaryUser.getInstance();
         } else {
-            user = new User(userFromIntent, getApplicationContext());
+//            user = new User(userFromIntent, getApplicationContext());
+            try {
+                user = PrimaryUser.getInstance().getFriends().getFriend(username);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ServiceNotAvailableException e) {
+                throw new RuntimeException("OFFLINE CANT DO THIS I GUESS");
+            }
         }
 
-        itemModel = Parcels.unwrap(getIntent().getParcelableExtra("inventory/inspect/item"));
-
+//        itemModel = Parcels.unwrap(getIntent().getParcelableExtra("inventory/inspect/item"));
+        try {
+            itemModel = user.getInventory().getItem(itemUUID);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ServiceNotAvailableException e) {
+            throw new RuntimeException("OFFLINE CANT DO THIS I GUESS");
+        }
 
         AsyncTask<Item, Void, Item> task = new AsyncTask<Item, Void, Item>() {
             @Override
@@ -187,7 +202,7 @@ public class InspectItemView extends AppCompatActivity {
     }
 
 
-    public void onCloneItemButtonClicked(View view){
+    public void onCloneItemButtonClicked(final View view){
         final View view1 = view;
 
         AsyncTask<Void, Void, Item> task = new AsyncTask<Void, Void, Item>() {
@@ -210,12 +225,11 @@ public class InspectItemView extends AppCompatActivity {
             @Override
             protected void onPostExecute(Item item) {
                 if (item == null){
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Snackbar.make(view1, "Cloning item failed!", Snackbar.LENGTH_SHORT).show();
-                        }
-                    });
+                    Snackbar.make(view1, "Cloning item failed!", Snackbar.LENGTH_SHORT).show();
+                } else {
+                    Snackbar.make(view1,
+                            String.format("Successfully cloned %s to your inventory",
+                                          item.getItemName()), Snackbar.LENGTH_SHORT).show();
                 }
             }
         };

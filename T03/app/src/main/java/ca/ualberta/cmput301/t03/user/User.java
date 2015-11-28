@@ -219,7 +219,7 @@ public class User implements Observable, Observer, Comparable<User> {
      */
     public Inventory getInventory() throws IOException, ServiceNotAvailableException {
         if (inventory == null) {
-            DataKey key = new DataKey(Inventory.type, username);
+                DataKey key = new DataKey(Inventory.type, username);
             if (!dataManager.keyExists(key)) {
                 inventory = new Inventory();
                 dataManager.writeData(key, inventory, Inventory.class);
@@ -336,7 +336,7 @@ public class User implements Observable, Observer, Comparable<User> {
                     throw new RuntimeException("Unable to write trade list changes.");
                 }
             } else {
-                throw new RuntimeException("No rule found to update User using Observable: " + o.getClass());
+//                throw new RuntimeException("No rule found to update User using Observable: " + o.getClass());
             }
         }
         catch (ServiceNotAvailableException e) {

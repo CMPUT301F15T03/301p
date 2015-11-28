@@ -37,7 +37,7 @@ public class FieldGroupedQueryTests extends TestCase {
                 add(TradeStateOffered.stateString);
                 add(TradeStateAccepted.stateString);
             }
-        }, "owner.username", 5);
+        }, "owner.username", 5, "test_query");
 
         String queryJson = query.formQuery();
         assertEquals(expectedQueryJson, queryJson);

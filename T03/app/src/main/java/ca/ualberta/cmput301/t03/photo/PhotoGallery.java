@@ -51,6 +51,10 @@ public class PhotoGallery implements Observable, Observer, Cloneable {
      * @return Array list of item's photos.
      */
     public ArrayList<Photo> getPhotos() {
+        for (Photo photo : photos) {
+            photo.removeObserver(this);
+            photo.addObserver(this);
+        }
         return photos;
     }
 
@@ -89,6 +93,7 @@ public class PhotoGallery implements Observable, Observer, Cloneable {
      */
     public void addPhoto(Photo photo) {
         photos.add(photo);
+        photo.addObserver(this);
         notifyObservers();
     }
 
@@ -155,10 +160,8 @@ public class PhotoGallery implements Observable, Observer, Cloneable {
 
     @Override
     public Object clone() throws CloneNotSupportedException {
-        PhotoGallery newGallery = (PhotoGallery) super.clone();
-        newGallery.clearObservers(); //fixme
-
-        newGallery.photos = new ArrayList<>();
+//        PhotoGallery newGallery = (PhotoGallery) super.clone();
+        PhotoGallery newGallery = new PhotoGallery();
 
         for (Photo p: getPhotos()){
             newGallery.addPhoto((Photo) p.clone());
