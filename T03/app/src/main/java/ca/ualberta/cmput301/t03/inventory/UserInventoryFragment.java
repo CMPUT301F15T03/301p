@@ -275,7 +275,9 @@ public class UserInventoryFragment extends Fragment implements Observer, SwipeRe
     @Override
     public void onDestroy() {
         super.onDestroy();
-        model.removeObserver(this);
+        if (model != null) {
+            model.removeObserver(this);
+        }
     }
 
     private void setupFab(View v) {
