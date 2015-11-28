@@ -46,7 +46,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import org.parceler.Parcels;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -78,7 +77,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer, Swipe
 
     ArrayList<Item> allItems;
     ArrayList<HashMap<String, Object>> listItems;
-    EnhancedSimpleAdapter adapter;
+    ItemsAdapter adapter;
 
     private BrowsableInventories model;
     private BrowseInventoryController controller;
@@ -110,6 +109,8 @@ public class BrowseInventoryFragment extends Fragment implements Observer, Swipe
             user = PrimaryUser.getInstance();
             model = new BrowsableInventories(); //FIXME this seems fishy
             controller = new BrowseInventoryController(getContext(), model);
+            model.addObserver(this);
+
         } catch (Exception e) {
             throw new RuntimeException();
         }
@@ -121,9 +122,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer, Swipe
     @Override
     public void onResume() {
         super.onResume();
-//        listItems.clear();
-//        allItems.clear();
-//        setupListView();
+        onRefresh();
 
     }
 
@@ -136,7 +135,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer, Swipe
         ListView listview = (ListView) v.findViewById(R.id.BrowseListView);
         String[] from = {"tileViewItemName", "tileViewItemCategory", "tileViewItemImage"};
         int[] to = {R.id.tileViewItemName, R.id.tileViewItemCategory, R.id.tileViewItemImage};
-        adapter = new EnhancedSimpleAdapter(mActivity.getBaseContext(), listItems, R.layout.fragment_item_tile, from, to);
+        adapter = new ItemsAdapter<>(mActivity.getBaseContext(), model);
         listview.setAdapter(adapter);
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -198,7 +197,6 @@ public class BrowseInventoryFragment extends Fragment implements Observer, Swipe
             hm.put("tileViewItemImage", ((BitmapDrawable) getResources().getDrawable(R.drawable.photo_unavailable)).getBitmap());
         }
         listItems.add(hm);
-        adapter.notifyDataSetChanged();
     }
 
     /**
@@ -241,6 +239,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer, Swipe
     @Override
     public void onDestroy() {
         super.onDestroy();
+        model.removeObserver(this);
     }
 
 
@@ -252,7 +251,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer, Swipe
 
     @Override
     public void update(Observable observable) {
-        throw new UnsupportedOperationException();
+        onRefresh();
     }
 
     @Override
@@ -340,6 +339,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer, Swipe
             protected Void doInBackground(Void... params) {
                 try {
                     PrimaryUser.getInstance().refresh();
+                    //fixme browseableinventories actually needs to refresh
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (ServiceNotAvailableException e) {
@@ -350,6 +350,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer, Swipe
 
             @Override
             protected void onPostExecute(Void aVoid) {
+                adapter.notifyUpdated(model);
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         };
