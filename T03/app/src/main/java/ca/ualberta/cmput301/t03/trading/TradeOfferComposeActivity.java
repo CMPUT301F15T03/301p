@@ -239,20 +239,26 @@ public class TradeOfferComposeActivity extends AppCompatActivity {
         builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //todo
+                //todo Add Trade Entity item(s) to actual trade.
             }
         });
 
 
         ArrayList<String> inventoryItems = new ArrayList<String>();
-        for (Item item : model.getBorrowersItems()) {
+
+        ArrayList<Item> theItems = new ArrayList<>();
+        //todo Async grab this list
+//        ArrayList<Item> theItems = model.getBorrowersItems();
+
+
+        for (Item item : theItems) {
             inventoryItems.add(item.getItemName());
         }
         final CharSequence[] tradableItems = inventoryItems.toArray(new String[inventoryItems.size()]);
         builder.setItems(tradableItems, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
                 String selectedText = tradableItems[item].toString();
-                //todo Add Item to Trade
+                //todo Highlight Item(s) Add Item to Trade Entity
             }
         });
 
