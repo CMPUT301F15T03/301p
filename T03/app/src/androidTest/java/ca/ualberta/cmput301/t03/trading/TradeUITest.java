@@ -26,7 +26,9 @@ import android.test.ActivityInstrumentationTestCase2;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.UUID;
 
 import ca.ualberta.cmput301.t03.MainActivity;
@@ -63,6 +65,8 @@ public class TradeUITest
         extends ActivityInstrumentationTestCase2<MainActivity> {
 
     private static final String TEST_USER_FRIEND_1 = "TEST_USER_FRIEND_1";
+    private static final String TEST_USER_FRIEND_2 = "TEST_USER_FRIEND_2";
+
     private static final String TEST_ITEM_1_CATEGORY = "TEST_ITEM_1_CATEGORY";
     private static final String TEST_ITEM_1_NAME = "TEST_ITEM_1_NAME";
     private MainActivity mActivity;
@@ -88,6 +92,9 @@ public class TradeUITest
          * userFriend1
          *  - clear friends
          *  - clear items
+         * userFriend2
+         *  - clear friends
+         *  - clear items
          */
         PrimaryUserHelper.setup(mContext);
         User user = PrimaryUser.getInstance();
@@ -98,6 +105,10 @@ public class TradeUITest
         User userFriend1 = new User(TEST_USER_FRIEND_1, mContext);
         userFriend1.getFriends().setFriends(new ArrayList<User>());
         userFriend1.getInventory().setItems(new LinkedHashMap<UUID, Item>());
+
+        User userFriend2 = new User(TEST_USER_FRIEND_2, mContext);
+        userFriend2.getFriends().setFriends(new ArrayList<User>());
+        userFriend2.getInventory().setItems(new LinkedHashMap<UUID, Item>());
     }
 
     @Override
@@ -720,9 +731,51 @@ public class TradeUITest
      * UC1.4.8 UserBrowsesTradesInvolvingThem
      */
     public void testUserBrowsesTradesInvolvingThem() {
+        // set up users
+        User user = PrimaryUser.getInstance();
+        User userFriend1 = new User(TEST_USER_FRIEND_1, mContext);
+        User userFriend2 = new User(TEST_USER_FRIEND_2, mContext);
+
+        // set up items and set up friendships
+        final Item userItem = new Item(TEST_ITEM_1_NAME, TEST_ITEM_1_CATEGORY);
+        final Item userItem2 = new Item(TEST_ITEM_1_NAME, TEST_ITEM_1_CATEGORY);
+        try {
+            user.getFriends().addFriend(userFriend1);
+            userFriend1.getFriends().addFriend(userFriend2);
+            assertEquals(1, user.getFriends().size());
+            assertTrue(user.getFriends().containsFriend(userFriend1));
+            assertTrue(userFriend1.getFriends().containsFriend(userFriend2));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ServiceNotAvailableException e) {
+            e.printStackTrace();
+        }
+
+        ArrayList<Item> borrowersItems = new ArrayList<Item>() {{
+            add(userItem);
+        }};
+        ArrayList<Item> ownersItems = new ArrayList<Item>() {{
+            add(userItem2);
+        }};
+
         // TODO create trades in all possible states with the user as each role
+        Trade userIsOwner = new Trade(userFriend1, user, borrowersItems, ownersItems, mContext);
+        Trade userIsBorrower = new Trade(user, userFriend1, borrowersItems, ownersItems, mContext);
+        List<Trade> userTrades = Arrays.asList(userIsOwner, userIsBorrower);
 
         // TODO create trades which do not involve the user
+        Trade userNotInvolved = new Trade(userFriend1, userFriend2, borrowersItems, ownersItems, mContext);
+
+        try {
+            user.getTradeList().addAll(userTrades);
+            userFriend1.getTradeList().addTrade(userNotInvolved);
+            assertEquals(2, user.getTradeList().getTradesAsList().size());
+        } catch(IOException e) {
+            e.printStackTrace();
+        } catch(ServiceNotAvailableException e) {
+            e.printStackTrace();
+        }
+
 
         /**
          * Open trade history
@@ -734,10 +787,11 @@ public class TradeUITest
 
         // TODO assert each user trade is in the list
 
+
         // TODO assert each non-user trade is not in the list
 
         // TODO remove fail
-        fail("test functionality not yet implemented");
+        //fail("test functionality not yet implemented");
     }
 
     /**
