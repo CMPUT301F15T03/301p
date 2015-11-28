@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.TradeApp;

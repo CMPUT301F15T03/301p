@@ -8,13 +8,13 @@
         android:id="@+id/attrib_name"
         android:textStyle="bold"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+        android:layout_marginTop="@dimen/top_trader_padding"
+        android:layout_marginBottom="@dimen/top_trader_padding"/>
     <TextView
         android:id="@+id/attrib_value"
         android:gravity="right"
         android:textStyle="normal"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+        android:layout_marginTop="@dimen/top_trader_padding"
+        android:layout_marginBottom="@dimen/top_trader_padding"/>
 </TableRow>
