@@ -1,4 +1,4 @@
-package ca.ualberta.cmput301.t03.trading;
+package ca.ualberta.cmput301.t03.trading.toptraders;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +10,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import ca.ualberta.cmput301.t03.R;
@@ -26,7 +27,7 @@ public class TopTradersFragment extends Fragment {
     private TopTradersProvider refreshController;
     private TableLayout topTradersLayout;
 
-    private HashMap<String, Integer> topTraders;
+    private ArrayList<TopTrader> topTraders;
 
     public TopTradersFragment() {
 
@@ -75,13 +76,11 @@ public class TopTradersFragment extends Fragment {
             public void run() {
                 topTradersLayout.removeAllViews();
 
-                for (String userName : topTraders.keySet()) {
-                    Integer successfulTrades = topTraders.get(userName);
-
+                for (TopTrader trader : topTraders) {
                     TableRow row = (TableRow)LayoutInflater.from(TopTradersFragment.this.getContext())
                             .inflate(R.layout.attrib_row, null);
-                    ((TextView)row.findViewById(R.id.attrib_name)).setText(userName);
-                    ((TextView)row.findViewById(R.id.attrib_value)).setText(successfulTrades.toString());
+                    ((TextView)row.findViewById(R.id.attrib_name)).setText(trader.getUserName());
+                    ((TextView)row.findViewById(R.id.attrib_value)).setText(trader.getSuccessfulTradeCount().toString());
                     topTradersLayout.addView(row);
                 }
             }

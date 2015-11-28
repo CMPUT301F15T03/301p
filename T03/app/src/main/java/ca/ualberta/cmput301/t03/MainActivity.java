@@ -43,7 +43,7 @@ import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.configuration.ConfigurationActivity;
 import ca.ualberta.cmput301.t03.inventory.BrowseInventoryFragment;
 import ca.ualberta.cmput301.t03.inventory.UserInventoryFragment;
-import ca.ualberta.cmput301.t03.trading.TopTradersFragment;
+import ca.ualberta.cmput301.t03.trading.toptraders.TopTradersFragment;
 import ca.ualberta.cmput301.t03.trading.TradeOfferHistoryFragment;
 import ca.ualberta.cmput301.t03.user.FriendsListFragment;
 import ca.ualberta.cmput301.t03.user.InitializeUserActivity;
