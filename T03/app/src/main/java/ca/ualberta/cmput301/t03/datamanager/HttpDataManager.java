@@ -123,7 +123,7 @@ public class HttpDataManager extends JsonDataManager {
             throw new ServiceNotAvailableException("HttpDataManager is not operational. Cannot perform this operation.");
         }
 
-        elasticSearchHelper.writeJson(serialize(obj, typeOfT), key.toString());
+        elasticSearchHelper.putJson(serialize(obj, typeOfT), key.toString());
     }
 
     /**

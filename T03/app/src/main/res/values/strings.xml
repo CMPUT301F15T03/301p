@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Photo Trading Post</string>
+    <string name="app_name">Photog Trader</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -8,7 +8,8 @@
     <string name="title_activity_trade_offer_compose">Compose a Trade</string>
     <string name="title_activity_trade_offer_review">Review Trade</string>
     <string name="title_activity_trade_offer_history">Trade History</string>
-    <string name="title_activity_configuration">Configuration</string>
+    <string name="title_activity_configuration">Settings</string>
+    <string name="title_activity_photo_gallery_view">Photo Gallery</string>
 
     <string name="action_settings">Settings</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -66,5 +67,6 @@
     <string name="noCityToast">Please provide a city</string>
     <string name="invalidEmailToast">Please provide a valid email address</string>
     <string name="allowable_username_characters">abcdefghijklmnopqrstuvwxyz1234567890</string>
+    <string name="title_activity_view_inventory">Inventory</string>
 
 </resources>
