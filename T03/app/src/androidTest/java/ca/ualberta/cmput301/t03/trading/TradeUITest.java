@@ -57,6 +57,9 @@ import static ca.ualberta.cmput301.t03.common.PauseForAnimation.pause;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.hasToString;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.allOf;
+
 
 /**
  * Created by rhanders on 2015-10-08.
@@ -763,13 +766,27 @@ public class TradeUITest
         Trade userIsBorrower = new Trade(user, userFriend1, borrowersItems, ownersItems, mContext);
         List<Trade> userTrades = Arrays.asList(userIsOwner, userIsBorrower);
 
+        UUID userIsOwnerUUID = userIsOwner.getTradeUUID();
+        UUID userIsBorrowerUUID = userIsBorrower.getTradeUUID();
+
         // TODO create trades which do not involve the user
         Trade userNotInvolved = new Trade(userFriend1, userFriend2, borrowersItems, ownersItems, mContext);
 
+        UUID userNotInvolvedUUID = userNotInvolved.getTradeUUID();
+
+        // assert some data conditions
         try {
             user.getTradeList().addAll(userTrades);
             userFriend1.getTradeList().addTrade(userNotInvolved);
-            assertEquals(2, user.getTradeList().getTradesAsList().size());
+            List<Trade> tradeList = user.getTradeList().getTradesAsList();
+            ArrayList<UUID> tradeUUIDList = new ArrayList<UUID>();
+            for (Trade trade: tradeList) {
+                tradeUUIDList.add(trade.getTradeUUID());
+            }
+
+            assertTrue(tradeUUIDList.contains(userIsOwnerUUID));
+            assertTrue(tradeUUIDList.contains(userIsBorrowerUUID));
+            assertFalse(tradeUUIDList.contains(userNotInvolvedUUID));
         } catch(IOException e) {
             e.printStackTrace();
         } catch(ServiceNotAvailableException e) {
@@ -785,10 +802,18 @@ public class TradeUITest
                 .check(matches(isDisplayed()))
                 .perform(click());
 
+        // UI tests
         // TODO assert each user trade is in the list
-
+        // check if correct number of trades are there
+        // Accessed November 28, 2015
+        // http://stackoverflow.com/questions/21604351/check-if-a-listview-has-an-specific-a-number-of-items-and-scroll-to-last-one-wi
+        onData(instanceOf(Trade.class))
+                .inAdapterView(allOf(withId(R.id.tradeHistoryListView), isDisplayed()))
+                .atPosition(2)
+                .check(matches(isDisplayed()));
 
         // TODO assert each non-user trade is not in the list
+
 
         // TODO remove fail
         //fail("test functionality not yet implemented");
