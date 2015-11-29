@@ -39,6 +39,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -49,8 +50,9 @@ import ca.ualberta.cmput301.t03.common.Preconditions;
 import ca.ualberta.cmput301.t03.common.TileBuilder;
 import ca.ualberta.cmput301.t03.common.exceptions.ExceptionUtils;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
-import ca.ualberta.cmput301.t03.inventory.EnhancedSimpleAdapter;
-import ca.ualberta.cmput301.t03.inventory.Inventory;
+import ca.ualberta.cmput301.t03.inventory.Item;
+import ca.ualberta.cmput301.t03.inventory.ItemsAdapter;
+
 
 /**
  * class TradeOfferReviewActivity is the View for reviewing a trade which
@@ -81,13 +83,9 @@ public class TradeOfferReviewActivity extends AppCompatActivity {
     private Button tradeReviewDecline;
     private Button tradeReviewDeclineAndCounterOffer;
 
-    private EnhancedSimpleAdapter ownerItemAdapter;
-    private List<HashMap<String, Object>> ownerItemTiles;
-    private HashMap<Integer, UUID> ownerItemTilePositionMap;
+    private ItemsAdapter ownerItemAdapter;
+    private ItemsAdapter borrowerItemAdapter;
 
-    private EnhancedSimpleAdapter borrowerItemAdapter;
-    private List<HashMap<String, Object>> borrowerItemTiles;
-    private HashMap<Integer, UUID> borrowerItemTilePositionMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,10 +111,12 @@ public class TradeOfferReviewActivity extends AppCompatActivity {
     }
 
     private void populateLayoutWithData(final UUID tradeUUID) {
-        ownerItemTilePositionMap = new HashMap<>();
-        borrowerItemTilePositionMap = new HashMap<>();
+
 
         AsyncTask<Void, Void, Context> task = new AsyncTask<Void, Void, Context>() {
+            private ArrayList<Item> owneritems;
+            private ArrayList<Item> borroweritems;
+
             @Override
             protected Context doInBackground(Void[] params) {
                 try {
@@ -133,8 +133,9 @@ public class TradeOfferReviewActivity extends AppCompatActivity {
                 }
 
                 TileBuilder tileBuilder = new TileBuilder(getResources());
-                ownerItemTiles = tileBuilder.buildItemTiles(model.getOwnersItems(), ownerItemTilePositionMap);
-                borrowerItemTiles = tileBuilder.buildItemTiles(model.getBorrowersItems(), borrowerItemTilePositionMap);
+
+                owneritems = model.getOwnersItems();
+                borroweritems = model.getBorrowersItems();
 
                 controller = new TradeOfferReviewController(getBaseContext(), model);
 
@@ -231,13 +232,12 @@ public class TradeOfferReviewActivity extends AppCompatActivity {
                     tradeReviewDeclineAndCounterOffer.setVisibility(View.GONE);
                 }
 
-                String[] from = {"tileViewItemName", "tileViewItemCategory", "tileViewItemImage"};
-                int[] to = {R.id.tileViewItemName, R.id.tileViewItemCategory, R.id.tileViewItemImage};
 
-                ownerItemAdapter = new EnhancedSimpleAdapter(c, ownerItemTiles, R.layout.fragment_item_tile, from, to);
+
+                ownerItemAdapter = new ItemsAdapter(c, owneritems);
+                borrowerItemAdapter = new ItemsAdapter(c, borroweritems);
+
                 ownerItemListView.setAdapter(ownerItemAdapter);
-
-                borrowerItemAdapter = new EnhancedSimpleAdapter(c, borrowerItemTiles, R.layout.fragment_item_tile, from, to);
                 borrowerItemListView.setAdapter(borrowerItemAdapter);
             }
         };
