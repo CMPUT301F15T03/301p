@@ -224,8 +224,10 @@ public class ViewProfileFragment extends Fragment implements Observer {
      */
     @Override
     public void onDetach() {
+        if (model != null){
+            model.removeObserver(this);
+        }
         super.onDetach();
-        model.removeObserver(this);
     }
 
     /**

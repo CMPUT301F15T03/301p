@@ -49,7 +49,7 @@ import ca.ualberta.cmput301.t03.filters.item_criteria.PrivateFilterCriteria;
 public class Inventory implements Filterable<Item>, Observable, Observer, Adaptable, Iterable<Item> {
     public final static String type = "Inventory";
     @Expose
-    private LinkedHashMap<UUID, Item> items;
+    private List<Item> items;
 
     @Transient
     private HashSet<Observer> observers;
@@ -64,7 +64,7 @@ public class Inventory implements Filterable<Item>, Observable, Observer, Adapta
      */
     public Inventory() {
         observers = new HashSet<>();
-        items = new LinkedHashMap<>();
+        items = new ArrayList<>();
         filters = new ArrayList<FilterCriteria>();
         filters.add(new PrivateFilterCriteria());
     }
@@ -77,7 +77,7 @@ public class Inventory implements Filterable<Item>, Observable, Observer, Adapta
     public HashMap<UUID, Item> getItems() {
         LinkedHashMap<UUID, Item> filteredItems = new LinkedHashMap<>();
         ArrayList<Item> itemList = new ArrayList<Item>();
-        for (Item item: this.items.values()){
+        for (Item item: this.items){
             itemList.add(item);
         }
         ArrayList<Item> filteredList = getFilteredItems(itemList, this.filters);
@@ -94,7 +94,7 @@ public class Inventory implements Filterable<Item>, Observable, Observer, Adapta
      * @param items items to be set
      */
     public void setItems(LinkedHashMap<UUID, Item> items) {
-        this.items = items;
+        this.items = new ArrayList<>(items.values());
         for (Item item : items.values()) {
             item.addObserver(this);
         }
@@ -109,7 +109,7 @@ public class Inventory implements Filterable<Item>, Observable, Observer, Adapta
      * @return the item
      */
     public Item getItem(UUID itemUUID) {
-        return items.get(itemUUID);
+        return getItems().get(itemUUID);
     }
 
     /**
@@ -120,7 +120,7 @@ public class Inventory implements Filterable<Item>, Observable, Observer, Adapta
      * @return the item
      */
     public Item getItem(String itemUUID) {
-        return items.get(UUID.fromString(itemUUID));
+        return getItems().get(UUID.fromString(itemUUID));
     }
 
     /**
@@ -129,7 +129,7 @@ public class Inventory implements Filterable<Item>, Observable, Observer, Adapta
      * @param item item to add
      */
     public void addItem(Item item) {
-        items.put(item.getUuid(), item);
+        items.add(item);
         item.addObserver(this);
         notifyObservers();
     }
@@ -140,7 +140,7 @@ public class Inventory implements Filterable<Item>, Observable, Observer, Adapta
      * @param item item to remove
      */
     public void removeItem(Item item) {
-        items.remove(item.getUuid());
+        items.remove(item);
         item.clearPhotoList();
         item.removeObserver(this);
         notifyObservers();
@@ -160,17 +160,21 @@ public class Inventory implements Filterable<Item>, Observable, Observer, Adapta
      */
     @Override
     public void addFilter(FilterCriteria filter) {
-        throw new UnsupportedOperationException();
+        filters.add(filter);
     }
 
     /**
      * {@inheritDoc}
      *
-     * @param filter the filter you wish to remove
+     * @param filterName the filter you wish to remove
      */
     @Override
     public void removeFilter(String filterName) {
-        throw new UnsupportedOperationException();
+        for (FilterCriteria filter: filters){
+            if (filter.getName().equals(filterName)){
+                filters.remove(filter);
+            }
+        }
     }
 
     /**
@@ -178,7 +182,8 @@ public class Inventory implements Filterable<Item>, Observable, Observer, Adapta
      */
     @Override
     public void clearFilters() {
-        throw new UnsupportedOperationException();
+        this.filters = new ArrayList<FilterCriteria>();
+        filters.add(new PrivateFilterCriteria());
     }
 
     /**
@@ -260,6 +265,6 @@ public class Inventory implements Filterable<Item>, Observable, Observer, Adapta
 
     @Override
     public Iterator<Item> iterator() {
-        return items.values().iterator();
+        return items.iterator();
     }
 }
