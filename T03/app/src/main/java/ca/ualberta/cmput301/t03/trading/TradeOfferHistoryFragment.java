@@ -61,8 +61,6 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer, Swi
 
     private ListView listView;
     private TradesAdapter<TradeList> adapter;
-    private List<HashMap<String, Object>> tradeTiles;
-    private HashMap<Integer, UUID> tradeTilePositionMap;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
     public TradeOfferHistoryFragment() {
@@ -88,8 +86,6 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer, Swi
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        tradeTilePositionMap = new HashMap<>();
 
         AsyncTask worker = new AsyncTask() {
 
