@@ -131,12 +131,8 @@ public class TradeUITest
          */
         User user = PrimaryUser.getInstance();
         User owner = new User(TEST_USER_FRIEND_1, mContext);
-        try {
-            owner.getTradeList().clear();
-        } catch (IOException e) {
-            assertTrue("IOException in testOfferTradeWithFriend", false);
-        }
         Item ownerItem = new Item(TEST_ITEM_1_NAME, TEST_ITEM_1_CATEGORY);
+
         try {
             owner.getInventory().addItem(ownerItem);
             user.getFriends().addFriend(owner);
@@ -164,10 +160,7 @@ public class TradeUITest
          * Create a trade using the UI
          */
         pause();
-        onData(hasEntry(anything(), hasToString(ownerItem.getItemName())))
-                .inAdapterView(withId(R.id.BrowseListView))
-                .atPosition(0)
-                .perform(click());
+        onData(anything()).inAdapterView(withId(R.id.BrowseListView)).atPosition(0).perform(click());
         pause();
         onView(withId(R.id.proposeTradeButton))
                 .perform(click());
@@ -178,7 +171,6 @@ public class TradeUITest
 
         try {
             assertEquals(1, user.getTradeList().getTrades().size());
-            assertEquals(1, owner.getTradeList().getTrades().size());
             Trade trade = user.getTradeList().getTradesAsList().get(0);
 
             assertEquals(user.getUsername(), trade.getBorrower().getUsername());
@@ -187,8 +179,8 @@ public class TradeUITest
             assertEquals(TradeStateOffered.class, trade.getState().getClass());
 
             assertEquals(1, trade.getOwnersItems().size());
-            assertNotNull(trade.getOwnersItems().getItems().get(0));
-            assertEquals(ownerItem.getItemName(), trade.getOwnersItems().getItems().get(0).getItemName());
+            assertNotNull(trade.getOwnersItems().get(0));
+            assertEquals(ownerItem.getItemName(), trade.getOwnersItems().get(0).getItemName());
         } catch (IOException e) {
             fail("IOException in testOfferTradeWithFriend");
         }
@@ -257,54 +249,77 @@ public class TradeUITest
     public void testOwnerAcceptsTrade() throws ServiceNotAvailableException {
         /**
          * Create a borrower with an item and who also has the user as a friend
-         * Then, have the borrower offer a trade with the user
+         * Then, have the borrower offer a trade with the user (user is owner).
          */
+
+        // user setup
         User user = PrimaryUser.getInstance();
         User borrower = new User(TEST_USER_FRIEND_1, mContext);
         final Item userItem = new Item(TEST_ITEM_1_NAME, TEST_ITEM_1_CATEGORY);
+        final Item borrowerItem = new Item(TEST_ITEM_1_NAME, TEST_ITEM_1_CATEGORY);
+
+        // add items and friends
         try {
             user.getInventory().addItem(userItem);
+            borrower.getInventory().addItem(borrowerItem);
             user.getFriends().addFriend(borrower);
             borrower.getFriends().addFriend(user);
         } catch (IOException e) {
             assertTrue("IOException in testOwnerAcceptsTrade", Boolean.FALSE);
         }
 
+        // assert that adding items and friends worked
         try {
+            // friendship check
             assertEquals(1, user.getFriends().size());
             assertTrue(user.getFriends().containsFriend(borrower));
+
+            // items check
+            assertNotNull(borrower.getInventory().getItem(borrowerItem.getUuid()));
+            assertNotNull(user.getInventory().getItem(userItem.getUuid()));
+            assertEquals(1, user.getInventory().size());
         } catch (ServiceNotAvailableException e) {
             assertTrue("ServiceNotAvailableException in testOwnerAcceptsTrade", Boolean.FALSE);
         } catch (IOException e) {
             assertTrue("IOException in testOwnerAcceptsTrade", Boolean.FALSE);
         }
 
+        // set up trade manually (not through UI, since it's a different user offering  )
         Inventory borrowerItems = new Inventory() {{
+            addItem(borrowerItem);
+        }};
+        Inventory ownersItems = new Inventory() {{
             addItem(userItem);
         }};
-        Trade trade = new Trade(borrower, user, borrowerItems, new Inventory(), mContext);
+
+        Trade trade = new Trade(borrower, user, borrowerItems, ownersItems, mContext);
+
         try {
             trade.offer();
             user.getTradeList().addTrade(trade);
-            assertEquals(1, user.getTradeList().getTradesAsList().size());
         } catch (IllegalTradeStateTransition e) {
             assertTrue("IllegalTradeStateTransition in testOwnerAcceptsTrade", false);
         } catch (IOException e) {
             assertTrue("IOException in testOwnerAcceptsTrade", false);
         }
 
+        // UI test time
         /**
          * Open trade history
          */
+        pause();
         onView(withContentDescription("Open navigation drawer")).perform(click());
+        pause();
         onView(withText(getActivity().getString(R.string.tradeTitle)))
                 .check(matches(isDisplayed()))
                 .perform(click());
+        pause();
 
         /**
          * Open trade review
          */
         try {
+            assertEquals(1, user.getTradeList().getTradesAsList().size());
             List<Trade> userTrades = user.getTradeList().getTradesAsList();
             onData(hasToString(startsWith(userTrades.get(0).getTradeUUID().toString())))
                     .inAdapterView(withId(R.id.tradeHistoryListView))
@@ -314,12 +329,6 @@ public class TradeUITest
         } catch (ServiceNotAvailableException e ) {
             assertTrue("ServiceNotAvailableException in testOwnerAcceptsTrade", Boolean.FALSE);
         }
-
-
-//        onData(hasToString("offered by"))
-//                .inAdapterView(withId(R.id.tradeHistoryListView))
-//                .check(matches(isDisplayed()))
-//                .perform(click());
 
         /**
          * Accept the trade
@@ -339,42 +348,77 @@ public class TradeUITest
     public void testOwnerDeclinesTrade() throws ServiceNotAvailableException {
         /**
          * Create a borrower with an item and who also has the user as a friend
-         * Then, have the borrower offer a trade with the user
+         * Then, have the borrower offer a trade with the user (user is owner).
          */
         User user = PrimaryUser.getInstance();
         User borrower = new User(TEST_USER_FRIEND_1, mContext);
         final Item userItem = new Item(TEST_ITEM_1_NAME, TEST_ITEM_1_CATEGORY);
+
+        // add items and friends
         try {
             user.getInventory().addItem(userItem);
+            user.getFriends().addFriend(borrower);
             borrower.getFriends().addFriend(user);
         } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Inventory borrowerItems = new Inventory() {{
-            addItem(userItem);
-        }};
-        Trade trade = new Trade(borrower, user, borrowerItems, new Inventory(), mContext);
-        try {
-            trade.offer();
-        } catch (IllegalTradeStateTransition e) {
-            e.printStackTrace();
+            assertTrue("IOException in testOwnerAcceptsTrade", Boolean.FALSE);
         }
 
+        // assert that adding items and friends worked
+        try {
+            // friendship check
+            assertEquals(1, user.getFriends().size());
+            assertTrue(user.getFriends().containsFriend(borrower));
+
+            // items check
+            assertNotNull(user.getInventory().getItem(userItem.getUuid()));
+            assertEquals(1, user.getInventory().size());
+        } catch (ServiceNotAvailableException e) {
+            assertTrue("ServiceNotAvailableException in testOwnerDeclinesTrade", Boolean.FALSE);
+        } catch (IOException e) {
+            assertTrue("IOException in testOwnerDeclinesTrade", Boolean.FALSE);
+        }
+
+        // set up trade manually (not through UI, since it's a different user offering  )
+        Inventory userItems = new Inventory() {{
+            addItem(userItem);
+        }};
+
+        Trade trade = new Trade(borrower, user, new Inventory(), userItems, mContext);
+        try {
+            trade.offer();
+            user.getTradeList().addTrade(trade);
+        } catch (IllegalTradeStateTransition e) {
+            assertTrue("IllegalTradeStateTransition in testOwnerDeclinesTrade", false);
+        } catch (IOException e) {
+            assertTrue("IOException in testOwnerDeclinesTrade", false);
+        }
+
+        // UI test time
         /**
          * Open trade history
          */
+        pause();
         onView(withContentDescription("Open navigation drawer")).perform(click());
+        pause();
         onView(withText(getActivity().getString(R.string.tradeTitle)))
                 .check(matches(isDisplayed()))
                 .perform(click());
+        pause();
 
         /**
          * Open trade review
          */
-        onData(hasToString("offered by"))
-                .inAdapterView(withId(R.id.tradeHistoryListView))
-                .check(matches(isDisplayed()))
-                .perform(click());
+        try {
+            assertEquals(1, user.getTradeList().getTradesAsList().size());
+            List<Trade> userTrades = user.getTradeList().getTradesAsList();
+            onData(hasToString(startsWith(userTrades.get(0).getTradeUUID().toString())))
+                    .inAdapterView(withId(R.id.tradeHistoryListView))
+                    .perform(click());
+        } catch (IOException e ) {
+            assertTrue("IOException in testOwnerDeclinesTrade", Boolean.FALSE);
+        } catch (ServiceNotAvailableException e ) {
+            assertTrue("ServiceNotAvailableException in testOwnerDeclinesTrade", Boolean.FALSE);
+        }
 
         /**
          * Decline the trade
