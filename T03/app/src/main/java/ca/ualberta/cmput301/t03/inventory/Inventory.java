@@ -66,7 +66,6 @@ public class Inventory implements Filterable<Item>, Observable, Observer, Adapta
         observers = new HashSet<>();
         items = new LinkedHashMap<>();
         filters = new ArrayList<FilterCriteria>();
-        filters.add(new PrivateFilterCriteria());
     }
 
     /**
@@ -161,6 +160,7 @@ public class Inventory implements Filterable<Item>, Observable, Observer, Adapta
     @Override
     public void addFilter(FilterCriteria filter) {
         filters.add(filter);
+
     }
 
     /**
@@ -183,7 +183,6 @@ public class Inventory implements Filterable<Item>, Observable, Observer, Adapta
     @Override
     public void clearFilters() {
         this.filters = new ArrayList<FilterCriteria>();
-        filters.add(new PrivateFilterCriteria());
     }
 
     /**
