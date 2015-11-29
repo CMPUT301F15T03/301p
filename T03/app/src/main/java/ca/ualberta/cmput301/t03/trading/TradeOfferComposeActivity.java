@@ -306,12 +306,7 @@ public class TradeOfferComposeActivity extends AppCompatActivity implements Obse
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Item selected = (Item) parent.getItemAtPosition(position);
-//                model.getOwnersItems().addItem(selected);
-//                ownerItems.addItem(selected);
                 borrowerItems.addItem(selected);
-//                ownerItemAdapter.notifyUpdated(ownerItems);
-//                borrowerItemAdapter.notifyDataSetChanged(); //todo do obesever properly.
-
             }
         });
 
