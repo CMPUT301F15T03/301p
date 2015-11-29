@@ -258,18 +258,37 @@ public class TradeUITest
         final Item userItem = new Item(TEST_ITEM_1_NAME, TEST_ITEM_1_CATEGORY);
         try {
             user.getInventory().addItem(userItem);
+            user.getFriends().addFriend(borrower);
             borrower.getFriends().addFriend(user);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        try {
+            assertEquals(1, user.getFriends().size());
+            assertTrue(user.getFriends().containsFriend(borrower));
+        } catch (ServiceNotAvailableException e) {
+            assertTrue("ServiceNotAvailableException in testUserBrowsesTradesInvolvingThem", Boolean.FALSE);
+        } catch (IOException e) {
+            assertTrue("IOException in testUserBrowsesTradesInvolvingThem", Boolean.FALSE);
+        }
+
         ArrayList<Item> borrowerItems = new ArrayList<Item>() {{
             add(userItem);
         }};
+
         Trade trade = new Trade(borrower, user, borrowerItems, new ArrayList<Item>(), mContext);
         try {
             trade.offer();
         } catch (IllegalTradeStateTransition e) {
-            e.printStackTrace();
+            assertTrue("IllegalTradeStateTransition in testOwnerAcceptsTrade", false);
+        }
+
+        // assert the above worked
+        try {
+            assertEquals(1, user.getTradeList().getTradesAsList().size());
+        } catch (IOException e) {
+            assertTrue("IOException in testOwnerAcceptsTrade", false);
         }
 
         /**
@@ -283,10 +302,22 @@ public class TradeUITest
         /**
          * Open trade review
          */
-        onData(hasToString("offered by"))
-                .inAdapterView(withId(R.id.tradeHistoryListView))
-                .check(matches(isDisplayed()))
-                .perform(click());
+        try {
+            List<Trade> userTrades = user.getTradeList().getTradesAsList();
+            onData(hasToString(startsWith(userTrades.get(0).getTradeUUID().toString())))
+                    .inAdapterView(withId(R.id.tradeHistoryListView))
+                    .perform(click());
+        } catch (IOException e ) {
+            assertTrue("IOException in testOwnerAcceptsTrade", Boolean.FALSE);
+        } catch (ServiceNotAvailableException e ) {
+            assertTrue("ServiceNotAvailableException in testOwnerAcceptsTrade", Boolean.FALSE);
+        }
+
+
+//        onData(hasToString("offered by"))
+//                .inAdapterView(withId(R.id.tradeHistoryListView))
+//                .check(matches(isDisplayed()))
+//                .perform(click());
 
         /**
          * Accept the trade
