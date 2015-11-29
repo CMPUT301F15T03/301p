@@ -41,6 +41,7 @@ import org.parceler.Parcels;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.UUID;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
@@ -61,6 +62,7 @@ import ca.ualberta.cmput301.t03.user.User;
 public class TradeOfferComposeActivity extends AppCompatActivity implements Observer{
 
     private final Activity activity = this;
+    public final static String EXTRA_PREV_TRADE_UUID = "prevuuid";
 
     private Trade model;
     private TradeOfferComposeController controller;
@@ -92,6 +94,14 @@ public class TradeOfferComposeActivity extends AppCompatActivity implements Obse
         setContentView(R.layout.activity_trade_offer_compose);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        if (getIntent().hasExtra(EXTRA_PREV_TRADE_UUID)) {
+            UUID previousUUID = (UUID) getIntent().getSerializableExtra(EXTRA_PREV_TRADE_UUID);
+
+        }
+
+
+
 
         ownerUsername = (TextView) findViewById(R.id.tradeComposeOtherUser);
         offerButton = (Button) findViewById(R.id.tradeComposeOffer);
@@ -246,7 +256,10 @@ public class TradeOfferComposeActivity extends AppCompatActivity implements Obse
                 });
             }
         };
-        worker.execute();
+
+        if (!getIntent().hasExtra(EXTRA_PREV_TRADE_UUID)){
+            worker.execute();
+        }
     }
 
     @Override

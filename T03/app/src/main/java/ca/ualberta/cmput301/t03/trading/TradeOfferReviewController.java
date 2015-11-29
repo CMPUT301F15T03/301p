@@ -23,6 +23,8 @@ package ca.ualberta.cmput301.t03.trading;
 import android.content.Context;
 import android.util.Log;
 
+import java.util.UUID;
+
 import ca.ualberta.cmput301.t03.common.exceptions.NotImplementedException;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeStateTransition;
@@ -94,6 +96,9 @@ public class TradeOfferReviewController {
          * - create a new trade
          * - send to compose trade view
          */
+
+        Trade t = new Trade(UUID.randomUUID(), context);
+
         throw new NotImplementedException();
     }
 }
