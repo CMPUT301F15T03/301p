@@ -21,7 +21,9 @@
 package ca.ualberta.cmput301.t03.trading;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -43,9 +45,12 @@ import java.util.UUID;
 
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
+import ca.ualberta.cmput301.t03.common.Preconditions;
 import ca.ualberta.cmput301.t03.common.TileBuilder;
+import ca.ualberta.cmput301.t03.common.exceptions.ExceptionUtils;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.inventory.EnhancedSimpleAdapter;
+import ca.ualberta.cmput301.t03.inventory.Inventory;
 
 /**
  * class TradeOfferReviewActivity is the View for reviewing a trade which
@@ -54,6 +59,8 @@ import ca.ualberta.cmput301.t03.inventory.EnhancedSimpleAdapter;
  * On interaction, it delegates to a {@link TradeOfferReviewController}.
  */
 public class TradeOfferReviewActivity extends AppCompatActivity {
+
+    private static final Integer EMAIL_SENT = 1;
 
     private Activity activity = this;
 
@@ -148,14 +155,50 @@ public class TradeOfferReviewActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             AsyncTask task = new AsyncTask() {
+                                String emailOwner;
+                                String emailBorrower;
+                                Boolean emailUsers = false;
                                 @Override
                                 protected Object doInBackground(Object[] params) {
                                     controller.acceptTrade();
+                                    try {
+                                        emailBorrower = model.getBorrower().getProfile().getEmail();
+                                        emailOwner = model.getOwner().getProfile().getEmail();
+                                        emailUsers = true;
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    } catch (ServiceNotAvailableException e) {
+                                        e.printStackTrace();
+                                    }
                                     return null;
+                                }
+
+                                @Override
+                                protected void onPostExecute(Object o) {
+                                    if (emailUsers) {
+                                        Intent intent = new Intent(Intent.ACTION_SEND);
+                                        intent.setType("text/rfc822");
+                                        intent.putExtra(Intent.EXTRA_EMAIL,
+                                                new String[]{
+                                                        emailOwner,
+                                                        emailBorrower
+                                                });
+                                        intent.putExtra(Intent.EXTRA_SUBJECT, model.getEmailSubject());
+                                        intent.putExtra(Intent.EXTRA_TEXT, model.getEmailBody());
+                                        try {
+                                            startActivityForResult(intent, EMAIL_SENT);
+                                        } catch (ActivityNotFoundException e) {
+                                            ExceptionUtils.toastLong("No email client installed");
+                                            activity.finish();
+                                        }
+                                    }
+                                    else {
+                                        activity.finish();
+                                    }
                                 }
                             };
                             task.execute();
-                            activity.finish();
+//                            activity.finish();
                         }
                     });
                     tradeReviewDecline.setOnClickListener(new View.OnClickListener() {
@@ -222,5 +265,12 @@ public class TradeOfferReviewActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == EMAIL_SENT) {
+            activity.finish();
+        }
     }
 }
