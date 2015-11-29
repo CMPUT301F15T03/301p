@@ -21,6 +21,7 @@
     <string name="tradeTitle">Trades</string>
     <string name="friendsTitle">Friends</string>
     <string name="editProfileTitle">My Profile</string>
+    <string name="topTradersTitle">Top Traders</string>
 
     <!--Configuration strings-->
     <string name="configurationOfflineMode">Offline Mode</string>
@@ -67,6 +68,6 @@
     <string name="noCityToast">Please provide a city</string>
     <string name="invalidEmailToast">Please provide a valid email address</string>
     <string name="allowable_username_characters">abcdefghijklmnopqrstuvwxyz1234567890</string>
+    <string name="top_trader_offline_message">You\'re currently offline, and there\'s no data saved.</string>
     <string name="title_activity_view_inventory">Inventory</string>
-
 </resources>

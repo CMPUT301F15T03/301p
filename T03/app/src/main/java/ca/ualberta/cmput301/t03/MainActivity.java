@@ -43,6 +43,7 @@ import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.configuration.ConfigurationActivity;
 import ca.ualberta.cmput301.t03.inventory.BrowseInventoryFragment;
 import ca.ualberta.cmput301.t03.inventory.UserInventoryFragment;
+import ca.ualberta.cmput301.t03.trading.toptraders.TopTradersFragment;
 import ca.ualberta.cmput301.t03.trading.TradeOfferHistoryFragment;
 import ca.ualberta.cmput301.t03.user.FriendsListFragment;
 import ca.ualberta.cmput301.t03.user.InitializeUserActivity;
@@ -201,6 +202,12 @@ public class MainActivity extends AppCompatActivity
                 fragmentClass = ViewProfileFragment.class;
                 title = getString(R.string.myProfileLabel);
                 break;
+
+            case R.id.nav_top_traders:
+                fragmentClass = TopTradersFragment.class;
+                title = getString(R.string.topTradersTitle);
+                break;
+
             default:
                 fragmentClass = BrowseInventoryFragment.class;
                 title = getString(R.string.browseTitle);
@@ -208,10 +215,14 @@ public class MainActivity extends AppCompatActivity
 
         try {
             fragment = (Fragment) fragmentClass.newInstance();
-            fragmentManager.beginTransaction().replace(R.id.fragmentContent, fragment).commit();
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        fragmentManager.beginTransaction().replace(R.id.fragmentContent, fragment).commit();
 
         setTitle(title);
 
