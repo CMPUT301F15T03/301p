@@ -20,8 +20,15 @@
 
 package ca.ualberta.cmput301.t03.common.exceptions;
 
+import android.support.design.widget.Snackbar;
+import android.view.View;
+import android.widget.Toast;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
+
+import ca.ualberta.cmput301.t03.TradeApp;
+import ca.ualberta.cmput301.t03.trading.Trade;
 
 /**
  * Utility methods for {@link Exception}.
@@ -46,4 +53,30 @@ public class ExceptionUtils {
         pw.close();
         return stackTrace;
     }
+
+    private static void toast(String message, int duration) {
+        Toast.makeText(TradeApp.getContext(), message, duration).show();
+    }
+
+    public static void toastLong(String message) {
+        toast(message, Toast.LENGTH_LONG);
+    }
+
+    public static void toastShort(String message) {
+        toast(message, Toast.LENGTH_SHORT);
+    }
+
+    public static void toastOfflineWarning() {
+        toastLong("Functionality not available in offline mode");
+    }
+
+    public static void toastErrorWithNetwork() {
+        toastLong("There was an error connecting to the network");
+    }
+
+    public static void toastThingNotFound(String thing) {
+        toastLong("Could not find " + thing);
+    }
+
+
 }
