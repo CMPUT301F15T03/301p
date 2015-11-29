@@ -23,7 +23,12 @@ package ca.ualberta.cmput301.t03.trading;
 import android.content.Context;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.inventory.Item;
+import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeModificationException;
 import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeStateTransition;
 
 /**
@@ -45,7 +50,7 @@ public class TradeOfferComposeController {
      * Trigger an offer on the model, this may or may not transition based on the state of the
      * model.
      */
-    public void offerTrade() {
+    public void offerTrade() throws ServiceNotAvailableException {
         try {
             model.offer();
         } catch (IllegalTradeStateTransition illegalTradeStateTransition) {
@@ -57,7 +62,7 @@ public class TradeOfferComposeController {
      * Trigger a cancel trade on the model, this may or may not transition based on the state of the
      * model.
      */
-    public void cancelTrade() {
+    public void cancelTrade() throws ServiceNotAvailableException {
         try {
             model.cancel();
         } catch (IllegalTradeStateTransition illegalTradeStateTransition) {
@@ -70,8 +75,9 @@ public class TradeOfferComposeController {
      *
      * @param item item to be added
      */
-    public void addBorrowerItem(Item item) {
-        model = new Trade(model.getBorrower(), model.getOwner(),
-                model.getBorrowersItems(), model.getOwnersItems(), this.context);
+    public void addBorrowerItem(Item item) throws ServiceNotAvailableException, IllegalTradeModificationException {
+        List<Item> items = model.getBorrowersItems();
+        items.add(item);
+        model.setBorrowersItems(items);
     }
 }

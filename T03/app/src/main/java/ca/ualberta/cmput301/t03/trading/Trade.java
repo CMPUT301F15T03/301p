@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -85,7 +86,7 @@ public class Trade implements Observable, Comparable<Trade> {
      * @param tradeUUID
      * @param context
      */
-    public Trade(UUID tradeUUID, Context context) {
+    public Trade(UUID tradeUUID, Context context) throws ServiceNotAvailableException {
         this.tradeUUID = tradeUUID;
         this.context = context;
         this.dataManager = TradeApp.getInstance().createDataManager(true);
@@ -106,7 +107,7 @@ public class Trade implements Observable, Comparable<Trade> {
      */
     public Trade(User borrower, User owner,
                  Collection<Item> borrowersItems, Collection<Item> ownersItems,
-                 Context context) {
+                 Context context) throws ServiceNotAvailableException {
         this.borrower = new User(borrower, context);
         this.owner = new User(owner, context);
         this.borrowersItems = new ArrayList<>();
@@ -138,7 +139,7 @@ public class Trade implements Observable, Comparable<Trade> {
      *     <li>comments</li>
      * </ul>
      */
-    private void load() {
+    private void load() throws ServiceNotAvailableException {
         DataKey key = new DataKey(Trade.type, this.getTradeUUID().toString());
         try {
             if (dataManager.keyExists(key)) {
@@ -155,28 +156,28 @@ public class Trade implements Observable, Comparable<Trade> {
         } catch (IOException e) {
             throw new RuntimeException("Failed to load trade with UUID " + this.getTradeUUID().toString());
         } catch (ServiceNotAvailableException e) {
-            throw new RuntimeException("App is offline.", e);
+            throw e;
         }
     }
 
     /**
      * Saves this {@link Trade} by its {@link UUID}
      */
-    private void save() {
+    private void save() throws ServiceNotAvailableException {
         DataKey key = new DataKey(Trade.type, this.getTradeUUID().toString());
         try {
             dataManager.writeData(key, this, Trade.class);
         } catch (IOException e) {
             throw new RuntimeException("Failed to save trade with UUID " + this.getTradeUUID().toString());
         } catch (ServiceNotAvailableException e) {
-            throw new RuntimeException("App is offline.", e);
+            throw e;
         }
     }
 
     /**
      * Saves this Trade, then notifies its observers of the changes
      */
-    public void commitChanges() {
+    public void commitChanges() throws ServiceNotAvailableException {
         save();
         notifyObservers();
     }
@@ -186,7 +187,7 @@ public class Trade implements Observable, Comparable<Trade> {
      *
      * @see {@link TradeState#isClosed}
      */
-    public Boolean isClosed() {
+    public Boolean isClosed() throws ServiceNotAvailableException {
         return getState().isClosed();
     }
 
@@ -195,7 +196,7 @@ public class Trade implements Observable, Comparable<Trade> {
      *
      * @see {@link TradeState#isOpen}
      */
-    public Boolean isOpen() {
+    public Boolean isOpen() throws ServiceNotAvailableException {
         return getState().isOpen();
     }
 
@@ -204,7 +205,7 @@ public class Trade implements Observable, Comparable<Trade> {
      *
      * @see {@link TradeState#isEditable}
      */
-    public Boolean isEditable() {
+    public Boolean isEditable() throws ServiceNotAvailableException {
         return getState().isEditable();
     }
 
@@ -213,7 +214,7 @@ public class Trade implements Observable, Comparable<Trade> {
      *
      * @see {@link TradeState#isPublic}
      */
-    public Boolean isPublic() {
+    public Boolean isPublic() throws ServiceNotAvailableException {
         return getState().isPublic();
     }
 
@@ -222,7 +223,7 @@ public class Trade implements Observable, Comparable<Trade> {
      *
      * @return {@link TradeState} of this Trade
      */
-    public TradeState getState() {
+    public TradeState getState() throws ServiceNotAvailableException {
         this.load();
         return state;
     }
@@ -235,7 +236,7 @@ public class Trade implements Observable, Comparable<Trade> {
      *
      * @param state TradeState to set
      */
-    void setState(TradeState state) {
+    void setState(TradeState state) throws ServiceNotAvailableException {
         this.state = state;
         this.commitChanges();
     }
@@ -263,7 +264,7 @@ public class Trade implements Observable, Comparable<Trade> {
      *
      * @return List of {@link Item}s which the borrower {@link User} is offering
      */
-    public ArrayList<Item> getBorrowersItems() {
+    public ArrayList<Item> getBorrowersItems() throws ServiceNotAvailableException {
         this.load();
         return this.borrowersItems;
     }
@@ -277,13 +278,14 @@ public class Trade implements Observable, Comparable<Trade> {
      * @param newBorrowersItems List of {@link Item}s to offer
      * @throws IllegalTradeModificationException if this trade is no longer in an editable {@link TradeState}
      */
-    public void setBorrowersItems(ArrayList<Item> newBorrowersItems) throws IllegalTradeModificationException {
+    public void setBorrowersItems(List<Item> newBorrowersItems) throws IllegalTradeModificationException, ServiceNotAvailableException {
         if (!state.isEditable()) {
             String msg = String.format("Trade %s in state %s is uneditable",
                     tradeUUID.toString(), state.toString());
             throw new IllegalTradeModificationException(msg);
         }
-        this.borrowersItems = newBorrowersItems;
+        this.borrowersItems.clear();
+        this.borrowersItems.addAll(newBorrowersItems);
         this.commitChanges();
     }
 
@@ -311,7 +313,7 @@ public class Trade implements Observable, Comparable<Trade> {
      *
      * @return The owner's comments
      */
-    public String getComments() {
+    public String getComments() throws ServiceNotAvailableException {
         this.load();
         return this.comments;
     }
@@ -323,7 +325,7 @@ public class Trade implements Observable, Comparable<Trade> {
      *
      * @param comments The owner's comments
      */
-    public void setComments(String comments) {
+    public void setComments(String comments) throws ServiceNotAvailableException {
         this.comments = comments;
         this.commitChanges();
     }
@@ -333,7 +335,7 @@ public class Trade implements Observable, Comparable<Trade> {
      *
      * @throws IllegalTradeStateTransition if this trade cannot be offered
      */
-    public void offer() throws IllegalTradeStateTransition {
+    public void offer() throws IllegalTradeStateTransition, ServiceNotAvailableException {
         getState().offer(this);
     }
 
@@ -342,7 +344,7 @@ public class Trade implements Observable, Comparable<Trade> {
      *
      * @throws IllegalTradeStateTransition if this trade cannot be cancelled
      */
-    public void cancel() throws IllegalTradeStateTransition {
+    public void cancel() throws IllegalTradeStateTransition, ServiceNotAvailableException {
         getState().cancel(this);
     }
 
@@ -351,7 +353,7 @@ public class Trade implements Observable, Comparable<Trade> {
      *
      * @throws IllegalTradeStateTransition if this trade cannot be accepted
      */
-    public void accept() throws IllegalTradeStateTransition {
+    public void accept() throws IllegalTradeStateTransition, ServiceNotAvailableException {
         getState().accept(this);
     }
 
@@ -360,7 +362,7 @@ public class Trade implements Observable, Comparable<Trade> {
      *
      * @throws IllegalTradeStateTransition if this trade cannot be declined
      */
-    public void decline() throws IllegalTradeStateTransition {
+    public void decline() throws IllegalTradeStateTransition, ServiceNotAvailableException {
         getState().decline(this);
     }
 
@@ -414,7 +416,7 @@ public class Trade implements Observable, Comparable<Trade> {
      * @return subject of email
      */
     public String getEmailSubject() {
-        return "Follow up details";
+        return "Follow up details for our Photog Trade";
     }
 
     /**
@@ -424,6 +426,33 @@ public class Trade implements Observable, Comparable<Trade> {
      * @return body of trade accept email
      */
     public String getEmailBody() {
-        return "";
+        StringBuilder sb = new StringBuilder();
+        sb.append("Trade offer overview:\n\n");
+        sb.append("Borrower ");
+        sb.append(borrower.getUsername());
+        if (borrowersItems.size() > 0) {
+            sb.append(" would like to trade the following: \n");
+            for (Item item : borrowersItems) {
+                sb.append("\t");
+                sb.append(item.getItemName());
+                sb.append("\n");
+            }
+            sb.append("\n For these items of ");
+            sb.append(owner.getUsername());
+            sb.append(": \n");
+        }
+        else {
+            sb.append(" would like to accept these items of yours: \n");
+        }
+        for (Item item : ownersItems) {
+            sb.append("\t");
+            sb.append(item.getItemName());
+            sb.append("\n");
+        }
+        sb.append("\nEnter in the space below some details on how you (");
+        sb.append(owner.getUsername());
+        sb.append(") would like to proceed with the transfer of these items:\n\n");
+
+        return sb.toString();
     }
 }
