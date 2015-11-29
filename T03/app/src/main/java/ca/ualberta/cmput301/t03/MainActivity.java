@@ -268,6 +268,7 @@ public class MainActivity extends AppCompatActivity
             protected Object doInBackground(Object[] params) {
                 PrimaryUser.setup(getApplicationContext());
                 User mainUser = PrimaryUser.getInstance();
+                TradeApp.startNotificationService();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
