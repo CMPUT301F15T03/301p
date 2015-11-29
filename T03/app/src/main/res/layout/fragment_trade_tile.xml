@@ -1,71 +1,76 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="@dimen/trade_tile_image_width" tools:context="ca.ualberta.cmput301.t03.trading.TradeTileFragment"
-    android:descendantFocusability="blocksDescendants">
+    android:layout_height="match_parent" tools:context="ca.ualberta.cmput301.t03.inventory.ItemTileFragment">
 
-    <ImageButton
-        android:layout_width="@dimen/trade_tile_image_width"
-        android:layout_height="match_parent"
-        android:id="@+id/tradeTileMainItemImage"
-        android:layout_row="0"
-        android:layout_column="0"
-        android:layout_rowSpan="4"
-        android:layout_columnSpan="3"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="false"
-        android:layout_alignParentStart="true"
-        android:layout_gravity="left|top"
-        android:contentDescription=""
-        android:src="@drawable/photo_unavailable" />
+    <RelativeLayout
+        xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+        android:layout_height="@dimen/trade_tile_image_width" tools:context="ca.ualberta.cmput301.t03.trading.TradeTileFragment"
+        android:descendantFocusability="blocksDescendants">
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Canon Test1i"
-        android:id="@+id/tradeTileMainItemName"
-        android:layout_row="0"
-        android:layout_column="3"
-        android:textStyle="bold"
-        android:textSize="35dp"
-        android:textAlignment="textStart"
-        android:paddingLeft="@dimen/padding_trade_tile_text_left"
-        android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/tradeTileMainItemImage" />
+        <ImageButton
+            android:layout_width="@dimen/trade_tile_image_width"
+            android:layout_height="match_parent"
+            android:id="@+id/tradeTileMainItemImage"
+            android:layout_row="0"
+            android:layout_column="0"
+            android:layout_rowSpan="4"
+            android:layout_columnSpan="3"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="false"
+            android:layout_alignParentStart="true"
+            android:layout_gravity="left|top"
+            android:contentDescription=""
+            android:src="@drawable/photo_unavailable" />
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Item&apos;s Category"
-        android:id="@+id/tradeTileMainItemCategory"
-        android:layout_row="3"
-        android:layout_column="3"
-        android:textAlignment="textStart"
-        android:layout_below="@+id/tradeTileMainItemName"
-        android:layout_toEndOf="@+id/tradeTileMainItemImage"
-        android:paddingLeft="@dimen/padding_trade_tile_text_left" />
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Canon Test1i"
+            android:id="@+id/tradeTileMainItemName"
+            android:layout_row="0"
+            android:layout_column="3"
+            android:textStyle="bold"
+            android:textSize="35dp"
+            android:textAlignment="textStart"
+            android:paddingLeft="@dimen/padding_trade_tile_text_left"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/tradeTileMainItemImage" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Received from"
-        android:id="@+id/tradeTileTradeState"
-        android:layout_alignParentBottom="true"
-        android:layout_toEndOf="@+id/tradeTileMainItemImage"
-        android:layout_marginLeft="@dimen/padding_trade_tile_text_left" />
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Item&apos;s Category"
+            android:id="@+id/tradeTileMainItemCategory"
+            android:layout_row="3"
+            android:layout_column="3"
+            android:textAlignment="textStart"
+            android:layout_below="@+id/tradeTileMainItemName"
+            android:layout_toEndOf="@+id/tradeTileMainItemImage"
+            android:paddingLeft="@dimen/padding_trade_tile_text_left" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="UserABC"
-        android:id="@+id/tradeTileOtherUser"
-        android:layout_alignParentBottom="true"
-        android:layout_toEndOf="@+id/tradeTileTradeState"
-        android:layout_marginLeft="@dimen/padding_trade_tile_text_left"
-        android:textStyle="bold" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Received from"
+            android:id="@+id/tradeTileTradeState"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@+id/tradeTileMainItemImage"
+            android:layout_marginLeft="@dimen/padding_trade_tile_text_left" />
 
-</RelativeLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="UserABC"
+            android:id="@+id/tradeTileOtherUser"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@+id/tradeTileTradeState"
+            android:layout_marginLeft="@dimen/padding_trade_tile_text_left"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+</FrameLayout>

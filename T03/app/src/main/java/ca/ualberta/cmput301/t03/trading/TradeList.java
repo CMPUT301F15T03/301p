@@ -22,9 +22,12 @@ package ca.ualberta.cmput301.t03.trading;
 
 import com.google.gson.annotations.Expose;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
@@ -32,13 +35,15 @@ import java.util.UUID;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
+import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
+import ca.ualberta.cmput301.t03.inventory.Adaptable;
 import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeModificationException;
 
 /**
  * TradeList represents a collection of trades a user is currently involved in. This is the model
  * for the TradeHistory workflow.
  */
-public class TradeList implements Observable, Observer {
+public class TradeList implements Observable, Observer, Adaptable<Trade>, Iterable<Trade> {
     public static final String type = "TradeList";
 
     @Expose
@@ -176,5 +181,24 @@ public class TradeList implements Observable, Observer {
 
     public HashSet<Observer> getObservers() {
         return (HashSet<Observer>) observers;
+    }
+
+    @Override
+    public List<Trade> getAdaptableItems() throws IOException, ServiceNotAvailableException {
+        ArrayList<Trade> list = new ArrayList<>();
+
+        for (Trade t: getTrades().values()){
+            list.add(t);
+        }
+
+        Collections.sort(list);
+
+        return list;
+
+    }
+
+    @Override
+    public Iterator<Trade> iterator() {
+        return trades.values().iterator();
     }
 }
