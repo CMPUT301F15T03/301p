@@ -89,8 +89,6 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer, Swi
         super.onCreate(savedInstanceState);
         tradeTilePositionMap = new HashMap<Integer, UUID>();
 
-        tradeTilePositionMap = new HashMap<>();
-
         AsyncTask worker = new AsyncTask() {
 
             @Override
