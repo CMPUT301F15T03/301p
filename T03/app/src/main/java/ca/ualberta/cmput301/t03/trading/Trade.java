@@ -118,10 +118,11 @@ public class Trade implements Observable, Comparable<Trade>, Observer {
         this.borrower = new User(borrower, context);
         this.owner = new User(owner, context);
         this.borrowersItems = new Inventory();
-        this.ownersItems = new Inventory();
         for (Item item : borrowersItems) {
             this.borrowersItems.addItem(item);
         }
+
+        this.ownersItems = new Inventory();
         for (Item item : ownersItems) {
             this.ownersItems.addItem(item);
         }
@@ -129,6 +130,9 @@ public class Trade implements Observable, Comparable<Trade>, Observer {
         this.context = context;
         this.dataManager = TradeApp.getInstance().createDataManager(true);
         this.observers = new HashSet<>();
+
+        this.borrowersItems.addObserver(this);
+        this.ownersItems.addObserver(this);
 
         this.state = new TradeStateComposing();
         this.tradeUUID = UUID.randomUUID();
@@ -153,12 +157,14 @@ public class Trade implements Observable, Comparable<Trade>, Observer {
                 Trade t = dataManager.getData(key, Trade.class);
                 this.state = t.state;
                 this.borrowersItems = t.borrowersItems;
+                this.borrowersItems.addObserver(this);
                 this.comments = t.comments;
                 this.borrower = new User(t.borrower.getUsername(), context);
                 this.owner = new User(t.owner.getUsername(), context);
                 this.ownersItems = t.ownersItems;
                 this.hasBeenNotified = t.hasBeenNotified;
                 this.hasBeenSeen = t.hasBeenSeen;
+                this.ownersItems.addObserver(this);
                 this.commitChanges();
             }
         } catch (IOException e) {
