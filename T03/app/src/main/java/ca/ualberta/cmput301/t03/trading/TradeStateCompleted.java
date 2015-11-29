@@ -20,41 +20,15 @@
 
 package ca.ualberta.cmput301.t03.trading;
 
-import android.util.Log;
-
-import java.io.IOException;
-
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
-import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeModificationException;
 import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeStateTransition;
 
-/**
- * class TradeStateComposing implements {@link TradeState}
- */
-public class TradeStateComposing implements TradeState {
-    public final static String stateString = "TradeStateComposing";
-
+public class TradeStateCompleted implements TradeState {
     /**
      * {@inheritDoc}
      */
     @Override
     public Boolean isClosed() {
-        return Boolean.FALSE;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Boolean isPending() {
-        return !isClosed();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Boolean isEditable() {
         return Boolean.TRUE;
     }
 
@@ -62,38 +36,46 @@ public class TradeStateComposing implements TradeState {
      * {@inheritDoc}
      */
     @Override
-    public Boolean isPublic() {
+    public Boolean isPending() {
         return Boolean.FALSE;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Boolean isEditable() {
+        return Boolean.FALSE;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Boolean isPublic() {
+        return Boolean.TRUE;
     }
 
     /**
      * {@inheritDoc}
      *
      * @param trade Trade to be offered.
+     * @throws IllegalTradeStateTransition
      */
     @Override
-    public void offer(Trade trade) throws ServiceNotAvailableException {
-        trade.setState(new TradeStateOffered());
+    public void offer(Trade trade) throws IllegalTradeStateTransition, ServiceNotAvailableException {
+        throw new IllegalTradeStateTransition("Cannot offer a completed trade");
     }
 
     /**
      * {@inheritDoc}
      *
      * @param trade Trade to be cancelled.
+     * @throws IllegalTradeStateTransition
      */
     @Override
-    public void cancel(Trade trade) throws ServiceNotAvailableException {
-        try {
-            trade.getBorrower().getTradeList().remove(trade);
-            trade.getOwner().getTradeList().remove(trade);
-        } catch (IllegalTradeModificationException e) {
-            Log.e("trade", e.getMessage());
-        } catch (ServiceNotAvailableException e) {
-            // todo snackbar toast saying we're offline?
-        } catch (IOException e) {
-            // todo handle this exception
-        }
-        trade.setState(new TradeStateCancelled());
+    public void cancel(Trade trade) throws IllegalTradeStateTransition, ServiceNotAvailableException {
+        throw new IllegalTradeStateTransition("Cannot cancel a completed trade");
     }
 
     /**
@@ -103,8 +85,8 @@ public class TradeStateComposing implements TradeState {
      * @throws IllegalTradeStateTransition
      */
     @Override
-    public void accept(Trade trade) throws IllegalTradeStateTransition {
-        throw new IllegalTradeStateTransition("Trade being composed cannot be accepted");
+    public void accept(Trade trade) throws IllegalTradeStateTransition, ServiceNotAvailableException {
+        throw new IllegalTradeStateTransition("Cannot accept a completed trade");
     }
 
     /**
@@ -115,7 +97,7 @@ public class TradeStateComposing implements TradeState {
      */
     @Override
     public void complete(Trade trade) throws IllegalTradeStateTransition, ServiceNotAvailableException {
-        throw new IllegalTradeStateTransition("Trade being composed cannot be completed");
+        throw new IllegalTradeStateTransition("Completed trade cannot be completed");
     }
 
     /**
@@ -125,8 +107,8 @@ public class TradeStateComposing implements TradeState {
      * @throws IllegalTradeStateTransition
      */
     @Override
-    public void decline(Trade trade) throws IllegalTradeStateTransition {
-        throw new IllegalTradeStateTransition("Trade being composed cannot be declined");
+    public void decline(Trade trade) throws IllegalTradeStateTransition, ServiceNotAvailableException {
+        throw new IllegalTradeStateTransition("Cannot decline a completed trade");
     }
 
     /**
@@ -134,11 +116,10 @@ public class TradeStateComposing implements TradeState {
      */
     @Override
     public String getInterfaceString(Boolean currentUserIsOwner) {
-        return "COMPOSING-NOT-IN-INTERFACE";
-    }
-
-    @Override
-    public String toString() {
-        return stateString;
+        if (currentUserIsOwner) {
+            return "Completed trade with";
+        } else {
+            return "Completed trade with";
+        }
     }
 }
