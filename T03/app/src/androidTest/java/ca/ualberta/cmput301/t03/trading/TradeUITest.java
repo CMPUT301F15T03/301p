@@ -134,14 +134,14 @@ public class TradeUITest
         try {
             owner.getTradeList().clear();
         } catch (IOException e) {
-            e.printStackTrace();
+            assertTrue("IOException in testOfferTradeWithFriend", false);
         }
         Item ownerItem = new Item(TEST_ITEM_1_NAME, TEST_ITEM_1_CATEGORY);
         try {
             owner.getInventory().addItem(ownerItem);
             user.getFriends().addFriend(owner);
         } catch (IOException e) {
-            e.printStackTrace();
+            assertTrue("IOException in testOfferTradeWithFriend", false);
         }
 
         try {
@@ -218,7 +218,7 @@ public class TradeUITest
         try {
             trade.offer();
         } catch (IllegalTradeStateTransition e) {
-            e.printStackTrace();
+            assertTrue("IllegalTradeStateTransition exception in testOwnerIsNotifiedOfTradeOffer", false);
         }
 
         /**
@@ -232,6 +232,11 @@ public class TradeUITest
         /**
          * Assert trade exists in trade history view
          */
+        // use tradeUUID to assert that trade is in the history view
+        onData(hasToString(startsWith(trade.getTradeUUID().toString())))
+                .inAdapterView(withId(R.id.tradeHistoryListView));
+
+        // more specific stuff
         onData(hasToString(userItem.getItemName()))
                 .inAdapterView(withId(R.id.tradeHistoryListView))
                 .check(matches(isDisplayed()));
@@ -262,16 +267,16 @@ public class TradeUITest
             user.getFriends().addFriend(borrower);
             borrower.getFriends().addFriend(user);
         } catch (IOException e) {
-            e.printStackTrace();
+            assertTrue("IOException in testOwnerAcceptsTrade", Boolean.FALSE);
         }
 
         try {
             assertEquals(1, user.getFriends().size());
             assertTrue(user.getFriends().containsFriend(borrower));
         } catch (ServiceNotAvailableException e) {
-            assertTrue("ServiceNotAvailableException in testUserBrowsesTradesInvolvingThem", Boolean.FALSE);
+            assertTrue("ServiceNotAvailableException in testOwnerAcceptsTrade", Boolean.FALSE);
         } catch (IOException e) {
-            assertTrue("IOException in testUserBrowsesTradesInvolvingThem", Boolean.FALSE);
+            assertTrue("IOException in testOwnerAcceptsTrade", Boolean.FALSE);
         }
 
         Inventory borrowerItems = new Inventory() {{
@@ -280,13 +285,10 @@ public class TradeUITest
         Trade trade = new Trade(borrower, user, borrowerItems, new Inventory(), mContext);
         try {
             trade.offer();
+            user.getTradeList().addTrade(trade);
+            assertEquals(1, user.getTradeList().getTradesAsList().size());
         } catch (IllegalTradeStateTransition e) {
             assertTrue("IllegalTradeStateTransition in testOwnerAcceptsTrade", false);
-        }
-
-        // assert the above worked
-        try {
-            assertEquals(1, user.getTradeList().getTradesAsList().size());
         } catch (IOException e) {
             assertTrue("IOException in testOwnerAcceptsTrade", false);
         }
@@ -797,7 +799,7 @@ public class TradeUITest
         // create trades in all possible states with the user as owner or borrower
         // states: (in progress, accepted, declined, completed)
         Inventory borrowersItems = new Inventory() {{
-            addItem(userItem);
+            addItem(userItem2);
         }};
         Inventory ownersItems = new Inventory() {{
             addItem(userItem);
@@ -853,7 +855,6 @@ public class TradeUITest
             userNotInvolvedTrade = new Trade(userFriend1, userFriend2, borrowersItems, ownersItems, mContext);
             userNotInvolvedUUID = userNotInvolvedTrade.getTradeUUID();
 
-            // finished setup, now assert some data conditions
             user.getTradeList().addAll(userTrades);
             userFriend1.getTradeList().addTrade(userNotInvolvedTrade);
             List<Trade> tradeList = user.getTradeList().getTradesAsList();
@@ -861,6 +862,7 @@ public class TradeUITest
                 resultingUUIDList.add(trade.getTradeUUID());
             }
 
+            // finished setup, now assert some data conditions
             assertEquals(6, user.getTradeList().getTradesAsList().size());
             assertEquals(expectedTradeUUIDList, resultingUUIDList);
             assertFalse(resultingUUIDList.contains(userNotInvolvedUUID));
