@@ -22,9 +22,12 @@ package ca.ualberta.cmput301.t03.trading;
 
 import com.google.gson.annotations.Expose;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
@@ -32,21 +35,23 @@ import java.util.UUID;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
+import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
+import ca.ualberta.cmput301.t03.inventory.Adaptable;
 import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeModificationException;
 
 /**
  * TradeList represents a collection of trades a user is currently involved in. This is the model
  * for the TradeHistory workflow.
  */
-public class TradeList implements Observable, Observer {
+public class TradeList implements Observable, Observer, Adaptable<Trade>, Iterable<Trade> {
     public static final String type = "TradeList";
 
     @Expose
-    private HashMap<UUID, Trade> trades;
+    private List<Trade> trades;
     private Set<Observer> observers;
 
     public TradeList() {
-        this.trades = new LinkedHashMap<>();
+        this.trades = new ArrayList<>();
         this.observers = new HashSet<>();
     }
 
@@ -56,7 +61,7 @@ public class TradeList implements Observable, Observer {
      * @param trade trade to be added
      */
     public void addTrade(Trade trade) {
-        this.trades.put(trade.getTradeUUID(), trade);
+        this.trades.add(trade);
         commitChanges();
     }
 
@@ -75,7 +80,7 @@ public class TradeList implements Observable, Observer {
      * Clear the list of trades. Use carefully.
      */
     public void clear() {
-        this.trades = new LinkedHashMap<>();
+        this.trades = new ArrayList<>();
         this.commitChanges();
     }
 
@@ -98,7 +103,11 @@ public class TradeList implements Observable, Observer {
      * @return the trades, as a hash map
      */
     public HashMap<UUID, Trade> getTrades() {
-        return this.trades;
+        HashMap<UUID, Trade> tr = new HashMap<>();
+        for (Trade t: trades){
+            tr.put(t.getTradeUUID(), t);
+        }
+        return tr;
     }
 
     /**
@@ -107,7 +116,7 @@ public class TradeList implements Observable, Observer {
      * @param trades trades to be applied.
      */
     public void setTrades(LinkedHashMap<UUID, Trade> trades) {
-        this.trades = trades;
+        this.trades = new ArrayList<Trade>(trades.values());
         // todo : if you found a bug here, kyle was right.
         commitChanges();
     }
@@ -118,7 +127,7 @@ public class TradeList implements Observable, Observer {
      * @return the trades, as a list
      */
     public List<Trade> getTradesAsList() {
-        return new ArrayList<Trade>(getTrades().values());
+        return trades;
     }
 
     /**
@@ -176,5 +185,24 @@ public class TradeList implements Observable, Observer {
 
     public HashSet<Observer> getObservers() {
         return (HashSet<Observer>) observers;
+    }
+
+    @Override
+    public List<Trade> getAdaptableItems() throws IOException, ServiceNotAvailableException {
+        ArrayList<Trade> list = new ArrayList<>();
+
+        for (Trade t: getTrades().values()){
+            list.add(t);
+        }
+
+        Collections.sort(list);
+
+        return list;
+
+    }
+
+    @Override
+    public Iterator<Trade> iterator() {
+        return trades.iterator();
     }
 }
