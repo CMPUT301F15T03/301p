@@ -168,7 +168,7 @@ public class TradeApp extends Application {
                                     }
                                 }
                             }
-                        SystemClock.sleep(10000);
+                        SystemClock.sleep(30000);
                     }
                 }
             });
