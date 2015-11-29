@@ -53,6 +53,7 @@ import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.inventory.Inventory;
 import ca.ualberta.cmput301.t03.inventory.Item;
 import ca.ualberta.cmput301.t03.inventory.ItemsAdapter;
+import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeModificationException;
 import ca.ualberta.cmput301.t03.user.User;
 
 /**
@@ -149,7 +150,6 @@ public class TradeOfferComposeActivity extends AppCompatActivity implements Obse
                 try {
                     borrowerItems = model.getBorrowersItems();
                     borrowerItems.addObserver(TradeOfferComposeActivity.this);
-
                 } catch (ServiceNotAvailableException e) {
                     ExceptionUtils.toastLong("Failed to get borrowers items: app is offline");
                     activity.finish();
@@ -323,8 +323,6 @@ public class TradeOfferComposeActivity extends AppCompatActivity implements Obse
             }
         });
 
-
-
         builder.setView(dialogContent); //todo this ui is kind of gross
         builder.setTitle("Add Trade Item");
         builder.setCancelable(false);
@@ -337,6 +335,21 @@ public class TradeOfferComposeActivity extends AppCompatActivity implements Obse
 
     @Override
     public void update(Observable observable) {
+
+        AsyncTask setBorrowersItems = new AsyncTask() {
+            @Override
+            protected Object doInBackground(Object[] params) {
+                try {
+                    model.setBorrowersItems(borrowerItems);
+                } catch (IllegalTradeModificationException e) {
+                    e.printStackTrace();
+                } catch (ServiceNotAvailableException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        };
+        setBorrowersItems.execute();
 
         runOnUiThread(new Runnable() {
             @Override

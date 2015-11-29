@@ -11,11 +11,11 @@
 
     <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
         android:textSize="20dp"
-        android:paddingTop="@dimen/nav_header_vertical_spacing" android:text="@string/username"
+        android:paddingTop="@dimen/nav_header_vertical_spacing" android:text="loading user..."
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:id="@+id/SidebarUsernameTextView" />
 
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:text="myEmail@mail.ca" android:id="@+id/sidebarEmailTextView" />
+        android:text="loading email..." android:id="@+id/sidebarEmailTextView" />
 
 </LinearLayout>
