@@ -1,5 +1,6 @@
 package ca.ualberta.cmput301.t03.trading.toptraders;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -68,14 +69,16 @@ public class TopTradersFragment extends Fragment implements SwipeRefreshLayout.O
                     topTraders = refreshController.getTopTraders(TOP_TRADERS_COUNT);
                     refreshTopTradersUI();
                 } catch (IOException e) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            ExceptionUtils.toastShort(getString(R.string.top_trader_offline_message));
-                            //Toast.makeText(TopTradersFragment.this.getContext(), R.string.top_trader_offline_message,
-                              //      Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    Activity activity = getActivity();
+                    if (activity != null) {
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ExceptionUtils.toastShort(getString(R.string.top_trader_offline_message));
+                            }
+                        });
+                    }
+
                 }
             }
         });
@@ -84,22 +87,23 @@ public class TopTradersFragment extends Fragment implements SwipeRefreshLayout.O
     }
 
     private void refreshTopTradersUI() {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                topTradersLayout.removeAllViews();
+        Activity activity = getActivity();
+        if (activity != null) {
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    topTradersLayout.removeAllViews();
 
-                for (TopTrader trader : topTraders) {
-                    TableRow row = (TableRow)LayoutInflater.from(TopTradersFragment.this.getContext())
-                            .inflate(R.layout.attrib_row, null);
-                    ((TextView)row.findViewById(R.id.attrib_name)).setText(trader.getUserName());
-                    ((TextView)row.findViewById(R.id.attrib_value)).setText(trader.getSuccessfulTradeCount().toString());
-                    topTradersLayout.addView(row);
+                    for (TopTrader trader : topTraders) {
+                        TableRow row = (TableRow) LayoutInflater.from(TopTradersFragment.this.getContext())
+                                .inflate(R.layout.attrib_row, null);
+                        ((TextView) row.findViewById(R.id.attrib_name)).setText(trader.getUserName());
+                        ((TextView) row.findViewById(R.id.attrib_value)).setText(trader.getSuccessfulTradeCount().toString());
+                        topTradersLayout.addView(row);
+                    }
+                    swipeRefreshLayout.setRefreshing(false);
                 }
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
+            });
+        }
     }
-
-
 }
