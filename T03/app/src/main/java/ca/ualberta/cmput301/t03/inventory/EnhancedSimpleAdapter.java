@@ -5,6 +5,7 @@ package ca.ualberta.cmput301.t03.inventory;
 http://stackoverflow.com/questions/6327465/displaying-bitmap-image-in-imageview-by-simple-adapter
  */
 
+import java.util.ArrayList;
 import java.util.HashMap;
         import java.util.List;
         import java.util.Map;
@@ -14,7 +15,8 @@ import java.util.HashMap;
         import android.view.LayoutInflater;
         import android.view.View;
         import android.view.ViewGroup;
-        import android.widget.Checkable;
+import android.widget.ArrayAdapter;
+import android.widget.Checkable;
         import android.widget.ImageView;
         import android.widget.SimpleAdapter;
         import android.widget.TextView;

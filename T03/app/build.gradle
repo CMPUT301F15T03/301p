@@ -25,6 +25,11 @@ android {
         textReport true
         textOutput "stdout"
     }
+    //http://stackoverflow.com/questions/20673625/android-gradle-plugin-0-7-0-duplicate-files-during-packaging-of-apk
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+    }
 }
 
 allprojects {
@@ -51,4 +56,5 @@ dependencies {
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
     androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2'
     compile 'com.birbit:android-priority-jobqueue:1.3.5'
+    compile 'org.apache.commons:commons-lang3:3.4'
 }

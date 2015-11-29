@@ -21,6 +21,7 @@
 package ca.ualberta.cmput301.t03.datamanager.elasticsearch;
 
 import android.content.res.Resources;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.gson.JsonElement;
@@ -87,17 +88,27 @@ public class ElasticSearchHelper {
      * response code to be a successful one.
      * @param json The JSON string to be sent.
      * @param suffix The suffix to be used for making the request.
+     * @return The response to the request.
      * @throws IOException Thrown if the network communication fails.
      */
-    public void writeJson(String json, String suffix) throws IOException {
+    public String putJson(String json, String suffix) throws IOException {
         byte[] requestContents = json.getBytes();
         HttpResponse response = client.makePutRequest(suffix, requestContents);
-        String requestResponse = new String(response.getContents());
-        if (response.getResponseCode() != HttpStatusCode.OK.getStatusCode() &&
-                response.getResponseCode() != HttpStatusCode.CREATED.getStatusCode()) {
-            throw new NotImplementedException(String.format("Dev note: Unexpected response '%d' from the PUT Elastic Search endpoint.: %s",
-                    response.getResponseCode(), new String(response.getContents())));
-        }
+        return extractResponseString(response);
+    }
+
+    /**
+     * Makes an HTTP POST request at the URL formed with the provided suffix, and checks for the
+     * response code to be a successful one.
+     * @param json The JSON string to be sent.
+     * @param suffix The suffix to be used for making the request.
+     * @return The response to the request.
+     * @throws IOException Thrown if the network communication fails.
+     */
+    public String postJson(String json, String suffix) throws IOException {
+        byte[] requestContents = json.getBytes();
+        HttpResponse response = client.makePostRequest(suffix, requestContents);
+        return extractResponseString(response);
     }
 
     /**
@@ -148,5 +159,18 @@ public class ElasticSearchHelper {
         JsonParser jp = new JsonParser();
         JsonElement responseContentsJSON = jp.parse(responseContents);
         return responseContentsJSON.getAsJsonObject().getAsJsonObject("_source").toString();
+    }
+
+
+    @NonNull
+    private String extractResponseString(HttpResponse response) {
+        String requestResponse = new String(response.getContents());
+        if (response.getResponseCode() != HttpStatusCode.OK.getStatusCode() &&
+                response.getResponseCode() != HttpStatusCode.CREATED.getStatusCode()) {
+            throw new NotImplementedException(String.format("Dev note: Unexpected response '%d' from the POST/PUT Elastic Search endpoint.: %s",
+                    response.getResponseCode(), new String(response.getContents())));
+        }
+
+        return requestResponse;
     }
 }

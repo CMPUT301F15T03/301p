@@ -55,6 +55,14 @@ public class TradeStateOffered implements TradeState {
 
     /**
      * {@inheritDoc}
+     */
+    @Override
+    public Boolean isPublic() {
+        return Boolean.TRUE;
+    }
+
+    /**
+     * {@inheritDoc}
      *
      * @param trade Trade to be offered.
      * @throws IllegalTradeStateTransition
@@ -83,12 +91,6 @@ public class TradeStateOffered implements TradeState {
     @Override
     public void accept(Trade trade) {
         trade.setState(new TradeStateAccepted());
-        /**
-         * TODO perform required tasks on accept
-         * - update elasticsearch
-         * - notify observers
-         */
-        throw new NotImplementedException();
     }
 
     /**
@@ -99,12 +101,18 @@ public class TradeStateOffered implements TradeState {
     @Override
     public void decline(Trade trade) {
         trade.setState(new TradeStateDeclined());
-        /**
-         * TODO perform required tasks on decline
-         * - update elasticsearch
-         * - notify observers
-         */
-        throw new NotImplementedException();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getInterfaceString(Boolean currentUserIsOwner) {
+        if (currentUserIsOwner) {
+            return "Trade offered by";
+        } else {
+            return "Trade request sent to";
+        }
     }
 
     @Override

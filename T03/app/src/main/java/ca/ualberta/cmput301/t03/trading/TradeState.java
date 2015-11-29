@@ -59,6 +59,16 @@ public interface TradeState {
     Boolean isEditable();
 
     /**
+     * Returns whether the TradeState is Public
+     *
+     * A public trade is one which which has at least been offered. That is, a public trade
+     * is one which should be viewable by other users.
+     *
+     * @return True if the trade is Public. Returns false otherwise.
+     */
+    Boolean isPublic();
+
+    /**
      * Offer a trade.
      * <p>
      * A trade can only be offered if it is currently being composed, that is,
@@ -101,5 +111,27 @@ public interface TradeState {
      * @throws IllegalTradeStateTransition if the trade is in an illegal state and cannot be declined.
      */
     void decline(Trade trade) throws IllegalTradeStateTransition;
+
+    /**
+     * Returns a string for the interface.
+     *
+     * It will be displayed in combination with a username in the context of the original item
+     * which the borrower proposed the trade for.
+     *
+     * It must be a past-tense verb phrase.
+     *
+     * The first word must be capitalized.
+     *
+     * The subject of the verb is the original item which the borrower proposed the trade for.
+     *
+     * The receiver of the verb is the username. The passed parameter indicates whether the current
+     * user owns the item or not. Implementers must return a different string depending on whether
+     * the current user is the owner or not.
+     *
+     * The full interface string will be constructed as "[interfaceString] [username]".
+     *
+     * @param currentUserIsOwner
+     */
+    String getInterfaceString(Boolean currentUserIsOwner);
 }
 

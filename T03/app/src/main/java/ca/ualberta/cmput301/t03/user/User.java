@@ -234,10 +234,28 @@ public class User implements Observable, Observer, Comparable<User> {
         return inventory;
     }
 
+
+    public BrowsableInventories getBrowseableInventories() throws IOException, ServiceNotAvailableException {
+
+        BrowsableInventories newInventory = new BrowsableInventories();
+        FriendsList list = getFriends();
+        for (User f: list){
+            for (Item i: f.getInventory()){
+                newInventory.addItem(i);
+                try{
+                    i.getPhotoList().getPhotos().get(0).getPhoto(); //cache first photo!
+                } catch(IndexOutOfBoundsException e){
+                    // no problemo.
+                }
+            }
+        }
+        return newInventory;
+    }
+
     /**
      * Get TradeList of trades which the User is involved in.
      * <p>
-     * This should be called by hte view to display trades,
+     * This should be called by the view to display trades,
      * and by the controller to get a reference to the trades model.
      *
      * WARNING: This might hit the network! It must be run
@@ -380,5 +398,37 @@ public class User implements Observable, Observer, Comparable<User> {
     @Override
     public int hashCode() {
         return super.hashCode();
+    }
+
+    public void refresh() throws IOException, ServiceNotAvailableException {
+        if (friends != null) {
+            for (User friend : friends.getFriends()) {
+                friend.refresh();
+            }
+        }
+        if (profile != null) {
+            HashSet<Observer> backup = profile.getObservers();
+            profile = null;
+            getProfile();
+            for (Observer o : backup) {
+                profile.addObserver(o);
+            }
+        }
+        if (inventory != null) {
+            HashSet<Observer> backup = inventory.getObservers();
+            inventory = null;
+            getInventory();
+            for (Observer o : backup) {
+                inventory.addObserver(o);
+            }
+        }
+        if (tradeList != null) {
+            HashSet<Observer> backup = tradeList.getObservers();
+            tradeList = null;
+            getTradeList();
+            for (Observer o : backup) {
+                tradeList.addObserver(o);
+            }
+        }
     }
 }

@@ -3,12 +3,18 @@
     android:layout_height="match_parent"
     tools:context="ca.ualberta.cmput301.t03.inventory.UserInventoryFragment">
 
-    <ListView
-        android:layout_width="wrap_content"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/InventoryListView"
-        android:layout_gravity="center_horizontal|top"
-        tools:listitem="@layout/fragment_item_tile" />
+        android:id="@+id/userInventorySwipeLayout">
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/InventoryListView"
+            android:layout_gravity="center_horizontal|top"
+            tools:listitem="@layout/fragment_item_tile" />
+    </android.support.v4.widget.SwipeRefreshLayout>
+
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/addItemInventoryFab"

@@ -109,7 +109,7 @@ public class CachedDataManagerTests extends BaseDataManagerTests<CachedDataManag
                     throw new RuntimeException(e);
                 }
             }
-        }, ServiceNotAvailableException.class);
+        }, ServiceNotAvailableException.class, true);
         assertFalse(cachedDataManager.keyExists(dataKey));
         mockDataManager.setIsOperational(true);
         assertTrue(cachedDataManager.isOperational());

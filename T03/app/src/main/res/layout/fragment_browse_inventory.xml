@@ -7,12 +7,18 @@
     <!--<TextView android:layout_width="match_parent" android:layout_height="match_parent"-->
         <!--android:text="I AM BROWSE" />-->
 
-    <ListView
-        android:layout_width="wrap_content"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/BrowseListView"
-        android:layout_gravity="center_horizontal|top"
-        tools:listitem="@layout/fragment_item_tile"
-        android:clickable="true"/>
+        android:id="@+id/browseListSwipeLayout">
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/BrowseListView"
+            android:layout_gravity="center_horizontal|top"
+            tools:listitem="@layout/fragment_item_tile"
+            android:clickable="true"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
 
 </FrameLayout>
