@@ -24,6 +24,8 @@ import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeStateTransition;
 
 public class TradeStateCompleted implements TradeState {
+    public final static String stateString = "Completed";
+
     /**
      * {@inheritDoc}
      */
@@ -121,5 +123,10 @@ public class TradeStateCompleted implements TradeState {
         } else {
             return "Completed trade with";
         }
+    }
+
+    @Override
+    public String toString() {
+        return stateString;
     }
 }

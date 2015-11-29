@@ -27,7 +27,7 @@ import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeStateTransition;
  * class TradeStateDeclined implements {@link TradeState}
  */
 public class TradeStateDeclined implements TradeState {
-    public final static String stateString = "TradeStateDeclined";
+    public final static String stateString = "Declined";
 
     /**
      * {@inheritDoc}
