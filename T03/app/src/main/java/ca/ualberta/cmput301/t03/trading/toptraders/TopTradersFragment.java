@@ -1,6 +1,7 @@
 package ca.ualberta.cmput301.t03.trading.toptraders;
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,7 +9,6 @@ import android.widget.TableLayout;
 import android.support.v4.app.Fragment;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,13 +22,14 @@ import ca.ualberta.cmput301.t03.common.exceptions.ExceptionUtils;
  * Accessed: 28 Nov
  * Created by rishi on 15-11-28.
  */
-public class TopTradersFragment extends Fragment {
+public class TopTradersFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     private static final int TOP_TRADERS_COUNT = 10;
 
     private TopTradersProvider refreshController;
     private TableLayout topTradersLayout;
 
     private ArrayList<TopTrader> topTraders;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     public TopTradersFragment() {
 
@@ -50,10 +51,15 @@ public class TopTradersFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_top_traders, container, false);
         topTradersLayout = (TableLayout) rootView.findViewById(R.id.top_traders_grid);
+
+        swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.TopTradersSwipeLayout);
+        swipeRefreshLayout.setOnRefreshListener(this);
+
         onRefresh();
         return rootView;
     }
 
+    @Override
     public void onRefresh() {
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -90,6 +96,7 @@ public class TopTradersFragment extends Fragment {
                     ((TextView)row.findViewById(R.id.attrib_value)).setText(trader.getSuccessfulTradeCount().toString());
                     topTradersLayout.addView(row);
                 }
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
     }
