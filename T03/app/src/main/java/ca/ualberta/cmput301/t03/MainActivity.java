@@ -238,7 +238,15 @@ public class MainActivity extends AppCompatActivity
         Fragment fragment = null;
         Class fragmentClass;
 
-        fragmentClass = BrowseInventoryFragment.class;
+        if (getIntent().getExtras() != null &&
+                getIntent().getExtras().containsKey("INTENT") &&
+                getIntent().getExtras().getString("INTENT").equals("TRADES")) {
+            fragmentClass = TradeOfferHistoryFragment.class;
+        }
+        else {
+            fragmentClass = BrowseInventoryFragment.class;
+        }
+
         try {
             fragment = (Fragment) fragmentClass.newInstance();
         } catch (Exception e) {
@@ -260,6 +268,7 @@ public class MainActivity extends AppCompatActivity
             protected Object doInBackground(Object[] params) {
                 PrimaryUser.setup(getApplicationContext());
                 User mainUser = PrimaryUser.getInstance();
+                TradeApp.startNotificationService();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

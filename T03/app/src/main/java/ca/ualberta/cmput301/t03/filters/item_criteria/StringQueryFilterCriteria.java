@@ -18,10 +18,10 @@ public class StringQueryFilterCriteria implements FilterCriteria {
     public String getName() {return this.name;}
     public String getType() {return this.type;}
     public boolean passes(Object o){
-        if ( ((Item)o).getItemName().toLowerCase().contains(term) ){
+        if ( ((Item)o).getItemName().toLowerCase().contains(term.toLowerCase()) ){
             return true;
         }
-        if ( ((Item)o).getItemDescription().toLowerCase().contains(term) ){
+        if ( ((Item)o).getItemDescription().toLowerCase().contains(term.toLowerCase()) ){
             return true;
         }
         return false;

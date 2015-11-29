@@ -128,9 +128,31 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer, Swi
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Trade selected = (Trade) (parent.getItemAtPosition(position));
+                final Trade selected = (Trade) (parent.getItemAtPosition(position));
                 final UUID tradeUUID = selected.getTradeUUID();
+                Boolean isPublic = false;
 
+                try {
+                    isPublic = selected.isPublic();
+                } catch (ServiceNotAvailableException e) {
+                    isPublic = false;
+                }
+
+                if (PrimaryUser.getInstance().getUsername().equals(selected.getOwner().getUsername()) && isPublic) {
+                    selected.setHasBeenSeen(true);
+                    AsyncTask worker = new AsyncTask() {
+                        @Override
+                        protected Object doInBackground(Object[] params) {
+                            try {
+                                selected.commitChanges();
+                            } catch (ServiceNotAvailableException e) {
+                                // do nothing here
+                            }
+                            return null;
+                        }
+                    };
+                    worker.execute();
+                }
                 Intent intent = new Intent(getContext(), TradeOfferReviewActivity.class);
                 intent.putExtra("TRADE_UUID", tradeUUID);
                 startActivity(intent);
