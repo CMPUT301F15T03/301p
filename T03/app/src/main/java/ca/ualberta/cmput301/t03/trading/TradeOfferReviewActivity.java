@@ -136,6 +136,8 @@ public class TradeOfferReviewActivity extends AppCompatActivity implements Obser
 
             @Override
             protected Void doInBackground(Void[] params) {
+                currentUsername = PrimaryUser.getInstance().getUsername();
+
                 try {
                     model = PrimaryUser.getInstance().getTradeList().getTrades().get(tradeUUID);
                     currentUserOwnsMainItem = model.getOwner().getUsername().equals(currentUsername);
@@ -168,8 +170,6 @@ public class TradeOfferReviewActivity extends AppCompatActivity implements Obser
                 }
 
                 controller = new TradeOfferReviewController(getBaseContext(), model);
-
-                currentUsername = PrimaryUser.getInstance().getUsername();
 
                 return null;
             }
