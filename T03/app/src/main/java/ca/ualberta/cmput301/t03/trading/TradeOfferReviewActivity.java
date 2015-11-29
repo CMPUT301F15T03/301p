@@ -22,14 +22,11 @@ package ca.ualberta.cmput301.t03.trading;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,7 +42,6 @@ import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
-import ca.ualberta.cmput301.t03.common.Preconditions;
 import ca.ualberta.cmput301.t03.TradeApp;
 import ca.ualberta.cmput301.t03.common.exceptions.ExceptionUtils;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
@@ -75,6 +71,7 @@ public class TradeOfferReviewActivity extends AppCompatActivity implements Obser
     private TextView tradeReviewOtherUser;
     private TextView tradeOffererYouTheyWant;
     private TextView tradeOffererYouTheyOffer;
+    private TextView tradeStateTextView;
 
     private ListView ownerItemListView;
     private ListView borrowerItemListView;
@@ -101,6 +98,7 @@ public class TradeOfferReviewActivity extends AppCompatActivity implements Obser
         tradeReviewOtherUser = (TextView) findViewById(R.id.tradeReviewOtherUser);
         tradeOffererYouTheyWant = (TextView) findViewById(R.id.tradeOffererYouTheyWant);
         tradeOffererYouTheyOffer = (TextView) findViewById(R.id.tradeOffererYouTheyOffer);
+        tradeStateTextView = (TextView) findViewById(R.id.tradeState);
 
         ownerItemListView = (ListView) findViewById(R.id.tradeReviewOwnerItem);
         borrowerItemListView = (ListView) findViewById(R.id.tradeReviewBorrowerItems);
@@ -128,20 +126,22 @@ public class TradeOfferReviewActivity extends AppCompatActivity implements Obser
 
 
         AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
-            private ArrayList<Item> owneritems;
-            private ArrayList<Item> borroweritems;
             private Boolean currentUserOwnsMainItem;
             private Boolean tradeIsPending;
             private Boolean tradeIsAccepted;
+            private Boolean tradeIsCompleted;
+            private TradeState tradeState;
 
             @Override
             protected Void doInBackground(Void[] params) {
                 try {
                     model = PrimaryUser.getInstance().getTradeList().getTrades().get(tradeUUID);
                     currentUserOwnsMainItem = model.getOwner().getUsername().equals(currentUsername);
-                    TradeState state = model.getState();
-                    tradeIsPending = state.getClass().equals(TradeStateOffered.class);
-//                    tradeIsPending = mode
+                    tradeState = model.getState();
+                    Class tradeStateClass = tradeState.getClass();
+                    tradeIsPending = tradeStateClass.equals(TradeStateOffered.class);
+                    tradeIsAccepted = tradeStateClass.equals(TradeStateAccepted.class);
+                    tradeIsCompleted = tradeStateClass.equals(TradeStateCompleted.class);
                 } catch (IOException e) {
                     ExceptionUtils.toastErrorWithNetwork();
                     activity.finish();
@@ -150,14 +150,12 @@ public class TradeOfferReviewActivity extends AppCompatActivity implements Obser
                     activity.finish();
                 }
 
-
                 if (model == null) {
                     ExceptionUtils.toastLong("Failed to fetch trade info");
                     activity.finish();
                 }
                 ownerItems = model.getOwnersItems();
                 ownerItems.addObserver(TradeOfferReviewActivity.this);
-
 
                 try {
                     borrowerItems = model.getBorrowersItems();
@@ -177,16 +175,21 @@ public class TradeOfferReviewActivity extends AppCompatActivity implements Obser
 
             @Override
             protected void onPostExecute(Void o) {
+                populateTextViews(currentUserOwnsMainItem, tradeState);
+
                 if (tradeIsPending) {
                     populateLayoutPendingTrade(currentUserOwnsMainItem);
+                } else if (tradeIsCompleted) {
+                    populateLayoutCompletedTrade(currentUserOwnsMainItem);
                 } else if (tradeIsAccepted) {
-//                    populateLayoutAcceptedTrade(currentUserOwnsMainItem);
-//                } else if (tradeIsCompleted) {
-//
+                    populateLayoutAcceptedTrade(currentUserOwnsMainItem);
+                } else {
+                    // tradeIsDeclined
+                    populateLayoutDeclinedTrade(currentUserOwnsMainItem);
                 }
 
-                ownerItemAdapter = new ItemsAdapter(TradeApp.getContext(), owneritems);
-                borrowerItemAdapter = new ItemsAdapter(TradeApp.getContext(), borroweritems);
+                ownerItemAdapter = new ItemsAdapter(TradeApp.getContext(), ownerItems);
+                borrowerItemAdapter = new ItemsAdapter(TradeApp.getContext(), ownerItems);
 
                 ownerItemListView.setAdapter(ownerItemAdapter);
                 borrowerItemListView.setAdapter(borrowerItemAdapter);
@@ -196,12 +199,43 @@ public class TradeOfferReviewActivity extends AppCompatActivity implements Obser
         task.execute();
     }
 
-    private void populateLayoutPendingTrade(Boolean currentUserOwnsMainItem) {
+    private void populateTextViews(Boolean currentUserOwnsMainItem, TradeState tradeState) {
         if (currentUserOwnsMainItem) {
             tradeDirectionFromTo.setText("from");
             tradeReviewOtherUser.setText(model.getBorrower().getUsername());
             tradeOffererYouTheyWant.setText("They");
             tradeOffererYouTheyOffer.setText("They");
+        } else {
+            tradeDirectionFromTo.setText("to");
+            tradeReviewOtherUser.setText(model.getOwner().getUsername());
+            tradeOffererYouTheyWant.setText("You");
+            tradeOffererYouTheyOffer.setText("You");
+        }
+        tradeStateTextView.setText(tradeState.toString());
+    }
+
+    private void populateLayoutDeclinedTrade(Boolean currentUserOwnsMainItem) {
+        tradeReviewAccept.setVisibility(View.GONE);
+        tradeReviewDecline.setVisibility(View.GONE);
+        tradeReviewDeclineAndCounterOffer.setVisibility(View.GONE);
+    }
+
+    private void populateLayoutAcceptedTrade(Boolean currentUserOwnsMainItem) {
+        ExceptionUtils.toastLong("Completed action not yet implemented");
+        tradeReviewAccept.setVisibility(View.GONE);
+        tradeReviewDecline.setVisibility(View.GONE);
+        tradeReviewDeclineAndCounterOffer.setVisibility(View.GONE);
+    }
+
+    private void populateLayoutCompletedTrade(Boolean currentUserOwnsMainItem) {
+        ExceptionUtils.toastLong("Completed trade view not yet implemented");
+        tradeReviewAccept.setVisibility(View.GONE);
+        tradeReviewDecline.setVisibility(View.GONE);
+        tradeReviewDeclineAndCounterOffer.setVisibility(View.GONE);
+    }
+
+    private void populateLayoutPendingTrade(Boolean currentUserOwnsMainItem) {
+        if (currentUserOwnsMainItem) {
             tradeReviewAccept.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -277,11 +311,6 @@ public class TradeOfferReviewActivity extends AppCompatActivity implements Obser
                 }
             });
         } else {
-            // !currentUserOwnsMainItem
-            tradeDirectionFromTo.setText("to");
-            tradeReviewOtherUser.setText(model.getOwner().getUsername());
-            tradeOffererYouTheyWant.setText("You");
-            tradeOffererYouTheyOffer.setText("You");
             tradeReviewAccept.setVisibility(View.GONE);
             tradeReviewDecline.setVisibility(View.GONE);
             tradeReviewDeclineAndCounterOffer.setVisibility(View.GONE);

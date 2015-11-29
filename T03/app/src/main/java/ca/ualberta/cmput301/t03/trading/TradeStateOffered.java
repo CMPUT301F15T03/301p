@@ -28,7 +28,7 @@ import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeStateTransition;
  * class TradeStateOffered implements {@link TradeState}
  */
 public class TradeStateOffered implements TradeState {
-    public static final String stateString = "TradeStateOffered";
+    public static final String stateString = "Offered";
 
     /**
      * {@inheritDoc}
