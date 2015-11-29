@@ -139,7 +139,7 @@ public class AddItemController {
         if (itemName.length() == 0) {
             return false;
         }
-        if (itemModel.getItemCategory().length() == 0) {
+        if (itemModel.getItemCategory().length() == 0) { //todo npe here
             return false;
         }
         return true;
