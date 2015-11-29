@@ -92,7 +92,6 @@ public class ItemsAdapter<T extends Inventory> extends ArrayAdapter<Item> {
             image.setImageBitmap(item.getPhotoList().getPhotos().get(0).getPhoto());
         } catch (IndexOutOfBoundsException e){
             image.setImageBitmap(((BitmapDrawable) getContext().getResources().getDrawable(R.drawable.photo_unavailable)).getBitmap());
-            e.printStackTrace(); //fixme do da rigt things
         }
         // Return the completed view to render on screen
         return convertView;
