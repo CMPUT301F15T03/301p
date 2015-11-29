@@ -56,6 +56,12 @@ public interface Filterable<T> {
     void clearFilters();
 
     /**
+     * Set all filters from the data, this may or may not modify what is returned by
+     * getFilteredItems().
+     */
+    void setFilters(ArrayList<FilterCriteria> filters);
+
+    /**
      * Get the filtered T back from the model, this will be a subset of the non-filtered data.
      *
      * @return

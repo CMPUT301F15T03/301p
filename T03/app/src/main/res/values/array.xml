@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="categories_array_with_none">
+        <item>None</item>
+        <item>Cameras</item>
+        <item>Flash Photography</item>
+        <item>Instant Photography</item>
+        <item>Lens mounts</item>
+        <item>Photographic Chemicals</item>
+        <item>Photographic Shutters</item>
+        <item>Optical Filters</item>
+        <item>Photobooth Props</item>
+        <item>Stands</item>
+        <item>Photographic Films</item>
+    </string-array>
+</resources>

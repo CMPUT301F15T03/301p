@@ -15,5 +15,5 @@
         android:id="@+id/itemFilterCategory"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:entries="@array/categories_array"/>
+        android:entries="@array/categories_array_with_none"/>
 </LinearLayout>

@@ -42,6 +42,7 @@ import ca.ualberta.cmput301.t03.datamanager.CachedDataManager;
 import ca.ualberta.cmput301.t03.datamanager.DataKey;
 import ca.ualberta.cmput301.t03.datamanager.DataManager;
 import ca.ualberta.cmput301.t03.datamanager.HttpDataManager;
+import ca.ualberta.cmput301.t03.filters.FilterCriteria;
 import ca.ualberta.cmput301.t03.inventory.BrowsableInventories;
 import ca.ualberta.cmput301.t03.inventory.Inventory;
 import ca.ualberta.cmput301.t03.inventory.Item;
@@ -235,9 +236,10 @@ public class User implements Observable, Observer, Comparable<User> {
     }
 
 
-    public BrowsableInventories getBrowseableInventories() throws IOException, ServiceNotAvailableException {
+    public BrowsableInventories getBrowseableInventories(ArrayList<FilterCriteria> filters) throws IOException, ServiceNotAvailableException {
 
         BrowsableInventories newInventory = new BrowsableInventories();
+        newInventory.setFilters(filters);
         FriendsList list = getFriends();
         for (User f: list){
             for (Item i: f.getInventory()){

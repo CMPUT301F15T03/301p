@@ -25,12 +25,16 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -49,6 +53,7 @@ import org.parceler.Parcels;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -60,6 +65,7 @@ import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.filters.FilterCriteria;
 import ca.ualberta.cmput301.t03.filters.item_criteria.CategoryFilterCriteria;
+import ca.ualberta.cmput301.t03.filters.item_criteria.PrivateFilterCriteria;
 import ca.ualberta.cmput301.t03.filters.item_criteria.StringQueryFilterCriteria;
 import ca.ualberta.cmput301.t03.user.EditProfileActivity;
 import ca.ualberta.cmput301.t03.photo.Photo;
@@ -85,6 +91,8 @@ public class BrowseInventoryFragment extends Fragment implements Observer, Swipe
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private ListView mListview;
 
+    private ArrayList<FilterCriteria> filters;
+
     public BrowseInventoryFragment() {
         // Required empty public constructor
     }
@@ -103,13 +111,15 @@ public class BrowseInventoryFragment extends Fragment implements Observer, Swipe
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivity = getActivity();
+        filters = new ArrayList<>();
+        filters.add(new PrivateFilterCriteria());
         setHasOptionsMenu(true);
 
         AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
                 try {
-                    model = PrimaryUser.getInstance().getBrowseableInventories();
+                    model = PrimaryUser.getInstance().getBrowseableInventories(filters);
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (ServiceNotAvailableException e) {
@@ -240,31 +250,33 @@ public class BrowseInventoryFragment extends Fragment implements Observer, Swipe
         }
     }
 
+
     private AlertDialog createAddFilterDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(  getContext());
         final View dialogContent = View.inflate(getContext(), R.layout.content_add_filter_dialog, null);
-//        final EditText e = (EditText) dialogContent.findViewById(R.id.addFilterEditType);
 
         builder.setView(dialogContent);
         //itemCategoryText.setSelection(((ArrayAdapter) itemCategoryText.getAdapter()).getPosition(itemModel.getItemCategory()));
         builder.setCancelable(false);
         builder.setNegativeButton("Cancel", null);
-        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Set", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                for(FilterCriteria filter: model.getFilters()){
-                    if(filter.getType().equals("category")){
-                        model.removeFilter(filter.getName());
+                for (FilterCriteria filter : model.getFilters()) {
+                    if (filter.getType().equals("category")) {
+                        removeFilter(filter.getName());
                     }
                 }
                 Spinner spinner = (Spinner) dialogContent.findViewById(R.id.itemFilterCategory);
-                
                 String categoryType = spinner.getSelectedItem().toString();
-                model.addFilter(new CategoryFilterCriteria(categoryType));
-                Toast.makeText(getContext(), "Category Filter: '"+categoryType+"'", Toast.LENGTH_SHORT).show();
+                if (!categoryType.toLowerCase().equals("none")) {
+                    addFilter(new CategoryFilterCriteria(categoryType));
+                    Toast.makeText(getContext(), "Category Filter: '" + categoryType + "'", Toast.LENGTH_SHORT).show();
+                }
+                Toast.makeText(getContext(), "Category Filter: '" + categoryType + "'", Toast.LENGTH_SHORT).show();
             }
         });
-        builder.setTitle("Add a Category Filter");
+        builder.setTitle("Set a Category Filter");
         AlertDialog d = builder.create();
         return d;
     }
@@ -282,8 +294,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer, Swipe
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 final String usr = e.getText().toString().trim();
-                model.addFilter(new StringQueryFilterCriteria(usr));
-                model.commitChanges();
+                addFilter(new StringQueryFilterCriteria(usr));
                 Toast.makeText(getContext(), "Textual Filter: '" + usr + "' Added", Toast.LENGTH_SHORT).show();
             }
         });
@@ -292,14 +303,16 @@ public class BrowseInventoryFragment extends Fragment implements Observer, Swipe
 
         ArrayList<String> filterNames = new ArrayList<String>();
         for (FilterCriteria filter : model.getFilters()) {
-            filterNames.add(filter.getName());
+            if(filter.getType().equals("textual")){
+                filterNames.add(filter.getName());
+            }
         }
         final CharSequence[] fNames = filterNames.toArray(new String[filterNames.size()]);
         builder.setItems(fNames, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
                 String selectedText = fNames[item].toString();
-                model.removeFilter(selectedText);
-                model.commitChanges();
+                removeFilter(selectedText);
+
                 Toast.makeText(getContext(), "Textual Filter: '" + selectedText + "' Removed", Toast.LENGTH_SHORT).show();
             }
         });
@@ -308,13 +321,28 @@ public class BrowseInventoryFragment extends Fragment implements Observer, Swipe
         return d;
     }
 
+    public void addFilter(FilterCriteria filter){
+        filters.add(filter);
+        onRefresh();
+    }
+
+    public void removeFilter(String filterName){
+        for (FilterCriteria filter: filters){
+            if (filter.getName().equals(filterName)){
+                filters.remove(filter);
+            }
+        }
+        onRefresh();
+    }
+
+
     public void onRefresh() {
         AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
                 try {
                     PrimaryUser.getInstance().refresh();
-                    model = PrimaryUser.getInstance().getBrowseableInventories();
+                    model = PrimaryUser.getInstance().getBrowseableInventories(filters);
 
 
                     //fixme browseableinventories actually needs to refresh
