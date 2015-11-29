@@ -125,20 +125,17 @@ public class FriendsListFragment extends Fragment implements Observer, SwipeRefr
                     mController = new FriendsListController(getContext(), mModel);
 
 
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            populateFields();
-                        }
-                    });
-
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (ServiceNotAvailableException e) {
                     throw new RuntimeException("App is offline.", e);
                 }
                 return null;
+            }
+
+            @Override
+            protected void onPostExecute(Object o) {
+                populateFields();
             }
         };
         worker.execute();

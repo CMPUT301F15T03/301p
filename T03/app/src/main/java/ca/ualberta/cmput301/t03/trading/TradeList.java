@@ -114,6 +114,10 @@ public class TradeList implements Observable, Observer, Adaptable<Trade>, Iterab
         return tr;
     }
 
+    public Trade getTrade(UUID uuid){
+        return getTrades().get(uuid);
+    }
+
     /**
      * Set the trades that the user has.
      *
