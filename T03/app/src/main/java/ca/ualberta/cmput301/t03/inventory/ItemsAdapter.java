@@ -1,7 +1,6 @@
 package ca.ualberta.cmput301.t03.inventory;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,17 +9,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import ca.ualberta.cmput301.t03.Observable;
-import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
-import ca.ualberta.cmput301.t03.user.User;
 
 /**
  * Copyright 2015 John Slevinsky
@@ -37,7 +31,7 @@ import ca.ualberta.cmput301.t03.user.User;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-public class ItemsAdapter<T extends ItemsAdaptable> extends ArrayAdapter<Item> {
+public class ItemsAdapter<T extends Adaptable> extends ArrayAdapter<Item> {
 
     private T mInventory;
     private Context mContext;
