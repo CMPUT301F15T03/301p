@@ -24,6 +24,7 @@ import android.content.Context;
 import android.util.Log;
 
 import ca.ualberta.cmput301.t03.common.exceptions.NotImplementedException;
+import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeStateTransition;
 
 /**
@@ -52,7 +53,7 @@ public class TradeOfferReviewController {
      * is in TradeOfferReviewActivity, they are reviewing a trade which is in
      * {@link TradeStateOffered}. {@link TradeState#accept(Trade)} is a legal action.
      */
-    public void acceptTrade() {
+    public void acceptTrade() throws ServiceNotAvailableException {
         try {
             model.accept();
         } catch (IllegalTradeStateTransition illegalTradeStateTransition) {
@@ -67,7 +68,7 @@ public class TradeOfferReviewController {
      * is in TradeOfferReviewActivity, they are reviewing a trade which is in
      * {@link TradeStateOffered}. Thus, {@link TradeState#decline(Trade)} is a legal action.
      */
-    public void declineTrade() {
+    public void declineTrade() throws ServiceNotAvailableException {
         try {
             model.decline();
         } catch (IllegalTradeStateTransition illegalTradeStateTransition) {
@@ -82,7 +83,7 @@ public class TradeOfferReviewController {
      * is in TradeOfferReviewActivity, they are reviewing a trade which is in
      * {@link TradeStateOffered}. Thus, {@link TradeState#decline(Trade)} is a legal action.
      */
-    public void declineAndCounterTrade() {
+    public void declineAndCounterTrade() throws ServiceNotAvailableException {
         try {
             model.decline();
         } catch (IllegalTradeStateTransition illegalTradeStateTransition) {

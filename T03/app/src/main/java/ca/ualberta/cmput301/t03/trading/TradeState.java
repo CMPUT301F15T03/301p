@@ -20,6 +20,7 @@
 
 package ca.ualberta.cmput301.t03.trading;
 
+import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeStateTransition;
 
 /**
@@ -77,7 +78,7 @@ public interface TradeState {
      * @param trade Trade to be offered.
      * @throws IllegalTradeStateTransition if the trade is in an illegal state and cannot be offered.
      */
-    void offer(Trade trade) throws IllegalTradeStateTransition;
+    void offer(Trade trade) throws IllegalTradeStateTransition, ServiceNotAvailableException;
 
     /**
      * Cancel a trade.
@@ -88,7 +89,7 @@ public interface TradeState {
      * @param trade Trade to be cancelled.
      * @throws IllegalTradeStateTransition if the trade is in an illegal state and cannot be cancelled.
      */
-    void cancel(Trade trade) throws IllegalTradeStateTransition;
+    void cancel(Trade trade) throws IllegalTradeStateTransition, ServiceNotAvailableException;
 
     /**
      * Accept a trade.
@@ -99,7 +100,7 @@ public interface TradeState {
      * @param trade Trade to be accepted.
      * @throws IllegalTradeStateTransition if the trade is in an illegal state and cannot be accepted.
      */
-    void accept(Trade trade) throws IllegalTradeStateTransition;
+    void accept(Trade trade) throws IllegalTradeStateTransition, ServiceNotAvailableException;
 
     /**
      * Decline a trade.
@@ -110,7 +111,7 @@ public interface TradeState {
      * @param trade Trade to be declined.
      * @throws IllegalTradeStateTransition if the trade is in an illegal state and cannot be declined.
      */
-    void decline(Trade trade) throws IllegalTradeStateTransition;
+    void decline(Trade trade) throws IllegalTradeStateTransition, ServiceNotAvailableException;
 
     /**
      * Returns a string for the interface.
