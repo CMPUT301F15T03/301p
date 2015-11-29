@@ -26,11 +26,11 @@ import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 /**
  *
  */
-public interface ItemsAdaptable {
+public interface Adaptable<T> {
     /**
      * This should return a SORTED LIST of items,
      * sorted by ITEM NAME.
      * @return
      */
-    public List<Item> getAdaptableItems() throws IOException, ServiceNotAvailableException;
+    public List<T> getAdaptableItems() throws IOException, ServiceNotAvailableException;
 }

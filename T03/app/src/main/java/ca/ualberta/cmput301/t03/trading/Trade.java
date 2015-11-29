@@ -56,7 +56,7 @@ import ca.ualberta.cmput301.t03.user.User;
  * <p>
  * State is managed by the Trade's tradeState ({@link TradeState}) member.
  */
-public class Trade implements Observable {
+public class Trade implements Observable, Comparable<Trade> {
     public final static String type = "Trade";
     @Expose
     private TradeState state;
@@ -404,5 +404,28 @@ public class Trade implements Observable {
     @Override
     public String toString() {
         return this.getTradeUUID().toString();
+    }
+
+    @Override
+    public int compareTo(Trade another) {
+        return getTradeUUID().compareTo(another.getTradeUUID());
+    }
+
+    /**
+     * Generates an email subject after a trade has been accepted
+     * @return subject of email
+     */
+    public String getEmailSubject() {
+        return "Follow up details";
+    }
+
+    /**
+     * Generates a email body containing all trade information after a trade has been accepted
+     *
+     * The user should be able to edit this either in the email intent or a provided text area.
+     * @return body of trade accept email
+     */
+    public String getEmailBody() {
+        return "";
     }
 }

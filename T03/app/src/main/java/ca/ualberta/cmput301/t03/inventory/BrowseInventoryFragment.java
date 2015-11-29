@@ -208,8 +208,10 @@ public class BrowseInventoryFragment extends Fragment implements Observer, Swipe
      */
     @Override
     public void onDestroy() {
+        if (model != null){
+            model.removeObserver(this);
+        }
         super.onDestroy();
-        model.removeObserver(this);
     }
 
 

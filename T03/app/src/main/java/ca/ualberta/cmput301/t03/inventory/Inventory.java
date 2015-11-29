@@ -35,7 +35,6 @@ import java.util.List;
 import java.util.UUID;
 
 import ca.ualberta.cmput301.t03.filters.CollectionFilter;
-import ca.ualberta.cmput301.t03.filters.Filter;
 import ca.ualberta.cmput301.t03.filters.FilterCriteria;
 import ca.ualberta.cmput301.t03.filters.Filterable;
 import ca.ualberta.cmput301.t03.Observable;
@@ -47,7 +46,7 @@ import ca.ualberta.cmput301.t03.filters.item_criteria.PrivateFilterCriteria;
  * Represents the main model for the userinventory workflow and the browse inventories workflow.
  */
 @Parcel
-public class Inventory implements Filterable<Item>, Observable, Observer, ItemsAdaptable, Iterable<Item> {
+public class Inventory implements Filterable<Item>, Observable, Observer, Adaptable, Iterable<Item> {
     public final static String type = "Inventory";
     @Expose
     private LinkedHashMap<UUID, Item> items;
