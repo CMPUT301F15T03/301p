@@ -34,6 +34,7 @@ import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.common.PrimaryUserHelper;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
+import ca.ualberta.cmput301.t03.inventory.Inventory;
 import ca.ualberta.cmput301.t03.inventory.Item;
 import ca.ualberta.cmput301.t03.trading.Trade;
 import ca.ualberta.cmput301.t03.trading.TradeStateAccepted;
@@ -170,8 +171,8 @@ public class TradeUITest
             assertEquals(TradeStateOffered.class, trade.getState().getClass());
 
             assertEquals(1, trade.getOwnersItems().size());
-            assertNotNull(trade.getOwnersItems().get(0));
-            assertEquals(ownerItem.getItemName(), trade.getOwnersItems().get(0).getItemName());
+            assertNotNull(trade.getOwnersItems().getItems().get(0));
+            assertEquals(ownerItem.getItemName(), trade.getOwnersItems().getItems().get(0).getItemName());
         } catch (IOException e) {
             fail("IOException in testOfferTradeWithFriend");
         }
@@ -194,10 +195,10 @@ public class TradeUITest
         } catch (IOException e) {
             e.printStackTrace();
         }
-        ArrayList<Item> borrowerItems = new ArrayList<Item>() {{
-            add(userItem);
+        Inventory borrowerItems = new Inventory() {{
+            addItem(userItem);
         }};
-        Trade trade = new Trade(borrower, user, borrowerItems, new ArrayList<Item>(), mContext);
+        Trade trade = new Trade(borrower, user, borrowerItems, new Inventory(), mContext);
         try {
             trade.offer();
         } catch (IllegalTradeStateTransition e) {
@@ -246,10 +247,10 @@ public class TradeUITest
         } catch (IOException e) {
             e.printStackTrace();
         }
-        ArrayList<Item> borrowerItems = new ArrayList<Item>() {{
-            add(userItem);
+        Inventory borrowerItems = new Inventory() {{
+            addItem(userItem);
         }};
-        Trade trade = new Trade(borrower, user, borrowerItems, new ArrayList<Item>(), mContext);
+        Trade trade = new Trade(borrower, user, borrowerItems, new Inventory(), mContext);
         try {
             trade.offer();
         } catch (IllegalTradeStateTransition e) {
@@ -301,10 +302,10 @@ public class TradeUITest
         } catch (IOException e) {
             e.printStackTrace();
         }
-        ArrayList<Item> borrowerItems = new ArrayList<Item>() {{
-            add(userItem);
+        Inventory borrowerItems = new Inventory() {{
+            addItem(userItem);
         }};
-        Trade trade = new Trade(borrower, user, borrowerItems, new ArrayList<Item>(), mContext);
+        Trade trade = new Trade(borrower, user, borrowerItems, new Inventory(), mContext);
         try {
             trade.offer();
         } catch (IllegalTradeStateTransition e) {
@@ -356,10 +357,10 @@ public class TradeUITest
         } catch (IOException e) {
             e.printStackTrace();
         }
-        ArrayList<Item> borrowerItems = new ArrayList<Item>() {{
-            add(userItem);
+       Inventory borrowerItems = new Inventory() {{
+            addItem(userItem);
         }};
-        Trade trade = new Trade(borrower, user, borrowerItems, new ArrayList<Item>(), mContext);
+        Trade trade = new Trade(borrower, user, borrowerItems, new Inventory(), mContext);
         try {
             trade.offer();
         } catch (IllegalTradeStateTransition e) {
@@ -486,10 +487,10 @@ public class TradeUITest
         } catch (IOException e) {
             e.printStackTrace();
         }
-        ArrayList<Item> borrowerItems = new ArrayList<Item>() {{
-            add(userItem);
+       Inventory borrowerItems = new Inventory() {{
+            addItem(userItem);
         }};
-        Trade trade = new Trade(borrower, user, borrowerItems, new ArrayList<Item>(), mContext);
+        Trade trade = new Trade(borrower, user, borrowerItems, new Inventory(), mContext);
         try {
             trade.offer();
         } catch (IllegalTradeStateTransition e) {
@@ -590,8 +591,8 @@ public class TradeUITest
             assertEquals(owner.getUsername(), trade.getOwner().getUsername());
             assertEquals(TradeStateCancelled.class, trade.getState().getClass());
             assertEquals(1, trade.getOwnersItems().size());
-            assertNotNull(trade.getOwnersItems().get(0));
-            assertEquals(ownerItem.getItemName(), trade.getOwnersItems().get(0));
+            assertNotNull(trade.getOwnersItems().getItems().get(0));
+            assertEquals(ownerItem.getItemName(), trade.getOwnersItems().getItems().get(0));
         } catch (IOException e) {
             assertTrue("IOException in testOfferTradeWithFriend", Boolean.FALSE);
         }
@@ -614,10 +615,10 @@ public class TradeUITest
         } catch (IOException e) {
             e.printStackTrace();
         }
-        ArrayList<Item> borrowerItems = new ArrayList<Item>() {{
-            add(userItem);
+       Inventory borrowerItems = new Inventory() {{
+            addItem(userItem);
         }};
-        Trade trade = new Trade(borrower, user, borrowerItems, new ArrayList<Item>(), mContext);
+        Trade trade = new Trade(borrower, user, borrowerItems, new Inventory(), mContext);
         try {
             trade.offer();
         } catch (IllegalTradeStateTransition e) {
@@ -758,6 +759,6 @@ public class TradeUITest
 //
 //        while (NetworkManager.deviceIsOffline());
 //        assertTrue(tradeManager.exists(trade));
-//        assertTrue(tradeManager.isOpen(trade));
+//        assertTrue(tradeManager.isPending(trade));
     }
 }
