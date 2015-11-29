@@ -61,14 +61,11 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.allOf;
 
 
-/**
- * Created by rhanders on 2015-10-08.
- */
 public class TradeUITest
         extends ActivityInstrumentationTestCase2<MainActivity> {
 
-    private static final String TEST_USER_FRIEND_1 = "TEST_USER_FRIEND_1";
-    private static final String TEST_USER_FRIEND_2 = "TEST_USER_FRIEND_2";
+    private static final String TEST_USER_FRIEND_1 = "testuserfriend1";
+    private static final String TEST_USER_FRIEND_2 = "testuserfriend2";
 
     private static final String TEST_ITEM_1_CATEGORY = "TEST_ITEM_1_CATEGORY";
     private static final String TEST_ITEM_1_NAME = "TEST_ITEM_1_NAME";
