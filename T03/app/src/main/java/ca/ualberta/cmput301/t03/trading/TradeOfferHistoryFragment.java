@@ -22,6 +22,7 @@ package ca.ualberta.cmput301.t03.trading;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -158,7 +159,30 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Snackbar.make(getView(), "inspect/review trade unimplemented", Snackbar.LENGTH_SHORT).show();
+                final UUID tradeUUID = tradeTilePositionMap.get(position);
+
+                AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>() {
+                    @Override
+                    protected Boolean doInBackground(Void[] params) {
+                        if (model.getTrades().get(tradeUUID).getState().isClosed()) {
+                            return Boolean.FALSE;
+                        } else {
+                            return Boolean.TRUE;
+                        }
+                    }
+
+                    @Override
+                    protected void onPostExecute(Boolean shouldReview) {
+                        if (shouldReview) {
+                            Intent intent = new Intent(getContext(), TradeOfferReviewActivity.class);
+                            intent.putExtra("TRADE_UUID", tradeUUID);
+                            startActivity(intent);
+                        } else {
+                            Snackbar.make(getView(), "trade review of accepted|declined trades unimplemented", Snackbar.LENGTH_SHORT).show();
+                        }
+                    }
+                };
+                task.execute();
             }
         });
     }

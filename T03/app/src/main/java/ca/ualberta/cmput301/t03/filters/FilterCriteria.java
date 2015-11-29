@@ -5,4 +5,6 @@ package ca.ualberta.cmput301.t03.filters;
  */
 public interface FilterCriteria {
     public boolean passes(Object o);
+    public String getName();
+    public String getType();
 }
