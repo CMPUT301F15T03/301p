@@ -180,6 +180,16 @@ public class Inventory implements Filterable<Item>, Observable, Observer, Adapta
 
     /**
      * {@inheritDoc}
+     *
+     * @param filterName the filter you wish to remove
+     */
+    @Override
+    public void setFilters(ArrayList<FilterCriteria> filters){
+        this.filters = filters;
+    }
+
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void clearFilters() {

@@ -193,6 +193,14 @@ public class FriendsList implements Observable, Filterable<Item>, Iterable<User>
      * {@inheritDoc}
      */
     @Override
+    public void setFilters(ArrayList<FilterCriteria> filters) {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public ArrayList<Item> getFilteredItems(ArrayList<Item> list, List<FilterCriteria> filters) {
         throw new UnsupportedOperationException();
     }
