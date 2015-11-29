@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.common.exceptions.ExceptionUtils;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
@@ -77,8 +78,8 @@ public class TradesAdapter<T extends TradeList> extends ArrayAdapter<Trade> {
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
 
-        Boolean currentUserIsOwner = false;
         Trade trade = getItem(position);
+        currentUserIsOwner = PrimaryUser.getInstance().equals(trade.getOwner());
         Item mainItem = trade.getOwnersItems().get(0);
 
         // Check if an existing view is being reused, otherwise inflate the view
@@ -98,7 +99,7 @@ public class TradesAdapter<T extends TradeList> extends ArrayAdapter<Trade> {
         try {
             image.setImageBitmap(mainItem.getPhotoList().getPhotos().get(0).getPhoto());
         } catch (IndexOutOfBoundsException e){
-            image.setImageBitmap(((BitmapDrawable) getContext().getResources().getDrawable(R.drawable.photo_unavailable)).getBitmap());
+            image.setImageBitmap(((BitmapDrawable) getContext().getResources().getDrawable(R.drawable.photo_available_for_download)).getBitmap());
         }
         status.setText(tradeStates.get(trade.getTradeUUID()));
         otherUser.setText(trade.getBorrower().getUsername());
