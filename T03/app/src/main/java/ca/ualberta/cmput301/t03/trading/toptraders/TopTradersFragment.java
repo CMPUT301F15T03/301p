@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.TradeApp;
+import ca.ualberta.cmput301.t03.common.exceptions.ExceptionUtils;
 
 /**
  * Source (Icon): https://developers.google.com/games/services/images/branding/ic_play_games_badge_leaderboards_gray.png
@@ -64,8 +65,9 @@ public class TopTradersFragment extends Fragment {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(TopTradersFragment.this.getContext(), R.string.top_trader_offline_message,
-                                    Toast.LENGTH_SHORT).show();
+                            ExceptionUtils.toastShort(getString(R.string.top_trader_offline_message));
+                            //Toast.makeText(TopTradersFragment.this.getContext(), R.string.top_trader_offline_message,
+                              //      Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
