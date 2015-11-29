@@ -2,6 +2,7 @@ package ca.ualberta.cmput301.t03.inventory;
 
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.LogRecord;
 
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
@@ -58,14 +60,20 @@ public class ItemsAdapter<T extends Inventory> extends ArrayAdapter<Item> {
     public ItemsAdapter(Context context, ArrayList<Item> items){
         this(context, new Inventory());
 
+
+        Inventory i = makeInventory(items);
+
+        notifyUpdated(i);
+    }
+
+
+    private Inventory makeInventory(ArrayList<Item> items){
         Inventory inventory = new Inventory();
         for (Item i: items){
             inventory.addItem(i);
         }
-
-        notifyUpdated(inventory);
+        return inventory;
     }
-
     /**
      * https://github.com/codepath/android_guides/wiki/Using-an-ArrayAdapter-with-ListView
      * @param position
@@ -99,6 +107,13 @@ public class ItemsAdapter<T extends Inventory> extends ArrayAdapter<Item> {
 
     @Override
     public void notifyDataSetChanged() {
+
+        setNotifyOnChange(false);
+        clear();
+        addAll(getItems());
+        setNotifyOnChange(true);
+
+
         super.notifyDataSetChanged();
     }
 
@@ -108,5 +123,10 @@ public class ItemsAdapter<T extends Inventory> extends ArrayAdapter<Item> {
         mInventory = model;
         clear();
         addAll(getItems());
+    }
+
+    public void notifyUpdated(ArrayList<Item> model){
+        Inventory i = makeInventory(model);
+        notifyUpdated(i);
     }
 }

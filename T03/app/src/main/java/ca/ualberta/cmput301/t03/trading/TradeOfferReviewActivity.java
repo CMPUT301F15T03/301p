@@ -33,24 +33,23 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
 
+import ca.ualberta.cmput301.t03.Observable;
+import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.common.Preconditions;
 import ca.ualberta.cmput301.t03.TradeApp;
-import ca.ualberta.cmput301.t03.common.TileBuilder;
 import ca.ualberta.cmput301.t03.common.exceptions.ExceptionUtils;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
+import ca.ualberta.cmput301.t03.inventory.Inventory;
 import ca.ualberta.cmput301.t03.inventory.Item;
 import ca.ualberta.cmput301.t03.inventory.ItemsAdapter;
 
@@ -61,7 +60,7 @@ import ca.ualberta.cmput301.t03.inventory.ItemsAdapter;
  * <p>
  * On interaction, it delegates to a {@link TradeOfferReviewController}.
  */
-public class TradeOfferReviewActivity extends AppCompatActivity {
+public class TradeOfferReviewActivity extends AppCompatActivity implements Observer {
 
     private static final Integer EMAIL_SENT = 1;
 
@@ -87,6 +86,9 @@ public class TradeOfferReviewActivity extends AppCompatActivity {
     private ItemsAdapter ownerItemAdapter;
     private ItemsAdapter borrowerItemAdapter;
 
+    private Inventory ownerItems;
+    private Inventory borrowerItems;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,15 +113,24 @@ public class TradeOfferReviewActivity extends AppCompatActivity {
         populateLayoutWithData(tradeUUID);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (ownerItems != null){
+            ownerItems.removeObserver(this);
+        }
+        if (borrowerItems != null){
+            borrowerItems.removeObserver(this);
+        }
+    }
+
     private void populateLayoutWithData(final UUID tradeUUID) {
 
 
-        AsyncTask task = new AsyncTask() {
-            private ArrayList<Item> owneritems;
-            private ArrayList<Item> borroweritems;
-
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+            
             @Override
-            protected Object doInBackground(Object[] params) {
+            protected Void doInBackground(Void[] params) {
                 try {
                     model = PrimaryUser.getInstance().getTradeList().getTrades().get(tradeUUID);
                 } catch (IOException e) {
@@ -129,18 +140,23 @@ public class TradeOfferReviewActivity extends AppCompatActivity {
                     activity.finish();
                 }
 
+
                 if (model == null) {
                     ExceptionUtils.toastLong("Failed to fetch trade info");
                     activity.finish();
                 }
-                
-                owneritems = model.getOwnersItems();
+                ownerItems = model.getOwnersItems();
+                ownerItems.addObserver(TradeOfferReviewActivity.this);
+
+
                 try {
-                    borroweritems = model.getBorrowersItems();
+                    borrowerItems = model.getBorrowersItems();
+                    borrowerItems.addObserver(TradeOfferReviewActivity.this);
                 } catch (ServiceNotAvailableException e) {
                     ExceptionUtils.toastLong("Failed to get borrowers items: app is offline");
                     activity.finish();
                 }
+
 
                 controller = new TradeOfferReviewController(getBaseContext(), model);
 
@@ -150,7 +166,7 @@ public class TradeOfferReviewActivity extends AppCompatActivity {
             }
 
             @Override
-            protected void onPostExecute(Object o) {
+            protected void onPostExecute(Void o) {
                 Boolean currentUserOwnsMainItem = model.getOwner().getUsername().equals(currentUsername);
                 if (currentUserOwnsMainItem) {
                     tradeDirectionFromTo.setText("from");
@@ -241,10 +257,8 @@ public class TradeOfferReviewActivity extends AppCompatActivity {
                     tradeReviewDeclineAndCounterOffer.setVisibility(View.GONE);
                 }
 
-
-
-                ownerItemAdapter = new ItemsAdapter(TradeApp.getContext(), owneritems);
-                borrowerItemAdapter = new ItemsAdapter(TradeApp.getContext(), borroweritems);
+                ownerItemAdapter = new ItemsAdapter(TradeApp.getContext(), ownerItems);
+                borrowerItemAdapter = new ItemsAdapter(TradeApp.getContext(), borrowerItems);
 
                 ownerItemListView.setAdapter(ownerItemAdapter);
                 borrowerItemListView.setAdapter(borrowerItemAdapter);
@@ -281,5 +295,17 @@ public class TradeOfferReviewActivity extends AppCompatActivity {
         if (requestCode == EMAIL_SENT) {
             activity.finish();
         }
+    }
+
+    @Override
+    public void update(final Observable observable) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                borrowerItemAdapter.notifyDataSetChanged();
+                ownerItemAdapter.notifyDataSetChanged();
+            }
+        });
+
     }
 }
