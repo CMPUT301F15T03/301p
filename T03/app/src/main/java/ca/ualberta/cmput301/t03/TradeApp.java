@@ -122,7 +122,13 @@ public class TradeApp extends Application {
                         }
                         if (list != null)
                             for (Trade trade : list.getTradesAsList()) {
-                                if (!trade.getHasBeenNotified() && !trade.getHasBeenSeen()) {
+                                Boolean isPublic = false;
+                                try {
+                                    isPublic = trade.isPublic();
+                                } catch (ServiceNotAvailableException e) {
+                                    e.printStackTrace();
+                                }
+                                if (!trade.getHasBeenNotified() && !trade.getHasBeenSeen() && isPublic) {
                                     // do a notify
                                     NotificationCompat.Builder mBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(getApplicationContext())
                                             .setSmallIcon(R.drawable.ic_add)
