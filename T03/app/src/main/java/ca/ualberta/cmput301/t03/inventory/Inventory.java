@@ -50,7 +50,7 @@ import ca.ualberta.cmput301.t03.filters.item_criteria.PrivateFilterCriteria;
 public class Inventory implements Filterable<Item>, Observable, Observer, Adaptable, Iterable<Item> {
     public final static String type = "Inventory";
     @Expose
-    private List<Item> items;
+    private ArrayList<Item> items;
 
     @Transient
     private HashSet<Observer> observers;
@@ -77,13 +77,13 @@ public class Inventory implements Filterable<Item>, Observable, Observer, Adapta
      */
     public HashMap<UUID, Item> getItems() {
         LinkedHashMap<UUID, Item> filteredItems = new LinkedHashMap<>();
-        for (Item item: this.items){
-            filteredItems.put(item.getUuid(), item);
-        }
-//        ArrayList<Item> filteredList = getFilteredItems(itemList, this.filters);
-//        for (Item item: filteredList){
+//        for (Item item: this.items){
 //            filteredItems.put(item.getUuid(), item);
 //        }
+        ArrayList<Item> filteredList = getFilteredItems(this.items, this.filters);
+        for (Item item: filteredList){
+            filteredItems.put(item.getUuid(), item);
+        }
 
         return filteredItems;
     }
@@ -185,7 +185,7 @@ public class Inventory implements Filterable<Item>, Observable, Observer, Adapta
     /**
      * {@inheritDoc}
      *
-     * @param filterName the filter you wish to remove
+     * @param filters the filter you wish to remove
      */
     @Override
     public void setFilters(ArrayList<FilterCriteria> filters){
