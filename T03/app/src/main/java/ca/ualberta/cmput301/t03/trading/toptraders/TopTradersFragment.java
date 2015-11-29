@@ -8,6 +8,7 @@ import android.widget.TableLayout;
 import android.support.v4.app.Fragment;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -60,8 +61,13 @@ public class TopTradersFragment extends Fragment {
                     topTraders = refreshController.getTopTraders(TOP_TRADERS_COUNT);
                     refreshTopTradersUI();
                 } catch (IOException e) {
-                    // TODO: Handle this
-                    throw new RuntimeException(e);
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(TopTradersFragment.this.getContext(), R.string.top_trader_offline_message,
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
             }
         });
