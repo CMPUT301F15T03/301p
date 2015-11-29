@@ -32,7 +32,7 @@ import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeStateTransition;
  * class TradeStateComposing implements {@link TradeState}
  */
 public class TradeStateComposing implements TradeState {
-    public final static String stateString = "Composing";
+    public final static String stateString = "TradeStateComposing";
 
     /**
      * {@inheritDoc}
@@ -135,6 +135,11 @@ public class TradeStateComposing implements TradeState {
     @Override
     public String getInterfaceString(Boolean currentUserIsOwner) {
         return "COMPOSING-NOT-IN-INTERFACE";
+    }
+
+    @Override
+    public String getStateString() {
+        return "Composing";
     }
 
     @Override
