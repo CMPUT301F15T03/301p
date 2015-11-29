@@ -41,7 +41,6 @@ import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
  */
 public class CachedDataManager extends JsonDataManager {
 
-    private final static String CACHE_DIRECTORY = "cache";
     private final LocalDataManager cachingDataManager;
     protected final JsonDataManager innerManager;
 
@@ -70,7 +69,7 @@ public class CachedDataManager extends JsonDataManager {
             return innerManager.keyExists(key);
         }
 
-        return cachingDataManager.keyExists(convertToCacheKey(key));
+        return cachingDataManager.keyExists(key);
     }
 
     /**
@@ -88,11 +87,11 @@ public class CachedDataManager extends JsonDataManager {
     public <T> T getData(DataKey key, Type typeOfT) throws IOException, DataKeyNotFoundException, ClassCastException, ServiceNotAvailableException {
         if (innerManager.isOperational()) {
             T retrievedData = innerManager.getData(key, typeOfT);
-            cachingDataManager.writeData(convertToCacheKey(key), retrievedData, typeOfT);
+            cachingDataManager.writeData(key, retrievedData, typeOfT);
             return retrievedData;
         }
 
-        return cachingDataManager.getData(convertToCacheKey(key), typeOfT);
+        return cachingDataManager.getData(key, typeOfT);
     }
 
     /**
@@ -162,8 +161,7 @@ public class CachedDataManager extends JsonDataManager {
      * @param <T> The type of the object.
      */
     protected <T> void writeToCache(DataKey key, T obj, Type typeOfT) {
-        DataKey cacheKey = convertToCacheKey(key);
-        cachingDataManager.writeData(cacheKey, obj, typeOfT);
+        cachingDataManager.writeData(key, obj, typeOfT);
     }
 
     /**
@@ -172,11 +170,6 @@ public class CachedDataManager extends JsonDataManager {
      *            appropriate caching key.
      */
     protected void deleteFromCache(DataKey key) {
-        DataKey cacheKey = convertToCacheKey(key);
-        cachingDataManager.deleteIfExists(cacheKey);
-    }
-
-    private DataKey convertToCacheKey(DataKey key) {
-        return new DataKey(CACHE_DIRECTORY + "/" + key.getType(), key.getId());
+        cachingDataManager.deleteIfExists(key);
     }
 }

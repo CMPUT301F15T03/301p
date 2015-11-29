@@ -39,8 +39,10 @@ import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.TradeApp;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
+import ca.ualberta.cmput301.t03.datamanager.CachedDataManager;
 import ca.ualberta.cmput301.t03.datamanager.DataKey;
 import ca.ualberta.cmput301.t03.datamanager.DataManager;
+import ca.ualberta.cmput301.t03.datamanager.LocalDataManager;
 
 /**
  * Object for the item's photo. Belongs to an item's PhotoGallery.
@@ -53,26 +55,27 @@ import ca.ualberta.cmput301.t03.datamanager.DataManager;
 public class Photo implements Observable, Cloneable {
 
     public static final String type = "Photo";
+
     @Expose
     private UUID photoUUID;
     private Collection<Observer> observers;
     private DataManager dataManager;
+    private LocalDataManager localDataManager;
 
     private Base64Wrapper base64Photo;
     private Bitmap bitmap;
-    private boolean isDownloaded;
 
     public Photo() {
-        isDownloaded = false;
         observers = new ArrayList<>();
         dataManager = TradeApp.getInstance().createDataManager(false);
+        localDataManager = new LocalDataManager(false);
         base64Photo = new Base64Wrapper();
     }
 
     public Photo(Bitmap photo) {
-        isDownloaded = false;
         observers = new ArrayList<>();
         dataManager = TradeApp.getInstance().createDataManager(false);
+        localDataManager = new LocalDataManager(false);
         photoUUID = UUID.randomUUID();
         base64Photo = new Base64Wrapper();
         setPhoto(photo);
@@ -86,7 +89,7 @@ public class Photo implements Observable, Cloneable {
      * @return true if the photo has been downloaded, false if not
      */
     public boolean isDownloaded() {
-        return this.isDownloaded;
+        return localDataManager.keyExists((new DataKey(Photo.type, photoUUID.toString())));
     }
 
     /**
@@ -96,7 +99,7 @@ public class Photo implements Observable, Cloneable {
      * For an ImageView, call setBitmap(Photo.getPhoto()); -- i think
      */
     public void downloadPhoto(Boolean force) {
-        if (!isDownloaded) {
+        if (!isDownloaded()) {
             Configuration config = new Configuration(TradeApp.getContext());
             if (!force && !config.isDownloadImagesEnabled()) {
                 bitmap = ((BitmapDrawable) TradeApp.getContext().getResources().getDrawable(R.drawable.photo_available_for_download)).getBitmap();
@@ -105,7 +108,6 @@ public class Photo implements Observable, Cloneable {
             else {
                 try {
                     base64Photo = dataManager.getData(new DataKey(Photo.type, photoUUID.toString()), Base64Wrapper.class);
-                    isDownloaded = true;
                     byte[] bytes = Base64.decode(base64Photo.getContents(), Base64.NO_WRAP);
                     bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                 } catch (IOException e) {
@@ -115,6 +117,18 @@ public class Photo implements Observable, Cloneable {
                 }
             }
             notifyObservers();
+        }
+
+        else {
+            try {
+                base64Photo = localDataManager.getData(
+                        new DataKey(Photo.type, photoUUID.toString()),
+                        Base64Wrapper.class);
+                byte[] bytes = Base64.decode(base64Photo.getContents(), Base64.NO_WRAP);
+                bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -153,7 +167,6 @@ public class Photo implements Observable, Cloneable {
         base64Photo.setContents(Base64.encodeToString(stream.toByteArray(), Base64.NO_WRAP));
         byte[] bytes = Base64.decode(base64Photo.getContents(), Base64.NO_WRAP);
         bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-        isDownloaded = true;
 
         try {
             dataManager.writeData(new DataKey(Photo.type, photoUUID.toString()), base64Photo, Base64Wrapper.class);
@@ -231,13 +244,15 @@ public class Photo implements Observable, Cloneable {
 
     @Override
     public Object clone() throws CloneNotSupportedException {
-        Photo p = (Photo) super.clone();
-
+//        Photo p = (Photo) super.clone();
+//        p.clearObservers();
         Bitmap bitCopy= Bitmap.createBitmap(getPhoto());
-        p.setPhoto(bitCopy);
-        p.photoUUID = UUID.randomUUID();
-        p.clearObservers();
+        Photo p = new Photo(bitCopy);
 
         return p;
+    }
+
+    public UUID getPhotoUUID() {
+        return photoUUID;
     }
 }

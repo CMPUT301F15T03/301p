@@ -22,10 +22,12 @@ package ca.ualberta.cmput301.t03.trading;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +47,7 @@ import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.common.TileBuilder;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.inventory.EnhancedSimpleAdapter;
+import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeModificationException;
 
 /**
  * View that shows the history of all past and pending trades for a user. Will observe the users
@@ -84,11 +87,30 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer {
         super.onCreate(savedInstanceState);
         tradeTilePositionMap = new HashMap<Integer, UUID>();
 
+        tradeTilePositionMap = new HashMap<>();
+
         AsyncTask worker = new AsyncTask() {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                // TODO show loading indicator
+            }
+
             @Override
             protected Object doInBackground(Object[] params) {
                 try {
                     model = PrimaryUser.getInstance().getTradeList();
+                    for (Trade trade : model.getTradesAsList()) {
+                        if (!trade.isPublic()) {
+                            try {
+                                model.remove(trade);
+                            } catch (IllegalTradeModificationException e) {
+                                Log.e("trade", "Non-public trades cannot be removed from trade lists");
+                            }
+                        }
+                    }
+                    model.commitChanges();
                     TileBuilder tileBuilder = new TileBuilder(getResources());
                     tradeTiles = tileBuilder.buildTradeTiles(model, tradeTilePositionMap);
                 } catch (IOException e) {
@@ -105,8 +127,9 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                    setupListView(getContext());
-                    observeModel();
+                        // todo hide loading indicator
+                        setupListView(getContext());
+                        observeModel();
                     }
                 });
             }
@@ -137,7 +160,30 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Snackbar.make(getView(), "inspect/review trade unimplemented", Snackbar.LENGTH_SHORT).show();
+                final UUID tradeUUID = tradeTilePositionMap.get(position);
+
+                AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>() {
+                    @Override
+                    protected Boolean doInBackground(Void[] params) {
+                        if (model.getTrades().get(tradeUUID).getState().isClosed()) {
+                            return Boolean.FALSE;
+                        } else {
+                            return Boolean.TRUE;
+                        }
+                    }
+
+                    @Override
+                    protected void onPostExecute(Boolean shouldReview) {
+                        if (shouldReview) {
+                            Intent intent = new Intent(getContext(), TradeOfferReviewActivity.class);
+                            intent.putExtra("TRADE_UUID", tradeUUID);
+                            startActivity(intent);
+                        } else {
+                            Snackbar.make(getView(), "trade review of accepted|declined trades unimplemented", Snackbar.LENGTH_SHORT).show();
+                        }
+                    }
+                };
+                task.execute();
             }
         });
     }

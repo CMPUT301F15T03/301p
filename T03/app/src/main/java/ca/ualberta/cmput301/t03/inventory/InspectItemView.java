@@ -92,20 +92,20 @@ public class InspectItemView extends AppCompatActivity {
             throw new RuntimeException("OFFLINE CANT DO THIS I GUESS");
         }
 
-        AsyncTask<Item, Void, Item> task = new AsyncTask<Item, Void, Item>() {
+        AsyncTask<String, Void, Item> task = new AsyncTask<String, Void, Item>() {
             @Override
-            protected Item doInBackground(Item... params) {
-                Item im = params[0];
+            protected Item doInBackground(String... params) {
+                String im = params[0];
 
                 try {
-                    itemModel = user.getInventory().getItem(im.getUuid());
+                    itemModel = user.getInventory().getItem(im);
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (ServiceNotAvailableException e) {
                     e.printStackTrace();
                 }
 
-                return im;
+                return itemModel;
             }
 
             @Override
@@ -115,7 +115,7 @@ public class InspectItemView extends AppCompatActivity {
             }
         };
 
-        task.execute(itemModel);
+        task.execute(itemUUID);
 
     }
 

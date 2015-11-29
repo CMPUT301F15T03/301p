@@ -30,11 +30,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.inventory.Item;
 import ca.ualberta.cmput301.t03.photo.Photo;
 import ca.ualberta.cmput301.t03.trading.Trade;
 import ca.ualberta.cmput301.t03.trading.TradeList;
+import ca.ualberta.cmput301.t03.trading.TradeState;
 
 public class TileBuilder {
     private Resources resources;
@@ -70,9 +72,12 @@ public class TileBuilder {
 
         int i = 0;
         tradeTilePositionMap.clear();
+        String currentUsername = PrimaryUser.getInstance().getUsername();
         for (Trade trade : trades.getTradesAsList()) {
             Item mainItem = trade.getOwnersItems().get(0);
             List<Photo> mainItemPhotos = mainItem.getPhotoList().getPhotos();
+            Boolean currentUserIsOwner = trade.getOwner().getUsername().equals(currentUsername);
+            String otherUser = currentUserIsOwner ? trade.getBorrower().getUsername() : trade.getOwner().getUsername();
 
             HashMap<String, Object> hm = new HashMap<String, Object>();
             hm.put("tradeTileMainItemCategory", mainItem.getItemCategory());
@@ -82,11 +87,12 @@ public class TileBuilder {
                 hm.put("tradeTileMainItemImage", ((BitmapDrawable) resources.getDrawable(R.drawable.photo_unavailable)).getBitmap());
             }
             hm.put("tradeTileMainItemName", mainItem.getItemName());
-            hm.put("tradeTileOtherUser", trade.getBorrower().getUsername());
-            hm.put("tradeTileTradeState", trade.getBorrower().getUsername());
+            hm.put("tradeTileOtherUser", otherUser);
+            hm.put("tradeTileTradeState", trade.getState().getInterfaceString(currentUserIsOwner));
 
             tiles.add(hm);
             tradeTilePositionMap.put(i, trade.getTradeUUID());
+            i++;
         }
 
         return tiles;

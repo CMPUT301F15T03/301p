@@ -209,6 +209,15 @@ public class Trade implements Observable {
     }
 
     /**
+     * @return True if this Trade is public. Returns false otherwise.
+     *
+     * @see {@link TradeState#isPublic}
+     */
+    public Boolean isPublic() {
+        return getState().isPublic();
+    }
+
+    /**
      * Gets the current state of this Trade
      *
      * @return {@link TradeState} of this Trade

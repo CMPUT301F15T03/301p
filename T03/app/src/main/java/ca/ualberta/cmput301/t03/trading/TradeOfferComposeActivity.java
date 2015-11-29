@@ -21,17 +21,22 @@
 package ca.ualberta.cmput301.t03.trading;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.parceler.Parcels;
 
@@ -44,6 +49,8 @@ import java.util.UUID;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.common.TileBuilder;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
+import ca.ualberta.cmput301.t03.filters.FilterCriteria;
+import ca.ualberta.cmput301.t03.filters.item_criteria.StringQueryFilterCriteria;
 import ca.ualberta.cmput301.t03.inventory.EnhancedSimpleAdapter;
 import ca.ualberta.cmput301.t03.inventory.Item;
 import ca.ualberta.cmput301.t03.user.User;
@@ -115,6 +122,7 @@ public class TradeOfferComposeActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     throw new RuntimeException("Primary User failed to get TradeList");
                 } catch (ServiceNotAvailableException e) {
+                    // todo make a snackbar toast instead of runtime exception
                     throw new RuntimeException("App is offline.", e);
                 }
                 controller = new TradeOfferComposeController(c, model);
@@ -141,6 +149,14 @@ public class TradeOfferComposeActivity extends AppCompatActivity {
 
                         borrowerItemAdapter = new EnhancedSimpleAdapter(c, borrowerItemTiles, R.layout.fragment_item_tile, from, to);
                         borrowerItemListView.setAdapter(borrowerItemAdapter);
+
+                        addItemButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Snackbar.make(v, "add item to trade offer unimplemented", Snackbar.LENGTH_SHORT).show();
+                                createAddTradeItemDialog().show();
+                            }
+                        });
 
                         ownerUsername.setText(model.getOwner().getUsername());
                         offerButton.setOnClickListener(new View.OnClickListener() {
@@ -210,5 +226,43 @@ public class TradeOfferComposeActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private AlertDialog createAddTradeItemDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View dialogContent = View.inflate(this, R.layout.content_add_search_dialog, null);
+
+        //builder.setView(dialogContent); //todo replace with layout
+        builder.setTitle("Add Trade Item");
+        builder.setCancelable(false);
+        builder.setNegativeButton("Cancel", null);
+        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //todo Add Trade Entity item(s) to actual trade.
+            }
+        });
+
+
+        ArrayList<String> inventoryItems = new ArrayList<String>();
+
+        ArrayList<Item> theItems = new ArrayList<>();
+        //todo Async grab this list
+//        ArrayList<Item> theItems = model.getBorrowersItems();
+
+
+        for (Item item : theItems) {
+            inventoryItems.add(item.getItemName());
+        }
+        final CharSequence[] tradableItems = inventoryItems.toArray(new String[inventoryItems.size()]);
+        builder.setItems(tradableItems, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                String selectedText = tradableItems[item].toString();
+                //todo Highlight Item(s) Add Item to Trade Entity
+            }
+        });
+
+        AlertDialog d = builder.create();
+        return d;
     }
 }
