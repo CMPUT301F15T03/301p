@@ -77,16 +77,19 @@ public class Inventory implements Filterable<Item>, Observable, Observer, Adapta
      */
     public HashMap<UUID, Item> getItems() {
         LinkedHashMap<UUID, Item> filteredItems = new LinkedHashMap<>();
-        ArrayList<Item> itemList = new ArrayList<Item>();
         for (Item item: this.items){
-            itemList.add(item);
-        }
-        ArrayList<Item> filteredList = getFilteredItems(itemList, this.filters);
-        for (Item item: filteredList){
             filteredItems.put(item.getUuid(), item);
         }
+//        ArrayList<Item> filteredList = getFilteredItems(itemList, this.filters);
+//        for (Item item: filteredList){
+//            filteredItems.put(item.getUuid(), item);
+//        }
 
         return filteredItems;
+    }
+
+    public Item get(int index){
+        return items.get(index);
     }
 
     /**
