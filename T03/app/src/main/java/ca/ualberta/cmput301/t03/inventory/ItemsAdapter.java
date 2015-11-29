@@ -31,28 +31,39 @@ import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-public class ItemsAdapter<T extends Adaptable> extends ArrayAdapter<Item> {
+public class ItemsAdapter<T extends Inventory> extends ArrayAdapter<Item> {
 
-    private T mInventory;
+    private Inventory mInventory;
     private Context mContext;
 
     public List<Item> getItems(){
-        try {
-            return mInventory.getAdaptableItems();
-        } catch (IOException e) {
-            return new ArrayList<>();
-        } catch (ServiceNotAvailableException e) {
-            return new ArrayList<>(); //fixme this does not belong
-        }
+//        try {
+        return mInventory.getAdaptableItems();
+//        } catch (IOException e) {
+//            return new ArrayList<>();
+//        } catch (ServiceNotAvailableException e) {
+//            return new ArrayList<>(); //fixme this does not belong
+//        }
     }
 
-    public ItemsAdapter(Context context, T inventory) {
+    public ItemsAdapter(Context context, Inventory inventory) {
         super(context, 0);
         mInventory = inventory;
         mContext = context;
 
 
         addAll(getItems());
+    }
+
+    public ItemsAdapter(Context context, ArrayList<Item> items){
+        this(context, new Inventory());
+
+        Inventory inventory = new Inventory();
+        for (Item i: items){
+            inventory.addItem(i);
+        }
+
+        notifyUpdated(inventory);
     }
 
     /**
@@ -93,7 +104,7 @@ public class ItemsAdapter<T extends Adaptable> extends ArrayAdapter<Item> {
     }
 
 
-    public void notifyUpdated(T model) {
+    public void notifyUpdated(Inventory model) {
 
         mInventory = model;
         clear();
