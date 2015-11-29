@@ -24,6 +24,7 @@ import com.google.gson.annotations.Expose;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 import ca.ualberta.cmput301.t03.filters.Filter;
@@ -38,7 +39,7 @@ import ca.ualberta.cmput301.t03.inventory.Item;
  * User which owns the friendslist. When a user receives an update from its friendslist, the data
  * is written to the local index and the remote index.
  */
-public class FriendsList implements Observable, Filterable<Item> {
+public class FriendsList implements Observable, Filterable<Item>, Iterable<User> {
 
     public final static String type = "FriendsList";
 
@@ -166,7 +167,7 @@ public class FriendsList implements Observable, Filterable<Item> {
      * @param filter the filter you wish to apply
      */
     @Override
-    public void addFilter(Filter filter) {
+    public void addFilter(FilterCriteria filter) {
         throw new UnsupportedOperationException();
     }
 
@@ -176,7 +177,7 @@ public class FriendsList implements Observable, Filterable<Item> {
      * @param filter the filter you wish to remove
      */
     @Override
-    public void removeFilter(Filter filter) {
+    public void removeFilter(String filterName) {
         throw new UnsupportedOperationException();
     }
 
@@ -196,6 +197,11 @@ public class FriendsList implements Observable, Filterable<Item> {
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    public List<FilterCriteria> getFilters() {
+        throw new UnsupportedOperationException();
+    }
+
     /**
      * Get the number of friends.
      */
@@ -205,5 +211,10 @@ public class FriendsList implements Observable, Filterable<Item> {
 
     public HashSet<Observer> getObservers() {
         return observers;
+    }
+
+    @Override
+    public Iterator<User> iterator() {
+        return friends.iterator();
     }
 }

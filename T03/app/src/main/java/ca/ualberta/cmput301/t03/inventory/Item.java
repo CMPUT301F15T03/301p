@@ -27,6 +27,7 @@ import org.parceler.Transient;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.UUID;
 
 import ca.ualberta.cmput301.t03.Observable;
@@ -38,7 +39,7 @@ import ca.ualberta.cmput301.t03.photo.PhotoGallery;
  * Model for an Item, Is owned by an inventory which is owned by a user.
  */
 @Parcel
-public class Item implements Observer, Observable, Cloneable {
+public class Item implements Observer, Observable, Cloneable, Comparable<Item> {
 
     @Transient
     @Expose
@@ -316,5 +317,10 @@ public class Item implements Observer, Observable, Cloneable {
 //
 //        getPhotoList().addPhoto();
 
+    }
+
+    @Override
+    public int compareTo(Item another) {
+        return getItemName().compareTo(another.getItemName());
     }
 }

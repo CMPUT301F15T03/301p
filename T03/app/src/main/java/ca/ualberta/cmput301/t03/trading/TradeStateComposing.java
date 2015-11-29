@@ -89,7 +89,7 @@ public class TradeStateComposing implements TradeState {
         } catch (IllegalTradeModificationException e) {
             Log.e("trade", e.getMessage());
         } catch (ServiceNotAvailableException e) {
-            // todo snackbar toast saying we're offline
+            // todo snackbar toast saying we're offline?
         } catch (IOException e) {
             // todo handle this exception
         }
