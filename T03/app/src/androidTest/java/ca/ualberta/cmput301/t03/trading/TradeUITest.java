@@ -758,6 +758,6 @@ public class TradeUITest
 //
 //        while (NetworkManager.deviceIsOffline());
 //        assertTrue(tradeManager.exists(trade));
-//        assertTrue(tradeManager.isOpen(trade));
+//        assertTrue(tradeManager.isPending(trade));
     }
 }
