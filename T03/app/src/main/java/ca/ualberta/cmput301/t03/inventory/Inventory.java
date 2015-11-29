@@ -54,6 +54,7 @@ public class Inventory implements Filterable<Item>, Observable, Observer, Adapta
     @Transient
     private HashSet<Observer> observers;
 
+    @Expose
     private ArrayList<FilterCriteria> filters;
 
     /**

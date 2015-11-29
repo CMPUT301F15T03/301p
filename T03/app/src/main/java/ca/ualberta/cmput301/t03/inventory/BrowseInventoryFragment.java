@@ -258,6 +258,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer, Swipe
                     }
                 }
                 Spinner spinner = (Spinner) dialogContent.findViewById(R.id.itemFilterCategory);
+                
                 String categoryType = spinner.getSelectedItem().toString();
                 model.addFilter(new CategoryFilterCriteria(categoryType));
                 Toast.makeText(getContext(), "Category Filter: '"+categoryType+"'", Toast.LENGTH_SHORT).show();
@@ -298,6 +299,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer, Swipe
             public void onClick(DialogInterface dialog, int item) {
                 String selectedText = fNames[item].toString();
                 model.removeFilter(selectedText);
+                model.commitChanges();
                 Toast.makeText(getContext(), "Textual Filter: '" + selectedText + "' Removed", Toast.LENGTH_SHORT).show();
             }
         });
