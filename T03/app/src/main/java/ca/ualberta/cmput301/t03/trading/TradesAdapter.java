@@ -79,7 +79,7 @@ public class TradesAdapter<T extends TradeList> extends ArrayAdapter<Trade> {
 
         Boolean currentUserIsOwner = false;
         Trade trade = getItem(position);
-        Item mainItem = trade.getOwnersItems().get(0);
+        Item mainItem = trade.getOwnersItems().getItems().get(0);
 
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
