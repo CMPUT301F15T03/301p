@@ -37,6 +37,7 @@ import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.common.PrimaryUserHelper;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
+import ca.ualberta.cmput301.t03.inventory.Inventory;
 import ca.ualberta.cmput301.t03.inventory.Item;
 import ca.ualberta.cmput301.t03.trading.Trade;
 import ca.ualberta.cmput301.t03.trading.TradeStateAccepted;
@@ -186,8 +187,8 @@ public class TradeUITest
             assertEquals(TradeStateOffered.class, trade.getState().getClass());
 
             assertEquals(1, trade.getOwnersItems().size());
-            assertNotNull(trade.getOwnersItems().get(0));
-            assertEquals(ownerItem.getItemName(), trade.getOwnersItems().get(0).getItemName());
+            assertNotNull(trade.getOwnersItems().getItems().get(0));
+            assertEquals(ownerItem.getItemName(), trade.getOwnersItems().getItems().get(0).getItemName());
         } catch (IOException e) {
             fail("IOException in testOfferTradeWithFriend");
         }
@@ -210,10 +211,10 @@ public class TradeUITest
         } catch (IOException e) {
             e.printStackTrace();
         }
-        ArrayList<Item> borrowerItems = new ArrayList<Item>() {{
-            add(userItem);
+        Inventory borrowerItems = new Inventory() {{
+            addItem(userItem);
         }};
-        Trade trade = new Trade(borrower, user, borrowerItems, new ArrayList<Item>(), mContext);
+        Trade trade = new Trade(borrower, user, borrowerItems, new Inventory(), mContext);
         try {
             trade.offer();
         } catch (IllegalTradeStateTransition e) {
@@ -273,11 +274,10 @@ public class TradeUITest
             assertTrue("IOException in testUserBrowsesTradesInvolvingThem", Boolean.FALSE);
         }
 
-        ArrayList<Item> borrowerItems = new ArrayList<Item>() {{
-            add(userItem);
+        Inventory borrowerItems = new Inventory() {{
+            addItem(userItem);
         }};
-
-        Trade trade = new Trade(borrower, user, borrowerItems, new ArrayList<Item>(), mContext);
+        Trade trade = new Trade(borrower, user, borrowerItems, new Inventory(), mContext);
         try {
             trade.offer();
         } catch (IllegalTradeStateTransition e) {
@@ -348,10 +348,10 @@ public class TradeUITest
         } catch (IOException e) {
             e.printStackTrace();
         }
-        ArrayList<Item> borrowerItems = new ArrayList<Item>() {{
-            add(userItem);
+        Inventory borrowerItems = new Inventory() {{
+            addItem(userItem);
         }};
-        Trade trade = new Trade(borrower, user, borrowerItems, new ArrayList<Item>(), mContext);
+        Trade trade = new Trade(borrower, user, borrowerItems, new Inventory(), mContext);
         try {
             trade.offer();
         } catch (IllegalTradeStateTransition e) {
@@ -403,10 +403,10 @@ public class TradeUITest
         } catch (IOException e) {
             e.printStackTrace();
         }
-        ArrayList<Item> borrowerItems = new ArrayList<Item>() {{
-            add(userItem);
+       Inventory borrowerItems = new Inventory() {{
+            addItem(userItem);
         }};
-        Trade trade = new Trade(borrower, user, borrowerItems, new ArrayList<Item>(), mContext);
+        Trade trade = new Trade(borrower, user, borrowerItems, new Inventory(), mContext);
         try {
             trade.offer();
         } catch (IllegalTradeStateTransition e) {
@@ -533,10 +533,10 @@ public class TradeUITest
         } catch (IOException e) {
             e.printStackTrace();
         }
-        ArrayList<Item> borrowerItems = new ArrayList<Item>() {{
-            add(userItem);
+       Inventory borrowerItems = new Inventory() {{
+            addItem(userItem);
         }};
-        Trade trade = new Trade(borrower, user, borrowerItems, new ArrayList<Item>(), mContext);
+        Trade trade = new Trade(borrower, user, borrowerItems, new Inventory(), mContext);
         try {
             trade.offer();
         } catch (IllegalTradeStateTransition e) {
@@ -637,8 +637,8 @@ public class TradeUITest
             assertEquals(owner.getUsername(), trade.getOwner().getUsername());
             assertEquals(TradeStateCancelled.class, trade.getState().getClass());
             assertEquals(1, trade.getOwnersItems().size());
-            assertNotNull(trade.getOwnersItems().get(0));
-            assertEquals(ownerItem.getItemName(), trade.getOwnersItems().get(0));
+            assertNotNull(trade.getOwnersItems().getItems().get(0));
+            assertEquals(ownerItem.getItemName(), trade.getOwnersItems().getItems().get(0));
         } catch (IOException e) {
             assertTrue("IOException in testOfferTradeWithFriend", Boolean.FALSE);
         }
@@ -661,10 +661,10 @@ public class TradeUITest
         } catch (IOException e) {
             e.printStackTrace();
         }
-        ArrayList<Item> borrowerItems = new ArrayList<Item>() {{
-            add(userItem);
+       Inventory borrowerItems = new Inventory() {{
+            addItem(userItem);
         }};
-        Trade trade = new Trade(borrower, user, borrowerItems, new ArrayList<Item>(), mContext);
+        Trade trade = new Trade(borrower, user, borrowerItems, new Inventory(), mContext);
         try {
             trade.offer();
         } catch (IllegalTradeStateTransition e) {
@@ -794,24 +794,32 @@ public class TradeUITest
             assertTrue("IOException in testUserBrowsesTradesInvolvingThem", Boolean.FALSE);
         }
 
-        ArrayList<Item> borrowersItems = new ArrayList<Item>() {{
-            add(userItem);
-        }};
-        ArrayList<Item> ownersItems = new ArrayList<Item>() {{
-            add(userItem2);
-        }};
-
         // create trades in all possible states with the user as owner or borrower
         // states: (in progress, accepted, declined, completed)
-        Trade userIsOwnerInProgressTrade = new Trade(userFriend1, user, borrowersItems, ownersItems, mContext);
-        Trade userIsOwnerDeclinedTrade = new Trade(userFriend1, user, borrowersItems, ownersItems, mContext);
-        Trade userIsOwnerCompletedTrade = new Trade(userFriend1, user, borrowersItems, ownersItems, mContext);
+        Inventory borrowersItems = new Inventory() {{
+            addItem(userItem);
+        }};
+        Inventory ownersItems = new Inventory() {{
+            addItem(userItem);
+        }};
 
-        Trade userIsBorrowerInProgressTrade = new Trade(user, userFriend1, borrowersItems, ownersItems, mContext);
-        Trade userIsBorrowerDeclinedTrade = new Trade(user, userFriend1, borrowersItems, ownersItems, mContext);
-        Trade userIsBorrowerCompletedTrade = new Trade(user, userFriend1, borrowersItems, ownersItems, mContext);
+        Trade userIsOwnerInProgressTrade, userIsOwnerDeclinedTrade, userIsOwnerCompletedTrade,
+                userIsBorrowerInProgressTrade, userIsBorrowerDeclinedTrade,
+                userIsBorrowerCompletedTrade,  userNotInvolvedTrade;
+        List<Trade> userTrades;
 
+        ArrayList<UUID> expectedTradeUUIDList = new ArrayList<>();
+        ArrayList<UUID> resultingUUIDList = new ArrayList<>();
+        UUID userNotInvolvedUUID = UUID.randomUUID();
         try {
+            userIsOwnerInProgressTrade = new Trade(userFriend1, user, borrowersItems, ownersItems, mContext);
+            userIsOwnerDeclinedTrade = new Trade(userFriend1, user, borrowersItems, ownersItems, mContext);
+            userIsOwnerCompletedTrade = new Trade(userFriend1, user, borrowersItems, ownersItems, mContext);
+
+            userIsBorrowerInProgressTrade = new Trade(user, userFriend1, borrowersItems, ownersItems, mContext);
+            userIsBorrowerDeclinedTrade = new Trade(user, userFriend1, borrowersItems, ownersItems, mContext);
+            userIsBorrowerCompletedTrade = new Trade(user, userFriend1, borrowersItems, ownersItems, mContext);
+
             // offer all the trades first, otherwise you run into race conditions
             userIsOwnerInProgressTrade.offer();
             userIsOwnerDeclinedTrade.offer();
@@ -831,50 +839,40 @@ public class TradeUITest
             // TODO completed trade is yet to be implemented
             //userIsOwnerCompletedTrade.completed();
             //userIsBorrowerCompletedTrade.completed();
-        } catch (IllegalTradeStateTransition e) {
-            assertFalse("IllegalTradeStateTransition in testUserBrowsesTradesInvolvingThem", true);
-        }
 
-        List<Trade> userTrades = Arrays.asList(userIsOwnerInProgressTrade,
-                userIsOwnerDeclinedTrade, userIsOwnerCompletedTrade,
-                userIsBorrowerInProgressTrade,
-                userIsBorrowerDeclinedTrade, userIsBorrowerCompletedTrade);
+            userTrades = Arrays.asList(userIsOwnerInProgressTrade,
+                    userIsOwnerDeclinedTrade, userIsOwnerCompletedTrade,
+                    userIsBorrowerInProgressTrade,
+                    userIsBorrowerDeclinedTrade, userIsBorrowerCompletedTrade);
 
-        ArrayList<UUID> expectedTradeUUIDList = new ArrayList<>();
-        for (Trade trade: userTrades) {
-            expectedTradeUUIDList.add(trade.getTradeUUID());
-        }
+            for (Trade trade: userTrades) {
+                expectedTradeUUIDList.add(trade.getTradeUUID());
+            }
 
-        // Create trades which do not involve the user or shouldn't be seen in the Trades History
-        Trade userNotInvolvedTrade = new Trade(userFriend1, userFriend2, borrowersItems, ownersItems, mContext);
+            // Create trades which do not involve the user or shouldn't be seen in the Trades History
+            userNotInvolvedTrade = new Trade(userFriend1, userFriend2, borrowersItems, ownersItems, mContext);
+            userNotInvolvedUUID = userNotInvolvedTrade.getTradeUUID();
 
-        UUID userNotInvolvedUUID = userNotInvolvedTrade.getTradeUUID();
-
-        // assert some data conditions
-        ArrayList<UUID> resultingUUIDList = new ArrayList<>();
-        try {
+            // finished setup, now assert some data conditions
             user.getTradeList().addAll(userTrades);
             userFriend1.getTradeList().addTrade(userNotInvolvedTrade);
             List<Trade> tradeList = user.getTradeList().getTradesAsList();
             for (Trade trade: tradeList) {
                 resultingUUIDList.add(trade.getTradeUUID());
             }
-        } catch(IOException e) {
-            assertTrue("IOException in testUserBrowsesTradesInvolvingThem", Boolean.FALSE);
-        } catch(ServiceNotAvailableException e) {
-            assertTrue("ServiceNotAvailableException in testUserBrowsesTradesInvolvingThem", Boolean.FALSE);
-        }
 
-        // assert the above worked
-        try {
             assertEquals(6, user.getTradeList().getTradesAsList().size());
             assertEquals(expectedTradeUUIDList, resultingUUIDList);
             assertFalse(resultingUUIDList.contains(userNotInvolvedUUID));
-        } catch (IOException e ) {
+
+        } catch (ServiceNotAvailableException e) {
+            assertTrue("ServiceNotAvailableException in testUserBrowsesTradesInvolvingThem", false);
+        } catch (IllegalTradeStateTransition e) {
+            assertFalse("IllegalTradeStateTransition in testUserBrowsesTradesInvolvingThem", true);
+        } catch(IOException e) {
             assertTrue("IOException in testUserBrowsesTradesInvolvingThem", Boolean.FALSE);
-        } catch (ServiceNotAvailableException e ) {
-            assertTrue("ServiceNotAvailableException in testUserBrowsesTradesInvolvingThem", Boolean.FALSE);
         }
+
 
         /**
          * Open trade history

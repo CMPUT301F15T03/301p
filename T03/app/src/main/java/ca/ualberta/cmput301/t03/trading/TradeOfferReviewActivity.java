@@ -33,23 +33,23 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
 
+import ca.ualberta.cmput301.t03.Observable;
+import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.common.Preconditions;
-import ca.ualberta.cmput301.t03.common.TileBuilder;
+import ca.ualberta.cmput301.t03.TradeApp;
 import ca.ualberta.cmput301.t03.common.exceptions.ExceptionUtils;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
+import ca.ualberta.cmput301.t03.inventory.Inventory;
 import ca.ualberta.cmput301.t03.inventory.Item;
 import ca.ualberta.cmput301.t03.inventory.ItemsAdapter;
 
@@ -60,7 +60,7 @@ import ca.ualberta.cmput301.t03.inventory.ItemsAdapter;
  * <p>
  * On interaction, it delegates to a {@link TradeOfferReviewController}.
  */
-public class TradeOfferReviewActivity extends AppCompatActivity {
+public class TradeOfferReviewActivity extends AppCompatActivity implements Observer {
 
     private static final Integer EMAIL_SENT = 1;
 
@@ -86,6 +86,9 @@ public class TradeOfferReviewActivity extends AppCompatActivity {
     private ItemsAdapter ownerItemAdapter;
     private ItemsAdapter borrowerItemAdapter;
 
+    private Inventory ownerItems;
+    private Inventory borrowerItems;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,42 +113,60 @@ public class TradeOfferReviewActivity extends AppCompatActivity {
         populateLayoutWithData(tradeUUID);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (ownerItems != null){
+            ownerItems.removeObserver(this);
+        }
+        if (borrowerItems != null){
+            borrowerItems.removeObserver(this);
+        }
+    }
+
     private void populateLayoutWithData(final UUID tradeUUID) {
 
 
-        AsyncTask<Void, Void, Context> task = new AsyncTask<Void, Void, Context>() {
-            private ArrayList<Item> owneritems;
-            private ArrayList<Item> borroweritems;
-
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+            
             @Override
-            protected Context doInBackground(Void[] params) {
+            protected Void doInBackground(Void[] params) {
                 try {
                     model = PrimaryUser.getInstance().getTradeList().getTrades().get(tradeUUID);
                 } catch (IOException e) {
-                    Log.e("tradereview", e.getMessage());
-                    throw new RuntimeException();
+                    ExceptionUtils.toastErrorWithNetwork();
                 } catch (ServiceNotAvailableException e) {
-                    /**
-                     * todo do something reasonable when offline and clicking on a trade, maybe go back
-                     */
-                    Log.e("tradereview", "Trade Review attempted while offline");
-                    throw new RuntimeException("Trade Review attempted while offline");
+                    ExceptionUtils.toastLong("Trade operations are unavailable offline");
+                    activity.finish();
                 }
 
-                TileBuilder tileBuilder = new TileBuilder(getResources());
 
-                owneritems = model.getOwnersItems();
-                borroweritems = model.getBorrowersItems();
+                if (model == null) {
+                    ExceptionUtils.toastLong("Failed to fetch trade info");
+                    activity.finish();
+                }
+                ownerItems = model.getOwnersItems();
+                ownerItems.addObserver(TradeOfferReviewActivity.this);
+
+
+                try {
+                    borrowerItems = model.getBorrowersItems();
+                    borrowerItems.addObserver(TradeOfferReviewActivity.this);
+                } catch (ServiceNotAvailableException e) {
+                    ExceptionUtils.toastLong("Failed to get borrowers items: app is offline");
+                    activity.finish();
+                }
+
 
                 controller = new TradeOfferReviewController(getBaseContext(), model);
 
                 currentUsername = PrimaryUser.getInstance().getUsername();
 
-                return getBaseContext();
+                return null;
             }
 
             @Override
-            protected void onPostExecute(final Context c) {
+            protected void onPostExecute(Void o) {
                 Boolean currentUserOwnsMainItem = model.getOwner().getUsername().equals(currentUsername);
                 if (currentUserOwnsMainItem) {
                     tradeDirectionFromTo.setText("from");
@@ -161,15 +182,16 @@ public class TradeOfferReviewActivity extends AppCompatActivity {
                                 Boolean emailUsers = false;
                                 @Override
                                 protected Object doInBackground(Object[] params) {
-                                    controller.acceptTrade();
                                     try {
+                                        controller.acceptTrade();
                                         emailBorrower = model.getBorrower().getProfile().getEmail();
                                         emailOwner = model.getOwner().getProfile().getEmail();
                                         emailUsers = true;
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     } catch (ServiceNotAvailableException e) {
-                                        e.printStackTrace();
+                                        ExceptionUtils.toastLong("Failed to accept trade: app is offline");
+                                        activity.finish();
                                     }
                                     return null;
                                 }
@@ -199,7 +221,6 @@ public class TradeOfferReviewActivity extends AppCompatActivity {
                                 }
                             };
                             task.execute();
-//                            activity.finish();
                         }
                     });
                     tradeReviewDecline.setOnClickListener(new View.OnClickListener() {
@@ -208,7 +229,11 @@ public class TradeOfferReviewActivity extends AppCompatActivity {
                             AsyncTask task = new AsyncTask() {
                                 @Override
                                 protected Object doInBackground(Object[] params) {
-                                    controller.declineTrade();
+                                    try {
+                                        controller.declineTrade();
+                                    } catch (ServiceNotAvailableException e) {
+                                        ExceptionUtils.toastLong("Failed to decline trade: app is offline");
+                                    }
                                     return null;
                                 }
                             };
@@ -219,7 +244,7 @@ public class TradeOfferReviewActivity extends AppCompatActivity {
                     tradeReviewDeclineAndCounterOffer.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Snackbar.make(v, "trade decline&counter-offer unimplemented", Snackbar.LENGTH_SHORT).show();
+                            ExceptionUtils.toastShort("trade decline&counter-offer unimplemented");
                         }
                     });
                 } else {
@@ -232,10 +257,8 @@ public class TradeOfferReviewActivity extends AppCompatActivity {
                     tradeReviewDeclineAndCounterOffer.setVisibility(View.GONE);
                 }
 
-
-
-                ownerItemAdapter = new ItemsAdapter(c, owneritems);
-                borrowerItemAdapter = new ItemsAdapter(c, borroweritems);
+                ownerItemAdapter = new ItemsAdapter(TradeApp.getContext(), ownerItems);
+                borrowerItemAdapter = new ItemsAdapter(TradeApp.getContext(), borrowerItems);
 
                 ownerItemListView.setAdapter(ownerItemAdapter);
                 borrowerItemListView.setAdapter(borrowerItemAdapter);
@@ -272,5 +295,17 @@ public class TradeOfferReviewActivity extends AppCompatActivity {
         if (requestCode == EMAIL_SENT) {
             activity.finish();
         }
+    }
+
+    @Override
+    public void update(final Observable observable) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                borrowerItemAdapter.notifyDataSetChanged();
+                ownerItemAdapter.notifyDataSetChanged();
+            }
+        });
+
     }
 }

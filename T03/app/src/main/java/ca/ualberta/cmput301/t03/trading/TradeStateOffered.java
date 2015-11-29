@@ -21,6 +21,7 @@
 package ca.ualberta.cmput301.t03.trading;
 
 import ca.ualberta.cmput301.t03.common.exceptions.NotImplementedException;
+import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeStateTransition;
 
 /**
@@ -89,7 +90,7 @@ public class TradeStateOffered implements TradeState {
      * @param trade Trade to be accepted.
      */
     @Override
-    public void accept(Trade trade) {
+    public void accept(Trade trade) throws ServiceNotAvailableException {
         trade.setState(new TradeStateAccepted());
     }
 
@@ -99,7 +100,7 @@ public class TradeStateOffered implements TradeState {
      * @param trade Trade to be declined.
      */
     @Override
-    public void decline(Trade trade) {
+    public void decline(Trade trade) throws ServiceNotAvailableException {
         trade.setState(new TradeStateDeclined());
     }
 
