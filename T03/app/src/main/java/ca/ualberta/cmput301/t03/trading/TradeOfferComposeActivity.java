@@ -53,8 +53,10 @@ import ca.ualberta.cmput301.t03.common.exceptions.ExceptionUtils;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.filters.FilterCriteria;
 import ca.ualberta.cmput301.t03.filters.item_criteria.StringQueryFilterCriteria;
-import ca.ualberta.cmput301.t03.inventory.EnhancedSimpleAdapter;
+
+import ca.ualberta.cmput301.t03.inventory.Inventory;
 import ca.ualberta.cmput301.t03.inventory.Item;
+import ca.ualberta.cmput301.t03.inventory.ItemsAdapter;
 import ca.ualberta.cmput301.t03.user.User;
 
 /**
@@ -74,14 +76,9 @@ public class TradeOfferComposeActivity extends AppCompatActivity {
     private Button addItemButton;
 
     private ListView ownerItemListView;
-    private EnhancedSimpleAdapter ownerItemAdapter;
-    private List<HashMap<String, Object>> ownerItemTiles;
-    private HashMap<Integer, UUID> ownerItemTilePositionMap;
-
+    private ItemsAdapter<Inventory> ownerItemAdapter;
     private ListView borrowerItemListView;
-    private EnhancedSimpleAdapter borrowerItemAdapter;
-    private List<HashMap<String, Object>> borrowerItemTiles;
-    private HashMap<Integer, UUID> borrowerItemTilePositionMap;
+    private ItemsAdapter<Inventory> borrowerItemAdapter;
 
 
     /**
@@ -104,12 +101,12 @@ public class TradeOfferComposeActivity extends AppCompatActivity {
         ownerItemListView = (ListView) findViewById(R.id.tradeComposeOwnerItem);
         borrowerItemListView = (ListView) findViewById(R.id.tradeComposeBorrowerItems);
 
-        ownerItemTilePositionMap = new HashMap<>();
-        borrowerItemTilePositionMap = new HashMap<>();
+        AsyncTask worker = new AsyncTask() {
+            ArrayList<Item> borroweritems;
+            ArrayList<Item> owneritems;
 
-        AsyncTask<Void, Void, Boolean> worker = new AsyncTask<Void, Void, Boolean>() {
             @Override
-            protected Boolean doInBackground(Void[] params) {
+            protected Object doInBackground(Object[] params) {
                 try {
                     model = new Trade(Parcels.<User>unwrap(getIntent().getParcelableExtra("trade/compose/borrower")),
                             Parcels.<User>unwrap(getIntent().getParcelableExtra("trade/compose/owner")),
@@ -123,37 +120,31 @@ public class TradeOfferComposeActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     throw new RuntimeException("Primary User failed to get TradeList");
                 } catch (ServiceNotAvailableException e) {
-                    return Boolean.TRUE;
+                    ExceptionUtils.toastLong("Trade failed to create: app is offline");
+                    activity.finish();
                 }
+
                 controller = new TradeOfferComposeController(TradeApp.getContext(), model);
 
-                TileBuilder tileBuilder = new TileBuilder(getResources());
-                ownerItemTiles = tileBuilder.buildItemTiles(model.getOwnersItems(), ownerItemTilePositionMap);
+                owneritems = model.getOwnersItems();
                 try {
-                    borrowerItemTiles = tileBuilder.buildItemTiles(model.getBorrowersItems(), borrowerItemTilePositionMap);
+                    borroweritems = model.getBorrowersItems();
                 } catch (ServiceNotAvailableException e) {
-                    return Boolean.TRUE;
+                    ExceptionUtils.toastLong("Failed to get borrowers items: app is offline");
+                    activity.finish();
                 }
 
                 return Boolean.FALSE;
             }
 
             @Override
-            protected void onPostExecute(Boolean appIsOffline) {
-                super.onPostExecute(appIsOffline);
+            protected void onPostExecute(Object o) {
+                super.onPostExecute(o);
 
-                if (appIsOffline) {
-                    ExceptionUtils.toastOfflineWarning();
-                    activity.finish();
-                }
-
-                String[] from = {"tileViewItemName", "tileViewItemCategory", "tileViewItemImage"};
-                int[] to = {R.id.tileViewItemName, R.id.tileViewItemCategory, R.id.tileViewItemImage};
-
-                ownerItemAdapter = new EnhancedSimpleAdapter(TradeApp.getContext(), ownerItemTiles, R.layout.fragment_item_tile, from, to);
+                ownerItemAdapter = new ItemsAdapter<Inventory>(TradeApp.getContext(), owneritems);
                 ownerItemListView.setAdapter(ownerItemAdapter);
 
-                borrowerItemAdapter = new EnhancedSimpleAdapter(TradeApp.getContext(), borrowerItemTiles, R.layout.fragment_item_tile, from, to);
+                borrowerItemAdapter = new ItemsAdapter<Inventory>(TradeApp.getContext(), borroweritems);
                 borrowerItemListView.setAdapter(borrowerItemAdapter);
 
                 addItemButton.setOnClickListener(new View.OnClickListener() {

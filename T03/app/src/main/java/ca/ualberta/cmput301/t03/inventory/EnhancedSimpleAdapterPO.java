@@ -23,14 +23,14 @@ import android.widget.Checkable;
 
 
 
-public class EnhancedSimpleAdapter extends SimpleAdapter{
+public class EnhancedSimpleAdapterPO extends SimpleAdapter{
     List<? extends Map<String, ?>> map; // if fails to compile, replace with List<HashMap<String, Object>> map
     String[] from;
     int layout;
     int[] to;
     Context context;
     LayoutInflater mInflater;
-    public EnhancedSimpleAdapter(Context context, List<? extends Map<String, ?>> data, // if fails to compile, do the same replacement as above on this line
+    public EnhancedSimpleAdapterPO(Context context, List<? extends Map<String, ?>> data, // if fails to compile, do the same replacement as above on this line
                                  int resource, String[] from, int[] to) {
         super(context, data, resource, from, to);
         layout = resource;

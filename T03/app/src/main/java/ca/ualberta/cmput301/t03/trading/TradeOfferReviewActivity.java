@@ -21,7 +21,9 @@
 package ca.ualberta.cmput301.t03.trading;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -37,17 +39,21 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
+import ca.ualberta.cmput301.t03.common.Preconditions;
 import ca.ualberta.cmput301.t03.TradeApp;
 import ca.ualberta.cmput301.t03.common.TileBuilder;
 import ca.ualberta.cmput301.t03.common.exceptions.ExceptionUtils;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
-import ca.ualberta.cmput301.t03.inventory.EnhancedSimpleAdapter;
+import ca.ualberta.cmput301.t03.inventory.Item;
+import ca.ualberta.cmput301.t03.inventory.ItemsAdapter;
+
 
 /**
  * class TradeOfferReviewActivity is the View for reviewing a trade which
@@ -56,6 +62,8 @@ import ca.ualberta.cmput301.t03.inventory.EnhancedSimpleAdapter;
  * On interaction, it delegates to a {@link TradeOfferReviewController}.
  */
 public class TradeOfferReviewActivity extends AppCompatActivity {
+
+    private static final Integer EMAIL_SENT = 1;
 
     private Activity activity = this;
 
@@ -76,13 +84,9 @@ public class TradeOfferReviewActivity extends AppCompatActivity {
     private Button tradeReviewDecline;
     private Button tradeReviewDeclineAndCounterOffer;
 
-    private EnhancedSimpleAdapter ownerItemAdapter;
-    private List<HashMap<String, Object>> ownerItemTiles;
-    private HashMap<Integer, UUID> ownerItemTilePositionMap;
+    private ItemsAdapter ownerItemAdapter;
+    private ItemsAdapter borrowerItemAdapter;
 
-    private EnhancedSimpleAdapter borrowerItemAdapter;
-    private List<HashMap<String, Object>> borrowerItemTiles;
-    private HashMap<Integer, UUID> borrowerItemTilePositionMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,10 +112,12 @@ public class TradeOfferReviewActivity extends AppCompatActivity {
     }
 
     private void populateLayoutWithData(final UUID tradeUUID) {
-        ownerItemTilePositionMap = new HashMap<>();
-        borrowerItemTilePositionMap = new HashMap<>();
+
 
         AsyncTask task = new AsyncTask() {
+            private ArrayList<Item> owneritems;
+            private ArrayList<Item> borroweritems;
+
             @Override
             protected Object doInBackground(Object[] params) {
                 try {
@@ -127,13 +133,13 @@ public class TradeOfferReviewActivity extends AppCompatActivity {
                     ExceptionUtils.toastLong("Failed to fetch trade info");
                     activity.finish();
                 }
-
-                TileBuilder tileBuilder = new TileBuilder(getResources());
-                ownerItemTiles = tileBuilder.buildItemTiles(model.getOwnersItems(), ownerItemTilePositionMap);
+                
+                owneritems = model.getOwnersItems();
                 try {
-                    borrowerItemTiles = tileBuilder.buildItemTiles(model.getBorrowersItems(), borrowerItemTilePositionMap);
+                    borroweritems = model.getBorrowersItems();
                 } catch (ServiceNotAvailableException e) {
-                    e.printStackTrace();
+                    ExceptionUtils.toastLong("Failed to get borrowers items: app is offline");
+                    activity.finish();
                 }
 
                 controller = new TradeOfferReviewController(getBaseContext(), model);
@@ -155,18 +161,50 @@ public class TradeOfferReviewActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             AsyncTask task = new AsyncTask() {
+                                String emailOwner;
+                                String emailBorrower;
+                                Boolean emailUsers = false;
                                 @Override
                                 protected Object doInBackground(Object[] params) {
                                     try {
                                         controller.acceptTrade();
+                                        emailBorrower = model.getBorrower().getProfile().getEmail();
+                                        emailOwner = model.getOwner().getProfile().getEmail();
+                                        emailUsers = true;
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
                                     } catch (ServiceNotAvailableException e) {
                                         ExceptionUtils.toastLong("Failed to accept trade: app is offline");
+                                        activity.finish();
                                     }
                                     return null;
                                 }
+
+                                @Override
+                                protected void onPostExecute(Object o) {
+                                    if (emailUsers) {
+                                        Intent intent = new Intent(Intent.ACTION_SEND);
+                                        intent.setType("text/rfc822");
+                                        intent.putExtra(Intent.EXTRA_EMAIL,
+                                                new String[]{
+                                                        emailOwner,
+                                                        emailBorrower
+                                                });
+                                        intent.putExtra(Intent.EXTRA_SUBJECT, model.getEmailSubject());
+                                        intent.putExtra(Intent.EXTRA_TEXT, model.getEmailBody());
+                                        try {
+                                            startActivityForResult(intent, EMAIL_SENT);
+                                        } catch (ActivityNotFoundException e) {
+                                            ExceptionUtils.toastLong("No email client installed");
+                                            activity.finish();
+                                        }
+                                    }
+                                    else {
+                                        activity.finish();
+                                    }
+                                }
                             };
                             task.execute();
-                            activity.finish();
                         }
                     });
                     tradeReviewDecline.setOnClickListener(new View.OnClickListener() {
@@ -203,13 +241,12 @@ public class TradeOfferReviewActivity extends AppCompatActivity {
                     tradeReviewDeclineAndCounterOffer.setVisibility(View.GONE);
                 }
 
-                String[] from = {"tileViewItemName", "tileViewItemCategory", "tileViewItemImage"};
-                int[] to = {R.id.tileViewItemName, R.id.tileViewItemCategory, R.id.tileViewItemImage};
 
-                ownerItemAdapter = new EnhancedSimpleAdapter(TradeApp.getContext(), ownerItemTiles, R.layout.fragment_item_tile, from, to);
+
+                ownerItemAdapter = new ItemsAdapter(TradeApp.getContext(), owneritems);
+                borrowerItemAdapter = new ItemsAdapter(TradeApp.getContext(), borroweritems);
+
                 ownerItemListView.setAdapter(ownerItemAdapter);
-
-                borrowerItemAdapter = new EnhancedSimpleAdapter(TradeApp.getContext(), borrowerItemTiles, R.layout.fragment_item_tile, from, to);
                 borrowerItemListView.setAdapter(borrowerItemAdapter);
             }
         };
@@ -237,5 +274,12 @@ public class TradeOfferReviewActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == EMAIL_SENT) {
+            activity.finish();
+        }
     }
 }
