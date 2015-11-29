@@ -52,7 +52,9 @@ import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.filters.FilterCriteria;
 import ca.ualberta.cmput301.t03.filters.item_criteria.StringQueryFilterCriteria;
 
+import ca.ualberta.cmput301.t03.inventory.Inventory;
 import ca.ualberta.cmput301.t03.inventory.Item;
+import ca.ualberta.cmput301.t03.inventory.ItemsAdapter;
 import ca.ualberta.cmput301.t03.user.User;
 
 /**
@@ -72,14 +74,9 @@ public class TradeOfferComposeActivity extends AppCompatActivity {
     private Button addItemButton;
 
     private ListView ownerItemListView;
-//    private EnhancedSimpleAdapter ownerItemAdapter;
-    private List<HashMap<String, Object>> ownerItemTiles;
-    private HashMap<Integer, UUID> ownerItemTilePositionMap;
-
+    private ItemsAdapter<Inventory> ownerItemAdapter;
     private ListView borrowerItemListView;
-//    private EnhancedSimpleAdapter borrowerItemAdapter;
-    private List<HashMap<String, Object>> borrowerItemTiles;
-    private HashMap<Integer, UUID> borrowerItemTilePositionMap;
+    private ItemsAdapter<Inventory> borrowerItemAdapter;
 
 
     /**
@@ -102,10 +99,10 @@ public class TradeOfferComposeActivity extends AppCompatActivity {
         ownerItemListView = (ListView) findViewById(R.id.tradeComposeOwnerItem);
         borrowerItemListView = (ListView) findViewById(R.id.tradeComposeBorrowerItems);
 
-        ownerItemTilePositionMap = new HashMap<>();
-        borrowerItemTilePositionMap = new HashMap<>();
-
         AsyncTask worker = new AsyncTask() {
+            ArrayList<Item> borroweritems;
+            ArrayList<Item> owneritems;
+
             @Override
             protected Object doInBackground(Object[] params) {
                 Context c = (Context) params[0];
@@ -127,9 +124,8 @@ public class TradeOfferComposeActivity extends AppCompatActivity {
                 }
                 controller = new TradeOfferComposeController(c, model);
 
-                TileBuilder tileBuilder = new TileBuilder(getResources());
-                ownerItemTiles = tileBuilder.buildItemTiles(model.getOwnersItems(), ownerItemTilePositionMap);
-                borrowerItemTiles = tileBuilder.buildItemTiles(model.getBorrowersItems(), borrowerItemTilePositionMap);
+                owneritems = model.getOwnersItems();
+                borroweritems = model.getBorrowersItems();
 
                 return c;
             }
@@ -141,14 +137,13 @@ public class TradeOfferComposeActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        String[] from = {"tileViewItemName", "tileViewItemCategory", "tileViewItemImage"};
-                        int[] to = {R.id.tileViewItemName, R.id.tileViewItemCategory, R.id.tileViewItemImage};
 
-//                        ownerItemAdapter = new EnhancedSimpleAdapter(c, ownerItemTiles, R.layout.fragment_item_tile, from, to);
-//                        ownerItemListView.setAdapter(ownerItemAdapter);
-//
-//                        borrowerItemAdapter = new EnhancedSimpleAdapter(c, borrowerItemTiles, R.layout.fragment_item_tile, from, to);
-//                        borrowerItemListView.setAdapter(borrowerItemAdapter);
+
+                        ownerItemAdapter = new ItemsAdapter<Inventory>(c, owneritems);
+                        ownerItemListView.setAdapter(ownerItemAdapter);
+
+                        borrowerItemAdapter = new ItemsAdapter<Inventory>(c, borroweritems);
+                        borrowerItemListView.setAdapter(borrowerItemAdapter);
 
                         addItemButton.setOnClickListener(new View.OnClickListener() {
                             @Override

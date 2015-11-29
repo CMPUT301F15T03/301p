@@ -112,8 +112,6 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer, Swi
                         }
                     }
                     model.commitChanges();
-                    TileBuilder tileBuilder = new TileBuilder(getResources());
-                    tradeTiles = tileBuilder.buildTradeTiles(model, tradeTilePositionMap);
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (ServiceNotAvailableException e) {
@@ -146,7 +144,7 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer, Swi
 
 
 
-        adapter = new TradesAdapter<>(getView().getContext(), model);
+        adapter = new TradesAdapter<>(context, model);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -223,6 +221,7 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer, Swi
             protected Void doInBackground(Void... params) {
                 try {
                     PrimaryUser.getInstance().refresh();
+                    model = PrimaryUser.getInstance().getTradeList();
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (ServiceNotAvailableException e) {
