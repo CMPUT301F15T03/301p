@@ -193,12 +193,12 @@ public class Trade implements Observable, Comparable<Trade>, Observer {
     }
 
     /**
-     * @return True if this Trade is open. Returns false otherwise.
+     * @return True if this Trade is pending. Returns false otherwise.
      *
-     * @see {@link TradeState#isOpen}
+     * @see {@link TradeState#isPending}
      */
-    public Boolean isOpen() throws ServiceNotAvailableException {
-        return getState().isOpen();
+    public Boolean isPending() throws ServiceNotAvailableException {
+        return getState().isPending();
     }
 
     /**
