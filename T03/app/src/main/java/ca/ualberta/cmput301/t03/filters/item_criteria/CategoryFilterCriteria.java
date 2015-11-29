@@ -15,7 +15,7 @@ public class CategoryFilterCriteria implements FilterCriteria {
     public String getName() {return this.name;}
     public String getType() {return this.type;}
     public boolean passes(Object o){
-        return ((Item)o).getItemCategory().equals(category);
+        return ((Item)o).getItemCategory().toLowerCase().equals(category.toLowerCase());
     }
 
 

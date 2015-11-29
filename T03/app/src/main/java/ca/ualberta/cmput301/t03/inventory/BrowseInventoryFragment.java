@@ -282,6 +282,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer, Swipe
             public void onClick(DialogInterface dialog, int which) {
                 final String usr = e.getText().toString().trim();
                 model.addFilter(new StringQueryFilterCriteria(usr));
+                model.commitChanges();
                 Toast.makeText(getContext(), "Textual Filter: '" + usr + "' Added", Toast.LENGTH_SHORT).show();
             }
         });
