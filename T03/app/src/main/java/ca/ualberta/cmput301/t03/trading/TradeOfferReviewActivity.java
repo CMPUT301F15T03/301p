@@ -272,7 +272,25 @@ public class TradeOfferReviewActivity extends AppCompatActivity implements Obser
             tradeReviewDeclineAndCounterOffer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ExceptionUtils.toastShort("trade decline&counter-offer unimplemented");
+//                    ExceptionUtils.toastShort("trade decline&counter-offer unimplemented");
+                    AsyncTask task = new AsyncTask() {
+                        @Override
+                        protected Object doInBackground(Object[] params) {
+                            try {
+                                controller.declineTrade();
+                            } catch (ServiceNotAvailableException e) {
+                                ExceptionUtils.toastLong("Failed to decline and counter trade: app is offline");
+                            }
+                            return null;
+                        }
+                    };
+                    task.execute();
+
+                    Intent intent = new Intent(TradeOfferReviewActivity.this, TradeOfferComposeActivity.class);
+                    intent.putExtra(TradeOfferComposeActivity.EXTRA_PREV_TRADE_UUID, model.getTradeUUID());
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+
                 }
             });
         } else {
