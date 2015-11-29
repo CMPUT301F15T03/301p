@@ -33,7 +33,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.io.IOException;
@@ -45,7 +44,6 @@ import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
-import ca.ualberta.cmput301.t03.common.TileBuilder;
 import ca.ualberta.cmput301.t03.common.exceptions.ExceptionUtils;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeModificationException;
@@ -154,7 +152,7 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer, Swi
                     @Override
                     protected void onPostExecute(Boolean shouldReview) {
                         if (shouldReview) {
-                            Intent intent = new Intent(getContext(), TradeOfferReviewActivity.class);
+                            Intent intent = new Intent(getContext(), TradeOfferReviewActivity.class); //fixme npe here
                             intent.putExtra("TRADE_UUID", tradeUUID);
                             startActivity(intent);
                         } else {

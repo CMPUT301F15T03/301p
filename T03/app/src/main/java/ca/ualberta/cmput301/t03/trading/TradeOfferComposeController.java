@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
+import ca.ualberta.cmput301.t03.inventory.Inventory;
 import ca.ualberta.cmput301.t03.inventory.Item;
 import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeModificationException;
 import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeStateTransition;
@@ -76,8 +77,8 @@ public class TradeOfferComposeController {
      * @param item item to be added
      */
     public void addBorrowerItem(Item item) throws ServiceNotAvailableException, IllegalTradeModificationException {
-        List<Item> items = model.getBorrowersItems();
-        items.add(item);
+        Inventory items = model.getBorrowersItems();
+        items.addItem(item);
         model.setBorrowersItems(items);
     }
 }

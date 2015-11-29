@@ -38,6 +38,7 @@ import ca.ualberta.cmput301.t03.TradeApp;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.datamanager.DataKey;
 import ca.ualberta.cmput301.t03.datamanager.DataManager;
+import ca.ualberta.cmput301.t03.inventory.Inventory;
 import ca.ualberta.cmput301.t03.inventory.Item;
 import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeModificationException;
 import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeStateTransition;
@@ -56,7 +57,7 @@ import ca.ualberta.cmput301.t03.user.User;
  * <p>
  * State is managed by the Trade's tradeState ({@link TradeState}) member.
  */
-public class Trade implements Observable, Comparable<Trade> {
+public class Trade implements Observable, Comparable<Trade>, Observer {
     public final static String type = "Trade";
     @Expose
     private TradeState state;
@@ -65,9 +66,9 @@ public class Trade implements Observable, Comparable<Trade> {
     @Expose
     private User owner;
     @Expose
-    private ArrayList<Item> borrowersItems;
+    private Inventory borrowersItems;
     @Expose
-    private ArrayList<Item> ownersItems;
+    private Inventory ownersItems;
     @Expose
     private UUID tradeUUID;
     @Expose
@@ -106,17 +107,17 @@ public class Trade implements Observable, Comparable<Trade> {
      * @param context        The application context. Used to fetch and save data using @{link DataManager}.
      */
     public Trade(User borrower, User owner,
-                 Collection<Item> borrowersItems, Collection<Item> ownersItems,
-                 Context context) throws ServiceNotAvailableException {
+                 Inventory borrowersItems, Inventory ownersItems,
+                 Context context)  throws ServiceNotAvailableException {
         this.borrower = new User(borrower, context);
         this.owner = new User(owner, context);
-        this.borrowersItems = new ArrayList<>();
-        this.ownersItems = new ArrayList<>();
+        this.borrowersItems = new Inventory();
+        this.ownersItems = new Inventory();
         for (Item item : borrowersItems) {
-            this.borrowersItems.add(item);
+            this.borrowersItems.addItem(item);
         }
         for (Item item : ownersItems) {
-            this.ownersItems.add(item);
+            this.ownersItems.addItem(item);
         }
 
         this.context = context;
@@ -264,7 +265,7 @@ public class Trade implements Observable, Comparable<Trade> {
      *
      * @return List of {@link Item}s which the borrower {@link User} is offering
      */
-    public ArrayList<Item> getBorrowersItems() throws ServiceNotAvailableException {
+    public Inventory getBorrowersItems() throws ServiceNotAvailableException {
         this.load();
         return this.borrowersItems;
     }
@@ -278,14 +279,14 @@ public class Trade implements Observable, Comparable<Trade> {
      * @param newBorrowersItems List of {@link Item}s to offer
      * @throws IllegalTradeModificationException if this trade is no longer in an editable {@link TradeState}
      */
-    public void setBorrowersItems(List<Item> newBorrowersItems) throws IllegalTradeModificationException, ServiceNotAvailableException {
+    public void setBorrowersItems(Inventory newBorrowersItems) throws IllegalTradeModificationException, ServiceNotAvailableException {
         if (!state.isEditable()) {
             String msg = String.format("Trade %s in state %s is uneditable",
                     tradeUUID.toString(), state.toString());
             throw new IllegalTradeModificationException(msg);
         }
-        this.borrowersItems.clear();
-        this.borrowersItems.addAll(newBorrowersItems);
+        this.borrowersItems = newBorrowersItems;
+        // clear, addall...
         this.commitChanges();
     }
 
@@ -294,7 +295,7 @@ public class Trade implements Observable, Comparable<Trade> {
      *
      * @return List of {@link Item}s which the 'owner' {@link User} is offering
      */
-    public ArrayList<Item> getOwnersItems() {
+    public Inventory getOwnersItems() {
         return this.ownersItems;
     }
 
@@ -430,7 +431,7 @@ public class Trade implements Observable, Comparable<Trade> {
         sb.append("Trade offer overview:\n\n");
         sb.append("Borrower ");
         sb.append(borrower.getUsername());
-        if (borrowersItems.size() > 0) {
+        if (borrowersItems.getItems().size() > 0) {
             sb.append(" would like to trade the following: \n");
             for (Item item : borrowersItems) {
                 sb.append("\t");
@@ -454,5 +455,11 @@ public class Trade implements Observable, Comparable<Trade> {
         sb.append(") would like to proceed with the transfer of these items:\n\n");
 
         return sb.toString();
+    }
+
+    @Override
+    public void update(Observable observable) {
+        notifyObservers();
+
     }
 }
