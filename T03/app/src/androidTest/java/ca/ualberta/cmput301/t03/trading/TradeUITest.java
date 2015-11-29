@@ -58,7 +58,8 @@ import static ca.ualberta.cmput301.t03.common.PauseForAnimation.pause;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.hasToString;
-import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.startsWith;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.allOf;
 
 
@@ -769,35 +770,63 @@ public class TradeUITest
             add(userItem2);
         }};
 
-        // TODO create trades in all possible states with the user as each role (closed, open, public)
-        Trade userIsOwnerOpenTrade = new Trade(userFriend1, user, borrowersItems, ownersItems, mContext);
-        Trade userIsOwnerClosedTrade = new Trade(userFriend1, user, borrowersItems, ownersItems, mContext);
-        // TODO set closed trades to closed
-        //userIsOwnerClosedTrade.setState();
+        // create trades in all possible states with the user as owner or borrower
+        // states: (in progress, accepted, declined, completed)
+        Trade userIsOwnerInProgressTrade = new Trade(userFriend1, user, borrowersItems, ownersItems, mContext);
+        Trade userIsOwnerDeclinedTrade = new Trade(userFriend1, user, borrowersItems, ownersItems, mContext);
+        Trade userIsOwnerCompletedTrade = new Trade(userFriend1, user, borrowersItems, ownersItems, mContext);
 
-        Trade userIsBorrowerOpenTrade = new Trade(user, userFriend1, borrowersItems, ownersItems, mContext);
-        Trade userIsBorrowerClosedTrade = new Trade(user, userFriend1, borrowersItems, ownersItems, mContext);
+        Trade userIsBorrowerInProgressTrade = new Trade(user, userFriend1, borrowersItems, ownersItems, mContext);
+        Trade userIsBorrowerDeclinedTrade = new Trade(user, userFriend1, borrowersItems, ownersItems, mContext);
+        Trade userIsBorrowerCompletedTrade = new Trade(user, userFriend1, borrowersItems, ownersItems, mContext);
 
-        List<Trade> userTrades = Arrays.asList(userIsOwnerOpenTrade, userIsOwnerClosedTrade,
-                userIsBorrowerOpenTrade, userIsBorrowerClosedTrade);
+        try {
+            // offer all the trades first, otherwise you run into race conditions
+            userIsOwnerInProgressTrade.offer();
+            userIsOwnerDeclinedTrade.offer();
+            userIsOwnerCompletedTrade.offer();
+            userIsBorrowerInProgressTrade.offer();
+            userIsBorrowerDeclinedTrade.offer();
+            userIsBorrowerCompletedTrade.offer();
 
-        ArrayList<UUID> userTradeUUIDList = new ArrayList<>();
-        for (Trade trade: userTrades) {
-            userTradeUUIDList.add(trade.getTradeUUID());
+            // accept/decline/complete trades
+            userIsOwnerInProgressTrade.accept();
+            userIsOwnerDeclinedTrade.decline();
+            userIsOwnerCompletedTrade.accept();
+            userIsBorrowerInProgressTrade.accept();
+            userIsBorrowerDeclinedTrade.decline();
+            userIsBorrowerCompletedTrade.accept();
+
+            // TODO completed trade is yet to be implemented
+            //userIsOwnerCompletedTrade.completed();
+            //userIsBorrowerCompletedTrade.completed();
+        } catch (IllegalTradeStateTransition e) {
+            assertFalse("IllegalTradeStateTransition in testUserBrowsesTradesInvolvingThem", true);
         }
 
-        // TODO create trades which do not involve the user
-        Trade userNotInvolved = new Trade(userFriend1, userFriend2, borrowersItems, ownersItems, mContext);
-        UUID userNotInvolvedUUID = userNotInvolved.getTradeUUID();
+        List<Trade> userTrades = Arrays.asList(userIsOwnerInProgressTrade,
+                userIsOwnerDeclinedTrade, userIsOwnerCompletedTrade,
+                userIsBorrowerInProgressTrade,
+                userIsBorrowerDeclinedTrade, userIsBorrowerCompletedTrade);
+
+        ArrayList<UUID> expectedTradeUUIDList = new ArrayList<>();
+        for (Trade trade: userTrades) {
+            expectedTradeUUIDList.add(trade.getTradeUUID());
+        }
+
+        // Create trades which do not involve the user or shouldn't be seen in the Trades History
+        Trade userNotInvolvedTrade = new Trade(userFriend1, userFriend2, borrowersItems, ownersItems, mContext);
+
+        UUID userNotInvolvedUUID = userNotInvolvedTrade.getTradeUUID();
 
         // assert some data conditions
-        ArrayList<UUID> tradeUUIDList = new ArrayList<>();
+        ArrayList<UUID> resultingUUIDList = new ArrayList<>();
         try {
             user.getTradeList().addAll(userTrades);
-            userFriend1.getTradeList().addTrade(userNotInvolved);
+            userFriend1.getTradeList().addTrade(userNotInvolvedTrade);
             List<Trade> tradeList = user.getTradeList().getTradesAsList();
             for (Trade trade: tradeList) {
-                tradeUUIDList.add(trade.getTradeUUID());
+                resultingUUIDList.add(trade.getTradeUUID());
             }
         } catch(IOException e) {
             assertTrue("IOException in testUserBrowsesTradesInvolvingThem", Boolean.FALSE);
@@ -807,9 +836,9 @@ public class TradeUITest
 
         // assert the above worked
         try {
-            assertEquals(4, user.getTradeList().getTradesAsList().size());
-            assertEquals(userTradeUUIDList, tradeUUIDList);
-            assertFalse(tradeUUIDList.contains(userNotInvolvedUUID));
+            assertEquals(6, user.getTradeList().getTradesAsList().size());
+            assertEquals(expectedTradeUUIDList, resultingUUIDList);
+            assertFalse(resultingUUIDList.contains(userNotInvolvedUUID));
         } catch (IOException e ) {
             assertTrue("IOException in testUserBrowsesTradesInvolvingThem", Boolean.FALSE);
         } catch (ServiceNotAvailableException e ) {
@@ -824,25 +853,20 @@ public class TradeUITest
                 .check(matches(isDisplayed()))
                 .perform(click());
 
-        // UI tests
-        // TODO assert each user trade is in the list
-        // check if correct number of trades are there
-        // Accessed November 28, 2015
-        // http://stackoverflow.com/questions/21604351/check-if-a-listview-has-an-specific-a-number-of-items-and-scroll-to-last-one-wi
-
-        onData(anything())
-                .inAdapterView(allOf(withId(R.id.tradeHistoryListView), isDisplayed()))
-                .atPosition(4)
-                .check(matches(isDisplayed()));
-
-
-        //onData(anything()).inAdapterView(withId(R.id.tradeHistoryListView)).atPosition(0).perform(click());
-
-        // TODO assert each non-user trade is not in the list
-
-
-        // TODO remove fail
-        //fail("test functionality not yet implemented");
+        // UI testing
+        // assert each user trade is in the list, and assert each non-user trade is not in the list
+        try {
+            for (Trade trade: user.getTradeList().getTradesAsList()) {
+                onData(hasToString(startsWith(trade.getTradeUUID().toString())))
+                        .inAdapterView(withId(R.id.tradeHistoryListView));
+            }
+            onView(withId(R.id.tradeHistoryListView))
+                    .check(matches(not(hasToString(startsWith(userNotInvolvedUUID.toString())))));
+        } catch (IOException e ) {
+            assertTrue("IOException in testUserBrowsesTradesInvolvingThem", Boolean.FALSE);
+        } catch (ServiceNotAvailableException e ) {
+            assertTrue("ServiceNotAvailableException in testUserBrowsesTradesInvolvingThem", Boolean.FALSE);
+        }
     }
 
     /**
