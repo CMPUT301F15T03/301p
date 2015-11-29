@@ -42,7 +42,7 @@ public class TradeStateOffered implements TradeState {
      * {@inheritDoc}
      */
     @Override
-    public Boolean isOpen() {
+    public Boolean isPending() {
         return !isClosed();
     }
 
@@ -97,6 +97,17 @@ public class TradeStateOffered implements TradeState {
     /**
      * {@inheritDoc}
      *
+     * @param trade Trade to be completed.
+     * @throws IllegalTradeStateTransition
+     */
+    @Override
+    public void complete(Trade trade) throws IllegalTradeStateTransition, ServiceNotAvailableException {
+        throw new IllegalTradeStateTransition("Offered trade cannot be completed");
+    }
+
+    /**
+     * {@inheritDoc}
+     *
      * @param trade Trade to be declined.
      */
     @Override
@@ -114,6 +125,11 @@ public class TradeStateOffered implements TradeState {
         } else {
             return "Trade request sent to";
         }
+    }
+
+    @Override
+    public String getStateString() {
+        return "Offered";
     }
 
     @Override
