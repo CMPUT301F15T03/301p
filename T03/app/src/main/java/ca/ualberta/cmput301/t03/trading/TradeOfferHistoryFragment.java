@@ -130,21 +130,15 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer, Swi
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final Trade selected = (Trade) (parent.getItemAtPosition(position));
                 final UUID tradeUUID = selected.getTradeUUID();
-                Boolean isPublic = false;
 
-                try {
-                    isPublic = selected.isPublic();
-                } catch (ServiceNotAvailableException e) {
-                    isPublic = false;
-                }
-
-                if (PrimaryUser.getInstance().getUsername().equals(selected.getOwner().getUsername()) && isPublic) {
-                    selected.setHasBeenSeen(true);
+                if (PrimaryUser.getInstance().getUsername().equals(selected.getOwner().getUsername())) {
                     AsyncTask worker = new AsyncTask() {
                         @Override
                         protected Object doInBackground(Object[] params) {
                             try {
+                                selected.setHasBeenSeen(true);
                                 selected.commitChanges();
+
                             } catch (ServiceNotAvailableException e) {
                                 // do nothing here
                             }
