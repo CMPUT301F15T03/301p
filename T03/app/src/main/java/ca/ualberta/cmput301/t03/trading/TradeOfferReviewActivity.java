@@ -356,6 +356,9 @@ public class TradeOfferReviewActivity extends AppCompatActivity implements Obser
                         emailBorrower = model.getBorrower().getProfile().getEmail();
                         emailOwner = model.getOwner().getProfile().getEmail();
                         emailUsers = true;
+                        if (emailBorrower.equals("") || emailOwner.equals("")) {
+                            emailUsers = false;
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (ServiceNotAvailableException e) {
