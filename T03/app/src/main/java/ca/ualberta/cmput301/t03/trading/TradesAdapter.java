@@ -45,7 +45,6 @@ public class TradesAdapter<T extends TradeList> extends ArrayAdapter<Trade> {
     private T mTradeList;
     private Context mContext;
     private HashMap<UUID, String> tradeStates;
-    private Boolean currentUserIsOwner;
 
     public List<Trade> getTrades() {
         try {
@@ -62,7 +61,6 @@ public class TradesAdapter<T extends TradeList> extends ArrayAdapter<Trade> {
         mTradeList = tradelist;
         mContext = context;
         tradeStates = new HashMap<>();
-        currentUserIsOwner = false;
 
         notifyUpdated(mTradeList);
     }
@@ -78,8 +76,7 @@ public class TradesAdapter<T extends TradeList> extends ArrayAdapter<Trade> {
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
 
-        Trade trade = getItem(position);
-        currentUserIsOwner = PrimaryUser.getInstance().equals(trade.getOwner());
+        final Trade trade = getItem(position);
         Item mainItem = trade.getOwnersItems().get(0);
 
         // Check if an existing view is being reused, otherwise inflate the view
@@ -91,7 +88,7 @@ public class TradesAdapter<T extends TradeList> extends ArrayAdapter<Trade> {
         TextView itemName = (TextView) convertView.findViewById(R.id.tradeTileMainItemName);
         ImageView image = (ImageView) convertView.findViewById(R.id.tradeTileMainItemImage);
         TextView status = (TextView) convertView.findViewById(R.id.tradeTileTradeState);
-        TextView otherUser = (TextView) convertView.findViewById(R.id.tradeTileOtherUser);
+        final TextView otherUser = (TextView) convertView.findViewById(R.id.tradeTileOtherUser);
 
         // Populate the data into the template view using the data object
         categoryName.setText(mainItem.getItemCategory());
@@ -102,7 +99,27 @@ public class TradesAdapter<T extends TradeList> extends ArrayAdapter<Trade> {
             image.setImageBitmap(((BitmapDrawable) getContext().getResources().getDrawable(R.drawable.photo_available_for_download)).getBitmap());
         }
         status.setText(tradeStates.get(trade.getTradeUUID()));
-        otherUser.setText(trade.getBorrower().getUsername());
+
+        final String ownerUsername = trade.getOwner().getUsername();
+        AsyncTask setOtherUser = new AsyncTask() {
+            private Boolean currentUserIsOwner;
+
+            @Override
+            protected Object doInBackground(Object[] params) {
+                currentUserIsOwner = PrimaryUser.getInstance().getUsername().equals(ownerUsername);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Object o) {
+                if (currentUserIsOwner) {
+                    otherUser.setText(trade.getBorrower().getUsername());
+                } else {
+                    otherUser.setText(trade.getOwner().getUsername());
+                }
+            }
+        };
+        setOtherUser.execute();
 
         // Return the completed view to render on screen
         return convertView;
@@ -121,7 +138,9 @@ public class TradesAdapter<T extends TradeList> extends ArrayAdapter<Trade> {
             @Override
             protected Void doInBackground(Void... params) {
                 getTrades();
+
                 for (Trade t : mTradeList){
+                    Boolean currentUserIsOwner = PrimaryUser.getInstance().getUsername().equals(t.getOwner().getUsername());
                     try {
                         tradeStates.put(t.getTradeUUID(), t.getState().getInterfaceString(currentUserIsOwner));
                     } catch (ServiceNotAvailableException e) {
