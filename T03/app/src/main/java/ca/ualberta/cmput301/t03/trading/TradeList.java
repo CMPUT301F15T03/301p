@@ -48,11 +48,11 @@ public class TradeList implements Observable, Observer, Adaptable<Trade>, Iterab
     public static final String type = "TradeList";
 
     @Expose
-    private HashMap<UUID, Trade> trades;
+    private List<Trade> trades;
     private Set<Observer> observers;
 
     public TradeList() {
-        this.trades = new LinkedHashMap<>();
+        this.trades = new ArrayList<>();
         this.observers = new HashSet<>();
     }
 
@@ -62,7 +62,7 @@ public class TradeList implements Observable, Observer, Adaptable<Trade>, Iterab
      * @param trade trade to be added
      */
     public void addTrade(Trade trade) {
-        this.trades.put(trade.getTradeUUID(), trade);
+        this.trades.add(trade);
         commitChanges();
     }
 
@@ -81,7 +81,7 @@ public class TradeList implements Observable, Observer, Adaptable<Trade>, Iterab
      * Clear the list of trades. Use carefully.
      */
     public void clear() {
-        this.trades = new LinkedHashMap<>();
+        this.trades = new ArrayList<>();
         this.commitChanges();
     }
 
@@ -104,7 +104,11 @@ public class TradeList implements Observable, Observer, Adaptable<Trade>, Iterab
      * @return the trades, as a hash map
      */
     public HashMap<UUID, Trade> getTrades() {
-        return this.trades;
+        HashMap<UUID, Trade> tr = new HashMap<>();
+        for (Trade t: trades){
+            tr.put(t.getTradeUUID(), t);
+        }
+        return tr;
     }
 
     /**
@@ -113,7 +117,7 @@ public class TradeList implements Observable, Observer, Adaptable<Trade>, Iterab
      * @param trades trades to be applied.
      */
     public void setTrades(LinkedHashMap<UUID, Trade> trades) {
-        this.trades = trades;
+        this.trades = new ArrayList<Trade>(trades.values());
         // todo : if you found a bug here, kyle was right.
         commitChanges();
     }
@@ -124,7 +128,7 @@ public class TradeList implements Observable, Observer, Adaptable<Trade>, Iterab
      * @return the trades, as a list
      */
     public List<Trade> getTradesAsList() {
-        return new ArrayList<Trade>(getTrades().values());
+        return trades;
     }
 
     /**
@@ -200,6 +204,6 @@ public class TradeList implements Observable, Observer, Adaptable<Trade>, Iterab
 
     @Override
     public Iterator<Trade> iterator() {
-        return trades.values().iterator();
+        return trades.iterator();
     }
 }

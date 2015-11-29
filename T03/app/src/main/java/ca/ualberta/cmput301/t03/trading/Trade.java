@@ -416,7 +416,7 @@ public class Trade implements Observable, Comparable<Trade> {
      * @return subject of email
      */
     public String getEmailSubject() {
-        return "Follow up details";
+        return "Follow up details for our Photog Trade";
     }
 
     /**
@@ -426,6 +426,33 @@ public class Trade implements Observable, Comparable<Trade> {
      * @return body of trade accept email
      */
     public String getEmailBody() {
-        return "";
+        StringBuilder sb = new StringBuilder();
+        sb.append("Trade offer overview:\n\n");
+        sb.append("Borrower ");
+        sb.append(borrower.getUsername());
+        if (borrowersItems.size() > 0) {
+            sb.append(" would like to trade the following: \n");
+            for (Item item : borrowersItems) {
+                sb.append("\t");
+                sb.append(item.getItemName());
+                sb.append("\n");
+            }
+            sb.append("\n For these items of ");
+            sb.append(owner.getUsername());
+            sb.append(": \n");
+        }
+        else {
+            sb.append(" would like to accept these items of yours: \n");
+        }
+        for (Item item : ownersItems) {
+            sb.append("\t");
+            sb.append(item.getItemName());
+            sb.append("\n");
+        }
+        sb.append("\nEnter in the space below some details on how you (");
+        sb.append(owner.getUsername());
+        sb.append(") would like to proceed with the transfer of these items:\n\n");
+
+        return sb.toString();
     }
 }
