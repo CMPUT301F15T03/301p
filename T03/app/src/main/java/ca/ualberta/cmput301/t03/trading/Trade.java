@@ -372,6 +372,15 @@ public class Trade implements Observable, Comparable<Trade>, Observer {
     }
 
     /**
+     * Completes this trade. Only a trade in state {@link TradeStateAccepted} can be completed.
+     *
+     * @throws IllegalTradeStateTransition if this trade cannot be accepted
+     */
+    public void complete() throws IllegalTradeStateTransition, ServiceNotAvailableException {
+        getState().complete(this);
+    }
+
+    /**
      * Declines this trade. Only a trade in state {@link TradeStateOffered} can be declined.
      *
      * @throws IllegalTradeStateTransition if this trade cannot be declined
