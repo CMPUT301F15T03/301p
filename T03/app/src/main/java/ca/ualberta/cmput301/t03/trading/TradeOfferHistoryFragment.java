@@ -133,32 +133,9 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer, Swi
                 Trade selected = (Trade) (parent.getItemAtPosition(position));
                 final UUID tradeUUID = selected.getTradeUUID();
 
-                AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>() {
-                    @Override
-                    protected Boolean doInBackground(Void[] params) {
-                        Boolean shouldReview = Boolean.TRUE;
-                        try {
-                            if (model.getTrades().get(tradeUUID).isClosed()) {
-                                shouldReview = Boolean.FALSE;
-                            }
-                        } catch (ServiceNotAvailableException e) {
-                            // TODO notify onPostExecute somehow that it should toast network failure
-                        }
-                        return shouldReview;
-                    }
-
-                    @Override
-                    protected void onPostExecute(Boolean shouldReview) {
-                        if (shouldReview) {
-                            Intent intent = new Intent(getContext(), TradeOfferReviewActivity.class);
-                            intent.putExtra("TRADE_UUID", tradeUUID);
-                            startActivity(intent);
-                        } else {
-                            Snackbar.make(getView(), "trade review of accepted|declined trades unimplemented", Snackbar.LENGTH_SHORT).show();
-                        }
-                    }
-                };
-                task.execute();
+                Intent intent = new Intent(getContext(), TradeOfferReviewActivity.class);
+                intent.putExtra("TRADE_UUID", tradeUUID);
+                startActivity(intent);
             }
         });
     }

@@ -113,17 +113,24 @@ public class TradeOfferReviewActivity extends AppCompatActivity {
 
     private void populateLayoutWithData(final UUID tradeUUID) {
 
-
         AsyncTask task = new AsyncTask() {
             private ArrayList<Item> owneritems;
             private ArrayList<Item> borroweritems;
+            private Boolean currentUserOwnsMainItem;
+            private Boolean tradeIsPending;
+            private Boolean tradeIsAccepted;
 
             @Override
             protected Object doInBackground(Object[] params) {
                 try {
                     model = PrimaryUser.getInstance().getTradeList().getTrades().get(tradeUUID);
+                    currentUserOwnsMainItem = model.getOwner().getUsername().equals(currentUsername);
+                    TradeState state = model.getState();
+                    tradeIsPending = state.getClass().equals(TradeStateOffered.class);
+//                    tradeIsPending = mode
                 } catch (IOException e) {
                     ExceptionUtils.toastErrorWithNetwork();
+                    activity.finish();
                 } catch (ServiceNotAvailableException e) {
                     ExceptionUtils.toastLong("Trade operations are unavailable offline");
                     activity.finish();
@@ -151,97 +158,13 @@ public class TradeOfferReviewActivity extends AppCompatActivity {
 
             @Override
             protected void onPostExecute(Object o) {
-                Boolean currentUserOwnsMainItem = model.getOwner().getUsername().equals(currentUsername);
-                if (currentUserOwnsMainItem) {
-                    tradeDirectionFromTo.setText("from");
-                    tradeReviewOtherUser.setText(model.getBorrower().getUsername());
-                    tradeOffererYouTheyWant.setText("They");
-                    tradeOffererYouTheyOffer.setText("They");
-                    tradeReviewAccept.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            AsyncTask task = new AsyncTask() {
-                                String emailOwner;
-                                String emailBorrower;
-                                Boolean emailUsers = false;
-                                @Override
-                                protected Object doInBackground(Object[] params) {
-                                    try {
-                                        controller.acceptTrade();
-                                        emailBorrower = model.getBorrower().getProfile().getEmail();
-                                        emailOwner = model.getOwner().getProfile().getEmail();
-                                        emailUsers = true;
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    } catch (ServiceNotAvailableException e) {
-                                        ExceptionUtils.toastLong("Failed to accept trade: app is offline");
-                                        activity.finish();
-                                    }
-                                    return null;
-                                }
-
-                                @Override
-                                protected void onPostExecute(Object o) {
-                                    if (emailUsers) {
-                                        Intent intent = new Intent(Intent.ACTION_SEND);
-                                        intent.setType("text/rfc822");
-                                        intent.putExtra(Intent.EXTRA_EMAIL,
-                                                new String[]{
-                                                        emailOwner,
-                                                        emailBorrower
-                                                });
-                                        intent.putExtra(Intent.EXTRA_SUBJECT, model.getEmailSubject());
-                                        intent.putExtra(Intent.EXTRA_TEXT, model.getEmailBody());
-                                        try {
-                                            startActivityForResult(intent, EMAIL_SENT);
-                                        } catch (ActivityNotFoundException e) {
-                                            ExceptionUtils.toastLong("No email client installed");
-                                            activity.finish();
-                                        }
-                                    }
-                                    else {
-                                        activity.finish();
-                                    }
-                                }
-                            };
-                            task.execute();
-                        }
-                    });
-                    tradeReviewDecline.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            AsyncTask task = new AsyncTask() {
-                                @Override
-                                protected Object doInBackground(Object[] params) {
-                                    try {
-                                        controller.declineTrade();
-                                    } catch (ServiceNotAvailableException e) {
-                                        ExceptionUtils.toastLong("Failed to decline trade: app is offline");
-                                    }
-                                    return null;
-                                }
-                            };
-                            task.execute();
-                            activity.finish();
-                        }
-                    });
-                    tradeReviewDeclineAndCounterOffer.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            ExceptionUtils.toastShort("trade decline&counter-offer unimplemented");
-                        }
-                    });
-                } else {
-                    tradeDirectionFromTo.setText("to");
-                    tradeReviewOtherUser.setText(model.getOwner().getUsername());
-                    tradeOffererYouTheyWant.setText("You");
-                    tradeOffererYouTheyOffer.setText("You");
-                    tradeReviewAccept.setVisibility(View.GONE);
-                    tradeReviewDecline.setVisibility(View.GONE);
-                    tradeReviewDeclineAndCounterOffer.setVisibility(View.GONE);
+                if (tradeIsPending) {
+                    populateLayoutPendingTrade(currentUserOwnsMainItem);
+                } else if (tradeIsAccepted) {
+//                    populateLayoutAcceptedTrade(currentUserOwnsMainItem);
+//                } else if (tradeIsCompleted) {
+//
                 }
-
-
 
                 ownerItemAdapter = new ItemsAdapter(TradeApp.getContext(), owneritems);
                 borrowerItemAdapter = new ItemsAdapter(TradeApp.getContext(), borroweritems);
@@ -252,6 +175,98 @@ public class TradeOfferReviewActivity extends AppCompatActivity {
         };
 
         task.execute();
+    }
+
+    private void populateLayoutPendingTrade(Boolean currentUserOwnsMainItem) {
+        if (currentUserOwnsMainItem) {
+            tradeDirectionFromTo.setText("from");
+            tradeReviewOtherUser.setText(model.getBorrower().getUsername());
+            tradeOffererYouTheyWant.setText("They");
+            tradeOffererYouTheyOffer.setText("They");
+            tradeReviewAccept.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AsyncTask task = new AsyncTask() {
+                        String emailOwner;
+                        String emailBorrower;
+                        Boolean emailUsers = false;
+
+                        @Override
+                        protected Object doInBackground(Object[] params) {
+                            try {
+                                controller.acceptTrade();
+                                emailBorrower = model.getBorrower().getProfile().getEmail();
+                                emailOwner = model.getOwner().getProfile().getEmail();
+                                emailUsers = true;
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            } catch (ServiceNotAvailableException e) {
+                                ExceptionUtils.toastLong("Failed to accept trade: app is offline");
+                                activity.finish();
+                            }
+                            return null;
+                        }
+
+                        @Override
+                        protected void onPostExecute(Object o) {
+                            if (emailUsers) {
+                                Intent intent = new Intent(Intent.ACTION_SEND);
+                                intent.setType("text/rfc822");
+                                intent.putExtra(Intent.EXTRA_EMAIL,
+                                        new String[]{
+                                                emailOwner,
+                                                emailBorrower
+                                        });
+                                intent.putExtra(Intent.EXTRA_SUBJECT, model.getEmailSubject());
+                                intent.putExtra(Intent.EXTRA_TEXT, model.getEmailBody());
+                                try {
+                                    startActivityForResult(intent, EMAIL_SENT);
+                                } catch (ActivityNotFoundException e) {
+                                    ExceptionUtils.toastLong("No email client installed");
+                                    activity.finish();
+                                }
+                            } else {
+                                activity.finish();
+                            }
+                        }
+                    };
+                    task.execute();
+                }
+            });
+            tradeReviewDecline.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AsyncTask task = new AsyncTask() {
+                        @Override
+                        protected Object doInBackground(Object[] params) {
+                            try {
+                                controller.declineTrade();
+                            } catch (ServiceNotAvailableException e) {
+                                ExceptionUtils.toastLong("Failed to decline trade: app is offline");
+                            }
+                            return null;
+                        }
+                    };
+                    task.execute();
+                    activity.finish();
+                }
+            });
+            tradeReviewDeclineAndCounterOffer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ExceptionUtils.toastShort("trade decline&counter-offer unimplemented");
+                }
+            });
+        } else {
+            // !currentUserOwnsMainItem
+            tradeDirectionFromTo.setText("to");
+            tradeReviewOtherUser.setText(model.getOwner().getUsername());
+            tradeOffererYouTheyWant.setText("You");
+            tradeOffererYouTheyOffer.setText("You");
+            tradeReviewAccept.setVisibility(View.GONE);
+            tradeReviewDecline.setVisibility(View.GONE);
+            tradeReviewDeclineAndCounterOffer.setVisibility(View.GONE);
+        }
     }
 
     @Override
