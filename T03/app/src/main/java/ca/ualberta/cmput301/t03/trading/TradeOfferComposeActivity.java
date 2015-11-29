@@ -23,34 +23,29 @@ package ca.ualberta.cmput301.t03.trading;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.parceler.Parcels;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
 
+import ca.ualberta.cmput301.t03.Observable;
+import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.R;
-import ca.ualberta.cmput301.t03.common.TileBuilder;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
-import ca.ualberta.cmput301.t03.filters.FilterCriteria;
-import ca.ualberta.cmput301.t03.filters.item_criteria.StringQueryFilterCriteria;
 
 import ca.ualberta.cmput301.t03.inventory.Inventory;
 import ca.ualberta.cmput301.t03.inventory.Item;
@@ -61,7 +56,7 @@ import ca.ualberta.cmput301.t03.user.User;
  * The view portion of the TradeOfferCompose triplet. this is the view a user will see when
  * they wish to compose a trade with another user and their item.
  */
-public class TradeOfferComposeActivity extends AppCompatActivity {
+public class TradeOfferComposeActivity extends AppCompatActivity implements Observer{
 
     private final Activity activity = this;
 
@@ -78,6 +73,11 @@ public class TradeOfferComposeActivity extends AppCompatActivity {
     private ListView borrowerItemListView;
     private ItemsAdapter<Inventory> borrowerItemAdapter;
 
+    private Inventory borrowerInventory;
+    private Inventory ownerInventory;
+
+    private Inventory ownerItems;
+    private Inventory borrowerItems;
 
     /**
      * Sets up the view with all components, the model, and the controller
@@ -98,19 +98,25 @@ public class TradeOfferComposeActivity extends AppCompatActivity {
 
         ownerItemListView = (ListView) findViewById(R.id.tradeComposeOwnerItem);
         borrowerItemListView = (ListView) findViewById(R.id.tradeComposeBorrowerItems);
+        borrowerItemListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Item item = (Item) parent.getItemAtPosition(position);
+                borrowerItems.removeItem(item);
+            }
+        });
 
         AsyncTask worker = new AsyncTask() {
-            ArrayList<Item> borroweritems;
-            ArrayList<Item> owneritems;
+
 
             @Override
             protected Object doInBackground(Object[] params) {
                 Context c = (Context) params[0];
                 model = new Trade(Parcels.<User>unwrap(getIntent().getParcelableExtra("trade/compose/borrower")),
                         Parcels.<User>unwrap(getIntent().getParcelableExtra("trade/compose/owner")),
-                        new ArrayList<Item>(),
-                        new ArrayList<Item>() {{
-                            add(Parcels.<Item>unwrap(getIntent().getParcelableExtra("trade/compose/item")));
+                        new Inventory(),
+                        new Inventory() {{
+                            addItem(Parcels.<Item>unwrap(getIntent().getParcelableExtra("trade/compose/item")));
                         }},
                         c);
                 try {
@@ -124,8 +130,28 @@ public class TradeOfferComposeActivity extends AppCompatActivity {
                 }
                 controller = new TradeOfferComposeController(c, model);
 
-                owneritems = model.getOwnersItems();
-                borroweritems = model.getBorrowersItems();
+                ownerItems = model.getOwnersItems();
+                ownerItems.addObserver(TradeOfferComposeActivity.this);
+                borrowerItems = model.getBorrowersItems();
+                borrowerItems.addObserver(TradeOfferComposeActivity.this);
+
+
+                try {
+                    borrowerInventory = model.getBorrower().getInventory();
+                } catch (IOException e) {
+                    borrowerInventory = new Inventory();
+                } catch (ServiceNotAvailableException e) {
+                    borrowerInventory = new Inventory();
+                }
+                try {
+                    ownerInventory = model.getOwner().getInventory();
+                } catch (IOException e) {
+                    ownerInventory = new Inventory();
+                    Log.e("Error","Failed to fetch owner inventory: " + e.getMessage());
+                } catch (ServiceNotAvailableException e) {
+                    ownerInventory = new Inventory();
+                    Log.e("Error", "Failed to fetch owner inventory: " + e.getMessage());
+                }
 
                 return c;
             }
@@ -138,17 +164,17 @@ public class TradeOfferComposeActivity extends AppCompatActivity {
                     @Override
                     public void run() {
 
+                        model.addObserver(TradeOfferComposeActivity.this);
 
-                        ownerItemAdapter = new ItemsAdapter<Inventory>(c, owneritems);
+                        ownerItemAdapter = new ItemsAdapter<Inventory>(c, ownerItems);
                         ownerItemListView.setAdapter(ownerItemAdapter);
 
-                        borrowerItemAdapter = new ItemsAdapter<Inventory>(c, borroweritems);
+                        borrowerItemAdapter = new ItemsAdapter<Inventory>(c, borrowerItems);
                         borrowerItemListView.setAdapter(borrowerItemAdapter);
 
                         addItemButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Snackbar.make(v, "add item to trade offer unimplemented", Snackbar.LENGTH_SHORT).show();
                                 createAddTradeItemDialog().show();
                             }
                         });
@@ -189,6 +215,16 @@ public class TradeOfferComposeActivity extends AppCompatActivity {
         worker.execute(getBaseContext());
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (ownerItems != null){
+            ownerItems.removeObserver(this);
+        }
+        if (borrowerItems != null){
+            borrowerItems.removeObserver(this);
+        }
+    }
     /**
      * {@inheritDoc}
      *
@@ -224,40 +260,49 @@ public class TradeOfferComposeActivity extends AppCompatActivity {
     }
 
     private AlertDialog createAddTradeItemDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        View dialogContent = View.inflate(this, R.layout.content_add_search_dialog, null);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View dialogContent = View.inflate(this, R.layout.trade_item_picker_list, null);
 
-        //builder.setView(dialogContent); //todo replace with layout
+        ListView itemsListView = (ListView) dialogContent.findViewById(R.id.tradeItemListView);
+
+        ItemsAdapter<Inventory> inv = new ItemsAdapter<>(getApplicationContext(), ownerInventory);
+        itemsListView.setAdapter(inv);
+
+        itemsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Item selected = (Item) parent.getItemAtPosition(position);
+//                model.getOwnersItems().addItem(selected);
+//                ownerItems.addItem(selected);
+                borrowerItems.addItem(selected);
+//                ownerItemAdapter.notifyUpdated(ownerItems);
+//                borrowerItemAdapter.notifyDataSetChanged(); //todo do obesever properly.
+
+            }
+        });
+
+
+
+        builder.setView(dialogContent); //todo this ui is kind of gross
         builder.setTitle("Add Trade Item");
         builder.setCancelable(false);
-        builder.setNegativeButton("Cancel", null);
-        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //todo Add Trade Entity item(s) to actual trade.
-            }
-        });
-
-
-        ArrayList<String> inventoryItems = new ArrayList<String>();
-
-        ArrayList<Item> theItems = new ArrayList<>();
-        //todo Async grab this list
-//        ArrayList<Item> theItems = model.getBorrowersItems();
-
-
-        for (Item item : theItems) {
-            inventoryItems.add(item.getItemName());
-        }
-        final CharSequence[] tradableItems = inventoryItems.toArray(new String[inventoryItems.size()]);
-        builder.setItems(tradableItems, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
-                String selectedText = tradableItems[item].toString();
-                //todo Highlight Item(s) Add Item to Trade Entity
-            }
-        });
+        builder.setNegativeButton("Done", null);
+        builder.setView(dialogContent);
 
         AlertDialog d = builder.create();
         return d;
+    }
+
+    @Override
+    public void update(Observable observable) {
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                borrowerItemAdapter.notifyDataSetChanged();
+                ownerItemAdapter.notifyDataSetChanged();
+            }
+        });
+
     }
 }
