@@ -79,6 +79,7 @@ public class TradeOfferReviewActivity extends AppCompatActivity implements Obser
     private Button tradeReviewAccept;
     private Button tradeReviewDecline;
     private Button tradeReviewDeclineAndCounterOffer;
+    private Button tradeReviewComplete;
 
     private ItemsAdapter ownerItemAdapter;
     private ItemsAdapter borrowerItemAdapter;
@@ -106,6 +107,7 @@ public class TradeOfferReviewActivity extends AppCompatActivity implements Obser
         tradeReviewAccept = (Button) findViewById(R.id.tradeReviewAccept);
         tradeReviewDecline = (Button) findViewById(R.id.tradeReviewDecline);
         tradeReviewDeclineAndCounterOffer = (Button) findViewById(R.id.tradeReviewDeclineAndCounterOffer);
+        tradeReviewComplete = (Button) findViewById(R.id.tradeReviewComplete);
 
         UUID tradeUUID = (UUID) getIntent().getSerializableExtra("TRADE_UUID");
         populateLayoutWithData(tradeUUID);
@@ -165,7 +167,6 @@ public class TradeOfferReviewActivity extends AppCompatActivity implements Obser
                     activity.finish();
                 }
 
-
                 controller = new TradeOfferReviewController(getBaseContext(), model);
 
                 currentUsername = PrimaryUser.getInstance().getUsername();
@@ -218,13 +219,23 @@ public class TradeOfferReviewActivity extends AppCompatActivity implements Obser
         tradeReviewAccept.setVisibility(View.GONE);
         tradeReviewDecline.setVisibility(View.GONE);
         tradeReviewDeclineAndCounterOffer.setVisibility(View.GONE);
+        tradeReviewComplete.setVisibility(View.GONE);
     }
 
     private void populateLayoutAcceptedTrade(Boolean currentUserOwnsMainItem) {
-        ExceptionUtils.toastLong("Completed action not yet implemented");
         tradeReviewAccept.setVisibility(View.GONE);
         tradeReviewDecline.setVisibility(View.GONE);
         tradeReviewDeclineAndCounterOffer.setVisibility(View.GONE);
+        if (currentUserOwnsMainItem) {
+            tradeReviewComplete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ExceptionUtils.toastLong("Completed action not yet implemented");
+                }
+            });
+        } else {
+            tradeReviewComplete.setVisibility(View.GONE);
+        }
     }
 
     private void populateLayoutCompletedTrade(Boolean currentUserOwnsMainItem) {
@@ -232,60 +243,14 @@ public class TradeOfferReviewActivity extends AppCompatActivity implements Obser
         tradeReviewAccept.setVisibility(View.GONE);
         tradeReviewDecline.setVisibility(View.GONE);
         tradeReviewDeclineAndCounterOffer.setVisibility(View.GONE);
+        tradeReviewComplete.setVisibility(View.GONE);
     }
 
     private void populateLayoutPendingTrade(Boolean currentUserOwnsMainItem) {
+        tradeReviewComplete.setVisibility(View.GONE);
+
         if (currentUserOwnsMainItem) {
-            tradeReviewAccept.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    AsyncTask task = new AsyncTask() {
-                        String emailOwner;
-                        String emailBorrower;
-                        Boolean emailUsers = false;
-
-                        @Override
-                        protected Object doInBackground(Object[] params) {
-                            try {
-                                controller.acceptTrade();
-                                emailBorrower = model.getBorrower().getProfile().getEmail();
-                                emailOwner = model.getOwner().getProfile().getEmail();
-                                emailUsers = true;
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            } catch (ServiceNotAvailableException e) {
-                                ExceptionUtils.toastLong("Failed to accept trade: app is offline");
-                                activity.finish();
-                            }
-                            return null;
-                        }
-
-                        @Override
-                        protected void onPostExecute(Object o) {
-                            if (emailUsers) {
-                                Intent intent = new Intent(Intent.ACTION_SEND);
-                                intent.setType("text/rfc822");
-                                intent.putExtra(Intent.EXTRA_EMAIL,
-                                        new String[]{
-                                                emailOwner,
-                                                emailBorrower
-                                        });
-                                intent.putExtra(Intent.EXTRA_SUBJECT, model.getEmailSubject());
-                                intent.putExtra(Intent.EXTRA_TEXT, model.getEmailBody());
-                                try {
-                                    startActivityForResult(intent, EMAIL_SENT);
-                                } catch (ActivityNotFoundException e) {
-                                    ExceptionUtils.toastLong("No email client installed");
-                                    activity.finish();
-                                }
-                            } else {
-                                activity.finish();
-                            }
-                        }
-                    };
-                    task.execute();
-                }
-            });
+            tradeReviewAccept.setOnClickListener(new TradeOfferReviewAcceptOnClickListener());
             tradeReviewDecline.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -356,5 +321,56 @@ public class TradeOfferReviewActivity extends AppCompatActivity implements Obser
             }
         });
 
+    }
+
+    private class TradeOfferReviewAcceptOnClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            AsyncTask task = new AsyncTask() {
+                String emailOwner;
+                String emailBorrower;
+                Boolean emailUsers = false;
+
+                @Override
+                protected Object doInBackground(Object[] params) {
+                    try {
+                        controller.acceptTrade();
+                        emailBorrower = model.getBorrower().getProfile().getEmail();
+                        emailOwner = model.getOwner().getProfile().getEmail();
+                        emailUsers = true;
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (ServiceNotAvailableException e) {
+                        ExceptionUtils.toastLong("Failed to accept trade: app is offline");
+                        activity.finish();
+                    }
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(Object o) {
+                    if (emailUsers) {
+                        Intent intent = new Intent(Intent.ACTION_SEND);
+                        intent.setType("text/rfc822");
+                        intent.putExtra(Intent.EXTRA_EMAIL,
+                                new String[]{
+                                        emailOwner,
+                                        emailBorrower
+                                });
+                        intent.putExtra(Intent.EXTRA_SUBJECT, model.getEmailSubject());
+                        intent.putExtra(Intent.EXTRA_TEXT, model.getEmailBody());
+                        try {
+                            startActivityForResult(intent, EMAIL_SENT);
+                        } catch (ActivityNotFoundException e) {
+                            ExceptionUtils.toastLong("No email client installed");
+                            activity.finish();
+                        }
+                    } else {
+                        activity.finish();
+                    }
+                }
+            };
+            task.execute();
+        }
     }
 }
