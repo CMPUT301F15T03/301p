@@ -408,4 +408,22 @@ public class Trade implements Observable, Comparable<Trade> {
     public int compareTo(Trade another) {
         return getTradeUUID().compareTo(another.getTradeUUID());
     }
+
+    /**
+     * Generates an email subject after a trade has been accepted
+     * @return subject of email
+     */
+    public String getEmailSubject() {
+        return "Follow up details";
+    }
+
+    /**
+     * Generates a email body containing all trade information after a trade has been accepted
+     *
+     * The user should be able to edit this either in the email intent or a provided text area.
+     * @return body of trade accept email
+     */
+    public String getEmailBody() {
+        return "";
+    }
 }
