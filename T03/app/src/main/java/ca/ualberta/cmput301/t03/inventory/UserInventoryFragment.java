@@ -22,12 +22,17 @@ package ca.ualberta.cmput301.t03.inventory;
 
 
 import android.app.Activity;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.NotificationCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +47,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import ca.ualberta.cmput301.t03.MainActivity;
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.PrimaryUser;
