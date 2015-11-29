@@ -160,7 +160,7 @@ public class Inventory implements Filterable<Item>, Observable, Observer, Adapta
      */
     @Override
     public void addFilter(FilterCriteria filter) {
-        throw new UnsupportedOperationException();
+        filters.add(filter);
     }
 
     /**
@@ -170,7 +170,11 @@ public class Inventory implements Filterable<Item>, Observable, Observer, Adapta
      */
     @Override
     public void removeFilter(String filterName) {
-        throw new UnsupportedOperationException();
+        for (FilterCriteria filter: filters){
+            if (filter.getName().equals(filterName)){
+                filters.remove(filter);
+            }
+        }
     }
 
     /**
@@ -178,7 +182,8 @@ public class Inventory implements Filterable<Item>, Observable, Observer, Adapta
      */
     @Override
     public void clearFilters() {
-        throw new UnsupportedOperationException();
+        this.filters = new ArrayList<FilterCriteria>();
+        filters.add(new PrivateFilterCriteria());
     }
 
     /**
