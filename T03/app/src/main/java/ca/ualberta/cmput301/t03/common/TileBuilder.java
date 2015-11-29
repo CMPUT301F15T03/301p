@@ -32,6 +32,7 @@ import java.util.UUID;
 
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
+import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.inventory.Item;
 import ca.ualberta.cmput301.t03.photo.Photo;
 import ca.ualberta.cmput301.t03.trading.Trade;
@@ -67,7 +68,7 @@ public class TileBuilder {
         return tiles;
     }
 
-    public List<HashMap<String, Object>> buildTradeTiles(TradeList trades, HashMap<Integer, UUID> tradeTilePositionMap) {
+    public List<HashMap<String, Object>> buildTradeTiles(TradeList trades, HashMap<Integer, UUID> tradeTilePositionMap) throws ServiceNotAvailableException {
         ArrayList<HashMap<String, Object>> tiles = new ArrayList<>();
 
         int i = 0;
