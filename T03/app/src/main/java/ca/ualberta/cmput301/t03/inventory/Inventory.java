@@ -55,6 +55,7 @@ public class Inventory implements Filterable<Item>, Observable, Observer, Adapta
     @Transient
     private HashSet<Observer> observers;
 
+    @Expose
     private ArrayList<FilterCriteria> filters;
 
     /**
@@ -67,7 +68,6 @@ public class Inventory implements Filterable<Item>, Observable, Observer, Adapta
         observers = new HashSet<>();
         items = new ArrayList<>();
         filters = new ArrayList<FilterCriteria>();
-        filters.add(new PrivateFilterCriteria());
     }
 
     /**
@@ -165,6 +165,7 @@ public class Inventory implements Filterable<Item>, Observable, Observer, Adapta
     @Override
     public void addFilter(FilterCriteria filter) {
         filters.add(filter);
+
     }
 
     /**
@@ -183,11 +184,20 @@ public class Inventory implements Filterable<Item>, Observable, Observer, Adapta
 
     /**
      * {@inheritDoc}
+     *
+     * @param filterName the filter you wish to remove
+     */
+    @Override
+    public void setFilters(ArrayList<FilterCriteria> filters){
+        this.filters = filters;
+    }
+
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void clearFilters() {
         this.filters = new ArrayList<FilterCriteria>();
-        filters.add(new PrivateFilterCriteria());
     }
 
     /**

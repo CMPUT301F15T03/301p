@@ -299,19 +299,14 @@ public class TradeOfferComposeActivity extends AppCompatActivity implements Obse
 
         ListView itemsListView = (ListView) dialogContent.findViewById(R.id.tradeItemListView);
 
-        ItemsAdapter<Inventory> inv = new ItemsAdapter<>(getApplicationContext(), ownerInventory);
+        ItemsAdapter<Inventory> inv = new ItemsAdapter<>(getApplicationContext(), borrowerInventory);
         itemsListView.setAdapter(inv);
 
         itemsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Item selected = (Item) parent.getItemAtPosition(position);
-//                model.getOwnersItems().addItem(selected);
-//                ownerItems.addItem(selected);
                 borrowerItems.addItem(selected);
-//                ownerItemAdapter.notifyUpdated(ownerItems);
-//                borrowerItemAdapter.notifyDataSetChanged(); //todo do obesever properly.
-
             }
         });
 
