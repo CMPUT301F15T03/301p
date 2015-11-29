@@ -176,10 +176,6 @@ public class TradeOfferComposeActivity extends AppCompatActivity implements Obse
                 borrowerItemAdapter = new ItemsAdapter<Inventory>(TradeApp.getContext(), borrowerItems);
                 borrowerItemListView.setAdapter(borrowerItemAdapter);
 
-
-                model.addObserver(TradeOfferComposeActivity.this);
-
-
                 addItemButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
