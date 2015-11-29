@@ -164,11 +164,15 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer {
                 AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>() {
                     @Override
                     protected Boolean doInBackground(Void[] params) {
-                        if (model.getTrades().get(tradeUUID).getState().isClosed()) {
-                            return Boolean.FALSE;
-                        } else {
-                            return Boolean.TRUE;
+                        Boolean shouldReview = Boolean.TRUE;
+                        try {
+                            if (model.getTrades().get(tradeUUID).isClosed()) {
+                                shouldReview = Boolean.FALSE;
+                            }
+                        } catch (ServiceNotAvailableException e) {
+                            // TODO notify onPostExecute somehow that it should toast network failure
                         }
+                        return shouldReview;
                     }
 
                     @Override

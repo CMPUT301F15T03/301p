@@ -43,7 +43,9 @@ import java.util.UUID;
 
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
+import ca.ualberta.cmput301.t03.TradeApp;
 import ca.ualberta.cmput301.t03.common.TileBuilder;
+import ca.ualberta.cmput301.t03.common.exceptions.ExceptionUtils;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.inventory.EnhancedSimpleAdapter;
 
@@ -109,35 +111,40 @@ public class TradeOfferReviewActivity extends AppCompatActivity {
         ownerItemTilePositionMap = new HashMap<>();
         borrowerItemTilePositionMap = new HashMap<>();
 
-        AsyncTask<Void, Void, Context> task = new AsyncTask<Void, Void, Context>() {
+        AsyncTask task = new AsyncTask() {
             @Override
-            protected Context doInBackground(Void[] params) {
+            protected Object doInBackground(Object[] params) {
                 try {
                     model = PrimaryUser.getInstance().getTradeList().getTrades().get(tradeUUID);
                 } catch (IOException e) {
-                    Log.e("tradereview", e.getMessage());
-                    throw new RuntimeException();
+                    ExceptionUtils.toastErrorWithNetwork();
                 } catch (ServiceNotAvailableException e) {
-                    /**
-                     * todo do something reasonable when offline and clicking on a trade, maybe go back
-                     */
-                    Log.e("tradereview", "Trade Review attempted while offline");
-                    throw new RuntimeException("Trade Review attempted while offline");
+                    ExceptionUtils.toastLong("Trade operations are unavailable offline");
+                    activity.finish();
+                }
+
+                if (model == null) {
+                    ExceptionUtils.toastLong("Failed to fetch trade info");
+                    activity.finish();
                 }
 
                 TileBuilder tileBuilder = new TileBuilder(getResources());
                 ownerItemTiles = tileBuilder.buildItemTiles(model.getOwnersItems(), ownerItemTilePositionMap);
-                borrowerItemTiles = tileBuilder.buildItemTiles(model.getBorrowersItems(), borrowerItemTilePositionMap);
+                try {
+                    borrowerItemTiles = tileBuilder.buildItemTiles(model.getBorrowersItems(), borrowerItemTilePositionMap);
+                } catch (ServiceNotAvailableException e) {
+                    e.printStackTrace();
+                }
 
                 controller = new TradeOfferReviewController(getBaseContext(), model);
 
                 currentUsername = PrimaryUser.getInstance().getUsername();
 
-                return getBaseContext();
+                return null;
             }
 
             @Override
-            protected void onPostExecute(final Context c) {
+            protected void onPostExecute(Object o) {
                 Boolean currentUserOwnsMainItem = model.getOwner().getUsername().equals(currentUsername);
                 if (currentUserOwnsMainItem) {
                     tradeDirectionFromTo.setText("from");
@@ -150,7 +157,11 @@ public class TradeOfferReviewActivity extends AppCompatActivity {
                             AsyncTask task = new AsyncTask() {
                                 @Override
                                 protected Object doInBackground(Object[] params) {
-                                    controller.acceptTrade();
+                                    try {
+                                        controller.acceptTrade();
+                                    } catch (ServiceNotAvailableException e) {
+                                        ExceptionUtils.toastLong("Failed to accept trade: app is offline");
+                                    }
                                     return null;
                                 }
                             };
@@ -164,7 +175,11 @@ public class TradeOfferReviewActivity extends AppCompatActivity {
                             AsyncTask task = new AsyncTask() {
                                 @Override
                                 protected Object doInBackground(Object[] params) {
-                                    controller.declineTrade();
+                                    try {
+                                        controller.declineTrade();
+                                    } catch (ServiceNotAvailableException e) {
+                                        ExceptionUtils.toastLong("Failed to decline trade: app is offline");
+                                    }
                                     return null;
                                 }
                             };
@@ -175,7 +190,7 @@ public class TradeOfferReviewActivity extends AppCompatActivity {
                     tradeReviewDeclineAndCounterOffer.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Snackbar.make(v, "trade decline&counter-offer unimplemented", Snackbar.LENGTH_SHORT).show();
+                            ExceptionUtils.toastShort("trade decline&counter-offer unimplemented");
                         }
                     });
                 } else {
@@ -191,10 +206,10 @@ public class TradeOfferReviewActivity extends AppCompatActivity {
                 String[] from = {"tileViewItemName", "tileViewItemCategory", "tileViewItemImage"};
                 int[] to = {R.id.tileViewItemName, R.id.tileViewItemCategory, R.id.tileViewItemImage};
 
-                ownerItemAdapter = new EnhancedSimpleAdapter(c, ownerItemTiles, R.layout.fragment_item_tile, from, to);
+                ownerItemAdapter = new EnhancedSimpleAdapter(TradeApp.getContext(), ownerItemTiles, R.layout.fragment_item_tile, from, to);
                 ownerItemListView.setAdapter(ownerItemAdapter);
 
-                borrowerItemAdapter = new EnhancedSimpleAdapter(c, borrowerItemTiles, R.layout.fragment_item_tile, from, to);
+                borrowerItemAdapter = new EnhancedSimpleAdapter(TradeApp.getContext(), borrowerItemTiles, R.layout.fragment_item_tile, from, to);
                 borrowerItemListView.setAdapter(borrowerItemAdapter);
             }
         };

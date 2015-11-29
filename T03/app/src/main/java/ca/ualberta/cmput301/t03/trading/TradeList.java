@@ -32,6 +32,7 @@ import java.util.UUID;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
+import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeModificationException;
 
 /**
@@ -85,7 +86,7 @@ public class TradeList implements Observable, Observer {
      *
      * {@see {@link TradeState#isPublic}}
      */
-    public void remove(Trade trade) throws IllegalTradeModificationException {
+    public void remove(Trade trade) throws IllegalTradeModificationException, ServiceNotAvailableException {
         if (trade.getState().isPublic()) {
             throw new IllegalTradeModificationException("Cannot remove Trade from TradeList if it is already public");
         }

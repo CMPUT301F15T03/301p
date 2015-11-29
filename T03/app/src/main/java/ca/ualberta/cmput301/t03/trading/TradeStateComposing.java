@@ -72,7 +72,7 @@ public class TradeStateComposing implements TradeState {
      * @param trade Trade to be offered.
      */
     @Override
-    public void offer(Trade trade) {
+    public void offer(Trade trade) throws ServiceNotAvailableException {
         trade.setState(new TradeStateOffered());
     }
 
@@ -82,7 +82,7 @@ public class TradeStateComposing implements TradeState {
      * @param trade Trade to be cancelled.
      */
     @Override
-    public void cancel(Trade trade) {
+    public void cancel(Trade trade) throws ServiceNotAvailableException {
         try {
             trade.getBorrower().getTradeList().remove(trade);
             trade.getOwner().getTradeList().remove(trade);
