@@ -16,7 +16,7 @@ public class FieldGroupedQueryTests extends TestCase {
 
     private static final String expectedQueryJson = "{\n" +
             "  \"aggs\": {\n" +
-            "    \"group_by_owner_username\": {\n" +
+            "    \"group\": {\n" +
             "      \"terms\": {\n" +
             "        \"field\": \"owner.username\",\n" +
             "        \"size\": 5\n" +
@@ -41,10 +41,5 @@ public class FieldGroupedQueryTests extends TestCase {
 
         String queryJson = query.formQuery();
         assertEquals(expectedQueryJson, queryJson);
-
-        JsonFormatter formatter = new JsonFormatter(false, true);
-        FieldGroupedQuery query2 = formatter.getGson().fromJson(queryJson, FieldGroupedQuery.class);
-
-        assertEquals(query, query2);
     }
 }
