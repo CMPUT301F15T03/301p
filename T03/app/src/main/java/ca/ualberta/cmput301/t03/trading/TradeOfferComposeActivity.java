@@ -45,6 +45,7 @@ import java.util.UUID;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
+import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.TradeApp;
 import ca.ualberta.cmput301.t03.common.exceptions.ExceptionUtils;
@@ -125,13 +126,27 @@ public class TradeOfferComposeActivity extends AppCompatActivity implements Obse
             @Override
             protected Object doInBackground(Object[] params) {
                 try {
-                    model = new Trade(Parcels.<User>unwrap(getIntent().getParcelableExtra("trade/compose/borrower")),
-                            Parcels.<User>unwrap(getIntent().getParcelableExtra("trade/compose/owner")),
-                            new Inventory(),
-                            new Inventory() {{
-                                addItem(Parcels.<Item>unwrap(getIntent().getParcelableExtra("trade/compose/item")));
-                            }},
-                            TradeApp.getContext());
+
+                    if (getIntent().hasExtra(EXTRA_PREV_TRADE_UUID)) {
+                        UUID prevUUID = (UUID) getIntent().getSerializableExtra(EXTRA_PREV_TRADE_UUID);
+                        Trade prevTrade = PrimaryUser.getInstance().getTradeList().getTrade(prevUUID);
+
+
+                        model = new Trade(prevTrade.getOwner(),
+                                prevTrade.getBorrower(),
+                                prevTrade.getOwnersItems(),
+                                prevTrade.getBorrowersItems(),
+                                TradeApp.getContext());
+                    } else {
+
+                        model = new Trade(Parcels.<User>unwrap(getIntent().getParcelableExtra("trade/compose/borrower")),
+                                Parcels.<User>unwrap(getIntent().getParcelableExtra("trade/compose/owner")),
+                                new Inventory(),
+                                new Inventory() {{
+                                    addItem(Parcels.<Item>unwrap(getIntent().getParcelableExtra("trade/compose/item")));
+                                }},
+                                TradeApp.getContext());
+                    }
 
                     model.getBorrower().getTradeList().addTrade(model);
                     model.getOwner().getTradeList().addTrade(model);
@@ -179,88 +194,97 @@ public class TradeOfferComposeActivity extends AppCompatActivity implements Obse
             @Override
             protected void onPostExecute(Object o) {
                 super.onPostExecute(o);
-
-                ownerItemAdapter = new ItemsAdapter<Inventory>(TradeApp.getContext(), ownerItems);
-                ownerItemListView.setAdapter(ownerItemAdapter);
-
-                borrowerItemAdapter = new ItemsAdapter<Inventory>(TradeApp.getContext(), borrowerItems);
-                borrowerItemListView.setAdapter(borrowerItemAdapter);
-
-
-                model.addObserver(TradeOfferComposeActivity.this);
-
-
-                addItemButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        createAddTradeItemDialog().show();
-                    }
-                });
-
-                ownerUsername.setText(model.getOwner().getUsername());
-                offerButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        AsyncTask<Void, Void, Boolean> worker = new AsyncTask<Void, Void, Boolean>() {
-                            @Override
-                            protected Boolean doInBackground(Void[] params) {
-                                try {
-                                    controller.offerTrade();
-                                } catch (ServiceNotAvailableException e) {
-                                    return Boolean.TRUE;
-                                }
-                                return Boolean.FALSE;
-                            }
-
-                            @Override
-                            protected void onPostExecute(Boolean appIsOffline) {
-                                super.onPostExecute(appIsOffline);
-
-                                if (appIsOffline) {
-                                    ExceptionUtils.toastLong("Failed to offer trade: app is offline");
-                                }
-
-                            }
-                        };
-                        worker.execute();
-                        activity.finish();
-                    }
-                });
-                cancelButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        AsyncTask<Void, Void, Boolean> worker = new AsyncTask<Void, Void, Boolean>() {
-                            @Override
-                            protected Boolean doInBackground(Void[] params) {
-                                try {
-                                    controller.cancelTrade();
-                                } catch (ServiceNotAvailableException e) {
-                                    return Boolean.TRUE;
-                                }
-                                return Boolean.FALSE;
-                            }
-
-                            @Override
-                            protected void onPostExecute(Boolean appIsOffline) {
-                                super.onPostExecute(appIsOffline);
-
-                                if (appIsOffline) {
-                                    ExceptionUtils.toastLong("Failed to cancel trade: app is offline");
-                                }
-
-                            }
-                        };
-                        worker.execute();
-                        activity.finish();
-                    }
-                });
+                afterFieldsInitialized();
             }
+
         };
 
-        if (!getIntent().hasExtra(EXTRA_PREV_TRADE_UUID)){
-            worker.execute();
-        }
+        worker.execute();
+
     }
+
+
+
+
+    private void afterFieldsInitialized() {
+        ownerItemAdapter = new ItemsAdapter<Inventory>(TradeApp.getContext(), ownerItems);
+        ownerItemListView.setAdapter(ownerItemAdapter);
+
+        borrowerItemAdapter = new ItemsAdapter<Inventory>(TradeApp.getContext(), borrowerItems);
+        borrowerItemListView.setAdapter(borrowerItemAdapter);
+
+
+        model.addObserver(TradeOfferComposeActivity.this);
+
+
+        addItemButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createAddTradeItemDialog().show();
+            }
+        });
+
+        ownerUsername.setText(model.getOwner().getUsername());
+        offerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AsyncTask<Void, Void, Boolean> worker = new AsyncTask<Void, Void, Boolean>() {
+                    @Override
+                    protected Boolean doInBackground(Void[] params) {
+                        try {
+                            controller.offerTrade();
+                        } catch (ServiceNotAvailableException e) {
+                            return Boolean.TRUE;
+                        }
+                        return Boolean.FALSE;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Boolean appIsOffline) {
+                        super.onPostExecute(appIsOffline);
+
+                        if (appIsOffline) {
+                            ExceptionUtils.toastLong("Failed to offer trade: app is offline");
+                        }
+
+                    }
+                };
+                worker.execute();
+                activity.finish();
+            }
+        });
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AsyncTask<Void, Void, Boolean> worker = new AsyncTask<Void, Void, Boolean>() {
+                    @Override
+                    protected Boolean doInBackground(Void[] params) {
+                        try {
+                            controller.cancelTrade();
+                        } catch (ServiceNotAvailableException e) {
+                            return Boolean.TRUE;
+                        }
+                        return Boolean.FALSE;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Boolean appIsOffline) {
+                        super.onPostExecute(appIsOffline);
+
+                        if (appIsOffline) {
+                            ExceptionUtils.toastLong("Failed to cancel trade: app is offline");
+                        }
+
+                    }
+                };
+                worker.execute();
+                activity.finish();
+            }
+        });
+    }
+
+
+
 
     @Override
     protected void onDestroy() {
