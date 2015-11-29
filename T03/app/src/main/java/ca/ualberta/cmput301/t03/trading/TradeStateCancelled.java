@@ -27,7 +27,7 @@ import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeStateTransition;
  * class TradeStateCancelled implements {@link TradeState}
  */
 public class TradeStateCancelled implements TradeState {
-    public final static String stateString = "Cancelled";
+    public final static String stateString = "TradeStateCancelled";
 
     /**
      * {@inheritDoc}
@@ -122,6 +122,11 @@ public class TradeStateCancelled implements TradeState {
     @Override
     public String getInterfaceString(Boolean currentUserIsOwner) {
         return "CANCELLED-NOT-IN-INTERFACE";
+    }
+
+    @Override
+    public String getStateString() {
+        return "Cancelled";
     }
 
     @Override
