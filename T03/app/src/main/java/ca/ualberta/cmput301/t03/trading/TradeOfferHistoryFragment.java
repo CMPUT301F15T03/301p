@@ -46,6 +46,7 @@ import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.common.TileBuilder;
+import ca.ualberta.cmput301.t03.common.exceptions.ExceptionUtils;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeModificationException;
 
@@ -102,20 +103,10 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer, Swi
             protected Object doInBackground(Object[] params) {
                 try {
                     model = PrimaryUser.getInstance().getTradeList();
-                    for (Trade trade : model.getTradesAsList()) {
-                        if (!trade.isPublic()) {
-                            try {
-                                model.remove(trade);
-                            } catch (IllegalTradeModificationException e) {
-                                Log.e("trade", "Non-public trades cannot be removed from trade lists");
-                            }
-                        }
-                    }
-                    model.commitChanges();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    ExceptionUtils.toastErrorWithNetwork();
                 } catch (ServiceNotAvailableException e) {
-                    throw new RuntimeException("App is offline.", e);
+                    ExceptionUtils.toastErrorWithNetwork();
                 }
                 return null;
             }
@@ -123,14 +114,9 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer, Swi
             @Override
             protected void onPostExecute(Object o) {
                 super.onPostExecute(o);
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        // todo hide loading indicator
-                        setupListView(getContext());
-                        observeModel();
-                    }
-                });
+                // todo hide loading indicator
+                setupListView(getContext());
+                observeModel();
             }
         };
         worker.execute();
@@ -141,8 +127,6 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer, Swi
      */
     private void setupListView(Context context) {
         listView = (ListView) getActivity().findViewById(R.id.tradeHistoryListView);
-
-
 
         adapter = new TradesAdapter<>(context, model);
         listView.setAdapter(adapter);
