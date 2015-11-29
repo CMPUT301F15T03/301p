@@ -26,6 +26,7 @@ import org.parceler.Parcel;
 import org.parceler.Transient;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -266,5 +267,9 @@ public class Inventory implements Filterable<Item>, Observable, Observer, Adapta
     @Override
     public Iterator<Item> iterator() {
         return items.iterator();
+    }
+
+    public int size(){
+        return items.size();
     }
 }
