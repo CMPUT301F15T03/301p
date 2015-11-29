@@ -20,6 +20,8 @@
 
 package ca.ualberta.cmput301.t03.trading;
 
+import android.util.Log;
+
 import com.google.gson.annotations.Expose;
 
 import java.io.IOException;
@@ -35,8 +37,10 @@ import java.util.UUID;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
+import ca.ualberta.cmput301.t03.common.exceptions.ExceptionUtils;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.inventory.Adaptable;
+import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeModificationException;
 
 /**
@@ -90,7 +94,7 @@ public class TradeList implements Observable, Observer, Adaptable<Trade>, Iterab
      *
      * {@see {@link TradeState#isPublic}}
      */
-    public void remove(Trade trade) throws IllegalTradeModificationException {
+    public void remove(Trade trade) throws IllegalTradeModificationException, ServiceNotAvailableException {
         if (trade.getState().isPublic()) {
             throw new IllegalTradeModificationException("Cannot remove Trade from TradeList if it is already public");
         }
@@ -189,16 +193,32 @@ public class TradeList implements Observable, Observer, Adaptable<Trade>, Iterab
 
     @Override
     public List<Trade> getAdaptableItems() throws IOException, ServiceNotAvailableException {
-        ArrayList<Trade> list = new ArrayList<>();
-
-        for (Trade t: getTrades().values()){
-            list.add(t);
+        final ArrayList<Trade> list = new ArrayList<>();
+        final TradeList tradeList = this;
+        Thread worker = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (Trade t: tradeList.getTrades().values()){
+                    try {
+                        if (t.isPublic()) {
+                            list.add(t);
+                        }
+                    } catch (ServiceNotAvailableException e) {
+                        ExceptionUtils.toastErrorWithNetwork();
+                    }
+                }
+            }
+        });
+        worker.start();
+        try {
+            worker.join();
+        } catch (InterruptedException e) {
+            Log.e("TradeList", "getAdaptableItems failed, thread was interrupted while running");
         }
 
         Collections.sort(list);
 
         return list;
-
     }
 
     @Override

@@ -33,7 +33,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.io.IOException;
@@ -45,7 +44,7 @@ import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
-import ca.ualberta.cmput301.t03.common.TileBuilder;
+import ca.ualberta.cmput301.t03.common.exceptions.ExceptionUtils;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeModificationException;
 
@@ -60,8 +59,6 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer, Swi
 
     private ListView listView;
     private TradesAdapter<TradeList> adapter;
-    private List<HashMap<String, Object>> tradeTiles;
-    private HashMap<Integer, UUID> tradeTilePositionMap;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
     public TradeOfferHistoryFragment() {
@@ -88,8 +85,6 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer, Swi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        tradeTilePositionMap = new HashMap<>();
-
         AsyncTask worker = new AsyncTask() {
 
             @Override
@@ -102,20 +97,10 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer, Swi
             protected Object doInBackground(Object[] params) {
                 try {
                     model = PrimaryUser.getInstance().getTradeList();
-                    for (Trade trade : model.getTradesAsList()) {
-                        if (!trade.isPublic()) {
-                            try {
-                                model.remove(trade);
-                            } catch (IllegalTradeModificationException e) {
-                                Log.e("trade", "Non-public trades cannot be removed from trade lists");
-                            }
-                        }
-                    }
-                    model.commitChanges();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    ExceptionUtils.toastErrorWithNetwork();
                 } catch (ServiceNotAvailableException e) {
-                    throw new RuntimeException("App is offline.", e);
+                    ExceptionUtils.toastErrorWithNetwork();
                 }
                 return null;
             }
@@ -123,14 +108,9 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer, Swi
             @Override
             protected void onPostExecute(Object o) {
                 super.onPostExecute(o);
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        // todo hide loading indicator
-                        setupListView(getContext());
-                        observeModel();
-                    }
-                });
+                // todo hide loading indicator
+                setupListView(getContext());
+                observeModel();
             }
         };
         worker.execute();
@@ -142,8 +122,6 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer, Swi
     private void setupListView(Context context) {
         listView = (ListView) getActivity().findViewById(R.id.tradeHistoryListView);
 
-
-
         adapter = new TradesAdapter<>(context, model);
         listView.setAdapter(adapter);
 
@@ -153,28 +131,9 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer, Swi
                 Trade selected = (Trade) (parent.getItemAtPosition(position));
                 final UUID tradeUUID = selected.getTradeUUID();
 
-                AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>() {
-                    @Override
-                    protected Boolean doInBackground(Void[] params) {
-                        if (model.getTrades().get(tradeUUID).getState().isClosed()) {
-                            return Boolean.FALSE;
-                        } else {
-                            return Boolean.TRUE;
-                        }
-                    }
-
-                    @Override
-                    protected void onPostExecute(Boolean shouldReview) {
-                        if (shouldReview) {
-                            Intent intent = new Intent(getContext(), TradeOfferReviewActivity.class);
-                            intent.putExtra("TRADE_UUID", tradeUUID);
-                            startActivity(intent);
-                        } else {
-                            Snackbar.make(getView(), "trade review of accepted|declined trades unimplemented", Snackbar.LENGTH_SHORT).show();
-                        }
-                    }
-                };
-                task.execute();
+                Intent intent = new Intent(getContext(), TradeOfferReviewActivity.class);
+                intent.putExtra("TRADE_UUID", tradeUUID);
+                startActivity(intent);
             }
         });
     }

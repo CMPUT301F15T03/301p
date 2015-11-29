@@ -20,6 +20,7 @@
 
 package ca.ualberta.cmput301.t03.trading;
 
+import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeStateTransition;
 
 /**
@@ -32,7 +33,7 @@ public interface TradeState {
     /**
      * Returns whether the TradeState is Closed.
      * <p>
-     * A Closed trade is one which has been accepted or declined.
+     * A Closed trade is one which has been completed or declined.
      * That is, a Closed trade can no longer be interacted with.
      *
      * @return True if the trade is Closed. Returns false otherwise.
@@ -40,14 +41,14 @@ public interface TradeState {
     Boolean isClosed();
 
     /**
-     * Returns whether the TradeState is Open.
+     * Returns whether the TradeState is Pending.
      * <p>
-     * An open trade is one which has been neither accepted nor declined.
-     * That is, an open trade can be interacted with in some way.
+     * A pending trade is one which has been offered, but not accepted nor declined by the owner.
+     * That is, a pending trade is waiting to be interacted with by the other party.
      *
-     * @return True if the trade is Open. Returns false otherwise.
+     * @return True if the trade is Pending. Returns false otherwise.
      */
-    Boolean isOpen();
+    Boolean isPending();
 
     /**
      * Returns whether the TradeState is Editable.
@@ -77,7 +78,7 @@ public interface TradeState {
      * @param trade Trade to be offered.
      * @throws IllegalTradeStateTransition if the trade is in an illegal state and cannot be offered.
      */
-    void offer(Trade trade) throws IllegalTradeStateTransition;
+    void offer(Trade trade) throws IllegalTradeStateTransition, ServiceNotAvailableException;
 
     /**
      * Cancel a trade.
@@ -88,7 +89,7 @@ public interface TradeState {
      * @param trade Trade to be cancelled.
      * @throws IllegalTradeStateTransition if the trade is in an illegal state and cannot be cancelled.
      */
-    void cancel(Trade trade) throws IllegalTradeStateTransition;
+    void cancel(Trade trade) throws IllegalTradeStateTransition, ServiceNotAvailableException;
 
     /**
      * Accept a trade.
@@ -99,7 +100,18 @@ public interface TradeState {
      * @param trade Trade to be accepted.
      * @throws IllegalTradeStateTransition if the trade is in an illegal state and cannot be accepted.
      */
-    void accept(Trade trade) throws IllegalTradeStateTransition;
+    void accept(Trade trade) throws IllegalTradeStateTransition, ServiceNotAvailableException;
+
+    /**
+     * Complete a trade.
+     * <p>
+     * A trade can only be completed if it has been accepted, that is,
+     * if the current TradeState is {@link TradeStateAccepted}.
+     *
+     * @param trade Trade to be completed.
+     * @throws IllegalTradeStateTransition if the trade is in an illegal state and cannot be accepted.
+     */
+    void complete(Trade trade) throws IllegalTradeStateTransition, ServiceNotAvailableException;
 
     /**
      * Decline a trade.
@@ -110,7 +122,7 @@ public interface TradeState {
      * @param trade Trade to be declined.
      * @throws IllegalTradeStateTransition if the trade is in an illegal state and cannot be declined.
      */
-    void decline(Trade trade) throws IllegalTradeStateTransition;
+    void decline(Trade trade) throws IllegalTradeStateTransition, ServiceNotAvailableException;
 
     /**
      * Returns a string for the interface.
