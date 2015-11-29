@@ -28,7 +28,7 @@ import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeStateTransition;
  * class TradeStateOffered implements {@link TradeState}
  */
 public class TradeStateOffered implements TradeState {
-    public static final String stateString = "TradeStateOffered";
+    public static final String stateString = "Offered";
 
     /**
      * {@inheritDoc}
@@ -42,7 +42,7 @@ public class TradeStateOffered implements TradeState {
      * {@inheritDoc}
      */
     @Override
-    public Boolean isOpen() {
+    public Boolean isPending() {
         return !isClosed();
     }
 
@@ -92,6 +92,17 @@ public class TradeStateOffered implements TradeState {
     @Override
     public void accept(Trade trade) throws ServiceNotAvailableException {
         trade.setState(new TradeStateAccepted());
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param trade Trade to be completed.
+     * @throws IllegalTradeStateTransition
+     */
+    @Override
+    public void complete(Trade trade) throws IllegalTradeStateTransition, ServiceNotAvailableException {
+        throw new IllegalTradeStateTransition("Offered trade cannot be completed");
     }
 
     /**
