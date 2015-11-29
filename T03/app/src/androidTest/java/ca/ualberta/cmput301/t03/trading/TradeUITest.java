@@ -23,6 +23,7 @@ package ca.ualberta.cmput301.t03.trading;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.test.ActivityInstrumentationTestCase2;
+import android.util.Log;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -739,16 +740,26 @@ public class TradeUITest
         // set up items and set up friendships
         final Item userItem = new Item(TEST_ITEM_1_NAME, TEST_ITEM_1_CATEGORY);
         final Item userItem2 = new Item(TEST_ITEM_1_NAME, TEST_ITEM_1_CATEGORY);
+
         try {
+            user.getInventory().addItem(userItem);
             user.getFriends().addFriend(userFriend1);
             userFriend1.getFriends().addFriend(userFriend2);
+        } catch (ServiceNotAvailableException e) {
+            assertTrue("ServiceNotAvailableException in testUserBrowsesTradesInvolvingThem", Boolean.FALSE);
+        } catch (IOException e) {
+            assertTrue("IOException in testUserBrowsesTradesInvolvingThem", Boolean.FALSE);
+        }
+
+        // assert the above worked
+        try {
             assertEquals(1, user.getFriends().size());
             assertTrue(user.getFriends().containsFriend(userFriend1));
             assertTrue(userFriend1.getFriends().containsFriend(userFriend2));
-        } catch (IOException e) {
-            e.printStackTrace();
         } catch (ServiceNotAvailableException e) {
-            e.printStackTrace();
+            assertTrue("ServiceNotAvailableException in testUserBrowsesTradesInvolvingThem", Boolean.FALSE);
+        } catch (IOException e) {
+            assertTrue("IOException in testUserBrowsesTradesInvolvingThem", Boolean.FALSE);
         }
 
         ArrayList<Item> borrowersItems = new ArrayList<Item>() {{
@@ -758,38 +769,52 @@ public class TradeUITest
             add(userItem2);
         }};
 
-        // TODO create trades in all possible states with the user as each role
-        Trade userIsOwner = new Trade(userFriend1, user, borrowersItems, ownersItems, mContext);
-        Trade userIsBorrower = new Trade(user, userFriend1, borrowersItems, ownersItems, mContext);
-        List<Trade> userTrades = Arrays.asList(userIsOwner, userIsBorrower);
+        // TODO create trades in all possible states with the user as each role (closed, open, public)
+        Trade userIsOwnerOpenTrade = new Trade(userFriend1, user, borrowersItems, ownersItems, mContext);
+        Trade userIsOwnerClosedTrade = new Trade(userFriend1, user, borrowersItems, ownersItems, mContext);
+        // TODO set closed trades to closed
+        //userIsOwnerClosedTrade.setState();
 
-        UUID userIsOwnerUUID = userIsOwner.getTradeUUID();
-        UUID userIsBorrowerUUID = userIsBorrower.getTradeUUID();
+        Trade userIsBorrowerOpenTrade = new Trade(user, userFriend1, borrowersItems, ownersItems, mContext);
+        Trade userIsBorrowerClosedTrade = new Trade(user, userFriend1, borrowersItems, ownersItems, mContext);
+
+        List<Trade> userTrades = Arrays.asList(userIsOwnerOpenTrade, userIsOwnerClosedTrade,
+                userIsBorrowerOpenTrade, userIsBorrowerClosedTrade);
+
+        ArrayList<UUID> userTradeUUIDList = new ArrayList<>();
+        for (Trade trade: userTrades) {
+            userTradeUUIDList.add(trade.getTradeUUID());
+        }
 
         // TODO create trades which do not involve the user
         Trade userNotInvolved = new Trade(userFriend1, userFriend2, borrowersItems, ownersItems, mContext);
-
         UUID userNotInvolvedUUID = userNotInvolved.getTradeUUID();
 
         // assert some data conditions
+        ArrayList<UUID> tradeUUIDList = new ArrayList<>();
         try {
             user.getTradeList().addAll(userTrades);
             userFriend1.getTradeList().addTrade(userNotInvolved);
             List<Trade> tradeList = user.getTradeList().getTradesAsList();
-            ArrayList<UUID> tradeUUIDList = new ArrayList<UUID>();
             for (Trade trade: tradeList) {
                 tradeUUIDList.add(trade.getTradeUUID());
             }
-
-            assertTrue(tradeUUIDList.contains(userIsOwnerUUID));
-            assertTrue(tradeUUIDList.contains(userIsBorrowerUUID));
-            assertFalse(tradeUUIDList.contains(userNotInvolvedUUID));
         } catch(IOException e) {
-            e.printStackTrace();
+            assertTrue("IOException in testUserBrowsesTradesInvolvingThem", Boolean.FALSE);
         } catch(ServiceNotAvailableException e) {
-            e.printStackTrace();
+            assertTrue("ServiceNotAvailableException in testUserBrowsesTradesInvolvingThem", Boolean.FALSE);
         }
 
+        // assert the above worked
+        try {
+            assertEquals(4, user.getTradeList().getTradesAsList().size());
+            assertEquals(userTradeUUIDList, tradeUUIDList);
+            assertFalse(tradeUUIDList.contains(userNotInvolvedUUID));
+        } catch (IOException e ) {
+            assertTrue("IOException in testUserBrowsesTradesInvolvingThem", Boolean.FALSE);
+        } catch (ServiceNotAvailableException e ) {
+            assertTrue("ServiceNotAvailableException in testUserBrowsesTradesInvolvingThem", Boolean.FALSE);
+        }
 
         /**
          * Open trade history
@@ -804,10 +829,14 @@ public class TradeUITest
         // check if correct number of trades are there
         // Accessed November 28, 2015
         // http://stackoverflow.com/questions/21604351/check-if-a-listview-has-an-specific-a-number-of-items-and-scroll-to-last-one-wi
-        onData(instanceOf(Trade.class))
+
+        onData(anything())
                 .inAdapterView(allOf(withId(R.id.tradeHistoryListView), isDisplayed()))
-                .atPosition(2)
+                .atPosition(4)
                 .check(matches(isDisplayed()));
+
+
+        //onData(anything()).inAdapterView(withId(R.id.tradeHistoryListView)).atPosition(0).perform(click());
 
         // TODO assert each non-user trade is not in the list
 
