@@ -237,8 +237,19 @@ public class MainActivity extends AppCompatActivity
     private void addInitialFragment() {
         Fragment fragment = null;
         Class fragmentClass;
+        String title;
 
-        fragmentClass = BrowseInventoryFragment.class;
+        if (getIntent().getExtras() != null &&
+                getIntent().getExtras().containsKey("INTENT") &&
+                getIntent().getExtras().getString("INTENT").equals("TRADES")) {
+            fragmentClass = TradeOfferHistoryFragment.class;
+            title = getString(R.string.friendsTitle);
+        }
+        else {
+            fragmentClass = BrowseInventoryFragment.class;
+            title = getString(R.string.browseTitle);
+        }
+
         try {
             fragment = (Fragment) fragmentClass.newInstance();
         } catch (Exception e) {
@@ -246,6 +257,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         fragmentManager = getSupportFragmentManager();
+        setTitle(title);
         fragmentManager.beginTransaction().add(R.id.fragmentContent, fragment).commit();
 //        setTitle(getString(R.string.browseTitle));
     }
@@ -260,6 +272,7 @@ public class MainActivity extends AppCompatActivity
             protected Object doInBackground(Object[] params) {
                 PrimaryUser.setup(getApplicationContext());
                 User mainUser = PrimaryUser.getInstance();
+                TradeApp.startNotificationService();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
