@@ -52,7 +52,7 @@ public class ConfigurationActivity extends AppCompatActivity implements Observer
         setContentView(R.layout.activity_configuration);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         model = new Configuration(getApplicationContext());
         model.addObserver(this);

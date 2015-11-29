@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.UUID;
 
 import ca.ualberta.cmput301.t03.R;
+import ca.ualberta.cmput301.t03.common.exceptions.ExceptionUtils;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.inventory.Adaptable;
 import ca.ualberta.cmput301.t03.inventory.Item;
@@ -45,7 +46,7 @@ public class TradesAdapter<T extends TradeList> extends ArrayAdapter<Trade> {
     private HashMap<UUID, String> tradeStates;
     private Boolean currentUserIsOwner;
 
-    public List<Trade> getTrades(){
+    public List<Trade> getTrades() {
         try {
             return mTradeList.getAdaptableItems();
         } catch (IOException e) {
@@ -62,9 +63,7 @@ public class TradesAdapter<T extends TradeList> extends ArrayAdapter<Trade> {
         tradeStates = new HashMap<>();
         currentUserIsOwner = false;
 
-
         notifyUpdated(mTradeList);
-
     }
 
     /**
@@ -93,8 +92,6 @@ public class TradesAdapter<T extends TradeList> extends ArrayAdapter<Trade> {
         TextView status = (TextView) convertView.findViewById(R.id.tradeTileTradeState);
         TextView otherUser = (TextView) convertView.findViewById(R.id.tradeTileOtherUser);
 
-
-
         // Populate the data into the template view using the data object
         categoryName.setText(mainItem.getItemCategory());
         itemName.setText(mainItem.getItemName());
@@ -113,11 +110,7 @@ public class TradesAdapter<T extends TradeList> extends ArrayAdapter<Trade> {
     @Override
     public void notifyDataSetChanged() {
         super.notifyDataSetChanged();
-
-
     }
-
-
 
     public void notifyUpdated(T model) {
         mTradeList = model;
@@ -127,8 +120,12 @@ public class TradesAdapter<T extends TradeList> extends ArrayAdapter<Trade> {
             @Override
             protected Void doInBackground(Void... params) {
                 getTrades();
-                for (Trade t:mTradeList){
-                    tradeStates.put(t.getTradeUUID(), t.getState().getInterfaceString(currentUserIsOwner));
+                for (Trade t : mTradeList){
+                    try {
+                        tradeStates.put(t.getTradeUUID(), t.getState().getInterfaceString(currentUserIsOwner));
+                    } catch (ServiceNotAvailableException e) {
+                        ExceptionUtils.toastErrorWithNetwork();
+                    }
                 }
                 return null;
             }
