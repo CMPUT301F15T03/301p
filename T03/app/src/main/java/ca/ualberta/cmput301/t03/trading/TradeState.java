@@ -145,5 +145,16 @@ public interface TradeState {
      * @param currentUserIsOwner
      */
     String getInterfaceString(Boolean currentUserIsOwner);
+
+    /**
+     * Returns a string representing the state.
+     *
+     * This should be the name of the state, eg "Completed", "Accepted".
+     *
+     * The first letter should be capitalized.
+     *
+     * @return The string representing the state.
+     */
+    String getStateString();
 }
 

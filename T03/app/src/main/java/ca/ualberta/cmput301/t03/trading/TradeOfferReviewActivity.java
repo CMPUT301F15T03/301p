@@ -212,7 +212,7 @@ public class TradeOfferReviewActivity extends AppCompatActivity implements Obser
             tradeOffererYouTheyWant.setText("You");
             tradeOffererYouTheyOffer.setText("You");
         }
-        tradeStateTextView.setText(tradeState.toString());
+        tradeStateTextView.setText(tradeState.getStateString());
     }
 
     private void populateLayoutDeclinedTrade(Boolean currentUserOwnsMainItem) {
