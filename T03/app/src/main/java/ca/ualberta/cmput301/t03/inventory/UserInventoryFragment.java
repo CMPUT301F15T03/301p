@@ -105,9 +105,7 @@ public class UserInventoryFragment extends Fragment implements Observer, SwipeRe
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivity = getActivity();
-
         positionMap = new HashMap<>();
-
 
         if (getArguments() != null) {
 //            String username = getArguments().getString(ARG_PARAM1);
