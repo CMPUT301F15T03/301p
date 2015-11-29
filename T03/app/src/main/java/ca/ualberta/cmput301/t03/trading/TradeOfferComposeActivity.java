@@ -51,7 +51,7 @@ import ca.ualberta.cmput301.t03.common.TileBuilder;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.filters.FilterCriteria;
 import ca.ualberta.cmput301.t03.filters.item_criteria.StringQueryFilterCriteria;
-import ca.ualberta.cmput301.t03.inventory.EnhancedSimpleAdapter;
+
 import ca.ualberta.cmput301.t03.inventory.Item;
 import ca.ualberta.cmput301.t03.user.User;
 
@@ -72,12 +72,12 @@ public class TradeOfferComposeActivity extends AppCompatActivity {
     private Button addItemButton;
 
     private ListView ownerItemListView;
-    private EnhancedSimpleAdapter ownerItemAdapter;
+//    private EnhancedSimpleAdapter ownerItemAdapter;
     private List<HashMap<String, Object>> ownerItemTiles;
     private HashMap<Integer, UUID> ownerItemTilePositionMap;
 
     private ListView borrowerItemListView;
-    private EnhancedSimpleAdapter borrowerItemAdapter;
+//    private EnhancedSimpleAdapter borrowerItemAdapter;
     private List<HashMap<String, Object>> borrowerItemTiles;
     private HashMap<Integer, UUID> borrowerItemTilePositionMap;
 
@@ -144,11 +144,11 @@ public class TradeOfferComposeActivity extends AppCompatActivity {
                         String[] from = {"tileViewItemName", "tileViewItemCategory", "tileViewItemImage"};
                         int[] to = {R.id.tileViewItemName, R.id.tileViewItemCategory, R.id.tileViewItemImage};
 
-                        ownerItemAdapter = new EnhancedSimpleAdapter(c, ownerItemTiles, R.layout.fragment_item_tile, from, to);
-                        ownerItemListView.setAdapter(ownerItemAdapter);
-
-                        borrowerItemAdapter = new EnhancedSimpleAdapter(c, borrowerItemTiles, R.layout.fragment_item_tile, from, to);
-                        borrowerItemListView.setAdapter(borrowerItemAdapter);
+//                        ownerItemAdapter = new EnhancedSimpleAdapter(c, ownerItemTiles, R.layout.fragment_item_tile, from, to);
+//                        ownerItemListView.setAdapter(ownerItemAdapter);
+//
+//                        borrowerItemAdapter = new EnhancedSimpleAdapter(c, borrowerItemTiles, R.layout.fragment_item_tile, from, to);
+//                        borrowerItemListView.setAdapter(borrowerItemAdapter);
 
                         addItemButton.setOnClickListener(new View.OnClickListener() {
                             @Override

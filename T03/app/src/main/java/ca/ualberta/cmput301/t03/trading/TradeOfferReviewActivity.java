@@ -45,7 +45,7 @@ import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.common.TileBuilder;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
-import ca.ualberta.cmput301.t03.inventory.EnhancedSimpleAdapter;
+
 
 /**
  * class TradeOfferReviewActivity is the View for reviewing a trade which
@@ -74,11 +74,11 @@ public class TradeOfferReviewActivity extends AppCompatActivity {
     private Button tradeReviewDecline;
     private Button tradeReviewDeclineAndCounterOffer;
 
-    private EnhancedSimpleAdapter ownerItemAdapter;
+//    private EnhancedSimpleAdapter ownerItemAdapter;
     private List<HashMap<String, Object>> ownerItemTiles;
     private HashMap<Integer, UUID> ownerItemTilePositionMap;
 
-    private EnhancedSimpleAdapter borrowerItemAdapter;
+//    private EnhancedSimpleAdapter borrowerItemAdapter;
     private List<HashMap<String, Object>> borrowerItemTiles;
     private HashMap<Integer, UUID> borrowerItemTilePositionMap;
 
@@ -191,11 +191,11 @@ public class TradeOfferReviewActivity extends AppCompatActivity {
                 String[] from = {"tileViewItemName", "tileViewItemCategory", "tileViewItemImage"};
                 int[] to = {R.id.tileViewItemName, R.id.tileViewItemCategory, R.id.tileViewItemImage};
 
-                ownerItemAdapter = new EnhancedSimpleAdapter(c, ownerItemTiles, R.layout.fragment_item_tile, from, to);
-                ownerItemListView.setAdapter(ownerItemAdapter);
-
-                borrowerItemAdapter = new EnhancedSimpleAdapter(c, borrowerItemTiles, R.layout.fragment_item_tile, from, to);
-                borrowerItemListView.setAdapter(borrowerItemAdapter);
+//                ownerItemAdapter = new EnhancedSimpleAdapter(c, ownerItemTiles, R.layout.fragment_item_tile, from, to);
+//                ownerItemListView.setAdapter(ownerItemAdapter);
+//
+//                borrowerItemAdapter = new EnhancedSimpleAdapter(c, borrowerItemTiles, R.layout.fragment_item_tile, from, to);
+//                borrowerItemListView.setAdapter(borrowerItemAdapter);
             }
         };
 

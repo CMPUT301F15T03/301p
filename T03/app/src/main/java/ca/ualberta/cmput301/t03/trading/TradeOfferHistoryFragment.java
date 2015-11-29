@@ -27,6 +27,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,21 +47,22 @@ import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.common.TileBuilder;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
-import ca.ualberta.cmput301.t03.inventory.EnhancedSimpleAdapter;
 import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeModificationException;
+
 
 /**
  * View that shows the history of all past and pending trades for a user. Will observe the users
  * tradelist for new trades.
  */
-public class TradeOfferHistoryFragment extends Fragment implements Observer {
+public class TradeOfferHistoryFragment extends Fragment implements Observer, SwipeRefreshLayout.OnRefreshListener {
 
     private TradeList model;
 
     private ListView listView;
-    private EnhancedSimpleAdapter adapter;
+    private TradesAdapter<TradeList> adapter;
     private List<HashMap<String, Object>> tradeTiles;
     private HashMap<Integer, UUID> tradeTilePositionMap;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     public TradeOfferHistoryFragment() {
         // Required empty public constructor
@@ -142,24 +144,17 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer {
     private void setupListView(Context context) {
         listView = (ListView) getActivity().findViewById(R.id.tradeHistoryListView);
 
-        String[] from = {"tradeTileMainItemCategory",
-                "tradeTileMainItemImage",
-                "tradeTileMainItemName",
-                "tradeTileOtherUser",
-                "tradeTileTradeState"};
-        int[] to = {R.id.tradeTileMainItemCategory,
-                R.id.tradeTileMainItemImage,
-                R.id.tradeTileMainItemName,
-                R.id.tradeTileOtherUser,
-                R.id.tradeTileTradeState};
 
-        adapter = new EnhancedSimpleAdapter(context, tradeTiles, R.layout.fragment_trade_tile, from, to);
+
+        adapter = new TradesAdapter<>(getView().getContext(), model);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                UUID tradeUUID = tradeTilePositionMap.get(position);
+                Trade selected = (Trade) (parent.getItemAtPosition(position));
+                UUID tradeUUID = selected.getTradeUUID();
+
                 Intent intent = new Intent(getContext(), TradeOfferReviewActivity.class);
                 intent.putExtra("TRADE_UUID", tradeUUID);
                 startActivity(intent);
@@ -190,6 +185,12 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer {
     }
 
     @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setupSwipeLayout(view);
+    }
+
+    @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
@@ -210,4 +211,32 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer {
         });
     }
 
+    private void setupSwipeLayout(View v){
+        mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.tradeHistorySwipeLayout);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+    }
+
+    @Override
+    public void onRefresh() {
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    PrimaryUser.getInstance().refresh();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ServiceNotAvailableException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                adapter.notifyUpdated(model);
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        };
+        task.execute();
+    }
 }
