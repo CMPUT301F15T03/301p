@@ -14,7 +14,7 @@
 4. Glossary and Information Sources:
   * Terminology for all major nouns/verbs used in our Use Cases has been tabled in the glossary of our wiki, you can find that [here](https://github.com/CMPUT301F15T03/301p/wiki/Glossary-References#glossary).
   * A license has also been chosen and can be found at the root of this repository [here](https://github.com/CMPUT301F15T03/301p/blob/master/LICENSE).
-  
+
 ###Part 3
 UML diagrams can be found [here](https://github.com/CMPUT301F15T03/301p/tree/master/docs/uml). The master UML is [here](https://github.com/CMPUT301F15T03/301p/blob/master/docs/uml/master_uml.pdf).
 
@@ -23,3 +23,11 @@ UML diagrams can be found [here](https://github.com/CMPUT301F15T03/301p/tree/mas
  * UML diagrams can be found [here](https://github.com/CMPUT301F15T03/301p/tree/master/docs/uml). The master UML is [here](https://github.com/CMPUT301F15T03/301p/blob/master/docs/uml/master_uml.pdf).
  * Updates to the release planning can be seen in the [issues section](https://github.com/CMPUT301F15T03/301p/issues)
  * References to external sources are present in this [wiki page](https://github.com/CMPUT301F15T03/301p/wiki/External-Sources).
+
+ ###Part 5
+ * Javadocs can either be accessed in code, or through exported HTML [here](https://github.com/CMPUT301F15T03/301p/tree/master/docs/javadocs)
+ * UML diagrams can be found [here](https://github.com/CMPUT301F15T03/301p/tree/master/docs/uml). The master UML is [here](https://github.com/CMPUT301F15T03/301p/blob/master/docs/uml/master_uml.pdf).
+ * Updates to the release planning can be seen in the [issues section](https://github.com/CMPUT301F15T03/301p/issues)
+ * References to external sources are present in this [wiki page](https://github.com/CMPUT301F15T03/301p/wiki/External-Sources).
+ * YouTube demo:
+ <iframe width="560" height="315" src="https://www.youtube.com/embed/MbHIZUPE8Ck" frameborder="0" allowfullscreen></iframe>
