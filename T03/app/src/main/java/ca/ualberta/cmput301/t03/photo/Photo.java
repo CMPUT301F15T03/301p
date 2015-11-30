@@ -242,6 +242,12 @@ public class Photo implements Observable, Cloneable {
         return base64Photo;
     }
 
+    /**
+     * Return an object that is an exact clone of the photo, this is used in the item clone
+     * workflow
+     * @return cloned photo
+     * @throws CloneNotSupportedException
+     */
     @Override
     public Object clone() throws CloneNotSupportedException {
 //        Photo p = (Photo) super.clone();
