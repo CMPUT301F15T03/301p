@@ -37,12 +37,12 @@ public class AppSettingsTest extends ActivityInstrumentationTestCase2 {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        PrimaryUserHelper.setup(this.getInstrumentation().getTargetContext());
+//        PrimaryUserHelper.setup(this.getInstrumentation().getTargetContext());
     }
 
     @Override
     public void tearDown() throws Exception {
-        PrimaryUserHelper.tearDown(this.getInstrumentation().getTargetContext());
+//        PrimaryUserHelper.tearDown(this.getInstrumentation().getTargetContext());
         super.tearDown();
     }
 
@@ -51,6 +51,7 @@ public class AppSettingsTest extends ActivityInstrumentationTestCase2 {
      */
     public void testSettingAutoDownloadModeOff() {
         final ConfigurationActivity activity = (ConfigurationActivity) getActivity();
+        getInstrumentation().waitForIdleSync();
 
         // check that the view will trigger a change in the model
         activity.getModel().setDownloadImages(true);
@@ -92,6 +93,7 @@ public class AppSettingsTest extends ActivityInstrumentationTestCase2 {
      */
     public void testSettingAutoDownloadModeOn() {
         final ConfigurationActivity activity = (ConfigurationActivity) getActivity();
+        getInstrumentation().waitForIdleSync();
 
         // check that the view will trigger a change in the model
         activity.getModel().setDownloadImages(false);

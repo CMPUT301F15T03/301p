@@ -31,7 +31,7 @@
 
     <ListView
         android:layout_width="wrap_content"
-        android:layout_height="130dp"
+        android:layout_height="150dp"
         android:id="@+id/tradeComposeOwnerItem"
         tools:listitem="@layout/fragment_item_tile" />
 
@@ -84,15 +84,29 @@
 
     <ListView
         android:layout_width="wrap_content"
-        android:layout_height="200dp"
+        android:layout_height="150dp"
         android:id="@+id/tradeComposeBorrowerItems"
         tools:listitem="@layout/fragment_item_tile" />
 
-    <Button
-        android:id="@+id/tradeComposeAddItem"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Add Item to Offer" />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/tradeComposeAddItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Item to Offer"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/tradeComposeRequestItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Request Item"
+            android:layout_weight="1" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

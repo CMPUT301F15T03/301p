@@ -237,14 +237,17 @@ public class MainActivity extends AppCompatActivity
     private void addInitialFragment() {
         Fragment fragment = null;
         Class fragmentClass;
+        String title;
 
         if (getIntent().getExtras() != null &&
                 getIntent().getExtras().containsKey("INTENT") &&
                 getIntent().getExtras().getString("INTENT").equals("TRADES")) {
             fragmentClass = TradeOfferHistoryFragment.class;
+            title = getString(R.string.friendsTitle);
         }
         else {
             fragmentClass = BrowseInventoryFragment.class;
+            title = getString(R.string.browseTitle);
         }
 
         try {
@@ -254,6 +257,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         fragmentManager = getSupportFragmentManager();
+        setTitle(title);
         fragmentManager.beginTransaction().add(R.id.fragmentContent, fragment).commit();
 //        setTitle(getString(R.string.browseTitle));
     }

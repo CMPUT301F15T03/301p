@@ -190,7 +190,7 @@ public class TradeOfferReviewActivity extends AppCompatActivity implements Obser
                 }
 
                 ownerItemAdapter = new ItemsAdapter(TradeApp.getContext(), ownerItems);
-                borrowerItemAdapter = new ItemsAdapter(TradeApp.getContext(), ownerItems);
+                borrowerItemAdapter = new ItemsAdapter(TradeApp.getContext(), borrowerItems);
 
                 ownerItemListView.setAdapter(ownerItemAdapter);
                 borrowerItemListView.setAdapter(borrowerItemAdapter);
@@ -230,7 +230,11 @@ public class TradeOfferReviewActivity extends AppCompatActivity implements Obser
             tradeReviewComplete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ExceptionUtils.toastLong("Completed action not yet implemented");
+                    try {
+                        controller.completeTrade();
+                    } catch (ServiceNotAvailableException e) {
+                        ExceptionUtils.toastErrorWithNetwork();
+                    }
                 }
             });
         } else {
@@ -272,7 +276,25 @@ public class TradeOfferReviewActivity extends AppCompatActivity implements Obser
             tradeReviewDeclineAndCounterOffer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ExceptionUtils.toastShort("trade decline&counter-offer unimplemented");
+//                    ExceptionUtils.toastShort("trade decline&counter-offer unimplemented");
+                    AsyncTask task = new AsyncTask() {
+                        @Override
+                        protected Object doInBackground(Object[] params) {
+                            try {
+                                controller.declineTrade();
+                            } catch (ServiceNotAvailableException e) {
+                                ExceptionUtils.toastLong("Failed to decline and counter trade: app is offline");
+                            }
+                            return null;
+                        }
+                    };
+                    task.execute();
+
+                    Intent intent = new Intent(TradeOfferReviewActivity.this, TradeOfferComposeActivity.class);
+                    intent.putExtra(TradeOfferComposeActivity.EXTRA_PREV_TRADE_UUID, model.getTradeUUID());
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+
                 }
             });
         } else {
@@ -338,6 +360,9 @@ public class TradeOfferReviewActivity extends AppCompatActivity implements Obser
                         emailBorrower = model.getBorrower().getProfile().getEmail();
                         emailOwner = model.getOwner().getProfile().getEmail();
                         emailUsers = true;
+                        if (emailBorrower.equals("") || emailOwner.equals("")) {
+                            emailUsers = false;
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (ServiceNotAvailableException e) {

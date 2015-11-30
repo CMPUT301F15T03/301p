@@ -23,6 +23,12 @@ package ca.ualberta.cmput301.t03.datamanager;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Objects;
+import java.util.concurrent.locks.Lock;
 
 import ca.ualberta.cmput301.t03.common.Preconditions;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
@@ -40,6 +46,10 @@ import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
  * Created by rishi on 15-10-31.
  */
 public class CachedDataManager extends JsonDataManager {
+    private static long MAX_IN_MEMORY_CACHE_DURATION_MS = 3000;
+
+    private static Object cacheLock = new Object();
+    private static HashMap<DataKey, TimeObjectWrapper> inMemoryCache = new HashMap<>();
 
     private final LocalDataManager cachingDataManager;
     protected final JsonDataManager innerManager;
@@ -85,13 +95,29 @@ public class CachedDataManager extends JsonDataManager {
      */
     @Override
     public <T> T getData(DataKey key, Type typeOfT) throws IOException, DataKeyNotFoundException, ClassCastException, ServiceNotAvailableException {
+
+        synchronized (cacheLock) {
+            if (shouldGetFromInMemoryCache(key)) {
+                return (T) inMemoryCache.get(key).getObject();
+            }
+        }
+
         if (innerManager.isOperational()) {
             T retrievedData = innerManager.getData(key, typeOfT);
             cachingDataManager.writeData(key, retrievedData, typeOfT);
+            synchronized (cacheLock) {
+                inMemoryCache.put(key, new TimeObjectWrapper(retrievedData));
+            }
             return retrievedData;
         }
 
-        return cachingDataManager.getData(key, typeOfT);
+        synchronized (cacheLock) {
+            if (inMemoryCache.containsKey(key)) {
+                return (T) inMemoryCache.get(key).getObject();
+            } else {
+                return cachingDataManager.getData(key, typeOfT);
+            }
+        }
     }
 
     /**
@@ -171,5 +197,38 @@ public class CachedDataManager extends JsonDataManager {
      */
     protected void deleteFromCache(DataKey key) {
         cachingDataManager.deleteIfExists(key);
+    }
+
+    private boolean shouldGetFromInMemoryCache(DataKey key) {
+        if (inMemoryCache.containsKey(key)) {
+            TimeObjectWrapper timeObjectWrapper = inMemoryCache.get(key);
+            long difference = System.currentTimeMillis() - timeObjectWrapper.getDateCreatedEpochMillis();
+            if (difference <= MAX_IN_MEMORY_CACHE_DURATION_MS) {
+                return true;
+            } else {
+                inMemoryCache.remove(key);
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    private class TimeObjectWrapper {
+        private final Object obj;
+        private final long dateCreated;
+
+        public TimeObjectWrapper(Object obj) {
+            this.obj = obj;
+            this.dateCreated = System.currentTimeMillis();
+        }
+
+        public Object getObject() {
+            return obj;
+        }
+
+        public long getDateCreatedEpochMillis() {
+            return dateCreated;
+        }
     }
 }
