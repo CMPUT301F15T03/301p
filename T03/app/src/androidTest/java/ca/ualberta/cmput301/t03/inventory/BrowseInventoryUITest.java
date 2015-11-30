@@ -167,8 +167,9 @@ public class BrowseInventoryUITest {
                 .perform(click());
 
 //        onView(withId(R.id.itemFilterCategory)).inRoot(Decor) .perform(click());
-        onView(withId(R.id.itemFilterCategory))
-                .check(matches(withText(containsString("cameras")))).perform(click());
+        onView(withId(R.id.itemFilterCategory)).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is("cameras"))).perform(click());
+        onView(withId(R.id.itemFilterCategory)).check(matches(withText(containsString("cameras"))));
 
 
         onView(withText("Set")).
@@ -277,10 +278,6 @@ public class BrowseInventoryUITest {
         /**
          * Return to Browse
          */
-        onView(withContentDescription("Open navigation drawer")).check(matches(isDisplayed())).perform(click());
-        pause();
-        onView(withText("Inventory")).check(matches(isDisplayed())).perform(click());
-        pause();
 
         onView(withContentDescription("Open navigation drawer")).check(matches(isDisplayed())).perform(click());
         pause();
