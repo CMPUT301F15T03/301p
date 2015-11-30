@@ -10,4 +10,6 @@
     <dimen name="trade_tile_image_width">100dp</dimen>
     <dimen name="trade_offer_padding_between_user_and_other_word">10dp</dimen>
     <dimen name="top_trader_padding">10dp</dimen>
+    <dimen name="no_friends_icon_margin_top">60dp</dimen>
+    <dimen name="no_friends_text_margin_top">40dp</dimen>
 </resources>

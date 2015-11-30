@@ -76,6 +76,8 @@ public class BrowseInventoryFragment extends Fragment implements Observer, Swipe
     private ListView mListview;
 
     private ArrayList<FilterCriteria> filters;
+    private final Object uiLock = new Object();
+    private boolean init = true;
 
     public BrowseInventoryFragment() {
         // Required empty public constructor
@@ -98,70 +100,23 @@ public class BrowseInventoryFragment extends Fragment implements Observer, Swipe
         filters = new ArrayList<>();
         filters.add(new PrivateFilterCriteria());
         setHasOptionsMenu(true);
-
-        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-                try {
-                    model = PrimaryUser.getInstance().getBrowseableInventories(filters);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ServiceNotAvailableException e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                setupListView();
-            }
-        };
-        task.execute();
-
-    }
-
-    private void setupListView() {
-        adapter = new ItemsAdapter<>(mActivity.getBaseContext(), model);
-        mListview.setAdapter(adapter);
-
-        mListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                inspectItem((Item) parent.getItemAtPosition(position));
-            }
-        });
-        setupSwipeRefresh(getView());
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
         onRefresh();
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_browse_inventory, container, false);
-        mView = v;
-
-        mListview = (ListView) v.findViewById(R.id.BrowseListView);
-
-
-
-        return v;
+        synchronized (uiLock) {
+            mView = inflater.inflate(R.layout.fragment_browse_inventory, container, false);
+            mListview = (ListView) mView.findViewById(R.id.BrowseListView);
+        }
+        return mView;
     }
-
-
-    private void setupSwipeRefresh(View v){
-        mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.browseListSwipeLayout);
-        mSwipeRefreshLayout.setOnRefreshListener(this);
-    }
-
-
 
     /**
      * Starts intent for inspecting item
@@ -181,7 +136,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer, Swipe
                         }
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    throw new RuntimeException(e);
                 } catch (ServiceNotAvailableException e) {
                     throw new RuntimeException("App is offline.", e);
                 }
@@ -330,7 +285,21 @@ public class BrowseInventoryFragment extends Fragment implements Observer, Swipe
         onRefresh();
     }
 
+    private void setupListView() {
+        adapter = new ItemsAdapter<>(mActivity.getBaseContext(), model);
+        mListview.setAdapter(adapter);
 
+        mListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                inspectItem((Item) parent.getItemAtPosition(position));
+            }
+        });
+        mSwipeRefreshLayout = (SwipeRefreshLayout) mView.findViewById(R.id.browseListSwipeLayout);
+        mSwipeRefreshLayout.setOnRefreshListener(BrowseInventoryFragment.this);
+    }
+
+    @Override
     public void onRefresh() {
         AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
             @Override
@@ -338,21 +307,37 @@ public class BrowseInventoryFragment extends Fragment implements Observer, Swipe
                 try {
                     PrimaryUser.getInstance().refresh();
                     model = PrimaryUser.getInstance().getBrowseableInventories(filters);
-
-
                     //fixme browseableinventories actually needs to refresh
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    throw new RuntimeException(e);
                 } catch (ServiceNotAvailableException e) {
-                    e.printStackTrace();
+                    throw new RuntimeException(e);
                 }
                 return null;
             }
 
             @Override
             protected void onPostExecute(Void aVoid) {
-                adapter.notifyUpdated(model);
-                mSwipeRefreshLayout.setRefreshing(false);
+                if (model.size() > 0) {
+                    if (init) {
+                        init = false;
+                        setupListView();
+                    }
+                    else {
+                        if (mSwipeRefreshLayout.isRefreshing()) {
+                            mSwipeRefreshLayout.setRefreshing(false);
+                        }
+                        adapter.notifyUpdated(model);
+                    }
+                } else {
+                    synchronized (uiLock) {
+                        if (getActivity().getSupportFragmentManager() != null){
+                            getActivity().getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.fragmentContent, NoFriendsBrowseInventory.newInstance())
+                                    .commit();
+                        }
+                    }
+                }
             }
         };
         task.execute();
