@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity
     public FragmentManager fragmentManager;
     private TextView sidebarUsernameTextView;
     private TextView sidebarEmailTextView;
+    private NavigationView navigationView;
 
     /**
      * called when the activity is requested, used to initialize most of the view elements and
@@ -82,7 +83,7 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         View header = navigationView.inflateHeaderView(R.layout.nav_header_main);
@@ -177,40 +178,57 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+
+        changeNavigationTab(item.getItemId(), false);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    public void changeNavigationTab(int id, boolean manuallyChangeSelection) {
         Fragment fragment = null;
         String title;
         Class fragmentClass;
 
-        switch (item.getItemId()) {
+        int index;
+        switch (id) {
             case R.id.nav_inventory:
                 fragmentClass = UserInventoryFragment.class;
                 title = getString(R.string.inventoryTitle);
+                index = 0;
                 break;
             case R.id.nav_browse:
                 fragmentClass = BrowseInventoryFragment.class;
                 title = getString(R.string.browseTitle);
+                index = 1;
                 break;
             case R.id.nav_trades:
                 fragmentClass = TradeOfferHistoryFragment.class;
                 title = getString(R.string.tradeTitle);
+                index = 2;
                 break;
             case R.id.nav_friends:
                 fragmentClass = FriendsListFragment.class;
                 title = getString(R.string.friendsTitle);
+                index = 3;
                 break;
             case R.id.nav_edit_profile:
                 fragmentClass = ViewProfileFragment.class;
                 title = getString(R.string.myProfileLabel);
+                index = 4;
                 break;
 
             case R.id.nav_top_traders:
                 fragmentClass = TopTradersFragment.class;
                 title = getString(R.string.topTradersTitle);
+                index = 5;
                 break;
 
             default:
                 fragmentClass = BrowseInventoryFragment.class;
                 title = getString(R.string.browseTitle);
+                index = 1;
+                break;
         }
 
         try {
@@ -223,12 +241,11 @@ public class MainActivity extends AppCompatActivity
             e.printStackTrace();
         }
         fragmentManager.beginTransaction().replace(R.id.fragmentContent, fragment).commit();
-
         setTitle(title);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
+        if (manuallyChangeSelection) {
+            navigationView.getMenu().getItem(index).setChecked(true);
+        }
     }
 
     /**
