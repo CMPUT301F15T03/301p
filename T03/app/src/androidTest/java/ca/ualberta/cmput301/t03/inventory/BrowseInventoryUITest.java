@@ -26,6 +26,7 @@ import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
+import android.widget.Spinner;
 
 import org.hamcrest.core.StringContains;
 import org.junit.After;
@@ -44,6 +45,7 @@ import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -54,7 +56,11 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static ca.ualberta.cmput301.t03.common.PauseForAnimation.pause;
 import static java.lang.Thread.sleep;
 import static junit.framework.Assert.fail;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasToString;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
@@ -154,18 +160,16 @@ public class BrowseInventoryUITest {
          * Adding filter of a friend to view all friends inventories,
          * filtering by a given category.
          */
-        onView(withContentDescription(R.id.filter_inventory_button))
+        onView(withContentDescription("Filter"))
                 .check(matches(isDisplayed()))
                 .perform(click());
-        onView(withClassName(new StringContains("AddFilterType"))).
-                perform(typeText("category"),
-                        closeSoftKeyboard());
-        pause();
-        onView(withClassName(new StringContains("AddFilterText"))).
-                perform(typeText("Stands"),
-                        closeSoftKeyboard());
-        pause();
-        onView(withText("Add")).
+
+//        onView(withId(R.id.itemFilterCategory)).inRoot(Decor) .perform(click());
+        onView(withId(R.id.itemFilterCategory))
+                .check(matches(withText(containsString("cameras"))));
+
+
+        onView(withText("Set")).
                 perform(click());
         pause();
 
@@ -198,13 +202,11 @@ public class BrowseInventoryUITest {
          * Adding filter of textualQuery to view all friends inventories,
          * filtering by a given textualQuery.
          */
-        onView(withContentDescription(R.id.search_inventory_button))
+        onView(withContentDescription("Search"))
                 .check(matches(isDisplayed()))
                 .perform(click());
-        onView(withClassName(new StringContains("AddFilterType"))).
-                perform(typeText("category"),
-                        closeSoftKeyboard());
-        onView(withClassName(new StringContains("AddFilterText"))).
+
+        onView(withId(R.id.addSearchFilterText)).
                 perform(typeText("FX10"),
                         closeSoftKeyboard());
         pause();
@@ -218,6 +220,21 @@ public class BrowseInventoryUITest {
          */
         onView(withText("testItem1f1")).check(matches(isDisplayed()));
         onView(withText("testItem1f2")).check(matches(isDisplayed()));
+
+        onView(withContentDescription("Search"))
+                .check(matches(isDisplayed()))
+                .perform(click());
+
+//        onData().inAdapterView()
+//        onData(0)
+//                .inAdapterView(withId(R.id.existingSearchFilterListView))
+//                .perform(longClick());
+//        pause();
+//
+//        onView(withText("testItem1f1")).check(matches(isDisplayed()));
+//        onView(withText("testItem2f1")).check(matches(isDisplayed()));
+//        onView(withText("testItem1f2")).check(matches(isDisplayed()));
+//        onView(withText("testItem2f2")).check(matches(isDisplayed()));
 
     }
 
