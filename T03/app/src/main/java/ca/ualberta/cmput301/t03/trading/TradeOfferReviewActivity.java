@@ -124,9 +124,19 @@ public class TradeOfferReviewActivity extends AppCompatActivity implements Obser
         }
     }
 
+    /**
+     * Renders the layout for a particular trade.
+     *
+     * This method is responsible for:
+     * - populating text views with appropriate text
+     * - populating the owner items list view, and hooking up the adapter
+     * - populating the borrower items list view, and hooking up the adapter
+     * - hiding buttons which are not applicable given the particular trade
+     * - setting up on click listeners on buttons which are applicable given the current trade
+     *
+     * @param tradeUUID The unique identifier representing the trade
+     */
     private void populateLayoutWithData(final UUID tradeUUID) {
-
-
         AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
             private Boolean currentUserOwnsMainItem;
             private Boolean tradeIsPending;
@@ -230,11 +240,29 @@ public class TradeOfferReviewActivity extends AppCompatActivity implements Obser
             tradeReviewComplete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    try {
-                        controller.completeTrade();
-                    } catch (ServiceNotAvailableException e) {
-                        ExceptionUtils.toastErrorWithNetwork();
-                    }
+                    AsyncTask completeTask = new AsyncTask() {
+                        private Boolean appIsOffline = Boolean.FALSE;
+
+                        @Override
+                        protected Object doInBackground(Object[] params) {
+                            try {
+                                controller.completeTrade();
+                            } catch (ServiceNotAvailableException e) {
+                                appIsOffline = Boolean.TRUE;
+                            }
+                            return null;
+                        }
+
+                        @Override
+                        protected void onPostExecute(Object o) {
+                            super.onPostExecute(o);
+                            if (appIsOffline) {
+                                ExceptionUtils.toastErrorWithNetwork();
+                            }
+                        }
+                    };
+                    completeTask.execute();
+                    activity.finish();
                 }
             });
         } else {
