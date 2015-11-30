@@ -37,10 +37,20 @@ public class PhotoGalleryController {
         this.model = model;
     }
 
+    /**
+     * Remove an item at a given index from the model's collection of Photos
+     * @param index where in the photo's collection the photo is to be removed
+     */
     public void removePhoto(Integer index) {
         model.removePhoto(model.getPhotos().get(index));
     }
 
+    /**
+     * Force a prefetch of the photo at a given index regardless of the configuration settings.
+     *
+     * This is used when the the user explicitly chooses to download the photo.
+     * @param index
+     */
     public void downloadPhoto(Integer index) {
         model.getPhotos().get(index).downloadPhoto(true);
     }
