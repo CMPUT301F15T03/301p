@@ -36,7 +36,9 @@
     <string name="doneButtonText">Done</string>
 
     <!--Business logic constants-->
-    <string name="elasticSearchRootUrl">http://cmput301.softwareprocess.es:8080/cmput301f15t03/</string>
+    <string name="elasticSearchRootUrl">http://cmput301f15t03.westus.cloudapp.azure.com:9200/cmput301f15t03/</string>
+    <!--<string name="elasticSearchRootUrl">http://cmput301.softwareprocess.es:8080/cmput301f15t03/</string>-->
+    <!--<string name="elasticSearchRootUrl">http://192.168.99.100:32769/cmput301f15t03/</string>-->
     <string name="friendSearch">search</string>
     <string name="trade_tile_blank">A Trade Tile</string>
     <string name="title_activity_add_item_view">Add New Item</string>
