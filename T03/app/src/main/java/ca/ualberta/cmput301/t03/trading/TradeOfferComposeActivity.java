@@ -84,6 +84,7 @@ public class TradeOfferComposeActivity extends AppCompatActivity implements Obse
 
     private Inventory ownerItems;
     private Inventory borrowerItems;
+    private Button requestItemButton;
 
     /**
      * Sets up the view with all components, the model, and the controller
@@ -109,16 +110,23 @@ public class TradeOfferComposeActivity extends AppCompatActivity implements Obse
         offerButton = (Button) findViewById(R.id.tradeComposeOffer);
         cancelButton = (Button) findViewById(R.id.tradeComposeCancel);
         addItemButton = (Button) findViewById(R.id.tradeComposeAddItem);
+        requestItemButton = (Button) findViewById(R.id.tradeComposeRequestItem);
 
-        ownerItemListView = (ListView) findViewById(R.id.tradeComposeOwnerItem);
-        borrowerItemListView = (ListView) findViewById(R.id.tradeComposeBorrowerItems);
-        borrowerItemListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+        AdapterView.OnItemClickListener deleteItemListener = new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Item item = (Item) parent.getItemAtPosition(position);
                 borrowerItems.removeItem(item);
             }
-        });
+        };
+
+        ownerItemListView = (ListView) findViewById(R.id.tradeComposeOwnerItem);
+        ownerItemListView.setOnItemClickListener(deleteItemListener);
+
+        borrowerItemListView = (ListView) findViewById(R.id.tradeComposeBorrowerItems);
+        borrowerItemListView.setOnItemClickListener(deleteItemListener);
+
 
         AsyncTask worker = new AsyncTask() {
 
@@ -129,7 +137,7 @@ public class TradeOfferComposeActivity extends AppCompatActivity implements Obse
 
                     if (getIntent().hasExtra(EXTRA_PREV_TRADE_UUID)) {
                         UUID prevUUID = (UUID) getIntent().getSerializableExtra(EXTRA_PREV_TRADE_UUID);
-                        Trade prevTrade = PrimaryUser.getInstance().getTradeList().getTrade(prevUUID);
+                        Trade prevTrade = new Trade(prevUUID, TradeApp.getContext());
 
 
                         model = new Trade(prevTrade.getOwner(),
@@ -217,10 +225,18 @@ public class TradeOfferComposeActivity extends AppCompatActivity implements Obse
         model.addObserver(TradeOfferComposeActivity.this);
 
 
+        requestItemButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createAddTradeItemDialog(ownerInventory, ownerItems).show();
+            }
+        });
+
+
         addItemButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createAddTradeItemDialog().show();
+                createAddTradeItemDialog(borrowerInventory, borrowerItems).show();
             }
         });
 
@@ -330,22 +346,24 @@ public class TradeOfferComposeActivity extends AppCompatActivity implements Obse
         return super.onOptionsItemSelected(item);
     }
 
-    private AlertDialog createAddTradeItemDialog() {
+    private AlertDialog createAddTradeItemDialog(Inventory browseModel, final Inventory tradeItemsModel) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View dialogContent = View.inflate(this, R.layout.trade_item_picker_list, null);
 
         ListView itemsListView = (ListView) dialogContent.findViewById(R.id.tradeItemListView);
 
-        ItemsAdapter<Inventory> inv = new ItemsAdapter<>(getApplicationContext(), borrowerInventory);
+        ItemsAdapter<Inventory> inv = new ItemsAdapter<>(getApplicationContext(), browseModel);
         itemsListView.setAdapter(inv);
 
         itemsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Item selected = (Item) parent.getItemAtPosition(position);
-                borrowerItems.addItem(selected);
+                tradeItemsModel.addItem(selected);
             }
         });
+
+
 
         builder.setView(dialogContent); //todo this ui is kind of gross
         builder.setTitle("Add Trade Item");
