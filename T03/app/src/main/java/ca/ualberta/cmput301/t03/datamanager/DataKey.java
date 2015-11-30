@@ -91,4 +91,24 @@ public class DataKey {
     public String toString() {
         return String.format("%s/%s", getType(), getId());
     }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) {
+            return false;
+        }
+
+        if (!(o instanceof DataKey)) {
+            return false;
+        }
+
+        DataKey rhs = (DataKey)o;
+        return rhs.type.equals(this.type) && rhs.id.equals(this.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode() ^ type.hashCode();
+    }
 }
