@@ -83,16 +83,6 @@ public class TradeStateComposing implements TradeState {
      */
     @Override
     public void cancel(Trade trade) throws ServiceNotAvailableException {
-        try {
-            trade.getBorrower().getTradeList().remove(trade);
-            trade.getOwner().getTradeList().remove(trade);
-        } catch (IllegalTradeModificationException e) {
-            Log.e("trade", e.getMessage());
-        } catch (ServiceNotAvailableException e) {
-            // todo snackbar toast saying we're offline?
-        } catch (IOException e) {
-            // todo handle this exception
-        }
         trade.setState(new TradeStateCancelled());
     }
 

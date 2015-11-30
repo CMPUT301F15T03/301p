@@ -78,14 +78,14 @@ public class BrowseInventoryUITest {
         /*
          * Go to browse fragment
          */
-        onView(withContentDescription(R.string.navigation_drawer_open))
-                .check(matches(isDisplayed()))
-                .perform(click());
-        pause();
-        onView(withText("Browse"))
-                .check(matches(isDisplayed()))
-                .perform(click());
-        pause();
+//        onView(withContentDescription(R.string.navigation_drawer_open))
+//                .check(matches(isDisplayed()))
+//                .perform(click());
+//        pause();
+//        onView(withText("Browse"))
+//                .check(matches(isDisplayed()))
+//                .perform(click());
+//        pause();
     }
 
     @After
@@ -144,81 +144,6 @@ public class BrowseInventoryUITest {
     }
 
     /**
-     * UC3.1.2 BrowseFriendGeneralSearch
-     * Precondition User exists with friends that have inventories,
-     * with both private and public items.
-     */
-    @Test
-    public void testBrowseFriendGeneralSearch() throws Exception {
-        /**
-         * Adding filter of a friend to view single friends inventory.
-         */
-        //TODO onView(withId(R.id.addFilterButton)).perform(click());
-        onView(withClassName(new StringContains("AddFilterType"))).
-                perform(typeText("friend"),
-                        closeSoftKeyboard());
-        pause();
-        onView(withClassName(new StringContains("AddFilterText"))).
-                perform(typeText("FRIENDWITHANINVENTORY"),
-                        closeSoftKeyboard());
-        pause();
-        onView(withText("Add")).
-                perform(click());
-        pause();
-
-        /**
-         * Checks that there are two items from the filtered friend
-         */
-        onView(withText("testItem1f1")).check(matches(isDisplayed()));
-        onView(withText("testItem2f1")).check(matches(isDisplayed()));
-        try {
-            onView(withText("testItem1f2")).check(matches(isDisplayed()));
-            fail("View should not be displayed");
-        } catch (NoMatchingViewException e) {
-            //pass
-        }
-    }
-
-    /**
-     * UC3.1.2 BrowseFriendGeneralSearch
-     * Precondition User exists with friends that have inventories,
-     * with both private and public items.
-     */
-    @Test
-    public void testBrowseFriendFromFriends() throws Exception {
-        /**
-         * Navigate to FriendList and Find Friend
-         */
-        onView(withContentDescription("Open navigation drawer")).check(matches(isDisplayed())).perform(click());
-        pause();
-        onView(withText("Friends")).check(matches(isDisplayed())).perform(click());
-        pause();
-
-        onData(hasToString("FRIENDWITHANINVENTORY"))
-                .inAdapterView(withId(R.id.friendsListListView))
-                .perform(click());
-        pause();
-
-        /**
-         * Click show inventory button
-         */
-        onView(withText("Inventory")).check(matches(isDisplayed())).perform(click());
-        pause();
-
-        /**
-         * Checks that there are two items from the filtered friend
-         */
-        onView(withText("testItem1f1")).check(matches(isDisplayed()));
-        onView(withText("testItem2f1")).check(matches(isDisplayed()));
-        try {
-            onView(withText("testItem3f1")).check(matches(isDisplayed()));
-            fail("View should not be displayed");
-        } catch (NoMatchingViewException e) {
-            //pass
-        }
-    }
-
-    /**
      * UC3.1.3 BrowseAllFriendsCategorySearch
      * Precondition User exists with friends that have inventories,
      * with items of two separate categories.
@@ -229,7 +154,9 @@ public class BrowseInventoryUITest {
          * Adding filter of a friend to view all friends inventories,
          * filtering by a given category.
          */
-        //TODO onView(withId(R.id.addFilterButton)).perform(click());
+        onView(withContentDescription(R.id.filter_inventory_button))
+                .check(matches(isDisplayed()))
+                .perform(click());
         onView(withClassName(new StringContains("AddFilterType"))).
                 perform(typeText("category"),
                         closeSoftKeyboard());
@@ -258,54 +185,7 @@ public class BrowseInventoryUITest {
         }
     }
 
-    /**
-     * UC3.1.4 BrowseFriendCategorySearch
-     * Precondition User exists with friends that have inventories,
-     * with items of two separate categories.
-     */
-    @Test
-    public void testBrowseFriendCategorySearch() throws Exception {
-        /**
-         * Adding filter of a friend and a category to view single friends
-         * inventory of only items pertaining to a given category.
-         */
-        //TODO onView(withId(R.id.addFilterButton)).perform(click());
-        onView(withClassName(new StringContains("AddFilterType"))).
-                perform(typeText("friend"),
-                        closeSoftKeyboard());
-        pause();
-        onView(withClassName(new StringContains("AddFilterText"))).
-                perform(typeText("FRIENDWITHANINVENTORY"),
-                        closeSoftKeyboard());
-        pause();
-        onView(withText("Add")).
-                perform(click());
-        pause();
-        //TODO onView(withId(R.id.addFilterButton)).perform(click());
-        onView(withClassName(new StringContains("AddFilterType"))).
-                perform(typeText("category"),
-                        closeSoftKeyboard());
-        pause();
-        onView(withClassName(new StringContains("AddFilterText"))).
-                perform(typeText("Stands"),
-                        closeSoftKeyboard());
-        pause();
-        onView(withText("Add")).
-                perform(click());
-        pause();
 
-        /**
-         * Checks that there is one item from the filtered friend and that is has category "stand".
-         */
-        onView(withText("testItem2f1")).check(matches(isDisplayed()));
-        onView(withText("Stands")).check(matches(isDisplayed()));
-        try {
-            onView(withText("Cameras")).check(matches(isDisplayed()));
-            fail("View should not be displayed");
-        } catch (NoMatchingViewException e) {
-            //pass
-        }
-    }
 
     /**
      * UC3.1.5 BrowseAllFriendsTextualQuerySearch
@@ -318,11 +198,12 @@ public class BrowseInventoryUITest {
          * Adding filter of textualQuery to view all friends inventories,
          * filtering by a given textualQuery.
          */
-        //TODO onView(withId(R.id.addFilterButton)).perform(click());
+        onView(withContentDescription(R.id.search_inventory_button))
+                .check(matches(isDisplayed()))
+                .perform(click());
         onView(withClassName(new StringContains("AddFilterType"))).
-                perform(typeText("textual"),
+                perform(typeText("category"),
                         closeSoftKeyboard());
-        pause();
         onView(withClassName(new StringContains("AddFilterText"))).
                 perform(typeText("FX10"),
                         closeSoftKeyboard());
@@ -340,47 +221,7 @@ public class BrowseInventoryUITest {
 
     }
 
-    /**
-     * UC3.1.6 BrowseFriendTextualQuerySearch
-     * Precondition User exists with friends that have inventories,
-     * with items with textual attributes that can be used to filter results.
-     */
-    @Test
-    public void testBrowseFriendTextualQuerySearch() throws Exception {
-        /**
-         * Adding filter of a textualQuery and friend to view one friends inventory,
-         * filtered by a given textualQuery.
-         */
-        //TODO onView(withId(R.id.addFilterButton)).perform(click());
-        onView(withClassName(new StringContains("AddFilterType"))).
-                perform(typeText("friend"),
-                        closeSoftKeyboard());
-        pause();
-        onView(withClassName(new StringContains("AddFilterText"))).
-                perform(typeText("FRIENDWITHANINVENTORY"),
-                        closeSoftKeyboard());
-        pause();
-        onView(withText("Add")).
-                perform(click());
-        pause();
-        //TODO onView(withId(R.id.addFilterButton)).perform(click());
-        onView(withClassName(new StringContains("AddFilterType"))).
-                perform(typeText("textual"),
-                        closeSoftKeyboard());
-        pause();
-        onView(withClassName(new StringContains("AddFilterText"))).
-                perform(typeText("FX10"),
-                        closeSoftKeyboard());
-        pause();
-        onView(withText("Add")).
-                perform(click());
-        pause();
 
-        /**
-         * Checks that there is one items from the filtered friend.
-         */
-        onView(withText("testItem1f1")).check(matches(isDisplayed()));
-    }
 
 
     /**

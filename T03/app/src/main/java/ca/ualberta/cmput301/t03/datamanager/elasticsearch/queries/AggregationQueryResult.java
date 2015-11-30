@@ -1,3 +1,23 @@
+/*
+ * Copyright (C) 2015 Kyle O'Shaughnessy, Ross Anderson, Michelle Mabuyo, John Slevinsky, Udey Rishi, Quentin Lautischer
+ * Photography equipment trading application for CMPUT 301 at the University of Alberta.
+ *
+ * This file is part of {ApplicationName}
+ *
+ * {ApplicationName} is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package ca.ualberta.cmput301.t03.datamanager.elasticsearch.queries;
 
 import com.google.gson.annotations.SerializedName;
@@ -5,6 +25,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 
 /**
+ * A DTO for the result of a {@link Query} execution by a {@link QueryExecutor}.
  * Created by rishi on 15-11-28.
  */
 public class AggregationQueryResult {
@@ -19,6 +40,9 @@ public class AggregationQueryResult {
         this.aggregations = aggregations;
     }
 
+    /**
+     * A DTO modelling the aggregations field inside the {@link AggregationQueryResult}.
+     */
     public static class Aggregations {
 
         @SerializedName(Query.AGGREGATION_KEY)
@@ -34,6 +58,12 @@ public class AggregationQueryResult {
 
     }
 
+    /**
+     * A DTO modelling the contents inside the
+     * {@link ca.ualberta.cmput301.t03.datamanager.elasticsearch.queries.AggregationQueryResult.Aggregations}.
+     * It contains a collection of {@link ca.ualberta.cmput301.t03.datamanager.elasticsearch.queries.AggregationQueryResult.Bucket}
+     * objects, containing the aggregation result.
+     */
     public static class AggregationGroup {
         private ArrayList<Bucket> buckets;
 
@@ -47,6 +77,10 @@ public class AggregationQueryResult {
 
     }
 
+    /**
+     * A class modelling a bucket inside an {@link ca.ualberta.cmput301.t03.datamanager.elasticsearch.queries.AggregationQueryResult.AggregationGroup}.
+     * A Bucket contains a key and a count mapping to the grouping field and the grouping count.
+     */
     public static class Bucket {
         private String key;
 

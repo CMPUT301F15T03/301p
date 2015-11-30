@@ -158,6 +158,11 @@ public class PhotoGallery implements Observable, Observer, Cloneable {
         notifyObservers();
     }
 
+    /**
+     * Return a photo gallery that is an exact clone of "this", used in the clone item workflow
+     * @return clone of photogallery
+     * @throws CloneNotSupportedException
+     */
     @Override
     public Object clone() throws CloneNotSupportedException {
 //        PhotoGallery newGallery = (PhotoGallery) super.clone();
