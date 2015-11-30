@@ -257,7 +257,7 @@ public class UserInventoryFragment extends Fragment implements Observer, SwipeRe
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.filter_menu_items, menu);
+        inflater.inflate(R.menu.inventory_filter_menu_items, menu);
     }
 
     @Override
