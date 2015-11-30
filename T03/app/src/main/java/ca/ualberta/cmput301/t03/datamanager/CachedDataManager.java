@@ -79,6 +79,12 @@ public class CachedDataManager extends JsonDataManager {
             return innerManager.keyExists(key);
         }
 
+        synchronized (cacheLock) {
+            if (inMemoryCache.containsKey(key)) {
+                return true;
+            }
+        }
+
         return cachingDataManager.keyExists(key);
     }
 
@@ -104,10 +110,7 @@ public class CachedDataManager extends JsonDataManager {
 
         if (innerManager.isOperational()) {
             T retrievedData = innerManager.getData(key, typeOfT);
-            cachingDataManager.writeData(key, retrievedData, typeOfT);
-            synchronized (cacheLock) {
-                inMemoryCache.put(key, new TimeObjectWrapper(retrievedData));
-            }
+            writeToCache(key, retrievedData, typeOfT);
             return retrievedData;
         }
 
@@ -188,6 +191,9 @@ public class CachedDataManager extends JsonDataManager {
      */
     protected <T> void writeToCache(DataKey key, T obj, Type typeOfT) {
         cachingDataManager.writeData(key, obj, typeOfT);
+        synchronized (cacheLock) {
+            inMemoryCache.put(key, new TimeObjectWrapper(obj));
+        }
     }
 
     /**
@@ -197,6 +203,11 @@ public class CachedDataManager extends JsonDataManager {
      */
     protected void deleteFromCache(DataKey key) {
         cachingDataManager.deleteIfExists(key);
+        synchronized (cacheLock) {
+            if (inMemoryCache.containsKey(key)) {
+                inMemoryCache.remove(key);
+            }
+        }
     }
 
     private boolean shouldGetFromInMemoryCache(DataKey key) {

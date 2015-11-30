@@ -22,37 +22,45 @@ package ca.ualberta.cmput301.t03.inventory;
 
 
 import android.app.Activity;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
-import android.content.Context;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.NotificationCompat;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 
 import org.parceler.Parcels;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-import ca.ualberta.cmput301.t03.MainActivity;
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
+import ca.ualberta.cmput301.t03.filters.FilterCriteria;
+import ca.ualberta.cmput301.t03.filters.item_criteria.CategoryFilterCriteria;
+import ca.ualberta.cmput301.t03.filters.item_criteria.PrivateFilterCriteria;
+import ca.ualberta.cmput301.t03.filters.item_criteria.StringQueryFilterCriteria;
 import ca.ualberta.cmput301.t03.user.User;
 
 
@@ -77,6 +85,8 @@ public class UserInventoryFragment extends Fragment implements Observer, SwipeRe
     private HashMap<Integer, UUID> positionMap;
     List<HashMap<String, Object>> tiles;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+
+    private ArrayList<FilterCriteria> filters;
 
     public UserInventoryFragment() {
         // Required empty public constructor
@@ -106,6 +116,8 @@ public class UserInventoryFragment extends Fragment implements Observer, SwipeRe
         super.onCreate(savedInstanceState);
         mActivity = getActivity();
         positionMap = new HashMap<>();
+        filters = new ArrayList<>();
+        setHasOptionsMenu(true);
 
         if (getArguments() != null) {
 //            String username = getArguments().getString(ARG_PARAM1);
@@ -134,6 +146,9 @@ public class UserInventoryFragment extends Fragment implements Observer, SwipeRe
 //                    user = PrimaryUser.getInstance();
 
                     model = user.getInventory();
+                    if (!PrimaryUser.getInstance().equals(user)) {
+                        addFilter(new PrivateFilterCriteria());
+                    }
                     controller = new UserInventoryController(getContext(), model);
 
                 } catch (IOException e) {
@@ -239,6 +254,121 @@ public class UserInventoryFragment extends Fragment implements Observer, SwipeRe
         }
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.filter_menu_items, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()) {
+            case R.id.filter_inventory_button:
+                createAddFilterDialog().show();
+                return true;
+            case R.id.search_inventory_button:
+                createAddSearchDialog().show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public AlertDialog createAddFilterDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(  getContext());
+        final View dialogContent = View.inflate(getContext(), R.layout.content_add_filter_dialog, null);
+
+        builder.setView(dialogContent);
+        //itemCategoryText.setSelection(((ArrayAdapter) itemCategoryText.getAdapter()).getPosition(itemModel.getItemCategory()));
+        builder.setCancelable(false);
+        builder.setNegativeButton("Cancel", null);
+        builder.setPositiveButton("Set", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Iterator<FilterCriteria> i = filters.iterator();
+                while(i.hasNext()){
+                    FilterCriteria filter = i.next();
+                    if (filter.getType().equals("category")) {
+                        i.remove();
+                    }
+                }
+                Spinner spinner = (Spinner) dialogContent.findViewById(R.id.itemFilterCategory);
+                String categoryType = spinner.getSelectedItem().toString();
+                if (!categoryType.toLowerCase().equals("none")) {
+                    addFilter(new CategoryFilterCriteria(categoryType));
+                    Toast.makeText(getContext(), "Category Filter: '" + categoryType + "'", Toast.LENGTH_SHORT).show();
+                } else {
+                    onRefresh();
+                }
+                Toast.makeText(getContext(), "Category Filter: '" + categoryType + "'", Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.setTitle("Set a Category Filter");
+        AlertDialog d = builder.create();
+        return d;
+    }
+
+    public AlertDialog createAddSearchDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        View dialogContent = View.inflate(getContext(), R.layout.content_add_search_dialog, null);
+        final EditText e = (EditText) dialogContent.findViewById(R.id.addSearchFilterText);
+
+        builder.setView(dialogContent); //todo replace with layout
+
+        builder.setCancelable(false);
+        builder.setNegativeButton("Cancel", null);
+        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                final String usr = e.getText().toString().trim();
+                addFilter(new StringQueryFilterCriteria(usr));
+                Toast.makeText(getContext(), "Textual Filter: '" + usr + "' Added", Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.setTitle("Textual Filters");
+
+
+        ArrayList<String> filterNames = new ArrayList<String>();
+        for (FilterCriteria filter : filters) {
+            if(filter.getType().equals("textual")){
+                filterNames.add(filter.getName());
+            }
+        }
+        final CharSequence[] fNames = filterNames.toArray(new String[filterNames.size()]);
+        builder.setItems(fNames, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                String selectedText = fNames[item].toString();
+                removeFilter(selectedText);
+
+                Toast.makeText(getContext(), "Textual Filter: '" + selectedText + "' Removed", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        AlertDialog d = builder.create();
+        return d;
+    }
+
+    public void addFilter(FilterCriteria filter){
+        filters.add(filter);
+        onRefresh();
+    }
+
+    public void removeFilter(String filterName){
+//        for (FilterCriteria filter: filters){
+//            if (filter.getType().equals("textual") && filter.getName().equals(filterName)){
+//                filters.remove(filter);
+//            }
+//        }
+        Iterator<FilterCriteria> i = filters.iterator();
+        while(i.hasNext()){
+            FilterCriteria filter = i.next();
+            if (filter.getType().equals("textual") && filter.getName().equals(filterName)) {
+                i.remove();
+            }
+        }
+        onRefresh();
+    }
+
     private void setupFab(View v) {
         addItemFab = (FloatingActionButton) v.findViewById(R.id.addItemInventoryFab);
         if (PrimaryUser.getInstance().equals(user)) {
@@ -273,6 +403,7 @@ public class UserInventoryFragment extends Fragment implements Observer, SwipeRe
                     model = user.getInventory();
 
 
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (ServiceNotAvailableException e) {
@@ -283,7 +414,7 @@ public class UserInventoryFragment extends Fragment implements Observer, SwipeRe
 
             @Override
             protected void onPostExecute(Void aVoid) {
-
+                model.setFilters(filters);
                 adapter.notifyUpdated(model);
                 mSwipeRefreshLayout.setRefreshing(false);
             }
