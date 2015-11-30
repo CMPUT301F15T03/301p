@@ -271,7 +271,6 @@ public class TradeOfferReviewActivity extends AppCompatActivity implements Obser
     }
 
     private void populateLayoutCompletedTrade(Boolean currentUserOwnsMainItem) {
-        ExceptionUtils.toastLong("Completed trade view not yet implemented");
         tradeReviewAccept.setVisibility(View.GONE);
         tradeReviewDecline.setVisibility(View.GONE);
         tradeReviewDeclineAndCounterOffer.setVisibility(View.GONE);
