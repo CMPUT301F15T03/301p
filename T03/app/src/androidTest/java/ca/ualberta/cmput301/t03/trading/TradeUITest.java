@@ -154,9 +154,17 @@ public class TradeUITest
         pause();
         onView(withContentDescription("Open navigation drawer")).perform(click());
         pause();
+        onView(withText(getActivity().getString(R.string.inventoryTitle)))
+                .check(matches(isDisplayed()))
+                .perform(click());
+        pause();
+
+        onView(withContentDescription("Open navigation drawer")).perform(click());
+        pause();
         onView(withText(getActivity().getString(R.string.browseTitle)))
                 .check(matches(isDisplayed()))
                 .perform(click());
+        pause();
 
         /**
          * Create a trade using the UI
@@ -553,7 +561,7 @@ public class TradeUITest
         // TODO assert counter offer was created
 
         // TODO remove fail
-        //fail("test functionality not yet implemented");
+        fail("test functionality not yet implemented");
     }
 
     /**
@@ -566,12 +574,13 @@ public class TradeUITest
          */
         User user = PrimaryUser.getInstance();
         User owner = new User(TEST_USER_FRIEND_1, mContext);
+        Item userItem = new Item(TEST_ITEM_1_NAME, TEST_ITEM_1_CATEGORY);
         Item ownerItem = new Item(TEST_ITEM_1_NAME, TEST_ITEM_1_CATEGORY);
         try {
             owner.getInventory().addItem(ownerItem);
             user.getFriends().addFriend(owner);
         } catch (IOException e) {
-            e.printStackTrace();
+            assertTrue("IOException in testBorrowerEditsTrade.", Boolean.FALSE);
         }
 
         try {
@@ -634,7 +643,7 @@ public class TradeUITest
          */
         onView(withId(R.id.tradeComposeAddItem))
                 .perform(click());
-        onData(hasToString(startsWith(ownerItem.getUuid().toString())))
+        onData(hasToString(startsWith(userItem.getUuid().toString())))
                 .inAdapterView(withId(R.id.tradeItemListView))
                 .perform(click());
 
@@ -685,10 +694,17 @@ public class TradeUITest
         /**
          * Open trade review
          */
-        onData(hasToString("offered by"))
-                .inAdapterView(withId(R.id.tradeHistoryListView))
-                .check(matches(isDisplayed()))
-                .perform(click());
+        try {
+            assertEquals(1, user.getTradeList().getTradesAsList().size());
+            List<Trade> userTrades = user.getTradeList().getTradesAsList();
+            onData(hasToString(startsWith(userTrades.get(0).getTradeUUID().toString())))
+                    .inAdapterView(withId(R.id.tradeHistoryListView))
+                    .perform(click());
+        } catch (IOException e ) {
+            assertTrue("IOException in testOwnerAcceptsTrade", Boolean.FALSE);
+        } catch (ServiceNotAvailableException e ) {
+            assertTrue("ServiceNotAvailableException in testOwnerAcceptsTrade", Boolean.FALSE);
+        }
 
         /**
          * Decline the trade
@@ -826,10 +842,17 @@ public class TradeUITest
         /**
          * Open trade review
          */
-        onData(hasToString("offered by"))
-                .inAdapterView(withId(R.id.tradeHistoryListView))
-                .check(matches(isDisplayed()))
-                .perform(click());
+        try {
+            assertEquals(1, user.getTradeList().getTradesAsList().size());
+            List<Trade> userTrades = user.getTradeList().getTradesAsList();
+            onData(hasToString(startsWith(userTrades.get(0).getTradeUUID().toString())))
+                    .inAdapterView(withId(R.id.tradeHistoryListView))
+                    .perform(click());
+        } catch (IOException e ) {
+            assertTrue("IOException in testOwnerAcceptsTrade", Boolean.FALSE);
+        } catch (ServiceNotAvailableException e ) {
+            assertTrue("ServiceNotAvailableException in testOwnerAcceptsTrade", Boolean.FALSE);
+        }
 
         /**
          * Decline the trade
