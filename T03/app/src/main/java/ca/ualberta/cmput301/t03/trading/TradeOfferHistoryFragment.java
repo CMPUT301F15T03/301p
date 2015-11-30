@@ -195,12 +195,15 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer, Swi
 
     @Override
     public void update(Observable observable) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                adapter.notifyDataSetChanged();
-            }
-        });
+        Activity activity = getActivity();
+        if (activity != null) {
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    adapter.notifyDataSetChanged();
+                }
+            });
+        }
     }
 
     private void setupSwipeLayout(View v){
