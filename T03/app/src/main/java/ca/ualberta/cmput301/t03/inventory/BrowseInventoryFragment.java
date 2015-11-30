@@ -24,17 +24,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -42,35 +35,26 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import org.parceler.Parcels;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.Iterator;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
-import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.filters.FilterCriteria;
 import ca.ualberta.cmput301.t03.filters.item_criteria.CategoryFilterCriteria;
 import ca.ualberta.cmput301.t03.filters.item_criteria.PrivateFilterCriteria;
 import ca.ualberta.cmput301.t03.filters.item_criteria.StringQueryFilterCriteria;
-import ca.ualberta.cmput301.t03.user.EditProfileActivity;
-import ca.ualberta.cmput301.t03.photo.Photo;
 import ca.ualberta.cmput301.t03.user.User;
-import ca.ualberta.cmput301.t03.user.ViewProfileActivity;
 
 
 /**
@@ -228,7 +212,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer, Swipe
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.fragment_browse_inventory, menu);
+        inflater.inflate(R.menu.filter_menu_items, menu);
     }
 
     @Override
@@ -262,9 +246,11 @@ public class BrowseInventoryFragment extends Fragment implements Observer, Swipe
         builder.setPositiveButton("Set", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                for (FilterCriteria filter : model.getFilters()) {
+                Iterator<FilterCriteria> i = filters.iterator();
+                while(i.hasNext()){
+                    FilterCriteria filter = i.next();
                     if (filter.getType().equals("category")) {
-                        removeFilter(filter.getName());
+                        i.remove();
                     }
                 }
                 Spinner spinner = (Spinner) dialogContent.findViewById(R.id.itemFilterCategory);
@@ -272,6 +258,8 @@ public class BrowseInventoryFragment extends Fragment implements Observer, Swipe
                 if (!categoryType.toLowerCase().equals("none")) {
                     addFilter(new CategoryFilterCriteria(categoryType));
                     Toast.makeText(getContext(), "Category Filter: '" + categoryType + "'", Toast.LENGTH_SHORT).show();
+                } else {
+                    onRefresh();
                 }
                 Toast.makeText(getContext(), "Category Filter: '" + categoryType + "'", Toast.LENGTH_SHORT).show();
             }
@@ -302,7 +290,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer, Swipe
 
 
         ArrayList<String> filterNames = new ArrayList<String>();
-        for (FilterCriteria filter : model.getFilters()) {
+        for (FilterCriteria filter : filters) {
             if(filter.getType().equals("textual")){
                 filterNames.add(filter.getName());
             }
@@ -327,9 +315,16 @@ public class BrowseInventoryFragment extends Fragment implements Observer, Swipe
     }
 
     public void removeFilter(String filterName){
-        for (FilterCriteria filter: filters){
-            if (filter.getName().equals(filterName)){
-                filters.remove(filter);
+//        for (FilterCriteria filter: filters){
+//            if (filter.getType().equals("textual") && filter.getName().equals(filterName)){
+//                filters.remove(filter);
+//            }
+//        }
+        Iterator<FilterCriteria> i = filters.iterator();
+        while(i.hasNext()){
+            FilterCriteria filter = i.next();
+            if (filter.getType().equals("textual") && filter.getName().equals(filterName)) {
+                i.remove();
             }
         }
         onRefresh();
