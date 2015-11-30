@@ -9,6 +9,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.widget.ImageView;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,6 +22,7 @@ import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.filters.FilterCriteria;
+import ca.ualberta.cmput301.t03.user.FriendsListFragment;
 
 /**
  * Created by rishi on 15-11-30.
@@ -61,6 +65,13 @@ public class NoFriendsBrowseInventory extends Fragment implements Observer, Swip
                              Bundle savedInstanceState) {
         synchronized (uiLock) {
             mView = inflater.inflate(R.layout.no_friends_layout, container, false);
+            final ImageView image =(ImageView) mView.findViewById(R.id.add_friends_icon);
+            image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onAddFriendsImagePressed(image);
+                }
+            });
             mSwipeRefreshLayout = (SwipeRefreshLayout) mView.findViewById(R.id.noFriendsSwipeLayout);
             mSwipeRefreshLayout.setOnRefreshListener(this);
         }
@@ -123,5 +134,30 @@ public class NoFriendsBrowseInventory extends Fragment implements Observer, Swip
             }
         };
         task.execute();
+    }
+
+    private void onAddFriendsImagePressed(ImageView image) {
+        Animation fadeout = new AlphaAnimation(1.f, 0.5f);
+        fadeout.setDuration(100);
+        image.startAnimation(fadeout);
+        fadeout = new AlphaAnimation(0.5f, 1.f);
+        fadeout.setDuration(100);
+        image.startAnimation(fadeout);
+
+        image.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                addFriendsImageClicked();
+            }
+        }, 100);
+    }
+
+    private void addFriendsImageClicked() {
+        synchronized (uiLock) {
+            getActivity().setTitle(getString(R.string.friendsTitle));
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.fragmentContent, FriendsListFragment.newInstance())
+                    .commit();
+        }
     }
 }
