@@ -124,7 +124,11 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer, Swi
      * Sets up adapters for view elements representing trades
      */
     private void setupListView(Context context) {
-        listView = (ListView) getActivity().findViewById(R.id.tradeHistoryListView);
+
+        if (context == null){
+            //we probably got killed, so just return
+            return;
+        }
 
         adapter = new TradesAdapter<>(context, model);
         listView.setAdapter(adapter);
@@ -211,6 +215,7 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer, Swi
     }
 
     private void setupSwipeLayout(View v){
+        listView = (ListView) getActivity().findViewById(R.id.tradeHistoryListView);
         mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.tradeHistorySwipeLayout);
         mSwipeRefreshLayout.setOnRefreshListener(this);
     }
@@ -233,8 +238,12 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer, Swi
 
             @Override
             protected void onPostExecute(Void aVoid) {
-                adapter.notifyUpdated(model);
-                mSwipeRefreshLayout.setRefreshing(false);
+                if (adapter != null && model != null){
+                    adapter.notifyUpdated(model);
+                }
+                if (mSwipeRefreshLayout != null){
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
             }
         };
         task.execute();

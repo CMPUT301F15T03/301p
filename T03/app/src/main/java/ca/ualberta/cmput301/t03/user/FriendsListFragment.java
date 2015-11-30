@@ -116,30 +116,9 @@ public class FriendsListFragment extends Fragment implements Observer, SwipeRefr
         setHasOptionsMenu(true);
 
         mUser = PrimaryUser.getInstance();
-
-        AsyncTask worker = new AsyncTask() {
-            @Override
-            protected Object doInBackground(Object[] params) {
-                try {
-                    mModel = mUser.getFriends();
-                    mController = new FriendsListController(getContext(), mModel);
-
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ServiceNotAvailableException e) {
-                    throw new RuntimeException("App is offline.", e);
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Object o) {
-                populateFields();
-            }
-        };
-        worker.execute();
     }
+
+
 
     /**
      * Callback method after data has been loaded.
@@ -172,7 +151,6 @@ public class FriendsListFragment extends Fragment implements Observer, SwipeRefr
      * action.
      */
     private void setupFab() {
-        addFriendFab = (FloatingActionButton) getActivity().findViewById(R.id.addFriendFab);
         addFriendFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -249,6 +227,32 @@ public class FriendsListFragment extends Fragment implements Observer, SwipeRefr
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        addFriendFab = (FloatingActionButton) getActivity().findViewById(R.id.addFriendFab);
+        mListView = (ListView) getActivity().findViewById(R.id.friendsListListView);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) getActivity().findViewById(R.id.friendsListSwipeLayout);
+
+
+        AsyncTask worker = new AsyncTask() {
+            @Override
+            protected Object doInBackground(Object[] params) {
+                try {
+                    mModel = mUser.getFriends();
+                    mController = new FriendsListController(getContext(), mModel);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ServiceNotAvailableException e) {
+                    throw new RuntimeException("App is offline.", e);
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Object o) {
+                populateFields();
+            }
+        };
+        worker.execute();
     }
 
     /**
@@ -258,10 +262,12 @@ public class FriendsListFragment extends Fragment implements Observer, SwipeRefr
      * have been initialized.
      */
     private void setupListView() {
-        mListView = (ListView) getActivity().findViewById(R.id.friendsListListView);
-        mSwipeRefreshLayout = (SwipeRefreshLayout) getActivity().findViewById(R.id.friendsListSwipeLayout);
-        mSwipeRefreshLayout.setOnRefreshListener(this);
+        if(getContext() == null){
+            //probably we got killed, so just return
+            return;
+        }
 
+        mSwipeRefreshLayout.setOnRefreshListener(this);
         mAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, mModel.getFriends());
         mListView.setAdapter(mAdapter);
 
@@ -292,8 +298,6 @@ public class FriendsListFragment extends Fragment implements Observer, SwipeRefr
                 t.start();
 
                 return true;
-
-
             }
         });
 
