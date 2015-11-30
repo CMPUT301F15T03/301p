@@ -143,7 +143,7 @@ public class TradeApp extends Application {
                                 } catch (ServiceNotAvailableException e) {
                                     e.printStackTrace();
                                 }
-                                if (!trade.getHasBeenNotified() && !trade.getHasBeenSeen() && isPublic) {
+                                if (trade.getOwner().getUsername().equals(username) &&  !trade.getHasBeenNotified() && !trade.getHasBeenSeen() && isPublic) {
                                     // do a notify
                                     NotificationCompat.Builder mBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(getApplicationContext())
                                             .setSmallIcon(R.drawable.ic_add)
