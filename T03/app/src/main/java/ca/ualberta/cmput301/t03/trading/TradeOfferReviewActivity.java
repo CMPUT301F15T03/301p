@@ -2,9 +2,9 @@
  * Copyright (C) 2015 Kyle O'Shaughnessy, Ross Anderson, Michelle Mabuyo, John Slevinsky, Udey Rishi, Quentin Lautischer
  * Photography equipment trading application for CMPUT 301 at the University of Alberta.
  *
- * This file is part of {ApplicationName}
+ * This file is part of "Trading Post"
  *
- * {ApplicationName} is free software: you can redistribute it and/or modify
+ * "Trading Post" is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
@@ -388,7 +388,7 @@ public class TradeOfferReviewActivity extends AppCompatActivity implements Obser
                         emailBorrower = model.getBorrower().getProfile().getEmail();
                         emailOwner = model.getOwner().getProfile().getEmail();
                         emailUsers = true;
-                        if (emailBorrower.equals("") || emailOwner.equals("")) {
+                        if (emailBorrower == null || emailOwner == null ||emailBorrower.equals("") || emailOwner.equals("")) {
                             emailUsers = false;
                         }
                     } catch (IOException e) {

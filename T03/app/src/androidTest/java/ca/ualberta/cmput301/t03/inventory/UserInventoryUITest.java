@@ -2,9 +2,9 @@
  * Copyright (C) 2015 Kyle O'Shaughnessy, Ross Anderson, Michelle Mabuyo, John Slevinsky, Udey Rishi, Quentin Lautischer
  * Photography equipment trading application for CMPUT 301 at the University of Alberta.
  *
- * This file is part of {ApplicationName}
+ * This file is part of "Trading Post"
  *
- * {ApplicationName} is free software: you can redistribute it and/or modify
+ * "Trading Post" is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
@@ -95,7 +95,8 @@ public class UserInventoryUITest {
         /**
          * Verify that three items are present as configured in the users template.
          */
-
+        pause();
+        pause();
         onView(withText("testItem1")).check(matches(isDisplayed()));
         onView(withText("testItem2")).check(matches(isDisplayed()));
         onView(withText("testItem3")).check(matches(isDisplayed()));

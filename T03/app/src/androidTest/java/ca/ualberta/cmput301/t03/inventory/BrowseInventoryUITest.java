@@ -2,9 +2,9 @@
  * Copyright (C) 2015 Kyle O'Shaughnessy, Ross Anderson, Michelle Mabuyo, John Slevinsky, Udey Rishi, Quentin Lautischer
  * Photography equipment trading application for CMPUT 301 at the University of Alberta.
  *
- * This file is part of {ApplicationName}
+ * This file is part of "Trading Post"
  *
- * {ApplicationName} is free software: you can redistribute it and/or modify
+ * "Trading Post" is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
@@ -167,8 +167,9 @@ public class BrowseInventoryUITest {
                 .perform(click());
 
 //        onView(withId(R.id.itemFilterCategory)).inRoot(Decor) .perform(click());
-        onView(withId(R.id.itemFilterCategory))
-                .check(matches(withText(containsString("cameras")))).perform(click());
+        onView(withId(R.id.itemFilterCategory)).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is("cameras"))).perform(click());
+        onView(withId(R.id.itemFilterCategory)).check(matches(withText(containsString("cameras"))));
 
 
         onView(withText("Set")).
@@ -277,10 +278,6 @@ public class BrowseInventoryUITest {
         /**
          * Return to Browse
          */
-        onView(withContentDescription("Open navigation drawer")).check(matches(isDisplayed())).perform(click());
-        pause();
-        onView(withText("Inventory")).check(matches(isDisplayed())).perform(click());
-        pause();
 
         onView(withContentDescription("Open navigation drawer")).check(matches(isDisplayed())).perform(click());
         pause();
