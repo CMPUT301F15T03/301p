@@ -190,7 +190,7 @@ public class TradeOfferReviewActivity extends AppCompatActivity implements Obser
                 }
 
                 ownerItemAdapter = new ItemsAdapter(TradeApp.getContext(), ownerItems);
-                borrowerItemAdapter = new ItemsAdapter(TradeApp.getContext(), ownerItems);
+                borrowerItemAdapter = new ItemsAdapter(TradeApp.getContext(), borrowerItems);
 
                 ownerItemListView.setAdapter(ownerItemAdapter);
                 borrowerItemListView.setAdapter(borrowerItemAdapter);
