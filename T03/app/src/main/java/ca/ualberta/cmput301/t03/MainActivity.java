@@ -260,7 +260,7 @@ public class MainActivity extends AppCompatActivity
                 getIntent().getExtras().containsKey("INTENT") &&
                 getIntent().getExtras().getString("INTENT").equals("TRADES")) {
             fragmentClass = TradeOfferHistoryFragment.class;
-            title = getString(R.string.friendsTitle);
+            title = getString(R.string.tradeTitle);
         }
         else {
             fragmentClass = BrowseInventoryFragment.class;

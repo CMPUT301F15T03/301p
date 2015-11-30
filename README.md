@@ -30,4 +30,4 @@ UML diagrams can be found [here](https://github.com/CMPUT301F15T03/301p/tree/mas
  * Updates to the release planning can be seen in the [issues section](https://github.com/CMPUT301F15T03/301p/issues)
  * References to external sources are present in this [wiki page](https://github.com/CMPUT301F15T03/301p/wiki/External-Sources).
  * YouTube demo:
- <iframe width="560" height="315" src="https://www.youtube.com/embed/MbHIZUPE8Ck" frameborder="0" allowfullscreen></iframe>
+[![ScreenShot](https://raw.githubusercontent.com/CMPUT301F15T03/301p/master/docs/screenshot_youtube.png)](https://www.youtube.com/embed/MbHIZUPE8Ck)
