@@ -103,15 +103,11 @@ public class TradeOfferComposeActivity extends AppCompatActivity implements Obse
 
         }
 
-
-
-
         ownerUsername = (TextView) findViewById(R.id.tradeComposeOtherUser);
         offerButton = (Button) findViewById(R.id.tradeComposeOffer);
         cancelButton = (Button) findViewById(R.id.tradeComposeCancel);
         addItemButton = (Button) findViewById(R.id.tradeComposeAddItem);
         requestItemButton = (Button) findViewById(R.id.tradeComposeRequestItem);
-
 
         AdapterView.OnItemClickListener deleteItemListener = new AdapterView.OnItemClickListener() {
             @Override
@@ -129,8 +125,6 @@ public class TradeOfferComposeActivity extends AppCompatActivity implements Obse
 
 
         AsyncTask worker = new AsyncTask() {
-
-
             @Override
             protected Object doInBackground(Object[] params) {
                 try {
@@ -138,7 +132,6 @@ public class TradeOfferComposeActivity extends AppCompatActivity implements Obse
                     if (getIntent().hasExtra(EXTRA_PREV_TRADE_UUID)) {
                         UUID prevUUID = (UUID) getIntent().getSerializableExtra(EXTRA_PREV_TRADE_UUID);
                         Trade prevTrade = new Trade(prevUUID, TradeApp.getContext());
-
 
                         model = new Trade(prevTrade.getOwner(),
                                 prevTrade.getBorrower(),
@@ -157,7 +150,9 @@ public class TradeOfferComposeActivity extends AppCompatActivity implements Obse
                     }
 
                     model.getBorrower().getTradeList().addTrade(model);
+                    model.addObserver(model.getBorrower());
                     model.getOwner().getTradeList().addTrade(model);
+                    model.addObserver(model.getOwner());
                 } catch (IOException e) {
                     throw new RuntimeException("Primary User failed to get TradeList");
                 } catch (ServiceNotAvailableException e) {
@@ -177,7 +172,6 @@ public class TradeOfferComposeActivity extends AppCompatActivity implements Obse
                     ExceptionUtils.toastLong("Failed to get borrowers items: app is offline");
                     activity.finish();
                 }
-
 
                 try {
                     borrowerInventory = model.getBorrower().getInventory();
@@ -211,9 +205,6 @@ public class TradeOfferComposeActivity extends AppCompatActivity implements Obse
 
     }
 
-
-
-
     private void afterFieldsInitialized() {
         ownerItemAdapter = new ItemsAdapter<Inventory>(TradeApp.getContext(), ownerItems);
         ownerItemListView.setAdapter(ownerItemAdapter);
@@ -221,17 +212,12 @@ public class TradeOfferComposeActivity extends AppCompatActivity implements Obse
         borrowerItemAdapter = new ItemsAdapter<Inventory>(TradeApp.getContext(), borrowerItems);
         borrowerItemListView.setAdapter(borrowerItemAdapter);
 
-
-        model.addObserver(TradeOfferComposeActivity.this);
-
-
         requestItemButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 createAddTradeItemDialog(ownerInventory, ownerItems).show();
             }
         });
-
 
         addItemButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -244,20 +230,22 @@ public class TradeOfferComposeActivity extends AppCompatActivity implements Obse
         offerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AsyncTask<Void, Void, Boolean> worker = new AsyncTask<Void, Void, Boolean>() {
+                AsyncTask worker = new AsyncTask() {
+                    Boolean appIsOffline = Boolean.FALSE;
+
                     @Override
-                    protected Boolean doInBackground(Void[] params) {
+                    protected Object doInBackground(Object[] params) {
                         try {
                             controller.offerTrade();
                         } catch (ServiceNotAvailableException e) {
-                            return Boolean.TRUE;
+                            appIsOffline = Boolean.TRUE;
                         }
-                        return Boolean.FALSE;
+                        return null;
                     }
 
                     @Override
-                    protected void onPostExecute(Boolean appIsOffline) {
-                        super.onPostExecute(appIsOffline);
+                    protected void onPostExecute(Object o) {
+                        super.onPostExecute(o);
 
                         if (appIsOffline) {
                             ExceptionUtils.toastLong("Failed to offer trade: app is offline");
@@ -272,20 +260,22 @@ public class TradeOfferComposeActivity extends AppCompatActivity implements Obse
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AsyncTask<Void, Void, Boolean> worker = new AsyncTask<Void, Void, Boolean>() {
+                AsyncTask worker = new AsyncTask() {
+                    private Boolean appIsOffline = Boolean.FALSE;
+
                     @Override
-                    protected Boolean doInBackground(Void[] params) {
+                    protected Object doInBackground(Object[] params) {
                         try {
                             controller.cancelTrade();
                         } catch (ServiceNotAvailableException e) {
-                            return Boolean.TRUE;
+                            appIsOffline = Boolean.TRUE;
                         }
-                        return Boolean.FALSE;
+                        return null;
                     }
 
                     @Override
-                    protected void onPostExecute(Boolean appIsOffline) {
-                        super.onPostExecute(appIsOffline);
+                    protected void onPostExecute(Object o) {
+                        super.onPostExecute(o);
 
                         if (appIsOffline) {
                             ExceptionUtils.toastLong("Failed to cancel trade: app is offline");
@@ -298,9 +288,6 @@ public class TradeOfferComposeActivity extends AppCompatActivity implements Obse
             }
         });
     }
-
-
-
 
     @Override
     protected void onDestroy() {
@@ -362,8 +349,6 @@ public class TradeOfferComposeActivity extends AppCompatActivity implements Obse
                 tradeItemsModel.addItem(selected);
             }
         });
-
-
 
         builder.setView(dialogContent); //todo this ui is kind of gross
         builder.setTitle("Add Trade Item");

@@ -283,14 +283,11 @@ public class User implements Observable, Observer, Comparable<User> {
 
         tradeList.addObserver(this);
 
-
-        for (Trade t: tradeList){
-//            t.getBorrower();
-//            t.getOwner();
+        for (Trade t: tradeList) {
+            // prefetching
             t.getBorrowersItems();
             t.getOwnersItems().getItems();
             t.getState().getInterfaceString(true);
-            //prefetcing
         }
         return tradeList;
     }

@@ -25,6 +25,8 @@ package ca.ualberta.cmput301.t03.photo;
  * <p/>
  * This class is necessary on the for the purposes of data serialization for the dataManager of the
  * Photo it belongs to.
+ *
+ * This is only used in Photo.
  */
 public class Base64Wrapper {
     private String contents;
@@ -32,6 +34,10 @@ public class Base64Wrapper {
     public Base64Wrapper() {
     }
 
+    /**
+     * provide the bas64 string that the photo will serialize
+     * @param contents
+     */
     public Base64Wrapper(String contents) {
         this.contents = contents;
     }
