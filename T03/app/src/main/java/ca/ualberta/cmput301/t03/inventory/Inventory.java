@@ -132,9 +132,11 @@ public class Inventory implements Filterable<Item>, Observable, Observer, Adapta
      * @param item item to add
      */
     public void addItem(Item item) {
-        items.add(item);
-        item.addObserver(this);
-        notifyObservers();
+        if (!items.contains(item)){
+            items.add(item);
+            item.addObserver(this);
+            notifyObservers();
+        }
     }
 
     /**
