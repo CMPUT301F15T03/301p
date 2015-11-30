@@ -221,9 +221,9 @@ public class BrowseInventoryUITest {
         onView(withText("testItem1f1")).check(matches(isDisplayed()));
         onView(withText("testItem1f2")).check(matches(isDisplayed()));
 
-        onView(withContentDescription("Search"))
-                .check(matches(isDisplayed()))
-                .perform(click());
+//        onView(withContentDescription("Search"))
+//                .check(matches(isDisplayed()))
+//                .perform(click());
 
 //        onData().inAdapterView()
 //        onData(0)

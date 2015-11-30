@@ -40,9 +40,12 @@ import ca.ualberta.cmput301.t03.common.PrimaryUserHelper;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static ca.ualberta.cmput301.t03.common.PauseForAnimation.pause;
 import static java.lang.Thread.sleep;
@@ -97,5 +100,46 @@ public class UserInventoryUITest {
         onView(withText("testItem2")).check(matches(isDisplayed()));
         onView(withText("testItem3")).check(matches(isDisplayed()));
 
+    }
+
+    @Test
+    public void testAddTextualQuerySearchOnInventory() throws Exception {
+        /**
+         * Adding filter of textualQuery to view all friends inventories,
+         * filtering by a given textualQuery.
+         */
+        onView(withContentDescription("Search"))
+                .check(matches(isDisplayed()))
+                .perform(click());
+
+        onView(withId(R.id.addSearchFilterText)).
+                perform(typeText("item"),
+                        closeSoftKeyboard());
+        pause();
+        onView(withText("Add")).
+                perform(click());
+        pause();
+
+        /**
+         * Checks that there are two items from the filtered friends and that have the
+         * textual string "FX10"
+         */
+        onView(withText("testItem1")).check(matches(isDisplayed()));
+        onView(withText("testItem2")).check(matches(isDisplayed()));
+        onView(withText("testItem3")).check(matches(isDisplayed()));
+
+        onView(withContentDescription("Search"))
+                .check(matches(isDisplayed()))
+                .perform(click());
+
+        onView(withId(R.id.addSearchFilterText)).
+                perform(typeText("3"),
+                        closeSoftKeyboard());
+        pause();
+        onView(withText("Add")).
+                perform(click());
+        pause();
+
+        onView(withText("testItem3")).check(matches(isDisplayed()));
     }
 }
