@@ -256,4 +256,10 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer, Swi
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        onRefresh();
+    }
 }
