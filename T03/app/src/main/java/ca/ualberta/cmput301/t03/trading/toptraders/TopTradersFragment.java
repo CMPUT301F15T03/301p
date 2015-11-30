@@ -19,6 +19,7 @@ import ca.ualberta.cmput301.t03.TradeApp;
 import ca.ualberta.cmput301.t03.common.exceptions.ExceptionUtils;
 
 /**
+ * The view for the Top Traders feature. Shows the current list of top 10 traders.
  * Source (Icon): https://developers.google.com/games/services/images/branding/ic_play_games_badge_leaderboards_gray.png
  * Accessed: 28 Nov
  * Created by rishi on 15-11-28.
@@ -32,14 +33,24 @@ public class TopTradersFragment extends Fragment implements SwipeRefreshLayout.O
     private ArrayList<TopTrader> topTraders;
     private SwipeRefreshLayout swipeRefreshLayout;
 
+    /**
+     * The default constructor needed for fragments.
+     */
     public TopTradersFragment() {
 
     }
 
+    /**
+     * Creates a new instance of {@link TopTradersFragment}.
+     * @return A newly constructed {@link TopTradersFragment}.
+     */
     public static TopTradersFragment newInstance() {
         return new TopTradersFragment();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +58,9 @@ public class TopTradersFragment extends Fragment implements SwipeRefreshLayout.O
         setHasOptionsMenu(true);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -60,6 +74,9 @@ public class TopTradersFragment extends Fragment implements SwipeRefreshLayout.O
         return rootView;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onRefresh() {
         Thread thread = new Thread(new Runnable() {

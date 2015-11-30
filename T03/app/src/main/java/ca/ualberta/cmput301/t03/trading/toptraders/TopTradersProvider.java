@@ -13,6 +13,8 @@ import ca.ualberta.cmput301.t03.trading.TradeStateAccepted;
 import ca.ualberta.cmput301.t03.trading.TradeStateOffered;
 
 /**
+ * Uses a {@link QueryExecutor} to get the list of top traders. Acts as a refresh controller for the
+ * {@link TopTradersFragment}.
  * Created by rishi on 15-11-28.
  */
 public class TopTradersProvider {
@@ -20,10 +22,23 @@ public class TopTradersProvider {
 
     private final QueryExecutor queryExecutor;
 
+    /**
+     * Creates a new instance of {@link TopTradersProvider}. Uses the {@link QueryExecutor} provided
+     * for executing a {@link FieldGroupedQuery} query that gets the list of top traders. The top
+     * trader list is created on the basis on the maximum number of successful trades (== completed
+     * and ongoing).
+     * @param queryExecutor The {@link QueryExecutor} to be used for executing queries.
+     */
     public TopTradersProvider(QueryExecutor queryExecutor) {
         this.queryExecutor = Preconditions.checkNotNull(queryExecutor, "queryExecutor");
     }
 
+    /**
+     * Uses the provided {@link QueryExecutor} to get the list of the current top traders.
+     * @param count The maximum number of results to be retrieved.
+     * @return The list of the current top traders.
+     * @throws IOException Thrown, if the{@link QueryExecutor#executeQuery(String, Query)} throws it.
+     */
     public ArrayList<TopTrader> getTopTraders(int count) throws IOException {
         Query query = new FieldGroupedQuery("state",
             new ArrayList<String>() { { add(TradeStateOffered.stateString); add(TradeStateAccepted.stateString); } },
