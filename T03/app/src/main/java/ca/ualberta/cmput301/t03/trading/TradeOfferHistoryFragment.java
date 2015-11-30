@@ -249,11 +249,11 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer, Swi
         task.execute();
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.trade_filter_menu, menu);
-    }
+//    @Override
+//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//        super.onCreateOptionsMenu(menu, inflater);
+//        inflater.inflate(R.menu.trade_filter_menu, menu);
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
