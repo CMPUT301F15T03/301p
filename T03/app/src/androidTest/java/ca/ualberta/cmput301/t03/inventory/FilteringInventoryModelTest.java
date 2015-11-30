@@ -26,7 +26,7 @@ import static junit.framework.Assert.assertEquals;
  */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class BrowseInventoryModelTest {
+public class FilteringInventoryModelTest {
     BrowsableInventories modelBrowse;
     ArrayList<Item> list;
     ArrayList<FilterCriteria> filters;
@@ -76,7 +76,7 @@ public class BrowseInventoryModelTest {
         filters.add(new StringQueryFilterCriteria("item1"));
         ArrayList<Item> filteredList = modelBrowse.getFilteredItems(list, filters);
         assertEquals(1, filteredList.size());
-        assertEquals( "item1", filteredList.get(0).getItemName());
+        assertEquals("item1", filteredList.get(0).getItemName());
 
         filters.clear();
         filters.add(new StringQueryFilterCriteria("testDesc2"));
@@ -98,6 +98,14 @@ public class BrowseInventoryModelTest {
 
         filters.clear();
         filters.add(new StringQueryFilterCriteria("item"));
+        filteredList = modelBrowse.getFilteredItems(list, filters);
+        assertEquals(3, filteredList.size());
+        assertEquals("item1", filteredList.get(0).getItemName());
+        assertEquals("item2", filteredList.get(1).getItemName());
+        assertEquals("item3", filteredList.get(2).getItemName());
+
+        filters.clear();
+        filters.add(new StringQueryFilterCriteria("test"));
         filteredList = modelBrowse.getFilteredItems(list, filters);
         assertEquals(3, filteredList.size());
         assertEquals("item1", filteredList.get(0).getItemName());

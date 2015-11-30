@@ -31,6 +31,7 @@ import java.lang.reflect.Type;
 import ca.ualberta.cmput301.t03.trading.TradeState;
 import ca.ualberta.cmput301.t03.trading.TradeStateAccepted;
 import ca.ualberta.cmput301.t03.trading.TradeStateCancelled;
+import ca.ualberta.cmput301.t03.trading.TradeStateCompleted;
 import ca.ualberta.cmput301.t03.trading.TradeStateComposing;
 import ca.ualberta.cmput301.t03.trading.TradeStateDeclined;
 import ca.ualberta.cmput301.t03.trading.TradeStateOffered;
@@ -49,6 +50,8 @@ public class TradeStateDeserializer implements JsonDeserializer<TradeState> {
 
     private static TradeState fromString(String str) throws IllegalTradeStateDeserialization {
         switch (str) {
+            case TradeStateCompleted.stateString:
+                return new TradeStateCompleted();
             case TradeStateComposing.stateString:
                 return new TradeStateComposing();
             case TradeStateCancelled.stateString:
