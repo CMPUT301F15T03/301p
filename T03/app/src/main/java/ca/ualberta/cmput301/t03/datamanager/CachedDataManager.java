@@ -120,21 +120,6 @@ public class CachedDataManager extends JsonDataManager {
         }
     }
 
-    private boolean shouldGetFromInMemoryCache(DataKey key) {
-        if (inMemoryCache.containsKey(key)) {
-            TimeObjectWrapper timeObjectWrapper = inMemoryCache.get(key);
-            long difference = System.currentTimeMillis() - timeObjectWrapper.getDateCreatedEpochMillis();
-            if (difference <= MAX_IN_MEMORY_CACHE_DURATION_MS) {
-                return true;
-            } else {
-                inMemoryCache.remove(key);
-                return false;
-            }
-        } else {
-            return false;
-        }
-    }
-
     /**
      * Writes the object to the inner manager, if it is operational.
      *
@@ -212,6 +197,21 @@ public class CachedDataManager extends JsonDataManager {
      */
     protected void deleteFromCache(DataKey key) {
         cachingDataManager.deleteIfExists(key);
+    }
+
+    private boolean shouldGetFromInMemoryCache(DataKey key) {
+        if (inMemoryCache.containsKey(key)) {
+            TimeObjectWrapper timeObjectWrapper = inMemoryCache.get(key);
+            long difference = System.currentTimeMillis() - timeObjectWrapper.getDateCreatedEpochMillis();
+            if (difference <= MAX_IN_MEMORY_CACHE_DURATION_MS) {
+                return true;
+            } else {
+                inMemoryCache.remove(key);
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 
     private class TimeObjectWrapper {
