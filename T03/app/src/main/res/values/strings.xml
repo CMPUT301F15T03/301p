@@ -1,10 +1,10 @@
 <resources>
-    <string name="app_name">Photog Trader</string>
+    <string name="app_name">Trading Post</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="title_activity_initialize_user">Welcome to TradingPost!</string>
+    <string name="title_activity_initialize_user">Welcome to Trading Post!</string>
     <string name="title_activity_trade_offer_compose">Compose a Trade</string>
     <string name="title_activity_trade_offer_review">Review Trade</string>
     <string name="title_activity_trade_offer_history">Trade History</string>
