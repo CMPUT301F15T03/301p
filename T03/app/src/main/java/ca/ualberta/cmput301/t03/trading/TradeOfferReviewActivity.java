@@ -320,7 +320,7 @@ public class TradeOfferReviewActivity extends AppCompatActivity implements Obser
 
                     Intent intent = new Intent(TradeOfferReviewActivity.this, TradeOfferComposeActivity.class);
                     intent.putExtra(TradeOfferComposeActivity.EXTRA_PREV_TRADE_UUID, model.getTradeUUID());
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     startActivity(intent);
 
                 }
