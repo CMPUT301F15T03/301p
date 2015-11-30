@@ -412,7 +412,7 @@ public class TradeOfferReviewActivity extends AppCompatActivity implements Obser
 
                 @Override
                 protected void onPostExecute(Object o) {
-                    ExceptionUtils.toastShort("Trade completed");
+                    ExceptionUtils.toastShort("Trade accepted");
                     if (emailUsers) {
                         Intent intent = new Intent(Intent.ACTION_SEND);
                         intent.setType("text/rfc822");
