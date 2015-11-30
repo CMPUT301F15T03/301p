@@ -10,6 +10,7 @@ public class StringQueryFilterCriteria implements FilterCriteria {
     private String name;
     private String term;
     private String type;
+    public StringQueryFilterCriteria(){}
     public StringQueryFilterCriteria(String term){
         this.term = term;
         this.name = term;
