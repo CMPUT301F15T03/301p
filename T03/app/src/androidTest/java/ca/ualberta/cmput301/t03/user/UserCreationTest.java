@@ -58,7 +58,7 @@ public class UserCreationTest extends ActivityInstrumentationTestCase2 {
         Context context = getInstrumentation().getTargetContext();
         DataManager dataManager = new CachedDataManager(new HttpDataManager(true));
         Configuration configuration = new Configuration(context);
-        configuration.setApplicationUserName("JUNIT_TEST_USER_DO_NOT_USE_THIS_NAME2");
+        configuration.setApplicationUserName("junittestuserxyz");
         try {
             dataManager.deleteIfExists(new DataKey(UserProfile.type, configuration.getApplicationUserName()));
             dataManager.deleteIfExists(new DataKey(Inventory.type, configuration.getApplicationUserName()));
@@ -76,13 +76,13 @@ public class UserCreationTest extends ActivityInstrumentationTestCase2 {
      * UC02.04.01
      * testCreateDuplicateProfile() now covered in here
      */
-    public void testCreateProfile() throws ServiceNotAvailableException {
+    public void testCreateProfile() throws ServiceNotAvailableException, IOException {
 
         Configuration configuration = new Configuration(getInstrumentation().getTargetContext());
 
         Context context = getInstrumentation().getTargetContext();
         DataManager dataManager = new CachedDataManager(new HttpDataManager(true));
-        configuration.setApplicationUserName("JUNIT_TEST_USER_DO_NOT_USE_THIS_NAME2");
+        configuration.setApplicationUserName("junittestuserxyz");
         try {
             dataManager.deleteIfExists(new DataKey(UserProfile.type, configuration.getApplicationUserName()));
             dataManager.deleteIfExists(new DataKey(Inventory.type, configuration.getApplicationUserName()));
@@ -125,7 +125,7 @@ public class UserCreationTest extends ActivityInstrumentationTestCase2 {
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                userNameEditText.setText("JUNIT_TEST_USER_DO_NOT_USE_THIS_NAME2");
+                userNameEditText.setText("junittestuserxyz");
                 doneButton.performClick();
             }
         });
@@ -163,14 +163,12 @@ public class UserCreationTest extends ActivityInstrumentationTestCase2 {
         PrimaryUser.setup(getInstrumentation().getTargetContext());
         User pUser = PrimaryUser.getInstance();
 
-        assertEquals(pUser.getUsername(), "JUNIT_TEST_USER_DO_NOT_USE_THIS_NAME2");
-        try {
-            assertEquals(pUser.getProfile().getCity(), "Edmonton");
-            assertEquals(pUser.getProfile().getEmail(), "a@b.ca");
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        assertEquals(pUser.getUsername(), "junittestuserxyz");
+        String city  = pUser.getProfile().getCity();
+        String email = pUser.getProfile().getEmail();
+        android.os.SystemClock.sleep(500);
+            assertEquals(city, "Edmonton");
+            assertEquals(email, "a@b.ca");
         configuration.setApplicationUserName("JUNIT_TEST_USER_DO_NOT_USE_THIS_NAME");
 
         activity.finish();
