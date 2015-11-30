@@ -333,6 +333,14 @@ public class TradeUITest
         /**
          * Accept the trade
          */
+        // we don't want to launch the email intent for the purposes of this test so set
+        // the email of the owner to an empty string for a workaround that
+        // check emailBody to assert that it has the necessary trade details
+        try {
+            borrower.getProfile().setEmail("");
+        } catch (IOException e) {
+            assertTrue("IOException in testOwnerAcceptsTrade", Boolean.FALSE);
+        }
         onView(withId(R.id.tradeReviewAccept))
                 .perform(click());
 
@@ -340,6 +348,7 @@ public class TradeUITest
          * Assert trade was accepted
          */
         assertEquals(TradeStateAccepted.class, trade.getState().getClass());
+        assertTrue(trade.getEmailBody().length() > 0);
     }
 
     /**
@@ -429,7 +438,9 @@ public class TradeUITest
         /**
          * Assert trade was declined
          */
+
         assertEquals(TradeStateDeclined.class, trade.getState().getClass());
+        assertTrue(trade.getEmailBody().length() > 0);
     }
 
     /**
