@@ -132,6 +132,14 @@ public class AddItemView extends AppCompatActivity {
         super.onBackPressed();
     }
 
+    /**
+     * When the upload photos button is clicked an alert dialog will get created asking the
+     * user if they want to upload a photo or take a photo, either option will result in a returned
+     * bitmap which is handled in onActivityResult.
+     *
+     * Code used:
+     * http://stackoverflow.com/questions/27874038/how-to-make-intent-chooser-for-camera-or-gallery-application-in-android-like-wha
+     */
     private void onUploadPhotosButtonClicked() {
         final CharSequence[] items = { "Take A Photo", "Choose Photo from Gallery" };
 
@@ -160,6 +168,16 @@ public class AddItemView extends AppCompatActivity {
         builder.show();
     }
 
+    /**
+     * Upon return from the gallery or the camera, we get the bitmap returned and add it to the item's
+     * photoGallery model via the ItemPhotoController; this will ensure the photo gets sized correctly
+     *
+     * Code used:
+     * http://stackoverflow.com/questions/27874038/how-to-make-intent-chooser-for-camera-or-gallery-application-in-android-like-wha
+     * @param requestCode We set this when launching the intent to determine how to handle its return
+     * @param resultCode if the intent returned with what we want, this will be RESULT_OK
+     * @param data optional data returned by the activity
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -203,6 +221,16 @@ public class AddItemView extends AppCompatActivity {
         }
     }
 
+    /**
+     * Used to get the path of the file selected in the gallery selector. This is called in the
+     * onActivityResult handler.
+     *
+     * Code used:
+     * http://stackoverflow.com/questions/27874038/how-to-make-intent-chooser-for-camera-or-gallery-application-in-android-like-wha
+     * @param uri the uri returned by the gallery intent
+     * @param activity this activity
+     * @return
+     */
     public String getPath(Uri uri, Activity activity) {
         String[] projection = { MediaStore.MediaColumns.DATA };
         Cursor cursor = activity

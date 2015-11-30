@@ -33,6 +33,8 @@ import ca.ualberta.cmput301.t03.user.User;
 public class TradeApp extends Application {
 
     private static TradeApp instance;
+    public static Integer POLL_RATE_MS = 30000;
+
     private JobManager jobManager;
     private Boolean notificationThreadStarted;
 
@@ -76,6 +78,10 @@ public class TradeApp extends Application {
         return getInstance();
     }
 
+    /**
+     * Calls the singleton to start the notification thread, this will can only get called once in
+     * lifetime of the singleton
+     */
     public static void startNotificationService() {
         instance.startNotificationThread();
     }
@@ -103,6 +109,15 @@ public class TradeApp extends Application {
         return new CachedQueryExecutor(new HttpQueryExecutor());
     }
 
+    /**
+     * Start a worker thread that will notify the user if a new trade has been added to their
+     * Tradelist, this will poll the tradelist every POLL_RATE_MS seconds for changes
+     *
+     * This gets called by startNotificationService in the MainActivity
+     *
+     * This way of sending notifications was copied from the android developer documentation:
+     * http://developer.android.com/guide/topics/ui/notifiers/notifications.html
+     */
     private void startNotificationThread() {
         if (notificationThreadStarted == null || !notificationThreadStarted) {
             notificationThreadStarted = true;
@@ -168,7 +183,7 @@ public class TradeApp extends Application {
                                     }
                                 }
                             }
-                        SystemClock.sleep(30000);
+                        SystemClock.sleep(POLL_RATE_MS);
                     }
                 }
             });
