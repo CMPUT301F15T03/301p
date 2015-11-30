@@ -30,6 +30,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -84,6 +87,7 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer, Swi
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
 
         AsyncTask worker = new AsyncTask() {
 
@@ -234,5 +238,22 @@ public class TradeOfferHistoryFragment extends Fragment implements Observer, Swi
             }
         };
         task.execute();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.trade_filter_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()) {
+            case R.id.filter_trades_button:
+//                createAddFilterDialog().show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

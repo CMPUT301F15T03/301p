@@ -158,7 +158,6 @@ public class CachedDataManager extends JsonDataManager {
 
         innerManager.deleteIfExists(key);
         deleteFromCache(key);
-
     }
 
     /**
@@ -214,12 +213,7 @@ public class CachedDataManager extends JsonDataManager {
         if (inMemoryCache.containsKey(key)) {
             TimeObjectWrapper timeObjectWrapper = inMemoryCache.get(key);
             long difference = System.currentTimeMillis() - timeObjectWrapper.getDateCreatedEpochMillis();
-            if (difference <= MAX_IN_MEMORY_CACHE_DURATION_MS) {
-                return true;
-            } else {
-                inMemoryCache.remove(key);
-                return false;
-            }
+            return difference <= MAX_IN_MEMORY_CACHE_DURATION_MS;
         } else {
             return false;
         }
