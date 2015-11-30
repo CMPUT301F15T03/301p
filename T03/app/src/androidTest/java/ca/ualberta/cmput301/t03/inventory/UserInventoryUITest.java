@@ -95,7 +95,8 @@ public class UserInventoryUITest {
         /**
          * Verify that three items are present as configured in the users template.
          */
-
+        pause();
+        pause();
         onView(withText("testItem1")).check(matches(isDisplayed()));
         onView(withText("testItem2")).check(matches(isDisplayed()));
         onView(withText("testItem3")).check(matches(isDisplayed()));
