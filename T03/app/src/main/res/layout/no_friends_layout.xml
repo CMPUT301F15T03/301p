@@ -25,7 +25,8 @@
                 android:layout_height="250dp"
                 android:src="@drawable/no_friends_icon"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/no_friends_icon_margin_top"/>
+                android:layout_marginTop="@dimen/no_friends_icon_margin_top"
+                android:id="@+id/add_friends_icon"/>
         </LinearLayout>
     </android.support.v4.widget.SwipeRefreshLayout>
 
