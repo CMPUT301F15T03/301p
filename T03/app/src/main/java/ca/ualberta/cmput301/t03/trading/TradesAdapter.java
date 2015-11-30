@@ -96,7 +96,7 @@ public class TradesAdapter<T extends TradeList> extends ArrayAdapter<Trade> {
         try {
             image.setImageBitmap(mainItem.getPhotoList().getPhotos().get(0).getPhoto());
         } catch (IndexOutOfBoundsException e){
-            image.setImageBitmap(((BitmapDrawable) getContext().getResources().getDrawable(R.drawable.photo_available_for_download)).getBitmap());
+            image.setImageBitmap(((BitmapDrawable) getContext().getResources().getDrawable(R.drawable.photo_unavailable)).getBitmap());
         }
         status.setText(tradeStates.get(trade.getTradeUUID()));
 
