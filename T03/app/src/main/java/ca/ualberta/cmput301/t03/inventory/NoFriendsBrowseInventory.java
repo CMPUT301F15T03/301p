@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import ca.ualberta.cmput301.t03.MainActivity;
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.PrimaryUser;
@@ -28,7 +29,7 @@ import ca.ualberta.cmput301.t03.user.FriendsListFragment;
  * Created by rishi on 15-11-30.
  */
 public class NoFriendsBrowseInventory extends Fragment implements Observer, SwipeRefreshLayout.OnRefreshListener {
-
+    private static final int IMAGE_ANIMATION_DELAY = 200;
     private View mView;
     private Inventory model;
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -138,26 +139,19 @@ public class NoFriendsBrowseInventory extends Fragment implements Observer, Swip
 
     private void onAddFriendsImagePressed(ImageView image) {
         Animation fadeout = new AlphaAnimation(1.f, 0.5f);
-        fadeout.setDuration(100);
+        fadeout.setDuration(IMAGE_ANIMATION_DELAY);
         image.startAnimation(fadeout);
         fadeout = new AlphaAnimation(0.5f, 1.f);
-        fadeout.setDuration(100);
+        fadeout.setDuration(IMAGE_ANIMATION_DELAY);
         image.startAnimation(fadeout);
 
         image.postDelayed(new Runnable() {
             @Override
             public void run() {
-                addFriendsImageClicked();
+                synchronized (uiLock) {
+                    ((MainActivity)getActivity()).changeNavigationTab(R.id.nav_friends, true);
+                }
             }
-        }, 100);
-    }
-
-    private void addFriendsImageClicked() {
-        synchronized (uiLock) {
-            getActivity().setTitle(getString(R.string.friendsTitle));
-            getFragmentManager().beginTransaction()
-                    .replace(R.id.fragmentContent, FriendsListFragment.newInstance())
-                    .commit();
-        }
+        }, IMAGE_ANIMATION_DELAY);
     }
 }
