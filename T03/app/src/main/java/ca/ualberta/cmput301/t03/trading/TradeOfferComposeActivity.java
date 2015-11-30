@@ -150,7 +150,9 @@ public class TradeOfferComposeActivity extends AppCompatActivity implements Obse
                     }
 
                     model.getBorrower().getTradeList().addTrade(model);
+                    model.addObserver(model.getBorrower());
                     model.getOwner().getTradeList().addTrade(model);
+                    model.addObserver(model.getOwner());
                 } catch (IOException e) {
                     throw new RuntimeException("Primary User failed to get TradeList");
                 } catch (ServiceNotAvailableException e) {
