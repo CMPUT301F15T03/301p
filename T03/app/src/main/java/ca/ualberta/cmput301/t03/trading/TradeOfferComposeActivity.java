@@ -255,6 +255,7 @@ public class TradeOfferComposeActivity extends AppCompatActivity implements Obse
                     protected void onPostExecute(Object o) {
                         super.onPostExecute(o);
 
+                        ExceptionUtils.toastShort("Trade offered!");
                         if (appIsOffline) {
                             ExceptionUtils.toastLong("Failed to offer trade: app is offline");
                         }
@@ -285,6 +286,7 @@ public class TradeOfferComposeActivity extends AppCompatActivity implements Obse
                     protected void onPostExecute(Object o) {
                         super.onPostExecute(o);
 
+                        ExceptionUtils.toastShort("Trade canceled");
                         if (appIsOffline) {
                             ExceptionUtils.toastLong("Failed to cancel trade: app is offline");
                         }

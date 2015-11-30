@@ -256,6 +256,8 @@ public class TradeOfferReviewActivity extends AppCompatActivity implements Obser
                         @Override
                         protected void onPostExecute(Object o) {
                             super.onPostExecute(o);
+
+                            ExceptionUtils.toastShort("Trade completed");
                             if (appIsOffline) {
                                 ExceptionUtils.toastErrorWithNetwork();
                             }
@@ -295,6 +297,12 @@ public class TradeOfferReviewActivity extends AppCompatActivity implements Obser
                             }
                             return null;
                         }
+
+                        @Override
+                        protected void onPostExecute(Object o) {
+                            super.onPostExecute(o);
+                            ExceptionUtils.toastShort("Trade declined");
+                        }
                     };
                     task.execute();
                     activity.finish();
@@ -303,7 +311,6 @@ public class TradeOfferReviewActivity extends AppCompatActivity implements Obser
             tradeReviewDeclineAndCounterOffer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    ExceptionUtils.toastShort("trade decline&counter-offer unimplemented");
                     AsyncTask task = new AsyncTask() {
                         @Override
                         protected Object doInBackground(Object[] params) {
@@ -314,14 +321,18 @@ public class TradeOfferReviewActivity extends AppCompatActivity implements Obser
                             }
                             return null;
                         }
+
+                        @Override
+                        protected void onPostExecute(Object o) {
+                            super.onPostExecute(o);
+                            ExceptionUtils.toastShort("Trade declined");
+                        }
                     };
                     task.execute();
 
                     Intent intent = new Intent(TradeOfferReviewActivity.this, TradeOfferComposeActivity.class);
                     intent.putExtra(TradeOfferComposeActivity.EXTRA_PREV_TRADE_UUID, model.getTradeUUID());
-//                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     startActivity(intent);
-
                 }
             });
         } else {
@@ -401,6 +412,7 @@ public class TradeOfferReviewActivity extends AppCompatActivity implements Obser
 
                 @Override
                 protected void onPostExecute(Object o) {
+                    ExceptionUtils.toastShort("Trade accepted");
                     if (emailUsers) {
                         Intent intent = new Intent(Intent.ACTION_SEND);
                         intent.setType("text/rfc822");
