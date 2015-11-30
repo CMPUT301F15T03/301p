@@ -1,5 +1,6 @@
 package ca.ualberta.cmput301.t03.filters.item_criteria;
 
+import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.filters.FilterCriteria;
 import ca.ualberta.cmput301.t03.inventory.Item;
 
@@ -9,9 +10,11 @@ import ca.ualberta.cmput301.t03.inventory.Item;
 public class PrivateFilterCriteria implements FilterCriteria {
     private String name = "private";
     private String type = "viewable";
+    public PrivateFilterCriteria(){}
     public String getName() {return this.name;}
     public String getType() {return this.type;}
     public boolean passes(Object o){
         return !((Item)o).isItemIsPrivate();
     }
+
 }
