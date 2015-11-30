@@ -331,8 +331,8 @@ public class BrowseInventoryFragment extends Fragment implements Observer, Swipe
                     }
                 } else {
                     synchronized (uiLock) {
-                        if (getFragmentManager() != null){
-                            getFragmentManager().beginTransaction()
+                        if (getActivity().getSupportFragmentManager() != null){
+                            getActivity().getSupportFragmentManager().beginTransaction()
                                     .replace(R.id.fragmentContent, NoFriendsBrowseInventory.newInstance())
                                     .commit();
                         }
