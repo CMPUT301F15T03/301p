@@ -62,10 +62,12 @@ public class BrowseFriendInventoryUITest {
         pause();
         onView(withText("Friends")).check(matches(isDisplayed())).perform(click());
         pause();
+        pause();
 
         onData(hasToString("friendwithaninventory"))
                 .inAdapterView(withId(R.id.friendsListListView))
                 .perform(click());
+        pause();
         pause();
 
         /**
@@ -86,7 +88,7 @@ public class BrowseFriendInventoryUITest {
      * with both private and public items.
      */
     @Test
-    public void testBrowseFriendFromFriends() throws Exception {
+    public void testBrowseFriendGeneral() throws Exception {
         /**
          * Navigate to FriendList and Find Friend
          */
@@ -130,6 +132,8 @@ public class BrowseFriendInventoryUITest {
         onView(withText("Add")).
                 perform(click());
         pause();
+        pause();
+        pause();
 
         /**
          * Checks that there are two items from the filtered friends and that have the
@@ -164,7 +168,6 @@ public class BrowseFriendInventoryUITest {
              * Adding filter of a friend and a category to view single friends
              * inventory of only items pertaining to a given category.
              */
-
 
             /**
              * Checks that there is one item from the filtered friend and that is has category "stand".

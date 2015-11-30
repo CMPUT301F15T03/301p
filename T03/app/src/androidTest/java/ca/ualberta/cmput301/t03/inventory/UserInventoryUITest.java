@@ -142,4 +142,8 @@ public class UserInventoryUITest {
 
         onView(withText("testItem3")).check(matches(isDisplayed()));
     }
+    @Test
+    public void testAddCategorySearchOnInventory(){
+
+    }
 }

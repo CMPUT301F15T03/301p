@@ -114,7 +114,7 @@ public class FriendsListTest {
         pause();
         onView(withClassName(new StringContains("EditText"))).
                 perform(typeText(TEST_OTHER_USER),
-                        closeSoftKeyboard());
+                            closeSoftKeyboard());
         pause();
         onView(withText("Add")).
                 perform(click());

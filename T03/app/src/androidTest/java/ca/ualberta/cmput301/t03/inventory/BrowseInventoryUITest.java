@@ -61,6 +61,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasToString;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
@@ -135,6 +136,7 @@ public class BrowseInventoryUITest {
         onView(withText("testItem2f1")).check(matches(isDisplayed()));
         onView(withText("testItem1f2")).check(matches(isDisplayed()));
         onView(withText("testItem2f2")).check(matches(isDisplayed()));
+        onView(withText("testItem3f1")).check(matches(not(isDisplayed())));
         try {
             onView(withText("testItem3f1")).check(matches(isDisplayed()));
             fail("View should not be displayed");
@@ -166,7 +168,7 @@ public class BrowseInventoryUITest {
 
 //        onView(withId(R.id.itemFilterCategory)).inRoot(Decor) .perform(click());
         onView(withId(R.id.itemFilterCategory))
-                .check(matches(withText(containsString("cameras"))));
+                .check(matches(withText(containsString("cameras")))).perform(click());
 
 
         onView(withText("Set")).
