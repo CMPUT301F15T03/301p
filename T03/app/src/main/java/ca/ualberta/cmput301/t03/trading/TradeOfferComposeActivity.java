@@ -203,6 +203,14 @@ public class TradeOfferComposeActivity extends AppCompatActivity implements Obse
 
     }
 
+    /**
+     * Call me after the models have been fetched asynchronously.
+     *
+     * Binds the models to their view adapters and
+     * sets up the rest of the ui widgets to perform
+     * their actions.
+     *
+     */
     private void afterFieldsInitialized() {
         ownerItemAdapter = new ItemsAdapter<Inventory>(TradeApp.getContext(), ownerItems);
         ownerItemListView.setAdapter(ownerItemAdapter);
@@ -331,6 +339,16 @@ public class TradeOfferComposeActivity extends AppCompatActivity implements Obse
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Factory method to build an alert dialog, used for adding inventory items to trades.
+     *
+     * browseModel and tradeItemsModel should belong to the same party (owner OR borrower)
+     *
+     * @param browseModel the Inventory that contains one party's full inventory
+     * @param tradeItemsModel the Inventory that contains one party's offered or requested
+     *                        trade items.
+     * @return an AlertDialog
+     */
     private AlertDialog createAddTradeItemDialog(Inventory browseModel, final Inventory tradeItemsModel) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View dialogContent = View.inflate(this, R.layout.trade_item_picker_list, null);
