@@ -30,7 +30,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 
 /**
- * This custom adapter aids in adding ImageViews to a ListView or GridView with bitmpas applied from
+ * This custom adapter aids in adding ImageViews to a ListView or GridView with bitmaps applied from
  * the PhotoGallery model.
  * <p/>
  * Modified from http://developer.android.com/guide/topics/ui/layout/gridview.html
