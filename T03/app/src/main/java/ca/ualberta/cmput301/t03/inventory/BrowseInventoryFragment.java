@@ -76,7 +76,7 @@ public class BrowseInventoryFragment extends Fragment implements Observer, Swipe
     private ListView mListview;
 
     private ArrayList<FilterCriteria> filters;
-    private Object uiLock = new Object();
+    private final Object uiLock = new Object();
     private boolean init = true;
 
     public BrowseInventoryFragment() {
@@ -331,9 +331,11 @@ public class BrowseInventoryFragment extends Fragment implements Observer, Swipe
                     }
                 } else {
                     synchronized (uiLock) {
-                        getFragmentManager().beginTransaction()
-                                .replace(R.id.fragmentContent, NoFriendsBrowseInventory.newInstance())
-                                .commit();
+                        if (getFragmentManager() != null){
+                            getFragmentManager().beginTransaction()
+                                    .replace(R.id.fragmentContent, NoFriendsBrowseInventory.newInstance())
+                                    .commit();
+                        }
                     }
                 }
             }
