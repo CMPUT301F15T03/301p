@@ -34,6 +34,7 @@ import java.util.UUID;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
+import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.TradeApp;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.datamanager.DataKey;
@@ -154,18 +155,33 @@ public class Trade implements Observable, Comparable<Trade>, Observer {
         DataKey key = new DataKey(Trade.type, this.getTradeUUID().toString());
         try {
             if (dataManager.keyExists(key)) {
-                Trade t = dataManager.getData(key, Trade.class);
-                this.state = t.state;
-                this.borrowersItems = t.borrowersItems;
-                this.borrowersItems.addObserver(this);
-                this.comments = t.comments;
-                this.borrower = new User(t.borrower.getUsername(), context);
-                this.owner = new User(t.owner.getUsername(), context);
-                this.ownersItems = t.ownersItems;
-                this.hasBeenNotified = t.hasBeenNotified;
-                this.hasBeenSeen = t.hasBeenSeen;
-                this.ownersItems.addObserver(this);
-                this.commitChanges();
+                try {
+                    Trade t = dataManager.getData(key, Trade.class);
+                    this.state = t.state;
+                    this.borrowersItems = t.borrowersItems;
+                    this.borrowersItems.addObserver(this);
+                    this.comments = t.comments;
+                    this.borrower = new User(t.borrower.getUsername(), context);
+                    this.owner = new User(t.owner.getUsername(), context);
+                    this.ownersItems = t.ownersItems;
+                    this.hasBeenNotified = t.hasBeenNotified;
+                    this.hasBeenSeen = t.hasBeenSeen;
+                    this.ownersItems.addObserver(this);
+                    this.commitChanges();
+                } catch(NullPointerException e){
+                    //Trade is corrupted; did a test crash?
+                    this.state = new TradeStateCancelled();
+                    this.borrowersItems = new Inventory();
+                    this.borrowersItems.addObserver(this);
+                    this.comments = "";
+                    this.borrower = new User("CORRUPTED", context);
+                    this.owner = new User("CORRUPTED", context);
+                    this.ownersItems =  new Inventory();
+                    this.hasBeenNotified = true;
+                    this.hasBeenSeen = true;
+                    this.ownersItems.addObserver(this);
+                    commitChanges();
+                }
             }
         } catch (IOException e) {
             throw new RuntimeException("Failed to load trade with UUID " + this.getTradeUUID().toString());

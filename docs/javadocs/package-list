@@ -5,10 +5,16 @@ ca.ualberta.cmput301.t03.common.http
 ca.ualberta.cmput301.t03.configuration
 ca.ualberta.cmput301.t03.datamanager
 ca.ualberta.cmput301.t03.datamanager.elasticsearch
+ca.ualberta.cmput301.t03.datamanager.elasticsearch.queries
 ca.ualberta.cmput301.t03.datamanager.jobs
+ca.ualberta.cmput301.t03.datamanager.mocks
+ca.ualberta.cmput301.t03.datamanager.queries
+ca.ualberta.cmput301.t03.filters
+ca.ualberta.cmput301.t03.filters.item_criteria
 ca.ualberta.cmput301.t03.inventory
 ca.ualberta.cmput301.t03.photo
 ca.ualberta.cmput301.t03.trading
 ca.ualberta.cmput301.t03.trading.exceptions
 ca.ualberta.cmput301.t03.trading.serialization
+ca.ualberta.cmput301.t03.trading.toptraders
 ca.ualberta.cmput301.t03.user
