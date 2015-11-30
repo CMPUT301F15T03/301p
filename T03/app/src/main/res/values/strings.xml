@@ -72,4 +72,5 @@
     <string name="allowable_username_characters">abcdefghijklmnopqrstuvwxyz1234567890</string>
     <string name="top_trader_offline_message">You\'re currently offline, and there\'s no data saved.</string>
     <string name="title_activity_view_inventory">Inventory</string>
+    <string name="no_friends_message">Nothing to see here. Go ahead, add some friends!</string>
 </resources>
