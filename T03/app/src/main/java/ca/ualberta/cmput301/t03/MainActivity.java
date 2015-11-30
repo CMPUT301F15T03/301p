@@ -275,7 +275,11 @@ public class MainActivity extends AppCompatActivity
 
         fragmentManager = getSupportFragmentManager();
         setTitle(title);
-        fragmentManager.beginTransaction().add(R.id.fragmentContent, fragment).commit();
+        try {
+            fragmentManager.beginTransaction().add(R.id.fragmentContent, fragment).commitAllowingStateLoss();
+        } catch (IllegalStateException e){
+            //todo gross, but we are aleady dead so who cares.
+        }
 //        setTitle(getString(R.string.browseTitle));
     }
 
@@ -290,13 +294,12 @@ public class MainActivity extends AppCompatActivity
                 PrimaryUser.setup(getApplicationContext());
                 User mainUser = PrimaryUser.getInstance();
                 TradeApp.startNotificationService();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        finishOnCreate();
-                    }
-                });
                 return null;
+            }
+
+            @Override
+            protected void onPostExecute(Object o) {
+                finishOnCreate();
             }
         };
         task.execute();
@@ -308,9 +311,11 @@ public class MainActivity extends AppCompatActivity
     public void finishOnCreate() {
         addInitialFragment();
         AsyncTask task = new AsyncTask() {
+            private String email = "";
+            private String username = "";
             @Override
             protected Object doInBackground(Object[] params) {
-                final String username = PrimaryUser.getInstance().getUsername();
+                username = PrimaryUser.getInstance().getUsername();
                 String emailTemp = "";
                 try {
                     emailTemp = PrimaryUser.getInstance().getProfile().getEmail();
@@ -320,14 +325,8 @@ public class MainActivity extends AppCompatActivity
                     throw new RuntimeException("App is offline.", e);
                 }
 
-                final String email = emailTemp;
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        sidebarUsernameTextView.setText(username);
-                        sidebarEmailTextView.setText(email);
-                    }
-                });
+                email = emailTemp;
+
                 try {
                     PrimaryUser.getInstance().getProfile().addObserver(MainActivity.this);
                 } catch (IOException e) {
@@ -336,6 +335,12 @@ public class MainActivity extends AppCompatActivity
                     throw new RuntimeException("App is offline.", e);
                 }
                 return null;
+            }
+
+            @Override
+            protected void onPostExecute(Object o) {
+                sidebarUsernameTextView.setText(username);
+                sidebarEmailTextView.setText(email);
             }
         };
 
