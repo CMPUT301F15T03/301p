@@ -83,6 +83,8 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+        fragmentManager = getSupportFragmentManager();
+
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -97,8 +99,6 @@ public class MainActivity extends AppCompatActivity
         } else {
             afterUserSetup();
         }
-
-
     }
 
     /**
@@ -273,7 +273,6 @@ public class MainActivity extends AppCompatActivity
             e.printStackTrace();
         }
 
-        fragmentManager = getSupportFragmentManager();
         setTitle(title);
         try {
             fragmentManager.beginTransaction().add(R.id.fragmentContent, fragment).commitAllowingStateLoss();
