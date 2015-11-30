@@ -230,7 +230,11 @@ public class TradeOfferReviewActivity extends AppCompatActivity implements Obser
             tradeReviewComplete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ExceptionUtils.toastLong("Completed action not yet implemented");
+                    try {
+                        controller.completeTrade();
+                    } catch (ServiceNotAvailableException e) {
+                        ExceptionUtils.toastErrorWithNetwork();
+                    }
                 }
             });
         } else {
