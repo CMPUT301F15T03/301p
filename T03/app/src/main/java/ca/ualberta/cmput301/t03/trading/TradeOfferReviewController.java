@@ -25,6 +25,7 @@ import android.util.Log;
 
 import java.util.UUID;
 
+import ca.ualberta.cmput301.t03.common.exceptions.ExceptionUtils;
 import ca.ualberta.cmput301.t03.common.exceptions.NotImplementedException;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeStateTransition;
@@ -59,7 +60,18 @@ public class TradeOfferReviewController {
         try {
             model.accept();
         } catch (IllegalTradeStateTransition illegalTradeStateTransition) {
-            throw new RuntimeException(illegalTradeStateTransition.getMessage());
+            ExceptionUtils.toastLong(illegalTradeStateTransition.getMessage());
+        }
+    }
+
+    /**
+     * Complete the trade.
+     */
+    public void completeTrade() throws ServiceNotAvailableException {
+        try {
+            model.complete();
+        } catch (IllegalTradeStateTransition illegalTradeStateTransition) {
+            ExceptionUtils.toastLong(illegalTradeStateTransition.getMessage());
         }
     }
 
@@ -74,7 +86,7 @@ public class TradeOfferReviewController {
         try {
             model.decline();
         } catch (IllegalTradeStateTransition illegalTradeStateTransition) {
-            throw new RuntimeException(illegalTradeStateTransition.getMessage());
+            ExceptionUtils.toastLong(illegalTradeStateTransition.getMessage());
         }
     }
 
@@ -89,7 +101,7 @@ public class TradeOfferReviewController {
         try {
             model.decline();
         } catch (IllegalTradeStateTransition illegalTradeStateTransition) {
-            throw new RuntimeException(illegalTradeStateTransition.getMessage());
+            ExceptionUtils.toastLong(illegalTradeStateTransition.getMessage());
         }
         /**
          * TODO perform required tasks for counter offer
