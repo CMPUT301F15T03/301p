@@ -10,5 +10,5 @@ curl -XDELETE 'http://cmput301f15t03.westus.cloudapp.azure.com:9200/cmput301f15t
 printf "\ndeleted joe: TradeList\n\n"
 curl -XDELETE 'http://cmput301f15t03.westus.cloudapp.azure.com:9200/cmput301f15t03/TradeList/bob'
 printf "\ndeleted bob: TradeList\n\n"
-curl -XDELETE 'http://cmput301f15t03.westus.cloudapp.azure.com:9200/cmput301f15t03/Trade'
+curl -XDELETE 'http://cmput301f15t03.westus.cloudapp.azure.com:9200/cmput301f15t03/Trade/'
 printf "\ndeleted Trade type\n\n"

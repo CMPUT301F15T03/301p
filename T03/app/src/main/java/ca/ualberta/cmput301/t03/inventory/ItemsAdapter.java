@@ -39,15 +39,15 @@ public class ItemsAdapter<T extends Inventory> extends ArrayAdapter<Item> {
     private Context mContext;
 
     public List<Item> getItems(){
-//        try {
         return mInventory.getAdaptableItems();
-//        } catch (IOException e) {
-//            return new ArrayList<>();
-//        } catch (ServiceNotAvailableException e) {
-//            return new ArrayList<>(); //fixme this does not belong
-//        }
     }
 
+    /**
+     * Item arraylist adapter, using Inventory as a model
+     *
+     * @param context application context
+     * @param inventory reference to the Inventory model.
+     */
     public ItemsAdapter(Context context, Inventory inventory) {
         super(context, 0);
         mInventory = inventory;
@@ -57,6 +57,12 @@ public class ItemsAdapter<T extends Inventory> extends ArrayAdapter<Item> {
         addAll(getItems());
     }
 
+    /**
+     * Item arraylist adapter, using ArrayList of items as a model
+     *
+     * @param context application context
+     * @param items reference to the ArrayList model.
+     */
     public ItemsAdapter(Context context, ArrayList<Item> items){
         this(context, new Inventory());
 
@@ -66,7 +72,12 @@ public class ItemsAdapter<T extends Inventory> extends ArrayAdapter<Item> {
         notifyUpdated(i);
     }
 
-
+    /**
+     * Transforms an arrayList of items into an Inventory, to be adapted.
+     *
+     * @param items ArrayList of items
+     * @return an Inventory containing the same items
+     */
     private Inventory makeInventory(ArrayList<Item> items){
         Inventory inventory = new Inventory();
         for (Item i: items){
@@ -75,6 +86,8 @@ public class ItemsAdapter<T extends Inventory> extends ArrayAdapter<Item> {
         return inventory;
     }
     /**
+     * Gets called by Android when tiles need to be built.
+     *
      * https://github.com/codepath/android_guides/wiki/Using-an-ArrayAdapter-with-ListView
      * @param position
      * @param convertView
@@ -118,6 +131,11 @@ public class ItemsAdapter<T extends Inventory> extends ArrayAdapter<Item> {
     }
 
 
+    /**
+     * If the model reference changes, call this method to update the adapter data.
+     *
+     * @param model new reference to Inventory model.
+     */
     public void notifyUpdated(Inventory model) {
 
         mInventory = model;
@@ -125,6 +143,13 @@ public class ItemsAdapter<T extends Inventory> extends ArrayAdapter<Item> {
         addAll(getItems());
     }
 
+    /**
+     * Like noftifyUpdated(Inventory), but if the model is in ArrayList form. (It must be an
+     * ArrayList of items)
+     *
+     *
+     * @param model
+     */
     public void notifyUpdated(ArrayList<Item> model){
         Inventory i = makeInventory(model);
         notifyUpdated(i);

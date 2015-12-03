@@ -46,6 +46,13 @@ public class TradesAdapter<T extends TradeList> extends ArrayAdapter<Trade> {
     private Context mContext;
     private HashMap<UUID, String> tradeStates;
 
+    /**
+     * Get the TradesList transformed into a List of Trades.
+     *
+     * Used by the actual ArrayAdapter internals.
+     *
+     * @return
+     */
     public List<Trade> getTrades() {
         try {
             return mTradeList.getAdaptableItems();
@@ -56,6 +63,12 @@ public class TradesAdapter<T extends TradeList> extends ArrayAdapter<Trade> {
         }
     }
 
+    /**
+     * Construct a Trade Adapter for adapting Trades in a ListView.
+     *
+     * @param context current application context
+     * @param tradelist the T extends TradeList model to be adapted
+     */
     public TradesAdapter(Context context, T tradelist) {
         super(context, 0);
         mTradeList = tradelist;
@@ -66,6 +79,8 @@ public class TradesAdapter<T extends TradeList> extends ArrayAdapter<Trade> {
     }
 
     /**
+     * Gets called by Android when tiles need to be built.
+     *
      * https://github.com/codepath/android_guides/wiki/Using-an-ArrayAdapter-with-ListView
      * @param position
      * @param convertView
@@ -130,6 +145,11 @@ public class TradesAdapter<T extends TradeList> extends ArrayAdapter<Trade> {
         super.notifyDataSetChanged();
     }
 
+    /**
+     * Update the adapter with a new model.
+     *
+     * @param model the T extends TradeList model.
+     */
     public void notifyUpdated(T model) {
         mTradeList = model;
         clear();
