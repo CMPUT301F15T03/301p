@@ -48,14 +48,14 @@ public class FilterDialogs {
                     try {
                         updateFilters.call();
                     } catch (Exception e){
-                        throw new RuntimeException();
+                        throw new RuntimeException("Error updating filters", e);
                     }
                     Toast.makeText(context, "Category Filter: '" + categoryType + "'", Toast.LENGTH_SHORT).show();
                 } else {
                     try {
                         updateFilters.call();
                     } catch (Exception e){
-                        throw new RuntimeException();
+                        throw new RuntimeException("Error updating filters", e);
                     }
                 }
                 Toast.makeText(context, "Category Filter: '" + categoryType + "'", Toast.LENGTH_SHORT).show();
@@ -84,7 +84,7 @@ public class FilterDialogs {
                 try {
                     updateFilters.call();
                 } catch (Exception e){
-                    throw new RuntimeException();
+                    throw new RuntimeException("Error updating filters", e);
                 }
                 Toast.makeText(context, "Textual Filter: '" + usr + "' Added", Toast.LENGTH_SHORT).show();
             }
@@ -105,7 +105,7 @@ public class FilterDialogs {
                 try {
                     updateFilters.call();
                 } catch (Exception e){
-                    throw new RuntimeException();
+                    throw new RuntimeException("Error updating filters", e);
                 }
                 Toast.makeText(context, "Textual Filter: '" + selectedText + "' Removed", Toast.LENGTH_SHORT).show();
             }
