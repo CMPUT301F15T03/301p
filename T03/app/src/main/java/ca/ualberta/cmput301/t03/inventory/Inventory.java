@@ -191,6 +191,7 @@ public class Inventory implements Filterable<Item>, Observable, Observer, Adapta
     @Override
     public void setFilters(ArrayList<FilterCriteria> filters){
         this.filters = filters;
+        commitChanges();
     }
 
     /**

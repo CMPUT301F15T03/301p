@@ -51,6 +51,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.Callable;
 
 import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
@@ -58,6 +59,7 @@ import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.filters.FilterCriteria;
+import ca.ualberta.cmput301.t03.filters.FilterDialogs;
 import ca.ualberta.cmput301.t03.filters.item_criteria.CategoryFilterCriteria;
 import ca.ualberta.cmput301.t03.filters.item_criteria.PrivateFilterCriteria;
 import ca.ualberta.cmput301.t03.filters.item_criteria.StringQueryFilterCriteria;
@@ -147,7 +149,7 @@ public class UserInventoryFragment extends Fragment implements Observer, SwipeRe
 
                     model = user.getInventory();
                     if (!PrimaryUser.getInstance().equals(user)) {
-                        addFilter(new PrivateFilterCriteria());
+                        filters.add(new PrivateFilterCriteria()); //no refresh here
                     }
                     controller = new UserInventoryController(getContext(), model);
 
@@ -262,111 +264,31 @@ public class UserInventoryFragment extends Fragment implements Observer, SwipeRe
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
+        AlertDialog alertDialog;
         switch (item.getItemId()) {
             case R.id.filter_inventory_button:
-                createAddFilterDialog().show();
+                alertDialog = FilterDialogs.createAddFilterDialog(getContext(), filters, new Callable<Void>() {
+                    @Override
+                    public Void call() throws Exception {
+                        onRefresh(); //Ideally like to not full refresh and just have the adapter watch the item list change
+                        return null;
+                    }
+                });
+                alertDialog.show();
                 return true;
             case R.id.search_inventory_button:
-                createAddSearchDialog().show();
+                alertDialog = FilterDialogs.createAddSearchDialog(getContext(), filters, new Callable<Void>() {
+                    @Override
+                    public Void call() throws Exception {
+                        onRefresh(); //Ideally like to not full refresh and just have the adapter watch the item list change
+                        return null;
+                    }
+                });
+                alertDialog.show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    public AlertDialog createAddFilterDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(  getContext());
-        final View dialogContent = View.inflate(getContext(), R.layout.content_add_filter_dialog, null);
-
-        builder.setView(dialogContent);
-        //itemCategoryText.setSelection(((ArrayAdapter) itemCategoryText.getAdapter()).getPosition(itemModel.getItemCategory()));
-        builder.setCancelable(false);
-        builder.setNegativeButton("Cancel", null);
-        builder.setPositiveButton("Set", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Iterator<FilterCriteria> i = filters.iterator();
-                while(i.hasNext()){
-                    FilterCriteria filter = i.next();
-                    if (filter.getType().equals("category")) {
-                        i.remove();
-                    }
-                }
-                Spinner spinner = (Spinner) dialogContent.findViewById(R.id.itemFilterCategory);
-                String categoryType = spinner.getSelectedItem().toString();
-                if (!categoryType.toLowerCase().equals("none")) {
-                    addFilter(new CategoryFilterCriteria(categoryType));
-                    Toast.makeText(getContext(), "Category Filter: '" + categoryType + "'", Toast.LENGTH_SHORT).show();
-                } else {
-                    onRefresh();
-                }
-                Toast.makeText(getContext(), "Category Filter: '" + categoryType + "'", Toast.LENGTH_SHORT).show();
-            }
-        });
-        builder.setTitle("Set a Category Filter");
-        AlertDialog d = builder.create();
-        return d;
-    }
-
-    public AlertDialog createAddSearchDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        View dialogContent = View.inflate(getContext(), R.layout.content_add_search_dialog, null);
-        final EditText e = (EditText) dialogContent.findViewById(R.id.addSearchFilterText);
-
-        builder.setView(dialogContent); //todo replace with layout
-
-        builder.setCancelable(false);
-        builder.setNegativeButton("Cancel", null);
-        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                final String usr = e.getText().toString().trim();
-                addFilter(new StringQueryFilterCriteria(usr));
-                Toast.makeText(getContext(), "Textual Filter: '" + usr + "' Added", Toast.LENGTH_SHORT).show();
-            }
-        });
-        builder.setTitle("Textual Filters");
-
-
-        ArrayList<String> filterNames = new ArrayList<String>();
-        for (FilterCriteria filter : filters) {
-            if(filter.getType().equals("textual")){
-                filterNames.add(filter.getName());
-            }
-        }
-        final CharSequence[] fNames = filterNames.toArray(new String[filterNames.size()]);
-        builder.setItems(fNames, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
-                String selectedText = fNames[item].toString();
-                removeFilter(selectedText);
-
-                Toast.makeText(getContext(), "Textual Filter: '" + selectedText + "' Removed", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        AlertDialog d = builder.create();
-        return d;
-    }
-
-    public void addFilter(FilterCriteria filter){
-        filters.add(filter);
-        onRefresh();
-    }
-
-    public void removeFilter(String filterName){
-//        for (FilterCriteria filter: filters){
-//            if (filter.getType().equals("textual") && filter.getName().equals(filterName)){
-//                filters.remove(filter);
-//            }
-//        }
-        Iterator<FilterCriteria> i = filters.iterator();
-        while(i.hasNext()){
-            FilterCriteria filter = i.next();
-            if (filter.getType().equals("textual") && filter.getName().equals(filterName)) {
-                i.remove();
-            }
-        }
-        onRefresh();
     }
 
     private void setupFab(View v) {
@@ -401,8 +323,6 @@ public class UserInventoryFragment extends Fragment implements Observer, SwipeRe
                 try {
                     PrimaryUser.getInstance().refresh();
                     model = user.getInventory();
-
-
 
                 } catch (IOException e) {
                     e.printStackTrace();

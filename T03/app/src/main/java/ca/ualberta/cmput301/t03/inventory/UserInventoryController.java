@@ -22,9 +22,13 @@ package ca.ualberta.cmput301.t03.inventory;
 
 import android.content.Context;
 
+import java.util.ArrayList;
+import java.util.concurrent.Callable;
+
 import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.datamanager.DataManager;
 import ca.ualberta.cmput301.t03.datamanager.HttpDataManager;
+import ca.ualberta.cmput301.t03.filters.FilterCriteria;
 
 /**
  * Controller for the Inventory model.
@@ -58,6 +62,10 @@ public class UserInventoryController {
      */
     public void addingItemToInventory(Item item) {
         inventory.addItem(item);
+    }
+
+    public void setFilters(ArrayList<FilterCriteria> filters){
+        inventory.setFilters(filters);
     }
 
 }
