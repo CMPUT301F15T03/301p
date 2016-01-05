@@ -31,3 +31,6 @@ UML diagrams can be found [here](https://github.com/CMPUT301F15T03/301p/tree/mas
  * References to external sources are present in this [wiki page](https://github.com/CMPUT301F15T03/301p/wiki/External-Sources).
  * YouTube demo:
 [![ScreenShot](https://raw.githubusercontent.com/CMPUT301F15T03/301p/master/docs/screenshot_youtube.png)](https://www.youtube.com/embed/MbHIZUPE8Ck)
+
+###Post submission changes
+The http and datamanager modules of the app have been pulled out into separate [SimpleHttpClient](https://github.com/udeyrishi/SimpleHttpClient) and [AndroidElasticSearchDataManager](https://github.com/udeyrishi/AndroidElasticSearchDataManager) repositories. This app now references the compiled .jar and .aar files for these 2 projects.
