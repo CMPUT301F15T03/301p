@@ -58,5 +58,4 @@ dependencies {
     compile 'com.birbit:android-priority-jobqueue:1.3.5'
     compile 'org.apache.commons:commons-lang3:3.4'
     compile project(':AndroidElasticSearchDataManager')
-    compile 'com.android.support.test.espresso:espresso-core:2.2.1'
 }
