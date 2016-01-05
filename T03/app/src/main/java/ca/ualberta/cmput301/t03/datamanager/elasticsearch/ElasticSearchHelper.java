@@ -34,9 +34,9 @@ import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.TradeApp;
 import ca.ualberta.cmput301.t03.common.Preconditions;
 import ca.ualberta.cmput301.t03.common.exceptions.NotImplementedException;
-import ca.ualberta.cmput301.t03.common.http.HttpClient;
-import ca.ualberta.cmput301.t03.common.http.HttpResponse;
-import ca.ualberta.cmput301.t03.common.http.HttpStatusCode;
+import com.udeyrishi.simplehttpclient.HttpClient;
+import com.udeyrishi.simplehttpclient.HttpResponse;
+import com.udeyrishi.simplehttpclient.HttpStatusCode;
 
 /**
  * A set for helped APIs for interacting with Elastic Search server.
