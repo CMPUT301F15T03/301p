@@ -36,24 +36,6 @@ import ca.ualberta.cmput301.t03.trading.Trade;
  */
 public class ExceptionUtils {
 
-    // Source: http://stackoverflow.com/questions/1149703/how-can-i-convert-a-stack-trace-to-a-string
-    // Date: 30 Oct, 2015
-
-    /**
-     * Extracts the stack trace from an {@link Exception} object to a formatted {@link String}.
-     *
-     * @param exception The {@link Exception} whose stack trace has to be extracted out.
-     * @return The extracted stack trace {@link String}.
-     */
-    public static String getStackTrace(Exception exception) {
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
-        exception.printStackTrace(pw);
-        String stackTrace = sw.toString();
-        pw.close();
-        return stackTrace;
-    }
-
     private static void toast(String message, int duration) {
         Toast.makeText(TradeApp.getContext(), message, duration).show();
     }
