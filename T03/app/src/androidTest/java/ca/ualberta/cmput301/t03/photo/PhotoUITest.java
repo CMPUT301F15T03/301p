@@ -53,10 +53,10 @@ import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.TradeApp;
 import ca.ualberta.cmput301.t03.common.PrimaryUserHelper;
-import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
+import com.udeyrishi.androidelasticsearchdatamanager.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
-import ca.ualberta.cmput301.t03.datamanager.DataKey;
-import ca.ualberta.cmput301.t03.datamanager.LocalDataManager;
+import com.udeyrishi.androidelasticsearchdatamanager.DataKey;
+import com.udeyrishi.androidelasticsearchdatamanager.datamanagers.LocalDataManager;
 import ca.ualberta.cmput301.t03.inventory.Inventory;
 import ca.ualberta.cmput301.t03.inventory.Item;
 import ca.ualberta.cmput301.t03.user.User;
@@ -307,7 +307,7 @@ public class PhotoUITest {
         pause();
 
 
-        LocalDataManager ldm = new LocalDataManager(false);
+        LocalDataManager ldm = new LocalDataManager(TradeApp.getContext(), false);
         ldm.deleteIfExists(new DataKey(Photo.type, item.getPhotoList().getPhotos().get(0).getPhotoUUID().toString()));
 
         assertTrue(true);

@@ -22,10 +22,11 @@ package ca.ualberta.cmput301.t03.inventory;
 
 import android.content.Context;
 
+import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.filters.Filter;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
-import ca.ualberta.cmput301.t03.datamanager.DataManager;
-import ca.ualberta.cmput301.t03.datamanager.HttpDataManager;
+import com.udeyrishi.androidelasticsearchdatamanager.datamanagers.DataManager;
+import com.udeyrishi.androidelasticsearchdatamanager.datamanagers.HttpDataManager;
 
 /**
  * Controller for the BrowsableInventories model
@@ -48,7 +49,7 @@ public class BrowseInventoryController {
         this.context = context;
         this.browsableInventories = browsableInventories;
         this.configuration = new Configuration(context);
-        this.dataManager = new HttpDataManager();
+        this.dataManager = new HttpDataManager(context, context.getString(R.string.elasticSearchRootUrl));
     }
 
     /**

@@ -11,15 +11,16 @@ import android.support.v7.app.NotificationCompat;
 
 import com.path.android.jobqueue.JobManager;
 import com.path.android.jobqueue.config.Configuration;
+import com.udeyrishi.androidelasticsearchdatamanager.datamanagers.DataManager;
+import com.udeyrishi.androidelasticsearchdatamanager.datamanagers.QueuedDataManager;
+import com.udeyrishi.androidelasticsearchdatamanager.elasticsearchhelpers.ElasticSearchHelper;
+import com.udeyrishi.androidelasticsearchdatamanager.exceptions.ServiceNotAvailableException;
+import com.udeyrishi.androidelasticsearchdatamanager.queries.CachedQueryExecutor;
+import com.udeyrishi.androidelasticsearchdatamanager.queries.HttpQueryExecutor;
+import com.udeyrishi.androidelasticsearchdatamanager.queries.QueryExecutor;
 
 import java.io.IOException;
 
-import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
-import ca.ualberta.cmput301.t03.datamanager.DataManager;
-import ca.ualberta.cmput301.t03.datamanager.QueuedDataManager;
-import ca.ualberta.cmput301.t03.datamanager.elasticsearch.queries.CachedQueryExecutor;
-import ca.ualberta.cmput301.t03.datamanager.elasticsearch.queries.HttpQueryExecutor;
-import ca.ualberta.cmput301.t03.datamanager.elasticsearch.queries.QueryExecutor;
 import ca.ualberta.cmput301.t03.trading.Trade;
 import ca.ualberta.cmput301.t03.trading.TradeList;
 import ca.ualberta.cmput301.t03.user.User;
@@ -102,11 +103,11 @@ public class TradeApp extends Application {
      * @return The {@link DataManager}.
      */
     public DataManager createDataManager(boolean useExplicitExposeAnnotation) {
-        return new QueuedDataManager(getJobManager(), useExplicitExposeAnnotation);
+        return new QueuedDataManager(getContext(), getContext().getString(R.string.elasticSearchRootUrl), getJobManager(), useExplicitExposeAnnotation);
     }
 
     public QueryExecutor createQueryExecutor() {
-        return new CachedQueryExecutor(new HttpQueryExecutor());
+        return new CachedQueryExecutor(getContext(), new HttpQueryExecutor(new ElasticSearchHelper(getString(R.string.elasticSearchRootUrl))));
     }
 
     /**

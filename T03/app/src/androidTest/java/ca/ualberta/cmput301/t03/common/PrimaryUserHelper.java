@@ -26,12 +26,14 @@ import android.support.test.InstrumentationRegistry;
 import java.io.IOException;
 
 import ca.ualberta.cmput301.t03.PrimaryUser;
-import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
+import com.udeyrishi.androidelasticsearchdatamanager.exceptions.ServiceNotAvailableException;
+
+import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
-import ca.ualberta.cmput301.t03.datamanager.CachedDataManager;
-import ca.ualberta.cmput301.t03.datamanager.DataKey;
-import ca.ualberta.cmput301.t03.datamanager.DataManager;
-import ca.ualberta.cmput301.t03.datamanager.HttpDataManager;
+import com.udeyrishi.androidelasticsearchdatamanager.datamanagers.CachedDataManager;
+import com.udeyrishi.androidelasticsearchdatamanager.DataKey;
+import com.udeyrishi.androidelasticsearchdatamanager.datamanagers.DataManager;
+import com.udeyrishi.androidelasticsearchdatamanager.datamanagers.HttpDataManager;
 import ca.ualberta.cmput301.t03.inventory.Inventory;
 import ca.ualberta.cmput301.t03.inventory.Item;
 import ca.ualberta.cmput301.t03.trading.TradeList;
@@ -458,7 +460,7 @@ public class PrimaryUserHelper {
 
     public static void deleteUserWithFriend(Context context) throws Exception {
 
-        DataManager dataManager = new CachedDataManager(new HttpDataManager(true));
+        DataManager dataManager = new CachedDataManager(context, new HttpDataManager(context, context.getString(R.string.elasticSearchRootUrl), true));
         Configuration configuration = new Configuration(context);
 
         String users[] = {GENERAL_INVENTORY_FRIEND_1, FRIEND_WITH_AN_INVENTORY, FRIEND_WITH_AN_INVENTORY2};
@@ -483,7 +485,7 @@ public class PrimaryUserHelper {
 
 
     public static void tearDown(Context context) throws Exception {
-        DataManager dataManager = new CachedDataManager(new HttpDataManager(true));
+        DataManager dataManager = new CachedDataManager(context, new HttpDataManager(context, context.getString(R.string.elasticSearchRootUrl), true));
         Configuration configuration = new Configuration(context);
         configuration.setApplicationUserName(USER_ID);
         for (Item item : PrimaryUser.getInstance().getInventory().getItems().values()) {

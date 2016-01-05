@@ -40,12 +40,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
+import com.udeyrishi.androidelasticsearchdatamanager.exceptions.ServiceNotAvailableException;
+
 import java.io.File;
 import java.io.IOException;
 
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
-import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.photo.ItemPhotoController;
 import ca.ualberta.cmput301.t03.photo.PhotoGalleryView;
 import ca.ualberta.cmput301.t03.user.User;

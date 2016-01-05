@@ -36,9 +36,10 @@ import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.TradeApp;
-import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
-import ca.ualberta.cmput301.t03.datamanager.DataKey;
-import ca.ualberta.cmput301.t03.datamanager.DataManager;
+
+import com.udeyrishi.androidelasticsearchdatamanager.DataKey;
+import com.udeyrishi.androidelasticsearchdatamanager.datamanagers.DataManager;
+import com.udeyrishi.androidelasticsearchdatamanager.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.inventory.Inventory;
 import ca.ualberta.cmput301.t03.inventory.Item;
 import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeModificationException;

@@ -32,12 +32,12 @@ import ca.ualberta.cmput301.t03.MainActivity;
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.common.PrimaryUserHelper;
-import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
+import com.udeyrishi.androidelasticsearchdatamanager.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
-import ca.ualberta.cmput301.t03.datamanager.CachedDataManager;
-import ca.ualberta.cmput301.t03.datamanager.DataKey;
-import ca.ualberta.cmput301.t03.datamanager.DataManager;
-import ca.ualberta.cmput301.t03.datamanager.HttpDataManager;
+import com.udeyrishi.androidelasticsearchdatamanager.datamanagers.CachedDataManager;
+import com.udeyrishi.androidelasticsearchdatamanager.DataKey;
+import com.udeyrishi.androidelasticsearchdatamanager.datamanagers.DataManager;
+import com.udeyrishi.androidelasticsearchdatamanager.datamanagers.HttpDataManager;
 import ca.ualberta.cmput301.t03.inventory.Inventory;
 
 public class UserCreationTest extends ActivityInstrumentationTestCase2 {
@@ -56,7 +56,7 @@ public class UserCreationTest extends ActivityInstrumentationTestCase2 {
     public void tearDown() throws Exception {
 
         Context context = getInstrumentation().getTargetContext();
-        DataManager dataManager = new CachedDataManager(new HttpDataManager(true));
+        DataManager dataManager = new CachedDataManager(context, new HttpDataManager(context, context.getString(R.string.elasticSearchRootUrl), true));
         Configuration configuration = new Configuration(context);
         configuration.setApplicationUserName("junittestuserxyz");
         try {
@@ -81,7 +81,7 @@ public class UserCreationTest extends ActivityInstrumentationTestCase2 {
         Configuration configuration = new Configuration(getInstrumentation().getTargetContext());
 
         Context context = getInstrumentation().getTargetContext();
-        DataManager dataManager = new CachedDataManager(new HttpDataManager(true));
+        DataManager dataManager = new CachedDataManager(context, new HttpDataManager(context, context.getString(R.string.elasticSearchRootUrl), true));
         configuration.setApplicationUserName("junittestuserxyz");
         try {
             dataManager.deleteIfExists(new DataKey(UserProfile.type, configuration.getApplicationUserName()));

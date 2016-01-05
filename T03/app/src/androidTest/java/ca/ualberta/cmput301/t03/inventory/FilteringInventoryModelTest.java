@@ -12,8 +12,6 @@ import org.junit.runner.RunWith;
 import java.util.ArrayList;
 
 import ca.ualberta.cmput301.t03.MainActivity;
-import ca.ualberta.cmput301.t03.datamanager.DataKey;
-import ca.ualberta.cmput301.t03.datamanager.mocks.TestDto;
 import ca.ualberta.cmput301.t03.filters.FilterCriteria;
 import ca.ualberta.cmput301.t03.filters.item_criteria.CategoryFilterCriteria;
 import ca.ualberta.cmput301.t03.filters.item_criteria.PrivateFilterCriteria;

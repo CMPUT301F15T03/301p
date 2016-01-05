@@ -25,11 +25,13 @@ import android.util.Patterns;
 
 import java.io.IOException;
 
-import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
+import com.udeyrishi.androidelasticsearchdatamanager.exceptions.ServiceNotAvailableException;
+
+import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
-import ca.ualberta.cmput301.t03.datamanager.DataKey;
-import ca.ualberta.cmput301.t03.datamanager.DataManager;
-import ca.ualberta.cmput301.t03.datamanager.HttpDataManager;
+import com.udeyrishi.androidelasticsearchdatamanager.DataKey;
+import com.udeyrishi.androidelasticsearchdatamanager.datamanagers.DataManager;
+import com.udeyrishi.androidelasticsearchdatamanager.datamanagers.HttpDataManager;
 import ca.ualberta.cmput301.t03.inventory.Inventory;
 
 /**
@@ -49,7 +51,7 @@ public class InitializeUserController {
     public InitializeUserController(Context context) {
         this.context = context;
         this.configuration = new Configuration(context);
-        this.dataManager = new HttpDataManager();
+        this.dataManager = new HttpDataManager(context, context.getString(R.string.elasticSearchRootUrl));
     }
 
     /**

@@ -20,15 +20,15 @@
 
 package ca.ualberta.cmput301.t03.trading.toptraders;
 
+import com.udeyrishi.androidelasticsearchdatamanager.Preconditions;
+import com.udeyrishi.androidelasticsearchdatamanager.queries.AggregationQueryResult;
+import com.udeyrishi.androidelasticsearchdatamanager.queries.FieldGroupedQuery;
+import com.udeyrishi.androidelasticsearchdatamanager.queries.Query;
+import com.udeyrishi.androidelasticsearchdatamanager.queries.QueryExecutor;
+
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
-import ca.ualberta.cmput301.t03.common.Preconditions;
-import ca.ualberta.cmput301.t03.datamanager.elasticsearch.queries.AggregationQueryResult;
-import ca.ualberta.cmput301.t03.datamanager.elasticsearch.queries.FieldGroupedQuery;
-import ca.ualberta.cmput301.t03.datamanager.elasticsearch.queries.Query;
-import ca.ualberta.cmput301.t03.datamanager.elasticsearch.queries.QueryExecutor;
 import ca.ualberta.cmput301.t03.trading.TradeStateAccepted;
 import ca.ualberta.cmput301.t03.trading.TradeStateOffered;
 

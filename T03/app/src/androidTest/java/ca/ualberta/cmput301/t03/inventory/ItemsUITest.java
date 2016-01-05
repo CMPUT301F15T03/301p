@@ -33,8 +33,9 @@ import ca.ualberta.cmput301.t03.MainActivity;
 import ca.ualberta.cmput301.t03.PrimaryUser;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.common.PrimaryUserHelper;
-import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
-import ca.ualberta.cmput301.t03.datamanager.HttpDataManager;
+
+import com.udeyrishi.androidelasticsearchdatamanager.datamanagers.HttpDataManager;
+import com.udeyrishi.androidelasticsearchdatamanager.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.user.User;
 
 import static android.support.test.espresso.Espresso.onData;

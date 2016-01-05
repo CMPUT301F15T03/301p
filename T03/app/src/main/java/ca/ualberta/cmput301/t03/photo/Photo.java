@@ -37,12 +37,14 @@ import ca.ualberta.cmput301.t03.Observable;
 import ca.ualberta.cmput301.t03.Observer;
 import ca.ualberta.cmput301.t03.R;
 import ca.ualberta.cmput301.t03.TradeApp;
-import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
+import com.udeyrishi.androidelasticsearchdatamanager.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
-import ca.ualberta.cmput301.t03.datamanager.CachedDataManager;
-import ca.ualberta.cmput301.t03.datamanager.DataKey;
-import ca.ualberta.cmput301.t03.datamanager.DataManager;
-import ca.ualberta.cmput301.t03.datamanager.LocalDataManager;
+import ca.ualberta.cmput301.t03.trading.Trade;
+
+import com.udeyrishi.androidelasticsearchdatamanager.datamanagers.CachedDataManager;
+import com.udeyrishi.androidelasticsearchdatamanager.DataKey;
+import com.udeyrishi.androidelasticsearchdatamanager.datamanagers.DataManager;
+import com.udeyrishi.androidelasticsearchdatamanager.datamanagers.LocalDataManager;
 
 /**
  * Object for the item's photo. Belongs to an item's PhotoGallery.
@@ -68,14 +70,14 @@ public class Photo implements Observable, Cloneable {
     public Photo() {
         observers = new ArrayList<>();
         dataManager = TradeApp.getInstance().createDataManager(false);
-        localDataManager = new LocalDataManager(false);
+        localDataManager = new LocalDataManager(TradeApp.getContext(), false);
         base64Photo = new Base64Wrapper();
     }
 
     public Photo(Bitmap photo) {
         observers = new ArrayList<>();
         dataManager = TradeApp.getInstance().createDataManager(false);
-        localDataManager = new LocalDataManager(false);
+        localDataManager = new LocalDataManager(TradeApp.getContext(), false);
         photoUUID = UUID.randomUUID();
         base64Photo = new Base64Wrapper();
         setPhoto(photo);

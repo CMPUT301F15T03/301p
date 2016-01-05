@@ -36,9 +36,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.udeyrishi.androidelasticsearchdatamanager.exceptions.ServiceNotAvailableException;
+
 import java.io.IOException;
 
-import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.configuration.ConfigurationActivity;
 import ca.ualberta.cmput301.t03.inventory.BrowseInventoryFragment;

@@ -39,7 +39,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import ca.ualberta.cmput301.t03.R;
-import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
+import com.udeyrishi.androidelasticsearchdatamanager.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.filters.CollectionFilter;
 import ca.ualberta.cmput301.t03.filters.Filter;
 import ca.ualberta.cmput301.t03.filters.FilterCriteria;

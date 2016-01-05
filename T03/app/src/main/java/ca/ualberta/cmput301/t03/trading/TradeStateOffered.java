@@ -21,7 +21,7 @@
 package ca.ualberta.cmput301.t03.trading;
 
 import ca.ualberta.cmput301.t03.common.exceptions.NotImplementedException;
-import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
+import com.udeyrishi.androidelasticsearchdatamanager.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.trading.exceptions.IllegalTradeStateTransition;
 
 /**

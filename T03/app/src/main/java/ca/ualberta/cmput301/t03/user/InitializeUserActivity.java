@@ -31,7 +31,7 @@ import android.widget.Toast;
 import java.io.IOException;
 
 import ca.ualberta.cmput301.t03.R;
-import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
+import com.udeyrishi.androidelasticsearchdatamanager.exceptions.ServiceNotAvailableException;
 
 /**
  * View component of the Initialize user workflow. To be entered if no user is found locally.

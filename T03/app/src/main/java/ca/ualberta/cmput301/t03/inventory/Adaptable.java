@@ -1,11 +1,12 @@
 package ca.ualberta.cmput301.t03.inventory;
 
+import com.udeyrishi.androidelasticsearchdatamanager.exceptions.ServiceNotAvailableException;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 
 /**
  * Copyright 2015 John Slevinsky

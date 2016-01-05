@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.logging.LogRecord;
 
 import ca.ualberta.cmput301.t03.R;
-import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
+import com.udeyrishi.androidelasticsearchdatamanager.exceptions.ServiceNotAvailableException;
 
 /**
  * Copyright 2015 John Slevinsky

@@ -22,9 +22,10 @@ package ca.ualberta.cmput301.t03;
 
 import android.content.Context;
 
+import com.udeyrishi.androidelasticsearchdatamanager.exceptions.ServiceNotAvailableException;
+
 import java.io.IOException;
 
-import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.configuration.Configuration;
 import ca.ualberta.cmput301.t03.user.User;
 

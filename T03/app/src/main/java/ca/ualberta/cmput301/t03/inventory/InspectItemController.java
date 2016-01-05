@@ -29,7 +29,7 @@ import org.parceler.Parcels;
 import java.io.IOException;
 
 import ca.ualberta.cmput301.t03.PrimaryUser;
-import ca.ualberta.cmput301.t03.common.exceptions.ServiceNotAvailableException;
+import com.udeyrishi.androidelasticsearchdatamanager.exceptions.ServiceNotAvailableException;
 import ca.ualberta.cmput301.t03.trading.TradeOfferComposeActivity;
 import ca.ualberta.cmput301.t03.user.User;
 
