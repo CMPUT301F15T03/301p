@@ -23,6 +23,9 @@ import java.io.IOException;
 
 import ca.ualberta.cmput301.t03.trading.Trade;
 import ca.ualberta.cmput301.t03.trading.TradeList;
+import ca.ualberta.cmput301.t03.trading.TradeState;
+import ca.ualberta.cmput301.t03.trading.serialization.TradeStateDeserializer;
+import ca.ualberta.cmput301.t03.trading.serialization.TradeStateSerializer;
 import ca.ualberta.cmput301.t03.user.User;
 
 /**
@@ -103,7 +106,12 @@ public class TradeApp extends Application {
      * @return The {@link DataManager}.
      */
     public DataManager createDataManager(boolean useExplicitExposeAnnotation) {
-        return new QueuedDataManager(getContext(), getContext().getString(R.string.elasticSearchRootUrl), getJobManager(), useExplicitExposeAnnotation);
+        QueuedDataManager dataManager =  new QueuedDataManager(getContext(), getContext().getString(R.string.elasticSearchRootUrl), getJobManager(), useExplicitExposeAnnotation);
+
+        dataManager.registerSerializer(TradeState.class, new TradeStateSerializer());
+        dataManager.registerDeserializer(TradeState.class, new TradeStateDeserializer());
+
+        return dataManager;
     }
 
     public QueryExecutor createQueryExecutor() {
